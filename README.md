@@ -1,0 +1,197 @@
+# BIP-39: NEON TERMINAL
+
+**Текстовый детективный квест в киберпанк-сеттинге, играющий против настоящей сети Bitcoin.**
+
+Игрок восстанавливает сид-фразы из детективных загадок и вводит их в консоль. Под сюжетом
+работает не симуляция, а реальная криптография: фраза проверяется по официальному словарю
+BIP-39 вместе с контрольной суммой, разворачивается в сид через PBKDF2-HMAC-SHA512, затем
+по BIP-32 на кривой secp256k1 выводятся адреса трёх типов — и их баланс запрашивается живым
+HTTP-запросом к публичным блокчейн-эксплорерам.
+
+▶ **Играть в браузере: <https://legenki.github.io/neon-terminal/>**
+
+*(English version of this README: [README.en.md](README.en.md))*
+
+---
+
+## Две сборки
+
+| | Терминал (Python) | Веб (GitHub Pages) |
+|---|---|---|
+| Запуск | `python -m neon_terminal` | браузер, без установки |
+| Криптография | чистый Python, стандартная библиотека | чистый JavaScript, без зависимостей |
+| Сеть | `requests` (или `urllib`) | `fetch` прямо из браузера |
+| Картинка | ANSI-цвета, посимвольный вывод | Canvas + WebGL-шейдер ЭЛТ-монитора |
+
+Обе сборки читают одни и те же данные из `data/` и считают **побитово одинаковые** адреса —
+это проверяется тестом `tests/test_web_parity.py`, который прогоняет JS под Node и сверяет
+результат с Python.
+
+## Быстрый старт
+
+### Веб-версия
+
+Просто откройте <https://legenki.github.io/neon-terminal/>. Локально:
+
+```bash
+python3 -m http.server 8000 --directory docs
+# откройте http://localhost:8000
+```
+
+### Терминальная версия
+
+```bash
+git clone https://github.com/legenki/neon-terminal
+cd neon-terminal
+python -m neon_terminal            # зависимости не обязательны
+```
+
+Опционально: `pip install -r requirements.txt` — `requests` даёт более аккуратную работу
+с таймаутами, а `mnemonic` и `bip-utils` нужны только тестам как эталонные реализации.
+
+Полезные флаги:
+
+```bash
+python -m neon_terminal --lang en          # английский текст
+python -m neon_terminal --offline          # без сети (криптография работает по-настоящему)
+python -m neon_terminal --speed 0          # отключить анимацию
+python -m neon_terminal --provider mempool # выбрать эксплорер
+python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # разовый запуск команд
+```
+
+## Команды
+
+| Команда | Что делает |
+|---|---|
+| `HELP` / `ABOUT` | список команд / что программа делает на самом деле |
+| `LANG RU\|EN` | язык повествования |
+| `CASES` | список из восьми дел и их состояние |
+| `OPEN <id>` | открыть дело: вводная, улики, таблица дешифровки |
+| `BRIEF` / `EVIDENCE` / `CLUES` | перечитать активное дело |
+| `HINT` | потратить подсказку (их три на дело) |
+| `WORD <n>` / `INDEX <слово>` / `SEARCH <префикс>` | инструменты по словарю BIP-39 |
+| `ENTROPY <hex>` | собрать мнемонику из 128 бит энтропии |
+| `DECRYPT <12 слов>` | проверить фразу и вывести сетку деривации |
+| `DERIVE` | повторить вывод адресов |
+| `SYNC_LEDGER [адрес]` | живой запрос баланса в сети Bitcoin |
+| `SWEEP` | проверить сразу все три выведенных адреса |
+| `TXLOG [адрес]` | последние транзакции адреса |
+| `PROVIDER [имя]` | `blockstream` \| `mempool` \| `blockchain` |
+| `EXPLORER` | ссылка на адрес в эксплорере |
+| `STATUS` | статус оператора и прогресс |
+| `CRT full\|soft\|flat\|off` | профиль монитора (только веб) |
+| `COPY` | адреса в буфер обмена (только веб) |
+| `CLEAR` / `RESET` / `EXIT` | очистить экран / стереть прогресс / выйти |
+
+Прогресс сохраняется: в терминале — в `~/.neon_terminal/progress.json`
+(переопределяется переменной `NEON_TERMINAL_HOME`), в вебе — в `localStorage`.
+
+## Как выглядит игра
+
+```
+nullsec@neon:~$ DECRYPT abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+[~] decrypting master pre-image...
+[~] pbkdf2-hmac-sha512, 2048 rounds...
+[~] deriving public key coordinates (X, Y)...
+[~] sha256 -> ripemd160 hashing...
+[ OK ] MNEMONIC CHECKSUM VALID.
+==================================================================
+PATH m/44'/0'/0'/0/0 (Legacy P2PKH)         : 1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA
+PATH m/49'/0'/0'/0/0 (Nested SegWit)        : 37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf
+PATH m/84'/0'/0'/0/0 (Native SegWit)        : bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu
+==================================================================
+
+nullsec@neon:~$ SYNC_LEDGER
+[NET] ESTABLISHING ENCRYPTED PROXY TO BLOCKSTREAM NODE... OK
+[NET] QUERYING ADDR: 1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA
+[NET] PARSING DATA STREAMS... SUCCESS
+------------------------------------------------------------------
+ADDRESS BALANCE ANALYSIS:
+CONFIRMED BALANCE : 0.00000000 BTC
+TOTAL RECEIVED    : 0.01150402 BTC
+TX COUNT          : 48
+------------------------------------------------------------------
+[STATUS] WALLET DRAINED. HISTORY INTACT — RUN TXLOG.
+```
+
+Ошибка контрольной суммы выглядит ровно так, как задумано ТЗ:
+
+```
+nullsec@neon:~$ DECRYPT abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon
+[FATAL] MNEMONIC CHECKSUM INVALID. DECRYPTION FAILED.
+        THE LAST WORD CARRIES THE CHECKSUM. ONE WRONG WORD BREAKS IT.
+```
+
+## Про кошельки в игре — важное
+
+ТЗ предполагало, что разработчик создаст свои кошельки, положит туда «пыль» и зашифрует их
+слова в загадках. Восемь дел вместо этого построены на **опубликованных тестовых векторах
+BIP-39** (тех самых, из спецификации Trezor). Причины:
+
+* это настоящие адреса основной сети с настоящей историей — у первого 48 транзакций начиная
+  с 2013 года, так что `SYNC_LEDGER` показывает подлинные данные, а не выдумку;
+* их приватные ключи известны всему миру, поэтому в них заведомо нет ничего ценного —
+  игра не может случайно превратиться в утечку денег;
+* они воспроизводимы: любой может проверить каждый адрес в любом эксплорере.
+
+**Хотите свои кошельки?** Это ровно три шага:
+
+1. создайте кошелёк, запишите 12 слов, отправьте на него немного сатоши;
+2. посчитайте отпечаток: `python -c "from neon_terminal.crypto_engine import fingerprint; print(fingerprint('ваши 12 слов'))"`;
+3. подставьте его в поле `fingerprint` нужного дела в `data/cases.json`, перепишите загадки
+   и выполните `python tools/build_web_data.py`.
+
+Сами слова в репозиторий класть не нужно — игра хранит только SHA-256 отпечаток и сверяет
+с ним то, что ввёл игрок.
+
+## Безопасность
+
+* Программа **не умеет и не будет уметь** подбирать чужие сид-фразы. Она считает адреса по
+  фразе, которую вы уже знаете, и читает публичные данные блокчейна.
+* Веб-версия считает всё в браузере. Наружу уходит только запрос баланса, и в нём нет
+  ничего, кроме самого адреса.
+* И всё же: **никогда не вводите в любую программу — включая эту — сид-фразу от кошелька
+  с реальными деньгами.**
+
+## Устройство репозитория
+
+```
+data/                 общий источник правды для обеих сборок
+  cases.json          восемь дел: сюжет, улики, загадки, подсказки, отпечатки ответов
+  english.txt         официальный словарь BIP-39 (sha256 2f5eed53…)
+  test_vectors.json   эталонные векторы, сгенерированные mnemonic + bip-utils
+neon_terminal/        терминальная версия
+  crypto_engine.py    BIP-39/32/44/49/84, secp256k1, base58check, bech32
+  _ripemd160.py       запасной RIPEMD-160 для сборок OpenSSL 3 без legacy-провайдера
+  chain.py            три эксплорера с автоматическим переключением
+  ui.py               ANSI-вывод, псевдо-логи поверх реального запроса
+  cases.py            загрузка дел и прогресса
+  game.py             разбор команд и игровой цикл
+docs/                 веб-версия, отсюда публикуется GitHub Pages
+  js/crypto/          hash.js, secp256k1.js, encoding.js, bip39.js, wallet.js
+  js/term.js          терминал на canvas
+  js/crt.js           WebGL: bloom, кривизна, аберрация, маска, шум
+  js/engine.js        те же команды, что и в Python-версии
+tools/build_web_data.py   генерирует docs/js/wordlist.js и campaign.js из data/
+tests/                109 тестов, включая сверку Python и JavaScript
+```
+
+## Разработка
+
+```bash
+pip install -r requirements-dev.txt
+python -m pytest tests -v          # 109 тестов
+python tools/build_web_data.py     # после правки data/ — обязательно
+```
+
+`data/` — единственный источник правды. Файлы `docs/js/wordlist.js` и `docs/js/campaign.js`
+генерируются; CI падает, если они разошлись с исходниками.
+
+## Публикация на GitHub Pages
+
+Настройки репозитория → **Pages** → **Source: GitHub Actions**. После этого каждый push
+в `main` публикует содержимое `docs/` воркфлоу `.github/workflows/pages.yml`.
+
+## Лицензия
+
+MIT — см. [LICENSE](LICENSE).

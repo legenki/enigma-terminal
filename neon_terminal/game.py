@@ -1,0 +1,718 @@
+"""The interactive terminal: command parsing, quest flow, live-chain queries."""
+
+from __future__ import annotations
+
+import argparse
+import os
+import sys
+from dataclasses import dataclass, field
+
+from . import __version__
+from .cases import Campaign, Case, Progress
+from .chain import ChainClient, ChainError, PROVIDERS
+from .crypto_engine import (
+    MnemonicError,
+    Wallet,
+    derive_wallet,
+    entropy_to_mnemonic,
+    index_of,
+    mnemonic_to_entropy,
+    search,
+    word_at,
+    wordlist_is_authentic,
+)
+from .ui import DECRYPT_LOGS, NET_LOGS, Screen
+
+PROMPT = "nullsec@neon:~$ "
+
+HELP_TEXT = {
+    "en": [
+        ("HELP", "this list"),
+        ("LANG RU|EN", "switch narrative language"),
+        ("CASES", "list every case file and its state"),
+        ("OPEN <id>", "open a case file and make it active"),
+        ("BRIEF / EVIDENCE / CLUES", "re-read the active case"),
+        ("HINT", "spend a hint on the active case"),
+        ("WORD <1..2048>", "read one entry of the BIP-39 wordlist"),
+        ("INDEX <word>", "find a word's position in the wordlist"),
+        ("SEARCH <prefix>", "list wordlist entries by prefix"),
+        ("ENTROPY <hex>", "rebuild a mnemonic from raw entropy (32 hex chars)"),
+        ("DECRYPT <12 words>", "validate a seed phrase and derive its addresses"),
+        ("DERIVE", "re-print the derivation grid of the loaded seed"),
+        ("SYNC_LEDGER [addr]", "query the live Bitcoin network for a balance"),
+        ("SWEEP", "check all three derived addresses at once"),
+        ("TXLOG [addr]", "pull the most recent on-chain transactions"),
+        ("PROVIDER [name]", "choose the explorer: blockstream|mempool|blockchain"),
+        ("EXPLORER", "print a browser URL for the loaded address"),
+        ("STATUS", "operator status and progress"),
+        ("ABOUT", "what this program actually does"),
+        ("CLEAR", "wipe the screen"),
+        ("RESET", "erase saved progress"),
+        ("EXIT", "close the session"),
+    ],
+    "ru": [
+        ("HELP", "этот список"),
+        ("LANG RU|EN", "язык повествования"),
+        ("CASES", "список дел и их состояние"),
+        ("OPEN <id>", "открыть дело и сделать его активным"),
+        ("BRIEF / EVIDENCE / CLUES", "перечитать активное дело"),
+        ("HINT", "потратить подсказку по активному делу"),
+        ("WORD <1..2048>", "показать слово словаря BIP-39"),
+        ("INDEX <слово>", "найти позицию слова в словаре"),
+        ("SEARCH <префикс>", "искать слова словаря по началу"),
+        ("ENTROPY <hex>", "собрать мнемонику из энтропии (32 hex-символа)"),
+        ("DECRYPT <12 слов>", "проверить фразу и вывести адреса"),
+        ("DERIVE", "повторить сетку деривации загруженного сида"),
+        ("SYNC_LEDGER [адрес]", "запрос баланса в живой сети Bitcoin"),
+        ("SWEEP", "проверить сразу все три выведенных адреса"),
+        ("TXLOG [адрес]", "последние транзакции адреса"),
+        ("PROVIDER [имя]", "выбрать эксплорер: blockstream|mempool|blockchain"),
+        ("EXPLORER", "ссылка на адрес в браузере"),
+        ("STATUS", "статус оператора и прогресс"),
+        ("ABOUT", "что эта программа делает на самом деле"),
+        ("CLEAR", "очистить экран"),
+        ("RESET", "стереть сохранённый прогресс"),
+        ("EXIT", "завершить сессию"),
+    ],
+}
+
+TEXT = {
+    "no_case": {
+        "en": "NO ACTIVE CASE. RUN: CASES, THEN OPEN <id>",
+        "ru": "НЕТ АКТИВНОГО ДЕЛА. ВЫПОЛНИ: CASES, ЗАТЕМ OPEN <id>",
+    },
+    "no_wallet": {
+        "en": "NO SEED LOADED. RUN: DECRYPT <12 words>",
+        "ru": "СИД НЕ ЗАГРУЖЕН. ВЫПОЛНИ: DECRYPT <12 слов>",
+    },
+    "locked": {
+        "en": "CASE LOCKED. REQUIRED CASES: {req}",
+        "ru": "ДЕЛО ЗАБЛОКИРОВАНО. СНАЧАЛА ЗАКРОЙ ДЕЛА: {req}",
+    },
+    "solved_banner": {
+        "en": "CASE {id} CLOSED — SEED MATCHES ORACLE'S FINGERPRINT",
+        "ru": "ДЕЛО {id} ЗАКРЫТО — СИД СОВПАЛ С ОТПЕЧАТКОМ ORACLE",
+    },
+    "not_this_case": {
+        "en": "VALID MNEMONIC, BUT IT IS NOT THE KEY TO CASE {id}.",
+        "ru": "МНЕМОНИКА ВАЛИДНА, НО ЭТО НЕ КЛЮЧ К ДЕЛУ {id}.",
+    },
+    "wrong_case": {
+        "en": "THIS SEED BELONGS TO CASE {id} ({name}).",
+        "ru": "ЭТОТ СИД ОТНОСИТСЯ К ДЕЛУ {id} ({name}).",
+    },
+    "hints_done": {
+        "en": "NO HINTS LEFT ON THIS CASE.",
+        "ru": "ПОДСКАЗКИ ПО ЭТОМУ ДЕЛУ ЗАКОНЧИЛИСЬ.",
+    },
+    "all_done": {
+        "en": "ALL EIGHT CASES CLOSED. ORACLE'S ARCHIVE IS FULLY RECOVERED.",
+        "ru": "ВСЕ ВОСЕМЬ ДЕЛ ЗАКРЫТЫ. АРХИВ ORACLE ВОССТАНОВЛЕН ПОЛНОСТЬЮ.",
+    },
+}
+
+ABOUT_TEXT = {
+    "en": [
+        "BIP-39: NEON TERMINAL — a detective quest played against the real network.",
+        "",
+        "Everything below the story is genuine:",
+        "  * mnemonics are checked against the official BIP-39 English wordlist,",
+        "    including the SHA-256 checksum carried by the final word;",
+        "  * seeds come from PBKDF2-HMAC-SHA512 with 2048 rounds;",
+        "  * keys are derived over secp256k1 through BIP-32 (BIP-44/49/84 paths);",
+        "  * balances come from live HTTP calls to public block explorers.",
+        "",
+        "The eight case answers are published BIP-39 test vectors. Their wallets are",
+        "known to the whole world, hold nothing worth taking, and carry years of real",
+        "on-chain history — which is exactly what makes them good exhibits.",
+        "",
+        "This program has no wallet-cracking capability and none is planned:",
+        "it derives addresses from phrases you already know and reads public data.",
+        "Never type a seed phrase that controls real funds into any program, this one",
+        "included.",
+    ],
+    "ru": [
+        "BIP-39: NEON TERMINAL — детективный квест, играющий против настоящей сети.",
+        "",
+        "Всё, что находится под сюжетом, — подлинное:",
+        "  * мнемоники проверяются по официальному словарю BIP-39,",
+        "    включая контрольную сумму SHA-256 в последнем слове;",
+        "  * сид получается через PBKDF2-HMAC-SHA512, 2048 раундов;",
+        "  * ключи выводятся на кривой secp256k1 по BIP-32 (пути BIP-44/49/84);",
+        "  * балансы приходят живыми HTTP-запросами к публичным эксплорерам.",
+        "",
+        "Ответы восьми дел — опубликованные тестовые векторы BIP-39. Эти кошельки",
+        "известны всему миру, в них нет ничего ценного, зато есть годы настоящей",
+        "истории в блокчейне — именно поэтому они и годятся как вещдоки.",
+        "",
+        "Программа не умеет взламывать чужие кошельки и не будет уметь:",
+        "она считает адреса по уже известным фразам и читает публичные данные.",
+        "Никогда не вводи в программы — включая эту — сид-фразу от кошелька",
+        "с реальными деньгами.",
+    ],
+}
+
+
+@dataclass
+class Session:
+    campaign: Campaign
+    progress: Progress
+    screen: Screen
+    chain: ChainClient
+    lang: str = "ru"
+    active: Case | None = None
+    wallet: Wallet | None = None
+    running: bool = True
+    history: list[str] = field(default_factory=list)
+
+    def t(self, key: str, **fmt) -> str:
+        return TEXT[key][self.lang].format(**fmt)
+
+
+# --------------------------------------------------------------------------- #
+# Command implementations
+# --------------------------------------------------------------------------- #
+
+def cmd_help(s: Session, _arg: str) -> None:
+    s.screen.write()
+    for command, description in HELP_TEXT[s.lang]:
+        print(s.screen.paint(f"  {command:<26}", "green")
+              + s.screen.paint(description, "grey"))
+    s.screen.write()
+
+
+def cmd_about(s: Session, _arg: str) -> None:
+    s.screen.write()
+    s.screen.lines(ABOUT_TEXT[s.lang], "grey")
+    s.screen.write()
+
+
+def cmd_lang(s: Session, arg: str) -> None:
+    choice = arg.strip().lower()
+    if choice not in ("ru", "en"):
+        s.screen.warn("USAGE: LANG RU | LANG EN")
+        return
+    s.lang = choice
+    s.screen.ok(f"NARRATIVE LANGUAGE: {choice.upper()}")
+
+
+def cmd_cases(s: Session, _arg: str) -> None:
+    s.screen.write()
+    s.screen.write("  CASE FILES // ORACLE ARCHIVE", "cyan", "bold")
+    s.screen.rule()
+    for case in s.campaign.cases:
+        unlocked = s.campaign.is_unlocked(case, s.progress)
+        if case.id in s.progress.solved:
+            mark, styles = "[CLOSED]", ("dark",)
+        elif not unlocked:
+            mark, styles = "[LOCKED]", ("grey",)
+        else:
+            mark, styles = "[  OPEN]", ("green",)
+        stars = "*" * case.difficulty
+        pointer = ">" if s.active and s.active.id == case.id else " "
+        s.screen.write(
+            f" {pointer} {mark} {case.id:02d}  {case.codename(s.lang):<22} {stars}", *styles
+        )
+    s.screen.rule()
+    s.screen.write(
+        f"  {len(s.progress.solved)}/{len(s.campaign.cases)} CLOSED", "amber"
+    )
+    s.screen.write()
+
+
+def _show_case(s: Session, case: Case) -> None:
+    s.screen.write()
+    s.screen.write(f"  CASE {case.id:02d} // {case.codename(s.lang)}", "magenta", "bold")
+    s.screen.rule("=")
+    s.screen.lines(case.brief(s.lang), "white", typed=True)
+    s.screen.write()
+    s.screen.lines(case.evidence(s.lang), "grey")
+    s.screen.write()
+    s.screen.write("  DECODING TABLE:", "cyan")
+    s.screen.lines(case.clues(s.lang), "green")
+    s.screen.rule("=")
+    s.screen.write()
+
+
+def cmd_open(s: Session, arg: str) -> None:
+    try:
+        case_id = int(arg.strip())
+    except ValueError:
+        s.screen.warn("USAGE: OPEN <case id>")
+        return
+    case = s.campaign.get(case_id)
+    if case is None:
+        s.screen.error(f"CASE {arg.strip()} NOT FOUND IN ARCHIVE.")
+        return
+    if not s.campaign.is_unlocked(case, s.progress):
+        missing = ", ".join(str(r) for r in case.requires if r not in s.progress.solved)
+        s.screen.error(s.t("locked", req=missing))
+        return
+    s.active = case
+    _show_case(s, case)
+
+
+def cmd_brief(s: Session, _arg: str) -> None:
+    if not s.active:
+        s.screen.warn(s.t("no_case"))
+        return
+    s.screen.lines(s.active.brief(s.lang), "white")
+
+
+def cmd_evidence(s: Session, _arg: str) -> None:
+    if not s.active:
+        s.screen.warn(s.t("no_case"))
+        return
+    s.screen.lines(s.active.evidence(s.lang), "grey")
+
+
+def cmd_clues(s: Session, _arg: str) -> None:
+    if not s.active:
+        s.screen.warn(s.t("no_case"))
+        return
+    s.screen.lines(s.active.clues(s.lang), "green")
+
+
+def cmd_hint(s: Session, _arg: str) -> None:
+    if not s.active:
+        s.screen.warn(s.t("no_case"))
+        return
+    hints = s.active.hints(s.lang)
+    used = s.progress.hints_used.get(s.active.id, 0)
+    if used >= len(hints):
+        s.screen.warn(s.t("hints_done"))
+        return
+    s.progress.use_hint(s.active.id)
+    s.screen.write(f"[HINT {used + 1}/{len(hints)}] {hints[used]}", "amber")
+
+
+def cmd_word(s: Session, arg: str) -> None:
+    try:
+        position = int(arg.strip())
+        s.screen.kv(f"WORD {position:04d}", word_at(position))
+    except ValueError:
+        s.screen.warn("USAGE: WORD <1..2048>")
+    except IndexError as exc:
+        s.screen.error(str(exc).upper())
+
+
+def cmd_index(s: Session, arg: str) -> None:
+    word = arg.strip().lower()
+    if not word:
+        s.screen.warn("USAGE: INDEX <word>")
+        return
+    try:
+        s.screen.kv(f"INDEX OF {word}", f"{index_of(word):04d}")
+    except KeyError:
+        s.screen.error(f"'{word.upper()}' IS NOT IN THE BIP-39 DICTIONARY.")
+
+
+def cmd_search(s: Session, arg: str) -> None:
+    prefix = arg.strip().lower()
+    if not prefix:
+        s.screen.warn("USAGE: SEARCH <prefix>")
+        return
+    hits = search(prefix)
+    if not hits:
+        s.screen.warn(f"NO WORDLIST ENTRY STARTS WITH '{prefix.upper()}'.")
+        return
+    for chunk_start in range(0, len(hits), 4):
+        row = hits[chunk_start : chunk_start + 4]
+        s.screen.write("  " + "".join(f"{i:>5}  {w:<14}" for i, w in row), "green")
+    s.screen.write(f"  {len(hits)} MATCH(ES)", "grey")
+
+
+def cmd_entropy(s: Session, arg: str) -> None:
+    raw = arg.strip().lower().replace("0x", "").replace(" ", "")
+    if not raw:
+        s.screen.warn("USAGE: ENTROPY <hex> (32 hex chars = 128 bits = 12 words)")
+        return
+    try:
+        entropy = bytes.fromhex(raw)
+    except ValueError:
+        s.screen.error("ENTROPY MUST BE HEXADECIMAL.")
+        return
+    try:
+        mnemonic = entropy_to_mnemonic(entropy)
+    except MnemonicError as exc:
+        s.screen.error(str(exc))
+        return
+    s.screen.write()
+    s.screen.kv("ENTROPY", entropy.hex(), value_styles=("cyan",))
+    s.screen.kv("BITS", str(len(entropy) * 8), value_styles=("cyan",))
+    s.screen.stream(f"{'MNEMONIC':<18}: {mnemonic}", "green", "bold", cps=120)
+    s.screen.write()
+    s.screen.info("RUN: DECRYPT " + mnemonic)
+
+
+def _print_derivation(s: Session, wallet: Wallet) -> None:
+    s.screen.rule("=")
+    s.screen.kv("BIP39 SEED", wallet.seed[:64] + "...", value_styles=("dark",))
+    s.screen.kv("MASTER XPRV", wallet.master_xprv, value_styles=("dark",))
+    s.screen.rule("-")
+    for derived in wallet.addresses:
+        label = f"PATH {derived.path} ({derived.label})"
+        print(s.screen.paint(f"{label:<44}: ", "grey")
+              + s.screen.paint(derived.address, "green", "bold"))
+    s.screen.rule("-")
+    for derived in wallet.addresses:
+        s.screen.kv(f"PUBKEY m/{derived.purpose}'", derived.public_key,
+                    value_styles=("dark",), width=18)
+    s.screen.rule("=")
+    s.screen.write("[STATUS] DERIVATION COMPLETE. RUN SYNC_LEDGER TO QUERY THE CHAIN.",
+                   "cyan")
+
+
+def cmd_decrypt(s: Session, arg: str) -> None:
+    phrase = arg.strip()
+    if not phrase:
+        s.screen.warn("USAGE: DECRYPT <12 words>")
+        return
+    s.screen.write()
+    wallet, error = s.screen.run_with_logs(lambda: derive_wallet(phrase), DECRYPT_LOGS)
+    if isinstance(error, MnemonicError):
+        s.screen.error(str(error))
+        if error.kind == "checksum":
+            s.screen.write(
+                "        THE LAST WORD CARRIES THE CHECKSUM. ONE WRONG WORD BREAKS IT.",
+                "red",
+            )
+        return
+    if error is not None or wallet is None:
+        s.screen.error(f"DERIVATION FAILED: {error}")
+        return
+
+    s.wallet = wallet
+    s.screen.ok("MNEMONIC CHECKSUM VALID.")
+    _print_derivation(s, wallet)
+
+    owner = s.campaign.find_by_mnemonic(wallet.mnemonic)
+    if s.active and owner is not None and owner.id == s.active.id:
+        _close_case(s, s.active)
+    elif owner is not None and owner.id not in s.progress.solved:
+        if s.campaign.is_unlocked(owner, s.progress):
+            s.active = owner
+            _close_case(s, owner)
+        else:
+            s.screen.warn(s.t("wrong_case", id=owner.id, name=owner.codename(s.lang)))
+    elif s.active is not None:
+        s.screen.warn(s.t("not_this_case", id=s.active.id))
+
+
+def _close_case(s: Session, case: Case) -> None:
+    first_time = case.id not in s.progress.solved
+    s.progress.mark_solved(case.id)
+    s.screen.write()
+    s.screen.write("  " + s.t("solved_banner", id=case.id), "magenta", "bold")
+    s.screen.rule("=")
+    if first_time:
+        s.screen.lines(case.epilogue(s.lang), "white", typed=True)
+    else:
+        s.screen.lines(case.epilogue(s.lang), "white")
+    s.screen.rule("=")
+    if len(s.progress.solved) == len(s.campaign.cases):
+        s.screen.write()
+        s.screen.write("  " + s.t("all_done"), "amber", "bold")
+    s.screen.write()
+
+
+def cmd_derive(s: Session, _arg: str) -> None:
+    if not s.wallet:
+        s.screen.warn(s.t("no_wallet"))
+        return
+    _print_derivation(s, s.wallet)
+
+
+def _target_address(s: Session, arg: str) -> str | None:
+    if arg.strip():
+        return arg.strip()
+    if s.wallet:
+        return s.wallet.primary.address
+    s.screen.warn(s.t("no_wallet"))
+    return None
+
+
+def cmd_sync(s: Session, arg: str) -> None:
+    address = _target_address(s, arg)
+    if address is None:
+        return
+    s.screen.write()
+    s.screen.write(f"[NET] ESTABLISHING ENCRYPTED PROXY TO {s.chain.node_name} NODE... OK",
+                   "cyan")
+    s.screen.write(f"[NET] QUERYING ADDR: {address}", "cyan")
+    stats, error = s.screen.run_with_logs(
+        lambda: s.chain.address_stats(address), NET_LOGS
+    )
+    if isinstance(error, ChainError) or stats is None:
+        s.screen.error("NETWORK LINK DOWN. NO EXPLORER ANSWERED.")
+        s.screen.write(f"        {error}", "red")
+        return
+    if error is not None:
+        s.screen.error(f"UNEXPECTED FAILURE: {error}")
+        return
+
+    s.screen.write("[NET] PARSING DATA STREAMS... SUCCESS", "cyan")
+    s.screen.rule("-")
+    s.screen.write("ADDRESS BALANCE ANALYSIS:", "white", "bold")
+    s.screen.kv("CONFIRMED BALANCE", f"{stats.confirmed_btc} BTC")
+    s.screen.kv("UNCONFIRMED TXs", f"{stats.unconfirmed_btc} BTC")
+    s.screen.kv("TOTAL RECEIVED", f"{stats.total_received_btc} BTC")
+    s.screen.kv("TOTAL SENT", f"{stats.total_sent_btc} BTC")
+    s.screen.kv("TX COUNT", str(stats.tx_count))
+    s.screen.kv("UTXO COUNT", str(stats.utxo_count))
+    s.screen.kv("SOURCE NODE", stats.provider, value_styles=("dark",))
+    s.screen.rule("-")
+    if stats.confirmed_sats > 0:
+        s.screen.write("[STATUS] ACCESS KEY REQUIRED FOR WITHDRAWAL.", "amber")
+    elif stats.is_touched:
+        s.screen.write("[STATUS] WALLET DRAINED. HISTORY INTACT — RUN TXLOG.", "amber")
+    else:
+        s.screen.write("[STATUS] ADDRESS NEVER USED ON MAINNET.", "grey")
+    s.screen.write()
+
+
+def cmd_sweep(s: Session, _arg: str) -> None:
+    """Query every derived path — history often sits on one branch only."""
+    if not s.wallet:
+        s.screen.warn(s.t("no_wallet"))
+        return
+    s.screen.write()
+    s.screen.write("[NET] SWEEPING DERIVATION GRID ACROSS THE LIVE CHAIN...", "cyan")
+
+    def sweep() -> list[tuple[str, object]]:
+        results = []
+        for derived in s.wallet.addresses:
+            try:
+                results.append((derived.label, s.chain.address_stats(derived.address)))
+            except ChainError as exc:
+                results.append((derived.label, exc))
+        return results
+
+    rows, error = s.screen.run_with_logs(sweep, NET_LOGS)
+    if error is not None or rows is None:
+        s.screen.error(f"SWEEP FAILED: {error}")
+        return
+
+    s.screen.rule("-")
+    header = f"{'PATH':<16}{'ADDRESS':<46}{'TX':>5}  {'RECEIVED':>16}"
+    s.screen.write(header, "grey")
+    touched = 0
+    for derived, (label, result) in zip(s.wallet.addresses, rows):
+        if isinstance(result, ChainError):
+            s.screen.write(f"m/{derived.purpose}'".ljust(16)
+                           + derived.address.ljust(46) + "  UNREACHABLE", "red")
+            continue
+        if result.is_touched:
+            touched += 1
+        s.screen.write(
+            f"m/{derived.purpose}'".ljust(16) + derived.address.ljust(46)
+            + f"{result.tx_count:>5}  {result.total_received_btc:>16}",
+            "green" if result.is_touched else "dark",
+        )
+    s.screen.rule("-")
+    if touched:
+        s.screen.write(f"[STATUS] {touched}/3 PATHS CARRY ON-CHAIN HISTORY.", "amber")
+    else:
+        s.screen.write("[STATUS] NO PATH OF THIS SEED HAS EVER BEEN USED.", "grey")
+    s.screen.write()
+
+
+def cmd_txlog(s: Session, arg: str) -> None:
+    address = _target_address(s, arg)
+    if address is None:
+        return
+    s.screen.write()
+    s.screen.write(f"[NET] FETCHING TRANSACTION HISTORY: {address}", "cyan")
+    txs, error = s.screen.run_with_logs(
+        lambda: s.chain.transactions(address, limit=8), NET_LOGS[:3]
+    )
+    if error is not None or txs is None:
+        s.screen.error("TX HISTORY UNAVAILABLE.")
+        s.screen.write(f"        {error}", "red")
+        return
+    if not txs:
+        s.screen.warn("NO TRANSACTIONS RECORDED FOR THIS ADDRESS.")
+        return
+    s.screen.rule("-")
+    for tx in txs:
+        height = str(tx.block_height) if tx.block_height else "MEMPOOL"
+        state = "CONFIRMED" if tx.confirmed else "PENDING  "
+        s.screen.write(f"  {state}  BLOCK {height:>9}  {tx.txid}", "green")
+    s.screen.rule("-")
+    s.screen.write(f"  {len(txs)} MOST RECENT TX(s)", "grey")
+    s.screen.write()
+
+
+def cmd_provider(s: Session, arg: str) -> None:
+    name = arg.strip().lower()
+    if not name:
+        current = s.chain.order[0]
+        for key, provider in PROVIDERS.items():
+            mark = ">" if key == current else " "
+            s.screen.write(f" {mark} {key:<12} {provider.base}", "green")
+        return
+    if name not in PROVIDERS:
+        s.screen.error("UNKNOWN PROVIDER. TRY: " + ", ".join(PROVIDERS))
+        return
+    s.chain.preferred = name
+    s.screen.ok(f"PRIMARY NODE: {PROVIDERS[name].name}")
+
+
+def cmd_explorer(s: Session, arg: str) -> None:
+    address = _target_address(s, arg)
+    if address is None:
+        return
+    s.screen.kv("EXPLORER", s.chain.explorer_url(address), value_styles=("cyan",))
+
+
+def cmd_status(s: Session, _arg: str) -> None:
+    s.screen.write()
+    s.screen.kv("OPERATOR", s.campaign.meta["operator"])
+    s.screen.kv("CLIENT", s.campaign.meta["client"])
+    s.screen.kv("BUILD", f"{__version__}")
+    s.screen.kv("LANGUAGE", s.lang.upper())
+    s.screen.kv("PRIMARY NODE", s.chain.node_name)
+    s.screen.kv("MODE", "OFFLINE" if s.chain.offline else "LIVE NET",
+                value_styles=("amber",) if s.chain.offline else ("green",))
+    s.screen.kv("WORDLIST", "AUTHENTIC" if wordlist_is_authentic() else "MODIFIED")
+    s.screen.kv("CASES CLOSED", f"{len(s.progress.solved)}/{len(s.campaign.cases)}")
+    s.screen.kv("ACTIVE CASE",
+                f"{s.active.id:02d} {s.active.codename(s.lang)}" if s.active else "NONE")
+    if s.wallet:
+        s.screen.kv("LOADED ADDRESS", s.wallet.primary.address)
+        try:
+            entropy = mnemonic_to_entropy(s.wallet.mnemonic)
+            s.screen.kv("SEED ENTROPY", entropy.hex(), value_styles=("dark",))
+        except MnemonicError:  # pragma: no cover - wallet is validated on load
+            pass
+    s.screen.write()
+
+
+def cmd_clear(s: Session, _arg: str) -> None:
+    os.system("cls" if os.name == "nt" else "clear")
+
+
+def cmd_reset(s: Session, _arg: str) -> None:
+    s.progress.reset()
+    s.active = None
+    s.wallet = None
+    s.screen.ok("PROGRESS ERASED. ARCHIVE SEALED AGAIN.")
+
+
+def cmd_exit(s: Session, _arg: str) -> None:
+    s.running = False
+    s.screen.write()
+    s.screen.write("[SYS] SESSION CLOSED. THE RAIN KEEPS FALLING.", "dark")
+
+
+COMMANDS = {
+    "HELP": cmd_help, "?": cmd_help,
+    "ABOUT": cmd_about,
+    "LANG": cmd_lang,
+    "CASES": cmd_cases, "LS": cmd_cases,
+    "OPEN": cmd_open,
+    "BRIEF": cmd_brief,
+    "EVIDENCE": cmd_evidence,
+    "CLUES": cmd_clues,
+    "HINT": cmd_hint,
+    "WORD": cmd_word,
+    "INDEX": cmd_index,
+    "SEARCH": cmd_search,
+    "ENTROPY": cmd_entropy,
+    "DECRYPT": cmd_decrypt,
+    "DERIVE": cmd_derive,
+    "SYNC_LEDGER": cmd_sync, "SYNC": cmd_sync,
+    "SWEEP": cmd_sweep,
+    "TXLOG": cmd_txlog,
+    "PROVIDER": cmd_provider,
+    "EXPLORER": cmd_explorer,
+    "STATUS": cmd_status,
+    "CLEAR": cmd_clear,
+    "RESET": cmd_reset,
+    "EXIT": cmd_exit, "QUIT": cmd_exit,
+}
+
+
+def dispatch(session: Session, line: str) -> None:
+    line = line.strip()
+    if not line:
+        return
+    session.history.append(line)
+    head, _, tail = line.partition(" ")
+    handler = COMMANDS.get(head.upper())
+    if handler is None:
+        session.screen.error(f"UNKNOWN COMMAND: {head.upper()}")
+        session.screen.write("        TYPE HELP FOR THE COMMAND LIST.", "grey")
+        return
+    handler(session, tail)
+
+
+def build_session(args: argparse.Namespace) -> Session:
+    campaign = Campaign()
+    return Session(
+        campaign=campaign,
+        progress=Progress.load(),
+        screen=Screen(colour=None if not args.no_color else False, speed=args.speed),
+        chain=ChainClient(preferred=args.provider, offline=args.offline),
+        lang=args.lang,
+    )
+
+
+def run(session: Session) -> int:
+    screen = session.screen
+    screen.boot(
+        version=__version__,
+        checksum="OK" if wordlist_is_authentic() else "MODIFIED",
+        provider=session.chain.node_name,
+        operator=session.campaign.meta["operator"],
+        client=session.campaign.meta["client"],
+    )
+    screen.lines(session.campaign.prologue(session.lang), "white", typed=True)
+    screen.write()
+
+    while session.running:
+        try:
+            line = input(screen.paint(PROMPT, "green", "bold"))
+        except EOFError:
+            screen.write()
+            break
+        except KeyboardInterrupt:
+            screen.write()
+            screen.write("[SYS] INTERRUPT — TYPE EXIT TO LEAVE.", "amber")
+            continue
+        dispatch(session, line)
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        prog="neon-terminal",
+        description="BIP-39: NEON TERMINAL — a detective quest over the live Bitcoin network.",
+    )
+    parser.add_argument("--lang", choices=("ru", "en"), default="ru",
+                        help="narrative language (default: ru)")
+    parser.add_argument("--provider", choices=tuple(PROVIDERS), default=None,
+                        help="preferred block explorer")
+    parser.add_argument("--offline", action="store_true",
+                        help="disable every network call; crypto still runs for real")
+    parser.add_argument("--speed", type=float, default=1.0,
+                        help="animation speed multiplier; 0 disables animation")
+    parser.add_argument("--no-color", action="store_true", help="disable ANSI colour")
+    parser.add_argument("--command", "-c", action="append", default=None,
+                        help="run a command and exit (repeatable)")
+    args = parser.parse_args(argv)
+
+    session = build_session(args)
+    if args.command:
+        for line in args.command:
+            dispatch(session, line)
+        return 0
+    try:
+        return run(session)
+    except KeyboardInterrupt:  # pragma: no cover - user abort
+        session.screen.write()
+        return 130
+
+
+if __name__ == "__main__":  # pragma: no cover
+    sys.exit(main())

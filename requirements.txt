@@ -1,0 +1,7 @@
+# The terminal runs on the standard library alone. Everything here is optional
+# but recommended: `requests` gives the network layer better timeout handling,
+# and the other two are the reference implementations the test suite diffs
+# against, exactly as named in the spec.
+requests>=2.31
+mnemonic>=0.20
+bip-utils>=2.9

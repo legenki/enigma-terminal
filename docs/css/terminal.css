@@ -1,0 +1,136 @@
+/* Terminal styling: the page is a CRT sitting in a dark room. */
+
+:root {
+  --phosphor: #39ff8b;
+  --phosphor-dim: #1f8c4d;
+  --tube: #03120b;
+  --bezel: #14181a;
+  --bezel-edge: #05070a;
+  --room: #05070a;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--room);
+  color: var(--phosphor);
+  font-family: "IBM Plex Mono", "Courier New", monospace;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* The room: a faint magenta/cyan glow bleeding in from off-screen. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(60% 50% at 20% 0%, rgba(255, 77, 210, 0.10), transparent 70%),
+    radial-gradient(50% 50% at 90% 100%, rgba(77, 243, 255, 0.08), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#bezel {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  padding: clamp(10px, 2.2vmin, 28px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#screen-frame {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border-radius: clamp(10px, 2.4vmin, 26px);
+  background: var(--tube);
+  border: clamp(6px, 1.2vmin, 14px) solid var(--bezel);
+  box-shadow:
+    0 0 0 2px var(--bezel-edge),
+    0 0 60px rgba(57, 255, 139, 0.14),
+    inset 0 0 90px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+}
+
+#term-layer,
+#crt-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* When the shader runs, the 2D canvas is only a texture source. It must stay
+   laid out (its size drives the grid) but must not be seen. */
+#term-layer.is-source { opacity: 0; }
+#crt-layer.is-hidden { display: none; }
+
+#keyboard-input {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+#status-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: clamp(9px, 1.5vmin, 12px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--phosphor-dim);
+  padding: 0 4px;
+  user-select: none;
+}
+
+#power-led {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--phosphor);
+  box-shadow: 0 0 10px var(--phosphor);
+  transition: background 120ms linear, box-shadow 120ms linear;
+}
+
+#power-led.is-busy {
+  background: #ffc23d;
+  box-shadow: 0 0 12px #ffc23d;
+}
+
+#status-bar .spacer { flex: 1; }
+
+#status-bar a {
+  color: var(--phosphor-dim);
+  text-decoration: none;
+  border-bottom: 1px dotted currentColor;
+}
+
+#status-bar a:hover { color: var(--phosphor); }
+
+#noscript-notice {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  padding: 2rem;
+  text-align: center;
+  background: var(--room);
+  z-index: 10;
+  line-height: 1.7;
+}
+
+@media (max-width: 640px) {
+  #status-bar .optional { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #power-led { transition: none; }
+}

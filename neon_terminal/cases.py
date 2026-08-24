@@ -1,0 +1,152 @@
+"""Quest content and player progress.
+
+Case data lives in ``data/cases.json`` so the Python build and the web build
+share one source of truth. Answers are never stored in plain text — each case
+carries the sha256 fingerprint of its mnemonic, so solving is checked by hashing
+whatever the player typed.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
+
+from .crypto_engine import fingerprint
+
+_ROOT = Path(__file__).resolve().parent.parent
+CASES_FILE = _ROOT / "data" / "cases.json"
+
+LANGUAGES = ("ru", "en")
+
+
+def _pick(value: Any, lang: str) -> Any:
+    """Resolve a ``{"ru": ..., "en": ...}`` bundle down to one language."""
+    if isinstance(value, dict) and set(value) & set(LANGUAGES):
+        return value.get(lang) or value.get("en") or next(iter(value.values()))
+    return value
+
+
+@dataclass(frozen=True)
+class Case:
+    id: int
+    difficulty: int
+    kind: str
+    fingerprint: str
+    raw: dict
+    requires: tuple[int, ...] = ()
+
+    def codename(self, lang: str) -> str:
+        return _pick(self.raw["codename"], lang)
+
+    def brief(self, lang: str) -> list[str]:
+        return list(_pick(self.raw["brief"], lang))
+
+    def evidence(self, lang: str) -> list[str]:
+        return list(_pick(self.raw["evidence"], lang))
+
+    def clues(self, lang: str) -> list[str]:
+        return list(_pick(self.raw["clues"], lang))
+
+    def hints(self, lang: str) -> list[str]:
+        return list(_pick(self.raw["hints"], lang))
+
+    def epilogue(self, lang: str) -> list[str]:
+        return list(_pick(self.raw["epilogue"], lang))
+
+    def matches(self, mnemonic: str) -> bool:
+        """Constant-shape check: hash what the player typed, compare fingerprints."""
+        return fingerprint(mnemonic) == self.fingerprint
+
+
+@dataclass
+class Progress:
+    """Solved cases and used hints, persisted between sessions."""
+
+    solved: set[int] = field(default_factory=set)
+    hints_used: dict[int, int] = field(default_factory=dict)
+    path: Path | None = None
+
+    @classmethod
+    def default_path(cls) -> Path:
+        base = os.environ.get("NEON_TERMINAL_HOME")
+        if base:
+            return Path(base) / "progress.json"
+        return Path.home() / ".neon_terminal" / "progress.json"
+
+    @classmethod
+    def load(cls, path: Path | None = None) -> "Progress":
+        path = path or cls.default_path()
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (FileNotFoundError, ValueError, OSError):
+            return cls(path=path)
+        return cls(
+            solved={int(i) for i in data.get("solved", [])},
+            hints_used={int(k): int(v) for k, v in data.get("hints_used", {}).items()},
+            path=path,
+        )
+
+    def save(self) -> None:
+        if self.path is None:
+            return
+        try:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            self.path.write_text(
+                json.dumps(
+                    {"solved": sorted(self.solved),
+                     "hints_used": {str(k): v for k, v in self.hints_used.items()}},
+                    indent=2,
+                ),
+                encoding="utf-8",
+            )
+        except OSError:
+            pass  # a read-only home must not break the game
+
+    def mark_solved(self, case_id: int) -> None:
+        self.solved.add(case_id)
+        self.save()
+
+    def use_hint(self, case_id: int) -> int:
+        self.hints_used[case_id] = self.hints_used.get(case_id, 0) + 1
+        self.save()
+        return self.hints_used[case_id]
+
+    def reset(self) -> None:
+        self.solved.clear()
+        self.hints_used.clear()
+        self.save()
+
+
+class Campaign:
+    """The eight cases plus the rules for unlocking them."""
+
+    def __init__(self, path: Path | None = None) -> None:
+        data = json.loads((path or CASES_FILE).read_text(encoding="utf-8"))
+        self.meta: dict = data["meta"]
+        self._prologue: dict = data["prologue"]
+        self.cases: list[Case] = [
+            Case(
+                id=item["id"],
+                difficulty=item["difficulty"],
+                kind=item["kind"],
+                fingerprint=item["fingerprint"],
+                requires=tuple(item.get("requires", ())),
+                raw=item,
+            )
+            for item in data["cases"]
+        ]
+
+    def prologue(self, lang: str) -> list[str]:
+        return list(_pick(self._prologue, lang))
+
+    def get(self, case_id: int) -> Case | None:
+        return next((c for c in self.cases if c.id == case_id), None)
+
+    def is_unlocked(self, case: Case, progress: Progress) -> bool:
+        return all(req in progress.solved for req in case.requires)
+
+    def find_by_mnemonic(self, mnemonic: str) -> Case | None:
+        return next((c for c in self.cases if c.matches(mnemonic)), None)

@@ -1,0 +1,267 @@
+"""Command-loop behaviour, exercised without touching the network."""
+
+import pytest
+
+from neon_terminal.cases import Campaign, Progress
+from neon_terminal.chain import ChainClient
+from neon_terminal.game import Session, dispatch
+from neon_terminal.ui import Screen
+
+from .answers import LEGACY_ADDRESSES, SOLUTIONS, UNRELATED_MNEMONIC
+
+
+@pytest.fixture
+def session(tmp_path):
+    return Session(
+        campaign=Campaign(),
+        progress=Progress.load(tmp_path / "progress.json"),
+        screen=Screen(colour=False, speed=0),
+        chain=ChainClient(offline=True),
+        lang="en",
+    )
+
+
+def run(session, *commands):
+    for command in commands:
+        dispatch(session, command)
+
+
+def test_unknown_command_is_reported(session, capsys):
+    run(session, "TELEPORT")
+    assert "UNKNOWN COMMAND: TELEPORT" in capsys.readouterr().out
+
+
+def test_blank_input_is_ignored(session, capsys):
+    run(session, "   ")
+    assert capsys.readouterr().out == ""
+
+
+def test_help_lists_the_core_commands(session, capsys):
+    run(session, "HELP")
+    out = capsys.readouterr().out
+    for command in ("DECRYPT", "SYNC_LEDGER", "ENTROPY", "CASES", "HINT"):
+        assert command in out
+
+
+def test_cases_marks_the_finale_locked(session, capsys):
+    run(session, "CASES")
+    out = capsys.readouterr().out
+    assert "[LOCKED] 08" in out
+    assert "0/8 CLOSED" in out
+
+
+def test_opening_a_locked_case_is_refused(session, capsys):
+    run(session, "OPEN 8")
+    assert "CASE LOCKED" in capsys.readouterr().out
+
+
+def test_open_shows_brief_evidence_and_clues(session, capsys):
+    run(session, "OPEN 1")
+    out = capsys.readouterr().out
+    assert "CASE 01 // ZERO VAULT" in out
+    assert "DECODING TABLE" in out
+    assert session.active.id == 1
+
+
+def test_hints_are_spent_one_at_a_time(session, capsys):
+    run(session, "OPEN 2", "HINT", "HINT", "HINT", "HINT")
+    out = capsys.readouterr().out
+    assert "[HINT 1/3]" in out and "[HINT 3/3]" in out
+    assert "NO HINTS LEFT" in out
+    assert session.progress.hints_used[2] == 3
+
+
+def test_entropy_command_rebuilds_a_mnemonic(session, capsys):
+    run(session, "ENTROPY 7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f")
+    assert SOLUTIONS[2] in capsys.readouterr().out
+
+
+def test_entropy_rejects_non_hex(session, capsys):
+    run(session, "ENTROPY zzzz")
+    assert "ENTROPY MUST BE HEXADECIMAL" in capsys.readouterr().out
+
+
+def test_entropy_rejects_wrong_length(session, capsys):
+    run(session, "ENTROPY 00ff")
+    assert "ENTROPY MUST BE 16, 20, 24, 28 OR 32 BYTES" in capsys.readouterr().out
+
+
+def test_decrypt_prints_the_derivation_grid(session, capsys):
+    run(session, f"DECRYPT {SOLUTIONS[1]}")
+    out = capsys.readouterr().out
+    assert "MNEMONIC CHECKSUM VALID" in out
+    assert "PATH m/44'/0'/0'/0/0 (Legacy P2PKH)" in out
+    assert "PATH m/49'/0'/0'/0/0 (Nested SegWit)" in out
+    assert "PATH m/84'/0'/0'/0/0 (Native SegWit)" in out
+    assert LEGACY_ADDRESSES[1] in out
+
+
+def test_decrypt_reports_a_broken_checksum(session, capsys):
+    run(session, "DECRYPT " + "abandon " * 12)
+    out = capsys.readouterr().out
+    assert "[FATAL] MNEMONIC CHECKSUM INVALID. DECRYPTION FAILED." in out
+    assert session.wallet is None
+
+
+def test_decrypt_reports_a_word_outside_the_dictionary(session, capsys):
+    run(session, "DECRYPT " + "abandon " * 11 + "bitcoin")
+    assert "WORD NOT IN BIP-39 DICTIONARY: bitcoin" in capsys.readouterr().out
+
+
+def test_solving_the_active_case_closes_it(session, capsys):
+    run(session, "OPEN 1", f"DECRYPT {SOLUTIONS[1]}")
+    out = capsys.readouterr().out
+    assert "CASE 1 CLOSED" in out
+    assert 1 in session.progress.solved
+
+
+def test_right_seed_wrong_case_is_flagged(session, capsys):
+    run(session, "OPEN 1", f"DECRYPT {SOLUTIONS[2]}")
+    out = capsys.readouterr().out
+    assert "CASE 2 CLOSED" in out  # it still belongs to a case, so it counts
+    assert session.progress.solved == {2}
+
+
+def test_a_valid_but_unrelated_seed_closes_nothing(session, capsys):
+    run(session, "OPEN 1", f"DECRYPT {UNRELATED_MNEMONIC}")
+    out = capsys.readouterr().out
+    assert "NOT THE KEY TO CASE 1" in out
+    assert session.progress.solved == set()
+
+
+def test_finale_unlocks_only_after_the_other_seven(session, capsys):
+    for case_id in range(1, 8):
+        run(session, f"DECRYPT {SOLUTIONS[case_id]}")
+    capsys.readouterr()
+    run(session, "OPEN 8", f"DECRYPT {SOLUTIONS[8]}")
+    out = capsys.readouterr().out
+    assert "CASE 8 CLOSED" in out
+    assert "ALL EIGHT CASES CLOSED" in out
+
+
+def test_solving_the_finale_early_is_refused(session, capsys):
+    run(session, f"DECRYPT {SOLUTIONS[8]}")
+    out = capsys.readouterr().out
+    assert "THIS SEED BELONGS TO CASE 8" in out
+    assert session.progress.solved == set()
+
+
+def test_offline_mode_reports_a_dead_link(session, capsys):
+    run(session, f"DECRYPT {SOLUTIONS[1]}", "SYNC_LEDGER")
+    out = capsys.readouterr().out
+    assert "NETWORK LINK DOWN" in out
+    assert "OFFLINE MODE ACTIVE" in out
+
+
+def test_sync_without_a_seed_asks_for_one(session, capsys):
+    run(session, "SYNC_LEDGER")
+    assert "NO SEED LOADED" in capsys.readouterr().out
+
+
+def test_wordlist_tools(session, capsys):
+    run(session, "WORD 1", "INDEX zoo", "SEARCH ozo", "WORD 9999", "INDEX notaword")
+    out = capsys.readouterr().out
+    assert "abandon" in out
+    assert "2048" in out
+    assert "ozone" in out
+    assert "BIP-39 INDEX MUST BE IN 1..2048" in out
+    assert "IS NOT IN THE BIP-39 DICTIONARY" in out
+
+
+def test_provider_can_be_switched(session, capsys):
+    run(session, "PROVIDER mempool", "STATUS")
+    out = capsys.readouterr().out
+    assert "PRIMARY NODE: MEMPOOL.SPACE" in out
+    assert session.chain.order[0] == "mempool"
+
+
+def test_unknown_provider_is_refused(session, capsys):
+    run(session, "PROVIDER hyperledger")
+    assert "UNKNOWN PROVIDER" in capsys.readouterr().out
+
+
+def test_language_switch_changes_the_narrative(session, capsys):
+    run(session, "LANG ru", "OPEN 1")
+    out = capsys.readouterr().out
+    assert "НУЛЕВОЕ ХРАНИЛИЩЕ" in out
+    run(session, "LANG de")
+    assert "USAGE: LANG RU | LANG EN" in capsys.readouterr().out
+
+
+def test_reset_clears_progress(session, capsys):
+    run(session, f"DECRYPT {SOLUTIONS[1]}", "RESET", "CASES")
+    assert "0/8 CLOSED" in capsys.readouterr().out
+    assert session.progress.solved == set()
+
+
+def test_exit_stops_the_loop(session):
+    run(session, "EXIT")
+    assert session.running is False
+
+
+def test_sweep_without_a_seed_asks_for_one(session, capsys):
+    run(session, "SWEEP")
+    assert "NO SEED LOADED" in capsys.readouterr().out
+
+
+def test_sweep_reports_every_derived_path(session, capsys, monkeypatch):
+    from neon_terminal import chain
+
+    stats = {
+        "1PpJDjhMCChYbnonB1Ri3cC4PAiU2Ss6xC": (0, 0),
+        "3ETvcnQcuGGRG4aZmTe9UmoGQKEeqYEkcw": (0, 0),
+        "bc1qp9cfwk986xqjwstvh95pyy8pm599jm6qfe8he5": (4, 181879),
+    }
+
+    def fake_stats(self, address):
+        tx_count, received = stats[address]
+        return chain.AddressStats(
+            address=address, confirmed_sats=0, unconfirmed_sats=0,
+            total_received_sats=received, total_sent_sats=received,
+            tx_count=tx_count, utxo_count=0, provider="TESTNODE",
+        )
+
+    monkeypatch.setattr(chain.ChainClient, "address_stats", fake_stats)
+    session.chain.offline = False
+    run(session, f"DECRYPT {SOLUTIONS[6]}", "SWEEP")
+    out = capsys.readouterr().out
+    for address in stats:
+        assert address in out
+    assert "0.00181879" in out
+    assert "1/3 PATHS CARRY ON-CHAIN HISTORY" in out
+
+
+def test_sweep_says_so_when_a_seed_was_never_used(session, capsys, monkeypatch):
+    from neon_terminal import chain
+
+    monkeypatch.setattr(
+        chain.ChainClient, "address_stats",
+        lambda self, address: chain.AddressStats(
+            address=address, confirmed_sats=0, unconfirmed_sats=0,
+            total_received_sats=0, total_sent_sats=0, tx_count=0,
+            utxo_count=0, provider="TESTNODE",
+        ),
+    )
+    session.chain.offline = False
+    run(session, f"DECRYPT {SOLUTIONS[8]}", "SWEEP")
+    assert "NO PATH OF THIS SEED HAS EVER BEEN USED" in capsys.readouterr().out
+
+
+def test_sweep_survives_one_unreachable_provider(session, capsys, monkeypatch):
+    from neon_terminal import chain
+
+    def flaky(self, address):
+        if address.startswith("bc1"):
+            raise chain.ChainError("all providers down")
+        return chain.AddressStats(
+            address=address, confirmed_sats=0, unconfirmed_sats=0,
+            total_received_sats=1000, total_sent_sats=0, tx_count=1,
+            utxo_count=1, provider="TESTNODE",
+        )
+
+    monkeypatch.setattr(chain.ChainClient, "address_stats", flaky)
+    session.chain.offline = False
+    run(session, f"DECRYPT {SOLUTIONS[1]}", "SWEEP")
+    out = capsys.readouterr().out
+    assert "UNREACHABLE" in out
+    assert "2/3 PATHS CARRY ON-CHAIN HISTORY" in out

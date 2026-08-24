@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BIP-39: NEON TERMINAL</title>
+<meta name="description" content="A cyberpunk detective quest that derives real Bitcoin addresses from BIP-39 seed phrases and queries the live blockchain.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="BIP-39: NEON TERMINAL">
+<meta property="og:description" content="Recover seed phrases from detective riddles. Real BIP-39 derivation, real block explorer queries, all in the browser.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🖥️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/terminal.css">
+</head>
+<body>
+<div id="bezel">
+  <div id="screen-frame">
+    <canvas id="term-layer"></canvas>
+    <canvas id="crt-layer"></canvas>
+    <input id="keyboard-input" type="text" autocomplete="off" autocorrect="off"
+           autocapitalize="none" spellcheck="false" aria-label="Terminal input">
+  </div>
+  <div id="status-bar">
+    <span id="power-led" aria-hidden="true"></span>
+    <span>BIP-39 // NEON TERMINAL</span>
+    <span class="optional">REAL NET BUILD</span>
+    <span class="spacer"></span>
+    <span class="optional">TYPE HELP</span>
+    <a href="https://github.com/legenki/neon-terminal" target="_blank" rel="noopener">SOURCE</a>
+  </div>
+</div>
+
+<noscript>
+  <div id="noscript-notice">
+    <h1>BIP-39: NEON TERMINAL</h1>
+    <p>This terminal derives Bitcoin addresses in your browser.<br>It needs JavaScript to run.</p>
+  </div>
+</noscript>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

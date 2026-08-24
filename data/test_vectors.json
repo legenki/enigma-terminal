@@ -1,0 +1,122 @@
+{
+  "source": "Generated from the reference implementations `mnemonic` and `bip-utils`; the first four entries are the official BIP-39 (Trezor) test vectors.",
+  "vectors": [
+    {
+      "entropy": "00000000000000000000000000000000",
+      "mnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "seed": "5eb00bbddcf069084889a8ab9155568165f5c453ccb85e70811aaed6f6da5fc19a5ac40b389cd370d086206dec8aa6c43daea6690f20ad3d8d48b2d2ce9e38e4",
+      "seed_trezor_passphrase": "c55257c360c07c72029aebc1b53c05ed0362ada38ead3e3e9efa3708e53495531f09a6987599d18264c1e1c92f2cf141630c7a3c4ab7c81b2f001698e7463b04",
+      "addresses": {
+        "44": "1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA",
+        "49": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf",
+        "84": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
+      },
+      "wif_44": "L4p2b9VAf8k5aUahF1JCJUzZkgNEAqLfq8DDdQiyAprQAKSbu8hf",
+      "pubkey_44": "03aaeb52dd7494c361049de67cc680e83ebcbbbdbeb13637d92cd845f70308af5e"
+    },
+    {
+      "entropy": "7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f",
+      "mnemonic": "legal winner thank year wave sausage worth useful legal winner thank yellow",
+      "seed": "878386efb78845b3355bd15ea4d39ef97d179cb712b77d5c12b6be415fffeffe5f377ba02bf3f8544ab800b955e51fbff09828f682052a20faa6addbbddfb096",
+      "seed_trezor_passphrase": "2e8905819b8723fe2c1d161860e5ee1830318dbf49a83bd451cfb8440c28bd6fa457fe1296106559a3c80937a1c1069be3a3a5bd381ee6260e8d9739fce1f607",
+      "addresses": {
+        "44": "1EBuf21icKTE5m3HWVndKx2bTxvqrWCqV6",
+        "49": "362rpGzFSAYLPEbHpKDsUezXUhXFVsDCDV",
+        "84": "bc1qgkju4yvvtuz0s8vqn837q396jezu2h8ex7gk98"
+      },
+      "wif_44": "KwjfPrGWtcEt8Ez5o4qtqy5JvZjLTMsLtks7xJdpVFWv9R4v21Df",
+      "pubkey_44": "026b6eadb10ad2b787e70fb8b29d270ac6a61d34e5a76b63bd953cbb9fa31d5e22"
+    },
+    {
+      "entropy": "80808080808080808080808080808080",
+      "mnemonic": "letter advice cage absurd amount doctor acoustic avoid letter advice cage above",
+      "seed": "77d6be9708c8218738934f84bbbb78a2e048ca007746cb764f0673e4b1812d176bbb173e1a291f31cf633f1d0bad7d3cf071c30e98cd0688b5bcce65ecaceb36",
+      "seed_trezor_passphrase": "d71de856f81a8acc65e6fc851a38d4d7ec216fd0796d0a6827a3ad6ed5511a30fa280f12eb2e47ed2ac03b5c462a0358d18d69fe4f985ec81778c1b370b652a8",
+      "addresses": {
+        "44": "1McjtxpqQQYR59v2cDp5HtjgbjrAr7Wmub",
+        "49": "3MxPhoNbL9vKsaHHzuEtdPpVC1PhzoPENr",
+        "84": "bc1q4f2e4sm7w094l7t6w6vtgynjw7q3987lgx9ssj"
+      },
+      "wif_44": "L4f4YfvuKBNndszc5jMEg24D56Ahd1FN57RK9TiALQBAkQY6PNXx",
+      "pubkey_44": "03c954cababcaac1d97b97ef3fb517309e7d66e908f9440f31a9ddec15e777df2a"
+    },
+    {
+      "entropy": "ffffffffffffffffffffffffffffffff",
+      "mnemonic": "zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo wrong",
+      "seed": "b6a6d8921942dd9806607ebc2750416b289adea669198769f2e15ed926c3aa92bf88ece232317b4ea463e84b0fcd3b53577812ee449ccc448eb45e6f544e25b6",
+      "seed_trezor_passphrase": "ac27495480225222079d7be181583751e86f571027b0497b5b5d11218e0a8a13332572917f0f8e5a589620c6f15b11c61dee327651a14c34e18231052e48c069",
+      "addresses": {
+        "44": "1EjnS13zBgN6tUgy6U64qFeh53fyAeUsqE",
+        "49": "3CfyLSjYFFV6MUAMh3auTK9kfpPscPCHth",
+        "84": "bc1qk0a9hr7wjfxeenz9nwenw9flhq0tmsf6vsgnn2"
+      },
+      "wif_44": "L5NpMzWdTPpmQ1WsjtBpTti3CCXQ7ZjZQo4qcJJXPUBVVWXGC8k4",
+      "pubkey_44": "02a710461ef2cc6db53d2ceeacfbd41f9b47be0e5b62d5e0532c1c1547db4fbc89"
+    },
+    {
+      "entropy": "9e885d952ad362caeb4efe34a8e91bd2",
+      "mnemonic": "ozone drill grab fiber curtain grace pudding thank cruise elder eight picnic",
+      "seed": "e2f88a043776c828063d4c3c97173944d32cf847a925b6e40b0b8bd0b4bead3ba734bdda5250d4698b310a71c9934e1a48e562315ce22bf85f89459df0e73a6c",
+      "seed_trezor_passphrase": "274ddc525802f7c828d8ef7ddbcdc5304e87ac3535913611fbbfa986d0c9e5476c91689f9c8a54fd55bd38606aa6a8595ad213d4c9c9f9aca3fb217069a41028",
+      "addresses": {
+        "44": "1H8vEx2NFVLXJCft86A5BPMrmPjQ3DQZb7",
+        "49": "3HtNhiznwgWXvcBuX8STnVcvcga7ZeAK9K",
+        "84": "bc1qejl9xacvuwn55857qa8jtm6ettgkla6ps0thaq"
+      },
+      "wif_44": "L24J1YH43KZHWT6CGwGAFymkopbAaa4PAEbM8pC8dsi6MSotVEFH",
+      "pubkey_44": "02d09980a99e858c1e9be986590cfce2ff95e9340c98970ba225db3b38a920eb9a"
+    },
+    {
+      "entropy": "23db8160a31d3e0dca3688ed941adbf3",
+      "mnemonic": "cat swing flag economy stadium alone churn speed unique patch report train",
+      "seed": "7ea73b3a398f8a71f7dde589d972b0358d3fa8b9e91317ecc544e42752b1bb251a1926b1f4c69eec0a80c0396aa0f7df29f7d73411d3106eba539f3d584fcdf8",
+      "seed_trezor_passphrase": "deb5f45449e615feff5640f2e49f933ff51895de3b4381832b3139941c57b59205a42480c52175b6efcffaa58a2503887c1e8b363a707256bdd2b587b46541f5",
+      "addresses": {
+        "44": "1PpJDjhMCChYbnonB1Ri3cC4PAiU2Ss6xC",
+        "49": "3ETvcnQcuGGRG4aZmTe9UmoGQKEeqYEkcw",
+        "84": "bc1qp9cfwk986xqjwstvh95pyy8pm599jm6qfe8he5"
+      },
+      "wif_44": "L2oHSGitfnv8Z1B1UFjQpFGRXqVaYcTDBHAou3qLb41bfkVuJHjB",
+      "pubkey_44": "03060171f7537d6afd91a48e19a9827f00ab2e955841842e609243c3f064adeb9d"
+    },
+    {
+      "entropy": "f30f8c1da665478f49b001d94c5fc452",
+      "mnemonic": "vessel ladder alter error federal sibling chat ability sun glass valve picture",
+      "seed": "e2d7f9a462875c1325f44f321392edc8eaafebf1547c89d72d10b41b4ee23af3fb0ab010f39f5cbea3b3aa671161b58262b6a508bcbe2d34ee272a942534d45f",
+      "seed_trezor_passphrase": "2aaa9242daafcee6aa9d7269f17d4efe271e1b9a529178d7dc139cd18747090bf9d60295d0ce74309a78852a9caadf0af48aae1c6253839624076224374bc63f",
+      "addresses": {
+        "44": "18Lbc57tBH7tG87jC3bVQXWdjXXHukwdv5",
+        "49": "3EHbT6Do5HfXriY7Pn5wT8fynzHTJmWa6L",
+        "84": "bc1qrptq4565m0d3lhrsfrpw0n27y3xrkhs2f3zdza"
+      },
+      "wif_44": "Kww61vo3WJ72HrCu2ZRmUpvcdQ1JGYH7ia38PQj8rSSeAEKa52PR",
+      "pubkey_44": "03466221668e2329069596a57b276e9bd9ee08ce76b5c116cea5c71c78c4746e0f"
+    },
+    {
+      "entropy": "c0ba5a8e914111210f2bd131f3d5e08d",
+      "mnemonic": "scheme spot photo card baby mountain device kick cradle pact join borrow",
+      "seed": "00e1e39a39e23735adab690d0ffbefda6cacc063b4a5fcc605de060bd370adc54c94370d966b9a3fae5ed16bd58a02224cbefca4146a083951b70be2a2ce3dcc",
+      "seed_trezor_passphrase": "ea725895aaae8d4c1cf682c1bfd2d358d52ed9f0f0591131b559e2724bb234fca05aa9c02c57407e04ee9dc3b454aa63fbff483a8b11de949624b9f1831a9612",
+      "addresses": {
+        "44": "18aLaNnNeNgtRY7y2PQch8JEFyoy9aZyf9",
+        "49": "3BgkZoUR51FyJmLpAufXaue6pQpS74hPdY",
+        "84": "bc1qs5076emu7tv3076muegg4az3jntnefc24f4n2x"
+      },
+      "wif_44": "KzsEba83TPEKPLcfC2nvUA7Q46J5xuCkMyXy3gnzMbHrEPNqcojR",
+      "pubkey_44": "02e85931a97e4c976bd98c024b072e0a091ed1278db4229add76172a4be9ece9c9"
+    },
+    {
+      "entropy": "68a79eaca2324873eacc50cb9c6eca8cc68ea5d936f98787c60c7ebc74e6ce7c",
+      "mnemonic": "hamster diagram private dutch cause delay private meat slide toddler razor book happy fancy gospel tennis maple dilemma loan word shrug inflict delay length",
+      "seed": "17e4b5661796eeff8904550f8572289317ece7c1cc1316469f8f4c986c1ffd7b9f4c3aeac3e1713ffc21fa33707d09d57a2ece358d72111ef7c7658e7b33f2d5",
+      "seed_trezor_passphrase": "64c87cde7e12ecf6704ab95bb1408bef047c22db4cc7491c4271d170a1b213d20b385bc1588d9c7b38f1b39d415665b8a9030c9ec653d75e65f847d8fc1fc440",
+      "addresses": {
+        "44": "18CquoRzbEYzK9LaNigoukKj4z3cY6Gy9g",
+        "49": "39mp6kBPqbtcZpYTFdws6W7uFXdGgNXZ36",
+        "84": "bc1qsyypdkm39xs2c5cu5r4w5r285p98rfmaq9ft35"
+      },
+      "wif_44": "L1SCv45Qc8z3tTw76su4zKxh5ae4KyxcLZDs7ga4SLCw3VxS2QCZ",
+      "pubkey_44": "03182d17a5e7dc2ca69d684810d513fde9b2f97be302d927ca9d7d6098f269ab44"
+    }
+  ]
+}
