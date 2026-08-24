@@ -1,5 +1,9 @@
-// The GUI front-end. Retro chrome, modern layout — and the same game core the
-// command line drives, so progress and rules are shared between the two modes.
+// The GUI front-end. Retro chrome, modern layout — over the same game core the
+// command line drives, so progress, journal and rules are shared.
+//
+// Panels are built once and cached: switching tabs hides a node instead of
+// re-rendering it, so a half-typed phrase, a query and its results all survive
+// the trip to another tool and back.
 
 import { el, replace, win, section, notice, badge, kv, table, empty } from './dom.js';
 import {
@@ -7,6 +11,7 @@ import {
   completeMnemonic, isUnlocked, missingRequirements, pick, randomMnemonic,
   searchCases, searchWordlist, MnemonicError,
 } from '../core.js';
+import { Journal, TOOLS, maskMnemonic } from '../journal.js';
 import { deriveWallet } from '../crypto/wallet.js';
 import { entropyToMnemonic, mnemonicToEntropy, wordAt, indexOf } from '../crypto/bip39.js';
 import { fromHex, toHex } from '../crypto/hash.js';
@@ -18,7 +23,8 @@ const PANELS = [
   { id: 'ledger', label: { en: 'Ledger', ru: 'Реестр' }, key: '3' },
   { id: 'search', label: { en: 'Search', ru: 'Поиск' }, key: '4' },
   { id: 'random', label: { en: 'Randomizer', ru: 'Рандомайзер' }, key: '5' },
-  { id: 'about', label: { en: 'About', ru: 'О программе' }, key: '6' },
+  { id: 'journal', label: { en: 'Journal', ru: 'Журнал' }, key: '6' },
+  { id: 'about', label: { en: 'About', ru: 'О программе' }, key: '7' },
 ];
 
 const T = {
@@ -26,7 +32,6 @@ const T = {
   open: { en: 'Open', ru: 'Открыто' },
   locked: { en: 'Locked', ru: 'Заперто' },
   closedCount: { en: 'closed', ru: 'закрыто' },
-  brief: { en: 'Brief', ru: 'Вводная' },
   evidence: { en: 'Evidence', ru: 'Улики' },
   clues: { en: 'Decoding table', ru: 'Таблица дешифровки' },
   hints: { en: 'Hints', ru: 'Подсказки' },
@@ -53,10 +58,28 @@ const T = {
   words: { en: 'Words', ru: 'Слов' },
   copy: { en: 'Copy', ru: 'Копировать' },
   copied: { en: 'Copied', ru: 'Скопировано' },
+  journal: { en: 'Journal', ru: 'Журнал' },
+  recent: { en: 'Recent', ru: 'Последнее' },
+  openJournal: { en: 'Open journal', ru: 'Открыть журнал' },
+  recall: { en: 'Recall', ru: 'Вернуться' },
+  pin: { en: 'Pin', ru: 'Закрепить' },
+  emptyJournal: {
+    en: 'Nothing recorded yet. Every derivation, query and search lands here.',
+    ru: 'Пока пусто. Сюда попадает каждая деривация, запрос и поиск.',
+  },
+  maskedNote: {
+    en: 'Phrase not stored — the game does not keep unknown seed phrases.',
+    ru: 'Фраза не сохранена — игра не хранит незнакомые сид-фразы.',
+  },
+  exportTxt: { en: 'Export', ru: 'Выгрузить' },
+  purge: { en: 'Purge', ru: 'Очистить' },
+  keepPinned: { en: 'Keep pinned', ru: 'Кроме закреплённых' },
+  all: { en: 'All', ru: 'Все' },
 };
 
 const t = (key, lang) => T[key][lang] || T[key].en;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const clock = (at) => new Date(at).toTimeString().slice(0, 8);
 
 export class GuiApp {
   constructor(root, { lang = 'ru', onLangChange = null } = {}) {
@@ -64,33 +87,75 @@ export class GuiApp {
     this.lang = lang;
     this.onLangChange = onLangChange;
     this.progress = new ProgressStore();
+    this.journal = new Journal();
     this.chain = new ChainClient();
     this.panel = 'cases';
     this.activeCaseId = null;
     this.wallet = null;
-    this.searchTab = 'words';
+    this.railOpen = true;
+    this.panels = new Map();     // key -> { node, api }
     this.mounted = false;
   }
 
   setLang(lang) {
     this.lang = lang;
+    this.panels.clear();          // every label changes, so rebuild on demand
     if (this.mounted) this.render();
   }
 
-  /** Called when the CL mode may have changed shared state. */
+  /** The other mode may have written progress or journal entries. */
   syncFromStorage() {
     this.progress.refresh();
+    this.journal.refresh();
+    this.panels.delete('cases');
+    this.panels.delete('journal');
     if (this.mounted) this.render();
   }
+
+  // ---- shell ------------------------------------------------------------
 
   mount() {
     this.nav = el('nav', { class: 'win__body' });
     this.content = el('div', { class: 'win__body' });
+    this.railBody = el('div', { class: 'win__body rail__body' });
+
     this.navWindow = win('Archive', this.nav);
     this.contentWindow = win('—', this.content);
-    replace(this.root, this.navWindow, this.contentWindow);
+    this.railWindow = win(t('recent', this.lang), this.railBody,
+      el('button', {
+        class: 'win__collapse', type: 'button', title: 'Collapse',
+        text: '–',
+        onClick: () => this.toggleRail(),
+      }));
+    this.railWindow.classList.add('rail');
+
+    this.railTab = el('button', {
+      class: 'rail-tab', type: 'button', text: '▤',
+      title: t('recent', this.lang),
+      onClick: () => this.toggleRail(),
+    });
+
+    replace(this.root, this.navWindow, this.contentWindow, this.railWindow, this.railTab);
+    this.journal.subscribe(() => {
+      this.paintRail();
+      this.panels.delete('journal');
+      if (this.panel === 'journal') this.render();
+    });
     this.mounted = true;
+    this.applyRail();
     this.render();
+  }
+
+  toggleRail() {
+    this.railOpen = !this.railOpen;
+    this.applyRail();
+  }
+
+  applyRail() {
+    this.root.classList.toggle('rail-closed', !this.railOpen);
+    this.railWindow.classList.toggle('is-hidden', !this.railOpen);
+    this.railTab.classList.toggle('is-hidden', this.railOpen);
+    if (this.railOpen) this.paintRail();
   }
 
   go(panel, caseId = null) {
@@ -100,25 +165,46 @@ export class GuiApp {
     this.content.scrollTop = 0;
   }
 
+  panelKey() {
+    if (this.panel === 'cases' && this.activeCaseId !== null) {
+      return `cases:${this.activeCaseId}`;
+    }
+    return this.panel;
+  }
+
+  ensurePanel(key) {
+    if (!this.panels.has(key)) this.panels.set(key, this.buildPanel(key));
+    return this.panels.get(key);
+  }
+
+  buildPanel(key) {
+    if (key.startsWith('cases:')) {
+      return this.buildCaseDetail(caseById(key.slice(6)));
+    }
+    return {
+      cases: () => this.buildCaseList(),
+      decrypt: () => this.buildDecrypt(),
+      ledger: () => this.buildLedger(),
+      search: () => this.buildSearch(),
+      random: () => this.buildRandom(),
+      journal: () => this.buildJournal(),
+      about: () => this.buildAbout(),
+    }[key]();
+  }
+
   render() {
-    this.renderNav();
-    const titleBar = this.contentWindow.querySelector('.win__title');
+    this.paintNav();
     const panel = PANELS.find((p) => p.id === this.panel);
-    titleBar.textContent = pick(panel.label, this.lang);
-    const renderer = {
-      cases: () => this.renderCases(),
-      decrypt: () => this.renderDecrypt(),
-      ledger: () => this.renderLedger(),
-      search: () => this.renderSearch(),
-      random: () => this.renderRandom(),
-      about: () => this.renderAbout(),
-    }[this.panel];
-    replace(this.content, ...renderer());
+    this.contentWindow.querySelector('.win__title').textContent =
+      pick(panel.label, this.lang);
+    const { node } = this.ensurePanel(this.panelKey());
+    replace(this.content, node);
+    if (this.railOpen) this.paintRail();
   }
 
   // ---- sidebar ----------------------------------------------------------
 
-  renderNav() {
+  paintNav() {
     const solved = this.progress.solved.length;
     const percent = Math.round((solved / CASES.length) * 100);
     replace(this.nav,
@@ -140,7 +226,8 @@ export class GuiApp {
       el('div', { class: 'nav__sep' }),
       el('div', { class: 'nav__meter' },
         el('div', { text: `OPERATOR ${META.operator}` }),
-        el('div', { text: `NODE ${this.chain.nodeName}` })),
+        el('div', { text: `NODE ${this.chain.nodeName}` }),
+        el('div', { text: `LOG ${this.journal.all().length}` })),
       el('div', { class: 'row row--tight', style: 'margin-top:10px;padding:0 9px' },
         ...['ru', 'en'].map((code) =>
           el('button', {
@@ -155,10 +242,179 @@ export class GuiApp {
           }))));
   }
 
+  // ---- journal ----------------------------------------------------------
+
+  /** Record one move. Callers decide whether a phrase may be stored. */
+  log(tool, title, { detail = '', status = 'info', payload = {} } = {}) {
+    return this.journal.push({ tool, title, detail, status, payload });
+  }
+
+  paintRail() {
+    const lang = this.lang;
+    const entries = this.journal.all().slice(0, 40);
+    replace(this.railBody,
+      el('div', { class: 'rail__head' },
+        el('span', { class: 'section__meta', text: `${this.journal.all().length}` }),
+        el('span', { class: 'card__spacer' }),
+        el('button', {
+          class: 'btn', style: 'padding:2px 8px;font-size:10px',
+          type: 'button', text: t('openJournal', lang),
+          onClick: () => this.go('journal'),
+        })),
+      entries.length
+        ? el('ol', { class: 'rail__list' },
+          ...entries.map((entry) => this.railEntry(entry)))
+        : el('p', { class: 'hint-text', text: t('emptyJournal', lang) }));
+  }
+
+  railEntry(entry) {
+    const tool = TOOLS[entry.tool] || { glyph: '·', label: { en: entry.tool } };
+    return el('li', { class: `rail__item rail__item--${entry.status}` },
+      el('button', {
+        class: 'rail__btn', type: 'button',
+        title: `${entry.title}${entry.detail ? '\n' + entry.detail : ''}`,
+        onClick: () => this.recall(entry),
+      },
+      el('span', { class: 'rail__glyph', text: tool.glyph }),
+      el('span', { class: 'rail__text' },
+        el('span', { class: 'rail__title', text: entry.title }),
+        el('span', { class: 'rail__meta', text: `${clock(entry.at)} · ${pick(tool.label, this.lang)}` })),
+      entry.pinned ? el('span', { class: 'rail__pin', text: '★' }) : null));
+  }
+
+  /** Take the player back to the tool that produced an entry, re-armed. */
+  recall(entry) {
+    const { tool, payload = {} } = entry;
+    if (tool === 'case' || tool === 'hint') {
+      if (payload.caseId) this.go('cases', payload.caseId);
+      return;
+    }
+    if (tool === 'decrypt' || tool === 'random') {
+      if (!payload.mnemonic) {
+        this.go('decrypt');
+        this.ensurePanel('decrypt').api.warn(t('maskedNote', this.lang));
+        return;
+      }
+      this.go('decrypt');
+      this.ensurePanel('decrypt').api.run(payload.mnemonic);
+      return;
+    }
+    if (tool === 'ledger' || tool === 'sweep' || tool === 'txlog') {
+      this.go('ledger');
+      this.ensurePanel('ledger').api.run(payload.address, tool);
+      return;
+    }
+    if (tool === 'search' || tool === 'archive' || tool === 'complete') {
+      this.go('search');
+      const api = this.ensurePanel('search').api;
+      const tab = tool === 'search' ? 'words' : tool === 'archive' ? 'archive' : 'complete';
+      api.run(tab, payload.query || payload.pattern || '');
+    }
+  }
+
+  buildJournal() {
+    const lang = this.lang;
+    let filter = '';
+    const body = el('div', {});
+    const node = el('div', { class: 'stack' });
+
+    const paint = () => {
+      const entries = this.journal.byTool(filter);
+      replace(body, entries.length
+        ? el('div', {}, ...entries.map((entry, index) => {
+          const tool = TOOLS[entry.tool] || { glyph: '·', label: { en: entry.tool } };
+          return el('div', { class: `card log log--${entry.status}` },
+            el('div', { class: 'log__row' },
+              el('span', { class: 'log__n', text: String(index + 1) }),
+              el('span', { class: 'log__glyph', text: tool.glyph }),
+              el('div', { class: 'log__body' },
+                el('div', { class: 'log__title', text: entry.title }),
+                entry.detail ? el('div', { class: 'log__detail', text: entry.detail }) : null,
+                el('div', { class: 'log__meta',
+                  text: `${clock(entry.at)} · ${pick(tool.label, lang)}` })),
+              el('div', { class: 'row row--tight' },
+                el('button', {
+                  class: 'btn', style: 'padding:2px 8px;font-size:10px',
+                  type: 'button', text: t('recall', lang),
+                  onClick: () => this.recall(entry),
+                }),
+                el('button', {
+                  class: 'btn', style: 'padding:2px 8px;font-size:10px',
+                  type: 'button', 'aria-pressed': entry.pinned ? 'true' : 'false',
+                  text: entry.pinned ? '★' : '☆', title: t('pin', lang),
+                  onClick: () => { this.journal.togglePin(entry.id); paint(); },
+                }),
+                el('button', {
+                  class: 'btn', style: 'padding:2px 8px;font-size:10px',
+                  type: 'button', text: '✕',
+                  onClick: () => { this.journal.remove(entry.id); paint(); },
+                }))));
+        }))
+        : empty(t('emptyJournal', lang)));
+    };
+
+    const counts = this.journal.counts();
+    const filterRow = el('div', { class: 'row row--tight' },
+      el('button', {
+        class: 'btn', type: 'button', 'aria-pressed': 'true', text: t('all', lang),
+        onClick: (event) => {
+          filter = '';
+          filterRow.querySelectorAll('.btn').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+          event.currentTarget.setAttribute('aria-pressed', 'true');
+          paint();
+        },
+      }),
+      ...Object.keys(TOOLS).filter((key) => counts[key]).map((key) =>
+        el('button', {
+          class: 'btn', type: 'button', 'aria-pressed': 'false',
+          text: `${TOOLS[key].glyph} ${pick(TOOLS[key].label, lang)} ${counts[key]}`,
+          onClick: (event) => {
+            filter = key;
+            filterRow.querySelectorAll('.btn').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+            event.currentTarget.setAttribute('aria-pressed', 'true');
+            paint();
+          },
+        })));
+
+    paint();
+    replace(node,
+      section(t('journal', lang), `${this.journal.all().length}`),
+      el('p', { class: 'hint-text', text: lang === 'ru'
+        ? 'Каждый шаг записывается сюда и переживает перезагрузку страницы. Нажми «Вернуться», чтобы повторить запрос в том же инструменте. Незнакомые сид-фразы записываются в замаскированном виде и на диск не попадают.'
+        : 'Every move lands here and survives a reload. Press Recall to re-run it in the tool that made it. Seed phrases the game does not recognise are recorded masked and never written to disk.' }),
+      filterRow,
+      el('div', { class: 'row' },
+        el('button', {
+          class: 'btn', type: 'button', text: t('exportTxt', lang),
+          onClick: async () => {
+            const text = this.journal.toText(lang);
+            try {
+              await navigator.clipboard.writeText(text);
+            } catch { /* clipboard blocked; the download below still works */ }
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = el('a', { href: url, download: 'neon-terminal-journal.txt' });
+            document.body.append(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+          },
+        }),
+        el('button', {
+          class: 'btn', type: 'button', text: `${t('purge', lang)} · ${t('keepPinned', lang)}`,
+          onClick: () => { this.journal.clear({ keepPinned: true }); paint(); },
+        }),
+        el('button', {
+          class: 'btn', type: 'button', text: `${t('purge', lang)} · ${t('all', lang)}`,
+          onClick: () => { this.journal.clear(); paint(); },
+        })),
+      body);
+    return { node, api: { paint } };
+  }
+
   // ---- cases ------------------------------------------------------------
 
-  renderCases() {
-    if (this.activeCaseId !== null) return this.renderCaseDetail(caseById(this.activeCaseId));
+  buildCaseList() {
     const rows = CASES.map((caseFile) => {
       const state = caseState(caseFile, this.progress);
       return el('div', { class: 'card' },
@@ -175,26 +431,25 @@ export class GuiApp {
         badge(state === 'solved' ? 'solved' : state === 'locked' ? 'locked' : 'open',
           t(state, this.lang))));
     });
-    return [
-      section('ORACLE ARCHIVE',
-        `${this.progress.solved.length}/${CASES.length}`),
-      ...rows,
-    ];
+    const node = el('div', {},
+      section('ORACLE ARCHIVE', `${this.progress.solved.length}/${CASES.length}`),
+      ...rows);
+    return { node, api: {} };
   }
 
-  renderCaseDetail(caseFile) {
+  buildCaseDetail(caseFile) {
     const lang = this.lang;
     const state = caseState(caseFile, this.progress);
     const hints = pick(caseFile.hints, lang);
-    const used = this.progress.hintsUsed(caseFile.id);
+    const node = el('div', {});
 
-    const back = el('button', {
-      class: 'btn', type: 'button', text: '← ' + (lang === 'ru' ? 'К списку' : 'All cases'),
-      onClick: () => { this.activeCaseId = null; this.render(); },
-    });
-
-    const nodes = [
-      el('div', { class: 'row', style: 'margin-bottom:12px' }, back,
+    const head = [
+      el('div', { class: 'row', style: 'margin-bottom:12px' },
+        el('button', {
+          class: 'btn', type: 'button',
+          text: '← ' + (lang === 'ru' ? 'К списку' : 'All cases'),
+          onClick: () => { this.activeCaseId = null; this.go('cases'); },
+        }),
         el('span', { class: 'card__spacer' }),
         el('span', { class: 'stars', text: '★'.repeat(caseFile.difficulty) }),
         badge(state === 'solved' ? 'solved' : state === 'locked' ? 'locked' : 'open',
@@ -203,20 +458,11 @@ export class GuiApp {
     ];
 
     if (state === 'locked') {
-      nodes.push(notice('warn', t('lockedMsg', lang),
+      replace(node, ...head, notice('warn', t('lockedMsg', lang),
         missingRequirements(caseFile, this.progress).join(', ')));
-      return nodes;
+      return { node, api: {} };
     }
 
-    nodes.push(el('div', { class: 'prose' },
-      ...pick(caseFile.brief, lang).map((line) => el('p', { text: line }))));
-    nodes.push(section(t('evidence', lang)));
-    nodes.push(el('div', { class: 'evidence', text: pick(caseFile.evidence, lang).join('\n') }));
-    nodes.push(section(t('clues', lang)));
-    nodes.push(el('div', { class: 'clues', text: pick(caseFile.clues, lang).join('\n') }));
-
-    // Hints, revealed one at a time and remembered across modes.
-    nodes.push(section(t('hints', lang), `${used}/${hints.length}`));
     const hintBox = el('div', { class: 'stack' });
     const paintHints = () => {
       const shown = this.progress.hintsUsed(caseFile.id);
@@ -226,15 +472,18 @@ export class GuiApp {
         shown < hints.length
           ? el('button', {
             class: 'btn', type: 'button', text: t('spendHint', lang),
-            onClick: () => { this.progress.useHint(caseFile.id); paintHints(); this.renderNav(); },
+            onClick: () => {
+              const used = this.progress.useHint(caseFile.id);
+              this.log('hint', `${pick(caseFile.codename, lang)} — hint ${used}/${hints.length}`,
+                { detail: hints[used - 1], payload: { caseId: caseFile.id } });
+              paintHints();
+              this.paintNav();
+            },
           })
           : el('p', { class: 'hint-text', text: t('noHints', lang) }));
     };
     paintHints();
-    nodes.push(hintBox);
 
-    // Answer box
-    nodes.push(section(t('submit', lang)));
     const input = el('textarea', {
       class: 'field', rows: '3', spellcheck: 'false',
       placeholder: lang === 'ru' ? 'двенадцать слов через пробел' : 'twelve words separated by spaces',
@@ -250,29 +499,37 @@ export class GuiApp {
           const wallet = deriveWallet(input.value);
           this.wallet = wallet;
           const owner = caseForMnemonic(wallet.mnemonic);
-          const nodesOut = [notice('ok', t('checksumOk', lang), wallet.primary.address)];
+          const out = [notice('ok', t('checksumOk', lang), wallet.primary.address)];
           if (owner && owner.id === caseFile.id) {
             const first = this.progress.markSolved(caseFile.id);
-            this.renderNav();
-            nodesOut.push(notice('ok',
+            this.panels.delete('cases');
+            this.paintNav();
+            if (first) {
+              this.log('case', `${lang === 'ru' ? 'Дело' : 'Case'} ${caseFile.id} — ${pick(caseFile.codename, lang)}`,
+                { detail: wallet.primary.address, status: 'ok',
+                  payload: { caseId: caseFile.id, mnemonic: wallet.mnemonic } });
+            }
+            out.push(notice('ok',
               lang === 'ru' ? `Дело ${caseFile.id} закрыто` : `Case ${caseFile.id} closed`,
               ...pick(caseFile.epilogue, lang)));
             if (first && this.progress.solved.length === CASES.length) {
-              nodesOut.push(notice('ok', lang === 'ru'
+              out.push(notice('ok', lang === 'ru'
                 ? 'Все восемь дел закрыты.' : 'All eight cases closed.'));
             }
           } else if (owner) {
-            nodesOut.push(notice('warn', lang === 'ru'
+            out.push(notice('warn', lang === 'ru'
               ? `Это ключ к делу ${owner.id}, а не к этому.`
               : `This is the key to case ${owner.id}, not this one.`));
           } else {
-            nodesOut.push(notice('warn', lang === 'ru'
+            out.push(notice('warn', lang === 'ru'
               ? 'Фраза валидна, но это не ключ к этому делу.'
               : 'Valid phrase, but not the key to this case.'));
           }
-          nodesOut.push(this.derivationTable(wallet));
-          replace(result, ...nodesOut);
+          this.recordDecrypt(wallet, owner);
+          out.push(this.derivationTable(wallet));
+          replace(result, ...out);
         } catch (error) {
+          this.log('decrypt', error.message, { status: 'danger' });
           replace(result, notice('danger',
             error instanceof MnemonicError ? 'DECRYPTION FAILED' : 'ERROR', error.message));
         } finally {
@@ -280,17 +537,38 @@ export class GuiApp {
         }
       },
     });
-    nodes.push(el('div', { class: 'stack' }, input, el('div', { class: 'row' }, submit), result));
 
-    if (state === 'solved') {
-      nodes.push(section(t('epilogue', lang)));
-      nodes.push(el('div', { class: 'prose' },
-        ...pick(caseFile.epilogue, lang).map((line) => el('p', { text: line }))));
-    }
-    return nodes;
+    replace(node, ...head,
+      el('div', { class: 'prose' },
+        ...pick(caseFile.brief, lang).map((line) => el('p', { text: line }))),
+      section(t('evidence', lang)),
+      el('div', { class: 'evidence', text: pick(caseFile.evidence, lang).join('\n') }),
+      section(t('clues', lang)),
+      el('div', { class: 'clues', text: pick(caseFile.clues, lang).join('\n') }),
+      section(t('hints', lang)),
+      hintBox,
+      section(t('submit', lang)),
+      el('div', { class: 'stack' }, input, el('div', { class: 'row' }, submit), result));
+    return { node, api: {} };
   }
 
   // ---- shared bits ------------------------------------------------------
+
+  /**
+   * Journal a derivation. A phrase is stored in full only when the game already
+   * knows it (a case answer — all published test vectors) or when this page
+   * generated it. Anything else the player typed stays masked.
+   */
+  recordDecrypt(wallet, owner, { generated = false } = {}) {
+    const storable = Boolean(owner) || generated;
+    this.log(generated ? 'random' : 'decrypt', wallet.primary.address, {
+      status: owner ? 'ok' : 'info',
+      detail: storable
+        ? wallet.mnemonic
+        : `${maskMnemonic(wallet.mnemonic)} — ${t('maskedNote', this.lang)}`,
+      payload: storable ? { mnemonic: wallet.mnemonic } : { masked: true },
+    });
+  }
 
   derivationTable(wallet) {
     return el('div', { class: 'stack' },
@@ -299,7 +577,17 @@ export class GuiApp {
         wallet.addresses.map((entry) => [
           { text: entry.path },
           { text: entry.label },
-          { class: 'addr', node: el('span', {}, entry.address, ' ', this.copyButton(entry.address)) },
+          { class: 'addr', node: el('span', {}, entry.address, ' ',
+            this.copyButton(entry.address), ' ',
+            el('button', {
+              class: 'btn', style: 'padding:1px 7px;font-size:10px',
+              type: 'button', text: '₿',
+              title: t('syncOne', this.lang),
+              onClick: () => {
+                this.go('ledger');
+                this.ensurePanel('ledger').api.run(entry.address, 'ledger');
+              },
+            })) },
         ])),
       el('details', {},
         el('summary', { class: 'hint-text', style: 'cursor:pointer;margin:8px 0',
@@ -330,22 +618,23 @@ export class GuiApp {
 
   // ---- decrypt ----------------------------------------------------------
 
-  renderDecrypt() {
+  buildDecrypt() {
     const lang = this.lang;
     const input = el('textarea', {
       class: 'field', rows: '3', spellcheck: 'false',
       placeholder: lang === 'ru' ? 'двенадцать слов через пробел' : 'twelve words separated by spaces',
     });
-    if (this.wallet) input.value = this.wallet.mnemonic;
     const output = el('div', {});
 
-    const run = async () => {
+    const run = async (phrase = null) => {
+      if (phrase !== null) input.value = phrase;
       replace(output, el('p', { class: 'spinner-line', text: t('deriving', lang) }));
       await sleep(16);
       try {
         const wallet = deriveWallet(input.value);
         this.wallet = wallet;
         const owner = caseForMnemonic(wallet.mnemonic);
+        this.recordDecrypt(wallet, owner);
         replace(output,
           notice('ok', t('checksumOk', lang)),
           owner
@@ -353,23 +642,20 @@ export class GuiApp {
               pick(owner.codename, lang))
             : null,
           kv([['ENTROPY', toHex(mnemonicToEntropy(wallet.mnemonic))]]),
-          this.derivationTable(wallet),
-          el('div', { class: 'row' },
-            el('button', {
-              class: 'btn', type: 'button', text: t('syncOne', lang),
-              onClick: () => this.go('ledger'),
-            })));
+          this.derivationTable(wallet));
       } catch (error) {
+        this.log('decrypt', error.message, { status: 'danger' });
         replace(output, notice('danger', 'DECRYPTION FAILED', error.message));
       }
     };
 
-    return [
+    const node = el('div', {},
       section(t('seedLabel', lang)),
       el('div', { class: 'stack' },
         input,
         el('div', { class: 'row' },
-          el('button', { class: 'btn btn--primary', type: 'button', text: t('derive', lang), onClick: run }),
+          el('button', { class: 'btn btn--primary', type: 'button', text: t('derive', lang),
+            onClick: () => run() }),
           el('button', {
             class: 'btn', type: 'button',
             text: lang === 'ru' ? 'Из энтропии (hex)' : 'From entropy (hex)',
@@ -378,45 +664,49 @@ export class GuiApp {
                 ? 'Энтропия, 32 hex-символа:' : 'Entropy, 32 hex characters:');
               if (!hex) return;
               try {
-                input.value = entropyToMnemonic(fromHex(hex.trim()));
-                run();
+                run(entropyToMnemonic(fromHex(hex.trim())));
               } catch (error) {
                 replace(output, notice('danger', 'ENTROPY REJECTED', error.message));
               }
             },
           })),
         el('p', { class: 'hint-text', text: lang === 'ru'
-          ? 'Проверка идёт по официальному словарю BIP-39 вместе с контрольной суммой. Всё считается здесь, в браузере.'
-          : 'Validated against the official BIP-39 wordlist, checksum included. Everything is computed here, in your browser.' }),
-        output),
-    ];
+          ? 'Проверка идёт по официальному словарю BIP-39 вместе с контрольной суммой. Всё считается здесь, в браузере, и незнакомые фразы в журнал целиком не попадают.'
+          : 'Validated against the official BIP-39 wordlist, checksum included. Everything runs in your browser, and unknown phrases are never written to the journal in full.' }),
+        output));
+
+    return {
+      node,
+      api: {
+        run,
+        warn: (message) => replace(output, notice('warn', message)),
+      },
+    };
   }
 
   // ---- ledger -----------------------------------------------------------
 
-  renderLedger() {
+  buildLedger() {
     const lang = this.lang;
-    if (!this.wallet) return [section('LEDGER'), empty(t('noWallet', lang))];
-
     const address = el('input', {
-      class: 'field', type: 'text', spellcheck: 'false', value: this.wallet.primary.address,
+      class: 'field', type: 'text', spellcheck: 'false',
+      placeholder: '1... / 3... / bc1...',
+      value: this.wallet ? this.wallet.primary.address : '',
     });
     const output = el('div', {});
 
-    const providerRow = el('div', { class: 'row row--tight' },
-      ...Object.entries(PROVIDERS).map(([key, provider]) =>
-        el('button', {
-          class: 'btn', type: 'button',
-          'aria-pressed': this.chain.order[0] === key ? 'true' : 'false',
-          text: provider.name,
-          onClick: () => { this.chain.preferred = key; this.render(); },
-        })));
-
     const sync = async () => {
+      const target = address.value.trim();
+      if (!target) return replace(output, notice('warn', t('noWallet', lang)));
       replace(output, el('p', { class: 'spinner-line', text: t('working', lang) }));
       try {
-        const stats = await this.chain.addressStats(address.value.trim());
+        const stats = await this.chain.addressStats(target);
         const used = stats.txCount > 0 || stats.totalReceivedSats > 0n;
+        this.log('ledger', target, {
+          status: stats.confirmedSats > 0n ? 'warn' : used ? 'info' : 'info',
+          detail: `${formatBtc(stats.confirmedSats)} BTC · ${stats.txCount} tx · ${stats.provider}`,
+          payload: { address: target },
+        });
         replace(output,
           kv([
             ['CONFIRMED', `${formatBtc(stats.confirmedSats)} BTC`],
@@ -437,21 +727,26 @@ export class GuiApp {
                 : 'Address never used on mainnet.'),
           el('a', {
             class: 'hint-text', target: '_blank', rel: 'noopener',
-            href: this.chain.explorerUrl(address.value.trim()),
+            href: this.chain.explorerUrl(target),
             text: lang === 'ru' ? 'Открыть в эксплорере ↗' : 'Open in explorer ↗',
           }));
       } catch (error) {
+        this.log('ledger', target, { status: 'danger', detail: error.message,
+          payload: { address: target } });
         replace(output, notice('danger', 'NETWORK LINK DOWN', error.message));
       }
     };
 
     const sweep = async () => {
+      if (!this.wallet) return replace(output, notice('warn', t('noWallet', lang)));
       replace(output, el('p', { class: 'spinner-line', text: t('working', lang) }));
       const rows = [];
+      let touched = 0;
       for (const entry of this.wallet.addresses) {
         try {
           const stats = await this.chain.addressStats(entry.address);
           const used = stats.txCount > 0 || stats.totalReceivedSats > 0n;
+          if (used) touched += 1;
           rows.push([
             { text: `m/${entry.purpose}'` },
             { class: 'addr', text: entry.address },
@@ -468,13 +763,24 @@ export class GuiApp {
           ]);
         }
       }
+      this.log('sweep', this.wallet.primary.address, {
+        status: touched ? 'ok' : 'info',
+        detail: `${touched}/3 ${lang === 'ru' ? 'путей с историей' : 'paths carry history'}`,
+        payload: { address: this.wallet.primary.address },
+      });
       replace(output, table(['PATH', 'ADDRESS', 'TX', 'RECEIVED', ''], rows));
     };
 
     const txlog = async () => {
+      const target = address.value.trim();
+      if (!target) return replace(output, notice('warn', t('noWallet', lang)));
       replace(output, el('p', { class: 'spinner-line', text: t('working', lang) }));
       try {
-        const txs = await this.chain.transactions(address.value.trim(), 10);
+        const txs = await this.chain.transactions(target, 10);
+        this.log('txlog', target, {
+          detail: `${txs.length} ${lang === 'ru' ? 'транзакций' : 'transactions'}`,
+          payload: { address: target },
+        });
         replace(output, txs.length
           ? table(['STATE', 'BLOCK', 'TXID'], txs.map((tx) => [
             { node: badge(tx.confirmed ? 'solved' : 'warn', tx.confirmed ? 'CONFIRMED' : 'PENDING') },
@@ -487,7 +793,21 @@ export class GuiApp {
       }
     };
 
-    return [
+    const providerRow = el('div', { class: 'row row--tight' },
+      ...Object.entries(PROVIDERS).map(([key, provider]) =>
+        el('button', {
+          class: 'btn', type: 'button',
+          'aria-pressed': this.chain.order[0] === key ? 'true' : 'false',
+          text: provider.name,
+          onClick: (event) => {
+            this.chain.preferred = key;
+            providerRow.querySelectorAll('.btn').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+            event.currentTarget.setAttribute('aria-pressed', 'true');
+            this.paintNav();
+          },
+        })));
+
+    const node = el('div', {},
       section('LIVE BITCOIN NETWORK', this.chain.nodeName),
       el('div', { class: 'stack' },
         address,
@@ -496,84 +816,134 @@ export class GuiApp {
           el('button', { class: 'btn', type: 'button', text: t('sweep', lang), onClick: sweep }),
           el('button', { class: 'btn', type: 'button', text: t('txlog', lang), onClick: txlog })),
         providerRow,
-        output),
-    ];
+        output));
+
+    return {
+      node,
+      api: {
+        run: (target, kind = 'ledger') => {
+          if (target) address.value = target;
+          if (kind === 'sweep') return sweep();
+          if (kind === 'txlog') return txlog();
+          return sync();
+        },
+      },
+    };
   }
 
   // ---- search -----------------------------------------------------------
 
-  renderSearch() {
+  buildSearch() {
     const lang = this.lang;
     const tabs = [
       ['words', lang === 'ru' ? 'Словарь' : 'Wordlist'],
       ['archive', lang === 'ru' ? 'Архив дел' : 'Case archive'],
       ['complete', lang === 'ru' ? 'Недостающее слово' : 'Missing word'],
     ];
+    // Each tab keeps its own node, so switching tabs does not lose results.
+    const panes = {
+      words: this.searchWordsPane(),
+      archive: this.searchArchivePane(),
+      complete: this.searchCompletePane(),
+    };
+    let active = 'words';
     const body = el('div', {});
-    const paint = () => replace(body, ...{
-      words: () => this.searchWordsPanel(),
-      archive: () => this.searchArchivePanel(),
-      complete: () => this.searchCompletePanel(),
-    }[this.searchTab]());
+
+    const show = (id) => {
+      active = id;
+      tabBar.querySelectorAll('.tab').forEach((tab) =>
+        tab.setAttribute('aria-selected', String(tab.dataset.tab === id)));
+      replace(body, panes[id].node);
+    };
 
     const tabBar = el('div', { class: 'tabs' },
       ...tabs.map(([id, label]) =>
         el('button', {
           class: 'tab', type: 'button', role: 'tab',
-          'aria-selected': this.searchTab === id ? 'true' : 'false',
+          dataset: { tab: id },
+          'aria-selected': id === active ? 'true' : 'false',
           text: label,
-          onClick: () => { this.searchTab = id; this.render(); },
+          onClick: () => show(id),
         })));
-    paint();
-    return [tabBar, body];
+
+    show(active);
+    const node = el('div', {}, tabBar, body);
+    return {
+      node,
+      api: {
+        run: (tab, value) => {
+          show(tab);
+          panes[tab].run(value);
+        },
+      },
+    };
   }
 
-  searchWordsPanel() {
+  searchWordsPane() {
     const lang = this.lang;
     const input = el('input', {
       class: 'field', type: 'search', spellcheck: 'false',
       placeholder: lang === 'ru' ? 'начало или часть слова, либо номер 1–2048' : 'prefix, substring, or an index 1–2048',
     });
     const output = el('div', {});
-    const run = () => {
+    let logged = '';
+
+    const run = (value = null) => {
+      if (value !== null) input.value = value;
       const query = input.value.trim();
       if (!query) return replace(output, empty(lang === 'ru' ? 'Введи запрос.' : 'Type a query.'));
       const asNumber = Number(query);
       if (Number.isInteger(asNumber) && asNumber >= 1 && asNumber <= 2048) {
-        return replace(output, el('div', { class: 'word-grid' },
+        replace(output, el('div', { class: 'word-grid' },
           el('div', { class: 'word' },
             el('span', { class: 'word__n', text: String(asNumber) }),
             el('span', { text: wordAt(asNumber) }))));
+      } else {
+        const hits = searchWordlist(query);
+        replace(output, hits.length
+          ? el('div', { class: 'stack' },
+            el('p', { class: 'hint-text', text: `${hits.length} ${lang === 'ru' ? 'совпадений' : 'matches'}` }),
+            el('div', { class: 'word-grid' },
+              ...hits.map((hit) => el('div', { class: 'word' },
+                el('span', { class: 'word__n', text: String(hit.index) }),
+                el('span', { text: hit.word })))))
+          : empty(lang === 'ru' ? 'Ничего не найдено.' : 'Nothing found.'));
       }
-      const hits = searchWordlist(query);
-      replace(output, hits.length
-        ? el('div', { class: 'stack' },
-          el('p', { class: 'hint-text', text: `${hits.length} ${lang === 'ru' ? 'совпадений' : 'matches'}` }),
-          el('div', { class: 'word-grid' },
-            ...hits.map((hit) => el('div', { class: 'word' },
-              el('span', { class: 'word__n', text: String(hit.index) }),
-              el('span', { text: hit.word })))))
-        : empty(lang === 'ru' ? 'Ничего не найдено.' : 'Nothing found.'));
+      // Log once the player stops typing, not on every keystroke.
+      clearTimeout(this._wordTimer);
+      this._wordTimer = setTimeout(() => {
+        if (query === logged) return;
+        logged = query;
+        const hits = searchWordlist(query);
+        this.log('search', query, {
+          detail: `${hits.length} ${lang === 'ru' ? 'совпадений' : 'matches'}`,
+          payload: { query },
+        });
+      }, 900);
     };
-    input.addEventListener('input', run);
-    return [
+
+    input.addEventListener('input', () => run());
+    const node = el('div', {},
       section(lang === 'ru' ? 'Словарь BIP-39' : 'BIP-39 wordlist', '2048'),
       el('div', { class: 'stack' }, input,
         el('p', { class: 'hint-text', text: lang === 'ru'
           ? 'Ищет по началу и по вхождению; число открывает слово по индексу.'
-          : 'Matches by prefix and by substring; a number opens that index.' }),
-        output),
-    ];
+          : 'Matches by prefix and by substring; a number opens that index.' },),
+        output));
+    return { node, run };
   }
 
-  searchArchivePanel() {
+  searchArchivePane() {
     const lang = this.lang;
     const input = el('input', {
       class: 'field', type: 'search', spellcheck: 'false',
       placeholder: lang === 'ru' ? 'слово из улик, загадок или вводной' : 'a word from the briefs, evidence or riddles',
     });
     const output = el('div', {});
-    const run = () => {
+    let logged = '';
+
+    const run = (value = null) => {
+      if (value !== null) input.value = value;
       const query = input.value.trim();
       if (!query) return replace(output, empty(lang === 'ru' ? 'Введи запрос.' : 'Type a query.'));
       const results = searchCases(query, lang, this.progress);
@@ -592,31 +962,53 @@ export class GuiApp {
               ...result.hits.slice(0, 4).map((hit) =>
                 el('div', { class: 'evidence', style: 'margin-top:6px', text: hit.line }))))))
         : empty(lang === 'ru' ? 'В архиве ничего.' : 'Nothing in the archive.'));
+
+      clearTimeout(this._archiveTimer);
+      this._archiveTimer = setTimeout(() => {
+        if (query === logged) return;
+        logged = query;
+        this.log('archive', query, {
+          detail: `${results.length} ${lang === 'ru' ? 'дел' : 'case(s)'}`,
+          payload: { query },
+        });
+      }, 900);
     };
-    input.addEventListener('input', run);
-    return [
+
+    input.addEventListener('input', () => run());
+    const node = el('div', {},
       section(lang === 'ru' ? 'Полнотекстовый поиск по делам' : 'Full-text case search'),
       el('div', { class: 'stack' }, input,
         el('p', { class: 'hint-text', text: lang === 'ru'
           ? 'Эпилоги попадают в поиск только после того, как дело закрыто — иначе это спойлер.'
           : 'Epilogues join the index only once a case is closed — otherwise it would spoil them.' }),
-        output),
-    ];
+        output));
+    return { node, run };
   }
 
-  searchCompletePanel() {
+  searchCompletePane() {
     const lang = this.lang;
     const input = el('textarea', {
       class: 'field', rows: '3', spellcheck: 'false',
       placeholder: 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon ?',
     });
     const output = el('div', {});
-    const run = async () => {
+
+    const run = async (value = null) => {
+      if (value !== null) input.value = value;
+      if (!input.value.trim()) return;
       replace(output, el('p', { class: 'spinner-line', text: t('searching', lang) }));
       await sleep(16);
       try {
-        const { position, candidates } = completeMnemonic(input.value);
+        const pattern = input.value.trim();
+        const { position, candidates } = completeMnemonic(pattern);
         const hit = candidates.find((candidate) => candidate.case);
+        this.log('complete', `? @ ${position + 1}`, {
+          status: hit ? 'ok' : 'info',
+          detail: hit
+            ? `${candidates.length} ${lang === 'ru' ? 'кандидатов' : 'candidates'} · ${hit.word} → case ${hit.case.id}`
+            : `${candidates.length} ${lang === 'ru' ? 'кандидатов' : 'candidates'}`,
+          payload: { pattern },
+        });
         replace(output,
           notice('info',
             lang === 'ru'
@@ -641,10 +1033,12 @@ export class GuiApp {
               el('span', { class: 'chip__i', text: String(indexOf(candidate.word)) }),
               el('span', { text: candidate.word })))));
       } catch (error) {
+        this.log('complete', error.message, { status: 'danger' });
         replace(output, notice('danger', 'SEARCH REFUSED', error.message));
       }
     };
-    return [
+
+    const node = el('div', {},
       section(lang === 'ru' ? 'Восстановление недостающего слова' : 'Missing-word recovery'),
       el('div', { class: 'stack' },
         el('p', { class: 'hint-text', text: lang === 'ru'
@@ -653,14 +1047,15 @@ export class GuiApp {
         input,
         el('div', { class: 'row' },
           el('button', { class: 'btn btn--primary', type: 'button',
-            text: lang === 'ru' ? 'Найти кандидатов' : 'Find candidates', onClick: run })),
-        output),
-    ];
+            text: lang === 'ru' ? 'Найти кандидатов' : 'Find candidates',
+            onClick: () => run() })),
+        output));
+    return { node, run };
   }
 
   // ---- randomizer -------------------------------------------------------
 
-  renderRandom() {
+  buildRandom() {
     const lang = this.lang;
     const output = el('div', {});
     let count = 12;
@@ -685,6 +1080,7 @@ export class GuiApp {
       const words = mnemonic.split(' ');
       const wallet = deriveWallet(mnemonic);
       this.wallet = wallet;
+      this.recordDecrypt(wallet, null, { generated: true });
       replace(output,
         el('div', { class: 'row', style: 'margin-bottom:10px' },
           this.copyButton(mnemonic),
@@ -695,19 +1091,13 @@ export class GuiApp {
             el('span', { text: word })))),
         kv([['ENTROPY', toHex(entropy)]]),
         this.derivationTable(wallet),
-        el('div', { class: 'row' },
-          el('button', {
-            class: 'btn', type: 'button',
-            text: lang === 'ru' ? 'Проверить в сети' : 'Check on chain',
-            onClick: () => this.go('ledger'),
-          })),
         notice('warn', lang === 'ru' ? 'Это настоящий кошелёк' : 'This is a real wallet',
           lang === 'ru'
-            ? 'Фраза собрана из криптостойкой случайности браузера и управляет настоящими адресами Bitcoin. Почти наверняка они пусты — но не клади сюда деньги: страница ничего не хранит, и после закрытия вкладки фраза исчезнет.'
-            : 'The phrase comes from your browser’s cryptographic randomness and controls real Bitcoin addresses. They are almost certainly empty — but do not fund them: nothing is stored, and the phrase is gone when you close the tab.'));
+            ? 'Фраза собрана из криптостойкой случайности браузера и управляет настоящими адресами Bitcoin. Она записана в журнал этого браузера, чтобы к ней можно было вернуться, — и стирается кнопкой «Очистить» в журнале. Не клади на эти адреса деньги.'
+            : 'The phrase comes from your browser’s cryptographic randomness and controls real Bitcoin addresses. It is written to this browser’s journal so you can come back to it, and Purge in the journal erases it. Do not fund these addresses.'));
     };
 
-    return [
+    const node = el('div', {},
       section(lang === 'ru' ? 'Генератор сид-фраз' : 'Seed phrase generator'),
       el('div', { class: 'stack' },
         el('div', { class: 'row' },
@@ -717,33 +1107,35 @@ export class GuiApp {
         el('p', { class: 'hint-text', text: lang === 'ru'
           ? 'Энтропия берётся из crypto.getRandomValues — той же функции, которой пользуются настоящие кошельки. Ничего не отправляется наружу.'
           : 'Entropy comes from crypto.getRandomValues — the same source real wallets use. Nothing leaves the page.' }),
-        output),
-    ];
+        output));
+    return { node, api: { run: generate } };
   }
 
   // ---- about ------------------------------------------------------------
 
-  renderAbout() {
+  buildAbout() {
     const lang = this.lang;
     const lines = lang === 'ru' ? [
       'Детективный квест, играющий против настоящей сети Bitcoin.',
       'Мнемоники проверяются по официальному словарю BIP-39 вместе с контрольной суммой, сид получается через PBKDF2-HMAC-SHA512 (2048 раундов), ключи выводятся на кривой secp256k1 по BIP-32, а балансы приходят живыми запросами к публичным эксплорерам.',
       'Вся криптография работает в браузере. Наружу уходит только запрос адреса — в нём нет ничего, кроме самого адреса.',
+      'Журнал расследования хранится в этом браузере. Сид-фразы, которых игра не знает, записываются в него замаскированными и на диск не попадают.',
       'Ответы восьми дел — опубликованные тестовые векторы BIP-39. Их ключи известны всему миру, красть там нечего, зато история в блокчейне настоящая.',
       'Программа не умеет подбирать чужие кошельки. Никогда не вводи в программы — включая эту — сид-фразу от кошелька с реальными деньгами.',
     ] : [
       'A detective quest played against the real Bitcoin network.',
       'Mnemonics are checked against the official BIP-39 wordlist including the checksum, seeds come from PBKDF2-HMAC-SHA512 over 2048 rounds, keys are derived over secp256k1 through BIP-32, and balances arrive from live calls to public explorers.',
       'All the cryptography runs in your browser. The only thing that leaves the page is an address lookup, which carries nothing but the address.',
+      'The investigation journal lives in this browser. Seed phrases the game does not recognise are recorded masked and never written to disk.',
       'The eight case answers are published BIP-39 test vectors. Their keys are known worldwide, so there is nothing to steal — but the on-chain history is genuine.',
       'This program cannot crack anyone’s wallet. Never type a seed phrase that controls real funds into any program, including this one.',
     ];
-    return [
+    const node = el('div', {},
       section('BIP-39: NEON TERMINAL', META.version),
       el('div', { class: 'prose' }, ...lines.map((line) => el('p', { text: line }))),
       el('div', { class: 'row' },
         el('a', { class: 'btn', href: 'https://github.com/legenki/neon-terminal',
-          target: '_blank', rel: 'noopener', text: 'Source on GitHub ↗' })),
-    ];
+          target: '_blank', rel: 'noopener', text: 'Source on GitHub ↗' })));
+    return { node, api: {} };
   }
 }

@@ -5,6 +5,7 @@ import pytest
 from neon_terminal.cases import Campaign, Progress
 from neon_terminal.chain import ChainClient
 from neon_terminal.game import Session, dispatch
+from neon_terminal.journal import Journal
 from neon_terminal.ui import Screen
 
 from .answers import LEGACY_ADDRESSES, SOLUTIONS, UNRELATED_MNEMONIC
@@ -17,6 +18,7 @@ def session(tmp_path):
         progress=Progress.load(tmp_path / "progress.json"),
         screen=Screen(colour=False, speed=0),
         chain=ChainClient(offline=True),
+        journal=Journal(tmp_path / "journal.json"),
         lang="en",
     )
 
@@ -342,3 +344,156 @@ def test_archive_hides_epilogues_until_a_case_is_closed(session, capsys):
 def test_archive_without_arguments_explains_itself(session, capsys):
     run(session, "ARCHIVE")
     assert "USAGE: ARCHIVE" in capsys.readouterr().out
+
+
+# --- the investigation journal --------------------------------------------
+
+def test_every_tool_writes_to_the_journal(session, capsys, monkeypatch):
+    """Every tool in TOOLS must leave a trace — a silent one is a hole in the record."""
+    from neon_terminal import chain
+    from neon_terminal.journal import TOOLS
+
+    monkeypatch.setattr(
+        chain.ChainClient, "address_stats",
+        lambda self, address: chain.AddressStats(
+            address=address, confirmed_sats=0, unconfirmed_sats=0,
+            total_received_sats=1000, total_sent_sats=0, tx_count=2,
+            utxo_count=1, provider="TESTNODE",
+        ),
+    )
+    monkeypatch.setattr(
+        chain.ChainClient, "transactions",
+        lambda self, address, limit=5: [
+            chain.Transaction(txid="aa" * 32, confirmed=True, block_height=1,
+                              block_time=1)
+        ],
+    )
+    session.chain.offline = False
+
+    missing_word = " ".join(SOLUTIONS[5].split()[:-1] + ["?"])
+    run(session,
+        "SEARCH ozo",
+        "ARCHIVE churn",
+        "RANDOM 12",
+        f"COMPLETE {missing_word}",
+        f"DECRYPT {SOLUTIONS[5]}",
+        "SYNC_LEDGER",
+        "SWEEP",
+        "TXLOG",
+        "OPEN 1",
+        "HINT")
+    capsys.readouterr()
+
+    tools = {entry.tool for entry in session.journal}
+    unrecorded = set(TOOLS) - tools
+    assert not unrecorded, f"these tools left no journal entry: {sorted(unrecorded)}"
+
+
+def test_journal_lists_newest_first(session, capsys):
+    run(session, "SEARCH ozo", "SEARCH zeb", "JOURNAL")
+    out = capsys.readouterr().out
+    assert "INVESTIGATION JOURNAL" in out
+    positions = [line for line in out.splitlines() if line.strip().startswith(("1.", "2."))]
+    assert "zeb" in positions[0]
+    assert "ozo" in positions[1]
+
+
+def test_journal_filters_by_tool(session, capsys):
+    run(session, "SEARCH ozo", "ARCHIVE churn", "JOURNAL search")
+    out = capsys.readouterr().out
+    assert "ozo" in out
+    assert "churn" not in out
+
+
+def test_journal_rejects_an_unknown_tool(session, capsys):
+    run(session, "JOURNAL teleport")
+    assert "UNKNOWN TOOL" in capsys.readouterr().out
+
+
+def test_empty_journal_says_so(session, capsys):
+    run(session, "JOURNAL")
+    assert "JOURNAL EMPTY" in capsys.readouterr().out
+
+
+def test_recall_replays_a_search(session, capsys):
+    run(session, "SEARCH zeb")
+    capsys.readouterr()
+    run(session, "RECALL 1")
+    out = capsys.readouterr().out
+    assert "REPLAYING #1" in out
+    assert "zebra" in out
+
+
+def test_recall_replays_a_case_answer(session, capsys):
+    run(session, f"DECRYPT {SOLUTIONS[4]}")
+    capsys.readouterr()
+    run(session, "JOURNAL")
+    listing = capsys.readouterr().out
+    position = next(
+        int(line.split(".")[0]) for line in listing.splitlines()
+        if "DECRYPT" in line
+    )
+    run(session, f"RECALL {position}")
+    assert "MNEMONIC CHECKSUM VALID" in capsys.readouterr().out
+
+
+def test_recall_refuses_an_unstored_phrase(session, capsys):
+    run(session, f"DECRYPT {UNRELATED_MNEMONIC}")
+    capsys.readouterr()
+    run(session, "RECALL 1")
+    out = capsys.readouterr().out
+    assert "PHRASE WAS NOT STORED" in out
+    assert "CHECKSUM VALID" not in out
+
+
+def test_unknown_phrases_never_reach_the_journal_in_full(session):
+    run(session, f"DECRYPT {UNRELATED_MNEMONIC}")
+    entry = session.journal.at(1)
+    assert entry.payload == {"masked": True}
+    assert UNRELATED_MNEMONIC not in entry.detail
+    for word in UNRELATED_MNEMONIC.split()[1:-1]:
+        assert word not in entry.detail
+    # And nothing else in the file carries it either.
+    assert UNRELATED_MNEMONIC not in session.journal.to_text()
+
+
+def test_case_answers_are_stored_in_full(session):
+    run(session, f"DECRYPT {SOLUTIONS[3]}")
+    entry = next(e for e in session.journal if e.tool == "decrypt")
+    assert entry.payload["mnemonic"] == SOLUTIONS[3]
+
+
+def test_generated_phrases_are_stored_in_full(session, capsys):
+    run(session, "RANDOM 12")
+    capsys.readouterr()
+    entry = next(e for e in session.journal if e.tool == "random")
+    assert len(entry.payload["mnemonic"].split()) == 12
+
+
+def test_recall_rejects_a_bad_position(session, capsys):
+    run(session, "SEARCH ozo")
+    capsys.readouterr()
+    run(session, "RECALL 99", "RECALL nope")
+    out = capsys.readouterr().out
+    assert "NO JOURNAL ENTRY 99" in out
+    assert "USAGE: RECALL" in out
+
+
+def test_pin_protects_an_entry_from_purge(session, capsys):
+    run(session, "SEARCH ozo", "SEARCH zeb", "PIN 1", "PURGE")
+    capsys.readouterr()
+    assert [entry.title for entry in session.journal] == ["zeb"]
+    run(session, "PURGE all")
+    assert len(session.journal) == 0
+
+
+def test_pin_reports_a_bad_position(session, capsys):
+    run(session, "PIN 5", "PIN x")
+    out = capsys.readouterr().out
+    assert "NO JOURNAL ENTRY 5" in out
+    assert "USAGE: PIN" in out
+
+
+def test_status_reports_the_journal_size(session, capsys):
+    run(session, "SEARCH ozo", "STATUS")
+    assert "JOURNAL" in capsys.readouterr().out

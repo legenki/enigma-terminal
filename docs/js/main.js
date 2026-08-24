@@ -105,8 +105,8 @@ function setMode(next, { animate = true } = {}) {
       });
     }
   } else {
-    gui.progress.refresh();
-    if (gui.mounted) gui.render();
+    // The command line shares progress and journal, so re-read both.
+    gui.syncFromStorage();
   }
 }
 

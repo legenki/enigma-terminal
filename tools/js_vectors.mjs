@@ -47,4 +47,12 @@ for (const [label, phrase] of [
   completions[label] = { position, words: candidates.map((c) => c.word) };
 }
 
-process.stdout.write(JSON.stringify({ vectors: out, completions }, null, 2));
+const journalModule = await import(join(root, 'docs/js/journal.js'));
+const journal = {
+  tools: Object.keys(journalModule.TOOLS),
+  masked: journalModule.maskMnemonic(
+    'absurd avoid scissors anxiety gather lottery category door army half long camera',
+  ),
+};
+
+process.stdout.write(JSON.stringify({ vectors: out, completions, journal }, null, 2));

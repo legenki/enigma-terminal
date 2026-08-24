@@ -78,6 +78,16 @@ def test_single_word_recovery_matches_between_builds(js_results):
         assert js_results["completions"][label]["words"] == matches
 
 
+def test_journal_surface_matches_between_builds(js_results):
+    """Both front-ends write the same journal, so the vocabulary must match."""
+    from neon_terminal.journal import TOOLS, mask_mnemonic
+
+    assert js_results["journal"]["tools"] == list(TOOLS)
+    assert js_results["journal"]["masked"] == mask_mnemonic(
+        "absurd avoid scissors anxiety gather lottery category door army half long camera"
+    )
+
+
 def test_web_data_is_in_sync_with_the_sources():
     """docs/js/*.js are generated; a stale build would ship the wrong quest."""
     completed = subprocess.run(

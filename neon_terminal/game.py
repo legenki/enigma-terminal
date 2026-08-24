@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from . import __version__
 from .cases import Campaign, Case, Progress
 from .chain import ChainClient, ChainError, PROVIDERS
+from .journal import STATUS_STYLES, TOOLS, Journal, mask_mnemonic
 from .crypto_engine import (
     MnemonicError,
     normalize,
@@ -50,6 +51,10 @@ HELP_TEXT = {
         ("TXLOG [addr]", "pull the most recent on-chain transactions"),
         ("PROVIDER [name]", "choose the explorer: blockstream|mempool|blockchain"),
         ("EXPLORER", "print a browser URL for the loaded address"),
+        ("JOURNAL [tool]", "the investigation journal, newest first"),
+        ("RECALL <n>", "replay entry n from the journal"),
+        ("PIN <n>", "pin a journal entry so PURGE keeps it"),
+        ("PURGE [all]", "clear the journal (pinned entries survive unless 'all')"),
         ("STATUS", "operator status and progress"),
         ("ABOUT", "what this program actually does"),
         ("CLEAR", "wipe the screen"),
@@ -77,6 +82,10 @@ HELP_TEXT = {
         ("TXLOG [адрес]", "последние транзакции адреса"),
         ("PROVIDER [имя]", "выбрать эксплорер: blockstream|mempool|blockchain"),
         ("EXPLORER", "ссылка на адрес в браузере"),
+        ("JOURNAL [инструмент]", "журнал расследования, свежее сверху"),
+        ("RECALL <n>", "повторить запись n из журнала"),
+        ("PIN <n>", "закрепить запись, чтобы PURGE её не тронул"),
+        ("PURGE [all]", "очистить журнал (закреплённые остаются, если не 'all')"),
         ("STATUS", "статус оператора и прогресс"),
         ("ABOUT", "что эта программа делает на самом деле"),
         ("CLEAR", "очистить экран"),
@@ -168,6 +177,7 @@ class Session:
     progress: Progress
     screen: Screen
     chain: ChainClient
+    journal: Journal = field(default_factory=Journal)
     lang: str = "ru"
     active: Case | None = None
     wallet: Wallet | None = None
@@ -292,6 +302,8 @@ def cmd_hint(s: Session, _arg: str) -> None:
         s.screen.warn(s.t("hints_done"))
         return
     s.progress.use_hint(s.active.id)
+    _log(s, "hint", f"{s.active.codename(s.lang)} — hint {used + 1}/{len(hints)}",
+         detail=hints[used], payload={"caseId": s.active.id})
     s.screen.write(f"[HINT {used + 1}/{len(hints)}] {hints[used]}", "amber")
 
 
@@ -325,6 +337,7 @@ def cmd_search(s: Session, arg: str) -> None:
     if not hits:
         s.screen.warn(f"NO WORDLIST ENTRY STARTS WITH '{prefix.upper()}'.")
         return
+    _log(s, "search", prefix, detail=f"{len(hits)} match(es)", payload={"query": prefix})
     for chunk_start in range(0, len(hits), 4):
         row = hits[chunk_start : chunk_start + 4]
         s.screen.write("  " + "".join(f"{i:>5}  {w:<14}" for i, w in row), "green")
@@ -346,6 +359,7 @@ def cmd_archive(s: Session, arg: str) -> None:
         s.screen.write(f"  CASE {case.id:02d} // {case.codename(s.lang)}", "magenta")
         for line in hits[:4]:
             s.screen.write(f"      {line.strip()}", "grey")
+    _log(s, "archive", query, detail=f"{len(results)} case(s)", payload={"query": query})
     s.screen.write(f"  {len(results)} CASE(S) MATCHED", "grey")
     s.screen.write()
 
@@ -373,6 +387,8 @@ def cmd_random(s: Session, arg: str) -> None:
         if s.lang == "ru" else
         "THIS IS A REAL WALLET. DO NOT FUND IT — THE PHRASE IS STORED NOWHERE."
     )
+    _log(s, "random", f"{len(entropy) * 8}-bit phrase", detail=mnemonic,
+         payload={"mnemonic": mnemonic})
     s.screen.info(f"RUN: DECRYPT {mnemonic}")
 
 
@@ -402,15 +418,24 @@ def cmd_complete(s: Session, arg: str) -> None:
 
     # If one completion is a case key, the detective has just closed the gap.
     words = normalize(phrase).split()
+    hit = None
     for candidate in matches:
         attempt = list(words)
         attempt[position] = candidate
         owner = s.campaign.find_by_mnemonic(" ".join(attempt))
         if owner is not None:
+            hit = (candidate, owner)
             s.screen.write(
                 f"[HIT ] '{candidate}' COMPLETES THE KEY TO CASE {owner.id}.", "magenta"
             )
             break
+    _log(
+        s, "complete", f"? @ {position + 1}",
+        status="ok" if hit else "info",
+        detail=(f"{len(matches)} candidates · {hit[0]} -> case {hit[1].id}" if hit
+                else f"{len(matches)} candidates"),
+        payload={"pattern": phrase},
+    )
     s.screen.write()
 
 
@@ -475,6 +500,7 @@ def cmd_decrypt(s: Session, arg: str) -> None:
         return
 
     s.wallet = wallet
+    _record_decrypt(s, wallet, s.campaign.find_by_mnemonic(wallet.mnemonic))
     s.screen.ok("MNEMONIC CHECKSUM VALID.")
     _print_derivation(s, wallet)
 
@@ -494,6 +520,9 @@ def cmd_decrypt(s: Session, arg: str) -> None:
 def _close_case(s: Session, case: Case) -> None:
     first_time = case.id not in s.progress.solved
     s.progress.mark_solved(case.id)
+    if first_time:
+        _log(s, "case", f"Case {case.id} — {case.codename(s.lang)}", status="ok",
+             payload={"caseId": case.id})
     s.screen.write()
     s.screen.write("  " + s.t("solved_banner", id=case.id), "magenta", "bold")
     s.screen.rule("=")
@@ -543,6 +572,12 @@ def cmd_sync(s: Session, arg: str) -> None:
         s.screen.error(f"UNEXPECTED FAILURE: {error}")
         return
 
+    _log(
+        s, "ledger", address,
+        status="warn" if stats.confirmed_sats > 0 else "info",
+        detail=f"{stats.confirmed_btc} BTC · {stats.tx_count} tx · {stats.provider}",
+        payload={"address": address},
+    )
     s.screen.write("[NET] PARSING DATA STREAMS... SUCCESS", "cyan")
     s.screen.rule("-")
     s.screen.write("ADDRESS BALANCE ANALYSIS:", "white", "bold")
@@ -602,6 +637,10 @@ def cmd_sweep(s: Session, _arg: str) -> None:
             "green" if result.is_touched else "dark",
         )
     s.screen.rule("-")
+    _log(s, "sweep", s.wallet.primary.address,
+         status="ok" if touched else "info",
+         detail=f"{touched}/3 paths carry history",
+         payload={"address": s.wallet.primary.address})
     if touched:
         s.screen.write(f"[STATUS] {touched}/3 PATHS CARRY ON-CHAIN HISTORY.", "amber")
     else:
@@ -631,6 +670,8 @@ def cmd_txlog(s: Session, arg: str) -> None:
         state = "CONFIRMED" if tx.confirmed else "PENDING  "
         s.screen.write(f"  {state}  BLOCK {height:>9}  {tx.txid}", "green")
     s.screen.rule("-")
+    _log(s, "txlog", address, detail=f"{len(txs)} transaction(s)",
+         payload={"address": address})
     s.screen.write(f"  {len(txs)} MOST RECENT TX(s)", "grey")
     s.screen.write()
 
@@ -657,6 +698,119 @@ def cmd_explorer(s: Session, arg: str) -> None:
     s.screen.kv("EXPLORER", s.chain.explorer_url(address), value_styles=("cyan",))
 
 
+def _log(s: Session, tool: str, title: str, *, detail: str = "",
+         status: str = "info", payload: dict | None = None) -> None:
+    """Record one move; the web build reads the same structure."""
+    s.journal.push(tool, title, detail=detail, status=status, payload=payload)
+
+
+def _record_decrypt(s: Session, wallet: Wallet, owner, *, generated: bool = False) -> None:
+    """Journal a derivation, masking phrases the game does not recognise."""
+    storable = owner is not None or generated
+    _log(
+        s,
+        "random" if generated else "decrypt",
+        wallet.primary.address,
+        status="ok" if owner is not None else "info",
+        detail=wallet.mnemonic if storable
+        else f"{mask_mnemonic(wallet.mnemonic)} — NOT STORED",
+        payload={"mnemonic": wallet.mnemonic} if storable else {"masked": True},
+    )
+
+
+def cmd_journal(s: Session, arg: str) -> None:
+    """List the investigation journal, newest first."""
+    tool = arg.strip().lower()
+    if tool and tool not in TOOLS:
+        s.screen.error("UNKNOWN TOOL. TRY: " + ", ".join(TOOLS))
+        return
+    s.journal.refresh()
+    entries = s.journal.by_tool(tool)
+    if not entries:
+        s.screen.warn("JOURNAL EMPTY.")
+        return
+    s.screen.write()
+    s.screen.write("  INVESTIGATION JOURNAL", "cyan", "bold")
+    s.screen.rule()
+    for index, entry in enumerate(entries[:30], 1):
+        style = STATUS_STYLES.get(entry.status, "grey")
+        label = TOOLS.get(entry.tool, entry.tool).upper()
+        pin = "*" if entry.pinned else " "
+        print(
+            s.screen.paint(f"{index:>3}. {entry.clock} ", "dark")
+            + s.screen.paint(f"{label:<12}", "cyan")
+            + s.screen.paint(f"{pin} ", "amber")
+            + s.screen.paint(entry.title, style)
+        )
+        if entry.detail:
+            s.screen.write(f"      {entry.detail}", "dark")
+    s.screen.rule()
+    s.screen.write(f"  {len(entries)} ENTRY(S) — RECALL <n> TO REPLAY", "grey")
+    s.screen.write()
+
+
+def cmd_recall(s: Session, arg: str) -> None:
+    """Replay a journal entry in the tool that produced it."""
+    try:
+        position = int(arg.strip())
+    except ValueError:
+        s.screen.warn("USAGE: RECALL <n>  (see JOURNAL)")
+        return
+    s.journal.refresh()
+    entry = s.journal.at(position)
+    if entry is None:
+        s.screen.error(f"NO JOURNAL ENTRY {position}.")
+        return
+    payload = entry.payload or {}
+    s.screen.info(f"REPLAYING #{position}: {entry.title}")
+
+    if entry.tool in ("decrypt", "random"):
+        mnemonic = payload.get("mnemonic")
+        if not mnemonic:
+            s.screen.warn(
+                "PHRASE WAS NOT STORED — THE GAME DOES NOT KEEP UNKNOWN SEEDS."
+            )
+            return
+        cmd_decrypt(s, mnemonic)
+    elif entry.tool == "ledger":
+        cmd_sync(s, payload.get("address", ""))
+    elif entry.tool == "sweep":
+        cmd_sweep(s, "")
+    elif entry.tool == "txlog":
+        cmd_txlog(s, payload.get("address", ""))
+    elif entry.tool == "search":
+        cmd_search(s, payload.get("query", ""))
+    elif entry.tool == "archive":
+        cmd_archive(s, payload.get("query", ""))
+    elif entry.tool == "complete":
+        cmd_complete(s, payload.get("pattern", ""))
+    elif entry.tool in ("case", "hint"):
+        cmd_open(s, str(payload.get("caseId", "")))
+    else:
+        s.screen.warn("THIS ENTRY HAS NOTHING TO REPLAY.")
+
+
+def cmd_pin(s: Session, arg: str) -> None:
+    try:
+        position = int(arg.strip())
+    except ValueError:
+        s.screen.warn("USAGE: PIN <n>  (see JOURNAL)")
+        return
+    entry = s.journal.toggle_pin(position)
+    if entry is None:
+        s.screen.error(f"NO JOURNAL ENTRY {position}.")
+        return
+    s.screen.ok(("PINNED: " if entry.pinned else "UNPINNED: ") + entry.title)
+
+
+def cmd_purge(s: Session, arg: str) -> None:
+    purge_all = arg.strip().lower() == "all"
+    s.journal.clear(keep_pinned=not purge_all)
+    s.screen.ok(
+        "JOURNAL CLEARED." if purge_all else "JOURNAL CLEARED, PINNED ENTRIES KEPT."
+    )
+
+
 def cmd_status(s: Session, _arg: str) -> None:
     s.screen.write()
     s.screen.kv("OPERATOR", s.campaign.meta["operator"])
@@ -668,6 +822,7 @@ def cmd_status(s: Session, _arg: str) -> None:
                 value_styles=("amber",) if s.chain.offline else ("green",))
     s.screen.kv("WORDLIST", "AUTHENTIC" if wordlist_is_authentic() else "MODIFIED")
     s.screen.kv("CASES CLOSED", f"{len(s.progress.solved)}/{len(s.campaign.cases)}")
+    s.screen.kv("JOURNAL", f"{len(s.journal)} entries")
     s.screen.kv("ACTIVE CASE",
                 f"{s.active.id:02d} {s.active.codename(s.lang)}" if s.active else "NONE")
     if s.wallet:
@@ -721,6 +876,10 @@ COMMANDS = {
     "TXLOG": cmd_txlog,
     "PROVIDER": cmd_provider,
     "EXPLORER": cmd_explorer,
+    "JOURNAL": cmd_journal, "LOG": cmd_journal,
+    "RECALL": cmd_recall,
+    "PIN": cmd_pin,
+    "PURGE": cmd_purge,
     "STATUS": cmd_status,
     "CLEAR": cmd_clear,
     "RESET": cmd_reset,
@@ -749,6 +908,7 @@ def build_session(args: argparse.Namespace) -> Session:
         progress=Progress.load(),
         screen=Screen(colour=None if not args.no_color else False, speed=args.speed),
         chain=ChainClient(preferred=args.provider, offline=args.offline),
+        journal=Journal(),
         lang=args.lang,
     )
 

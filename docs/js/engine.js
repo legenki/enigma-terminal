@@ -18,6 +18,7 @@ import {
   wordAt,
 } from './crypto/bip39.js';
 import { fromHex, toHex } from './crypto/hash.js';
+import { Journal, TOOLS, maskMnemonic } from './journal.js';
 
 const OFFICIAL_WORDLIST_SHA256 =
   '2f5eed53a4727b4bf8880d8f3f199efc90e58503646d9ff8eff3a2ed3b24dbda';
@@ -64,6 +65,9 @@ const HELP = {
     ['EXPLORER', 'open the loaded address in a block explorer'],
     ['COPY', 'copy the loaded addresses to the clipboard'],
     ['CRT full|soft|flat|off', 'change the monitor simulation'],
+    ['JOURNAL [tool]', 'the investigation journal, newest first'],
+    ['RECALL <n>', 'replay entry n from the journal'],
+    ['PURGE [all]', 'clear the journal (pinned entries survive unless "all")'],
     ['STATUS', 'operator status and progress'],
     ['ABOUT', 'what this program actually does'],
     ['CLEAR', 'wipe the screen'],
@@ -92,6 +96,9 @@ const HELP = {
     ['EXPLORER', 'открыть адрес в блокчейн-эксплорере'],
     ['COPY', 'скопировать адреса в буфер обмена'],
     ['CRT full|soft|flat|off', 'настройка симуляции монитора'],
+    ['JOURNAL [инструмент]', 'журнал расследования, свежее сверху'],
+    ['RECALL <n>', 'повторить запись n из журнала'],
+    ['PURGE [all]', 'очистить журнал (закреплённые остаются, если не "all")'],
     ['STATUS', 'статус оператора и прогресс'],
     ['ABOUT', 'что эта программа делает на самом деле'],
     ['CLEAR', 'очистить экран'],
@@ -191,6 +198,7 @@ export class Engine {
     this.active = null;
     this.wallet = null;
     this.progress = new ProgressStore();
+    this.journal = new Journal();
   }
 
   t(key, values = {}) {
@@ -283,6 +291,9 @@ export class Engine {
       EXPLORER: this.cmdExplorer,
       COPY: this.cmdCopy,
       CRT: this.cmdCrt,
+      JOURNAL: this.cmdJournal, LOG: this.cmdJournal,
+      RECALL: this.cmdRecall,
+      PURGE: this.cmdPurge,
       STATUS: this.cmdStatus,
       CLEAR: this.cmdClear,
       RESET: this.cmdReset,
@@ -403,6 +414,10 @@ export class Engine {
       return;
     }
     this.progress.useHint(caseFile.id);
+    this.log('hint', `${pick(caseFile.codename, this.lang)} — hint ${used + 1}/${hints.length}`, {
+      detail: hints[used],
+      payload: { caseId: caseFile.id },
+    });
     this.term.print(`[HINT ${used + 1}/${hints.length}] ${hints[used]}`, 'amber');
   }
 
@@ -445,6 +460,10 @@ export class Engine {
       this.term.print(`[WARN] NO WORDLIST ENTRY STARTS WITH '${prefix.toUpperCase()}'.`, 'amber');
       return;
     }
+    this.log('search', prefix, {
+      detail: `${hits.length} match(es)`,
+      payload: { query: prefix },
+    });
     for (let i = 0; i < hits.length; i += 4) {
       this.term.print(
         '  ' + hits.slice(i, i + 4)
@@ -477,6 +496,10 @@ export class Engine {
         this.term.print(`      ${hit.line.trim()}`, 'grey');
       }
     }
+    this.log('archive', query, {
+      detail: `${results.length} case(s)`,
+      payload: { query },
+    });
     this.term.print(`  ${results.length} CASE(S) MATCHED`, 'grey');
     this.term.blank();
   }
@@ -503,6 +526,10 @@ export class Engine {
         : '[WARN] THIS IS A REAL WALLET. DO NOT FUND IT — THE PHRASE IS STORED NOWHERE.',
       'amber',
     );
+    this.log('random', `${entropy.length * 8}-bit phrase`, {
+      detail: mnemonic,
+      payload: { mnemonic },
+    });
     this.term.print(`[INFO] RUN: DECRYPT ${mnemonic}`, 'cyan');
   }
 
@@ -539,6 +566,13 @@ export class Engine {
         'magenta',
       );
     }
+    this.log('complete', `? @ ${position + 1}`, {
+      status: hit ? 'ok' : 'info',
+      detail: hit
+        ? `${candidates.length} candidates · ${hit.word} -> case ${hit.case.id}`
+        : `${candidates.length} candidates`,
+      payload: { pattern: phrase },
+    });
     this.term.blank();
   }
 
@@ -651,6 +685,7 @@ export class Engine {
     this.printDerivation(wallet);
 
     const owner = caseForMnemonic(wallet.mnemonic);
+    this.recordDecrypt(wallet, owner);
     if (this.active && owner && owner.id === this.active.id) {
       this.closeCase(this.active);
     } else if (owner && !this.isSolved(owner.id)) {
@@ -670,6 +705,12 @@ export class Engine {
 
   closeCase(caseFile) {
     const firstTime = this.progress.markSolved(caseFile.id);
+    if (firstTime) {
+      this.log('case', `Case ${caseFile.id} — ${pick(caseFile.codename, this.lang)}`, {
+        status: 'ok',
+        payload: { caseId: caseFile.id },
+      });
+    }
     const term = this.term;
     term.blank();
     term.print(`  ${this.t('solved', { id: caseFile.id })}`, 'magenta');
@@ -719,6 +760,11 @@ export class Engine {
       return;
     }
 
+    this.log('ledger', address, {
+      status: stats.confirmedSats > 0n ? 'warn' : 'info',
+      detail: `${formatBtc(stats.confirmedSats)} BTC · ${stats.txCount} tx · ${stats.provider}`,
+      payload: { address },
+    });
     term.print('[NET] PARSING DATA STREAMS... SUCCESS', 'cyan');
     term.rule('-');
     term.print('ADDRESS BALANCE ANALYSIS:', 'white');
@@ -784,6 +830,11 @@ export class Engine {
       );
     }
     term.rule('-');
+    this.log('sweep', this.wallet.primary.address, {
+      status: touched ? 'ok' : 'info',
+      detail: `${touched}/3 paths carry history`,
+      payload: { address: this.wallet.primary.address },
+    });
     term.print(
       touched
         ? `[STATUS] ${touched}/3 PATHS CARRY ON-CHAIN HISTORY.`
@@ -820,6 +871,10 @@ export class Engine {
       );
     }
     term.rule('-');
+    this.log('txlog', address, {
+      detail: `${txs.length} transaction(s)`,
+      payload: { address },
+    });
     term.print(`  ${txs.length} MOST RECENT TX(s)`, 'grey');
     term.blank();
   }
@@ -876,6 +931,103 @@ export class Engine {
       return;
     }
     this.term.print(`[ OK ] MONITOR PROFILE: ${name.toUpperCase()}`, 'green');
+  }
+
+  /** Record one move; the GUI reads the same store. */
+  log(tool, title, { detail = '', status = 'info', payload = {} } = {}) {
+    return this.journal.push({ tool, title, detail, status, payload });
+  }
+
+  /**
+   * Journal a derivation. Only phrases the game already knows (case answers,
+   * all published test vectors) or ones this session generated are stored in
+   * full; anything else the player typed is masked before it reaches disk.
+   */
+  recordDecrypt(wallet, owner, { generated = false } = {}) {
+    const storable = Boolean(owner) || generated;
+    this.log(generated ? 'random' : 'decrypt', wallet.primary.address, {
+      status: owner ? 'ok' : 'info',
+      detail: storable ? wallet.mnemonic : `${maskMnemonic(wallet.mnemonic)} — NOT STORED`,
+      payload: storable ? { mnemonic: wallet.mnemonic } : { masked: true },
+    });
+  }
+
+  cmdJournal(argument) {
+    const filter = argument.trim().toLowerCase();
+    if (filter && !TOOLS[filter]) {
+      this.term.print(`[FATAL] UNKNOWN TOOL. TRY: ${Object.keys(TOOLS).join(', ')}`, 'red');
+      return;
+    }
+    this.journal.refresh();
+    const entries = this.journal.byTool(filter);
+    if (!entries.length) {
+      this.term.print('[WARN] JOURNAL EMPTY.', 'amber');
+      return;
+    }
+    this.term.blank();
+    this.term.print('  INVESTIGATION JOURNAL', 'cyan');
+    this.term.rule();
+    entries.slice(0, 30).forEach((entry, index) => {
+      const stamp = new Date(entry.at).toTimeString().slice(0, 8);
+      const tool = (TOOLS[entry.tool] || { label: { en: entry.tool } }).label.en.toUpperCase();
+      const style = { ok: 'green', warn: 'amber', danger: 'red' }[entry.status] || 'grey';
+      this.term.print([
+        { text: `${String(index + 1).padStart(3)}. `, style: 'dark' },
+        { text: `${stamp} `, style: 'dark' },
+        { text: `${tool.padEnd(12)}`, style: 'cyan' },
+        { text: entry.pinned ? '* ' : '  ', style: 'amber' },
+        { text: entry.title, style },
+      ]);
+      if (entry.detail) this.term.print(`      ${entry.detail}`, 'dark');
+    });
+    this.term.rule();
+    this.term.print(
+      `  ${entries.length} ENTRY(S) — RECALL <n> TO REPLAY`, 'grey',
+    );
+    this.term.blank();
+  }
+
+  async cmdRecall(argument) {
+    const position = parseInt(argument.trim(), 10);
+    if (!Number.isInteger(position)) {
+      this.term.print('[WARN] USAGE: RECALL <n>  (see JOURNAL)', 'amber');
+      return;
+    }
+    this.journal.refresh();
+    const entry = this.journal.at(position);
+    if (!entry) {
+      this.term.print(`[FATAL] NO JOURNAL ENTRY ${position}.`, 'red');
+      return;
+    }
+    const payload = entry.payload || {};
+    this.term.print(`[LOG ] REPLAYING #${position}: ${entry.title}`, 'cyan');
+
+    if (entry.tool === 'decrypt' || entry.tool === 'random') {
+      if (!payload.mnemonic) {
+        this.term.print('[WARN] PHRASE WAS NOT STORED — THE GAME DOES NOT KEEP UNKNOWN SEEDS.', 'amber');
+        return;
+      }
+      return this.cmdDecrypt(payload.mnemonic);
+    }
+    if (entry.tool === 'ledger') return this.cmdSync(payload.address || '');
+    if (entry.tool === 'sweep') return this.cmdSweep('');
+    if (entry.tool === 'txlog') return this.cmdTxlog(payload.address || '');
+    if (entry.tool === 'search') return this.cmdSearch(payload.query || '');
+    if (entry.tool === 'archive') return this.cmdArchive(payload.query || '');
+    if (entry.tool === 'complete') return this.cmdComplete(payload.pattern || '');
+    if (entry.tool === 'case' || entry.tool === 'hint') {
+      return this.cmdOpen(String(payload.caseId || ''));
+    }
+    this.term.print('[WARN] THIS ENTRY HAS NOTHING TO REPLAY.', 'amber');
+  }
+
+  cmdPurge(argument) {
+    const all = argument.trim().toLowerCase() === 'all';
+    this.journal.clear({ keepPinned: !all });
+    this.term.print(
+      all ? '[ OK ] JOURNAL CLEARED.' : '[ OK ] JOURNAL CLEARED, PINNED ENTRIES KEPT.',
+      'green',
+    );
   }
 
   cmdStatus() {

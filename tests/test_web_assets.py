@@ -74,3 +74,40 @@ def test_no_module_uses_inner_html():
     for path in JS_FILES:
         code = strip_js_comments(path.read_text())
         assert "innerHTML" not in code, f"{path.name} uses innerHTML"
+
+
+def journal_tools_written_by(path):
+    """Tool names the module records, including the two recordDecrypt covers."""
+    source = strip_js_comments(path.read_text())
+    tools = set(re.findall(r"""\blog\(\s*['"]([a-z]+)['"]""", source))
+    if "recordDecrypt(" in source:
+        tools |= {"decrypt", "random"}
+    return tools
+
+
+@pytest.mark.parametrize("module", ["js/engine.js", "js/gui/app.js"],
+                         ids=["command-line", "gui"])
+def test_every_journal_tool_is_recorded(module):
+    """A tool that quietly skips the journal leaves a hole in the case record.
+
+    This is a static check on purpose: an earlier version of the command line
+    silently failed to log wordlist searches because a patch matched nothing,
+    and nothing in the suite noticed.
+    """
+    from neon_terminal.journal import TOOLS
+
+    recorded = journal_tools_written_by(DOCS / module)
+    missing = set(TOOLS) - recorded
+    assert not missing, f"{module} never journals: {sorted(missing)}"
+
+
+def test_both_builds_share_one_journal_key():
+    """The GUI and the command line must read and write the same store."""
+    journal = (DOCS / "js" / "journal.js").read_text()
+    keys = re.findall(r"STORAGE_KEY\s*=\s*'([^']+)'", journal)
+    assert keys == ["neon-terminal/journal/v1"]
+    for module in ("js/engine.js", "js/gui/app.js"):
+        source = (DOCS / module).read_text()
+        assert "from './journal.js'" in source or "from '../journal.js'" in source
+        # Neither front-end may keep its own private copy of the key.
+        assert "neon-terminal/journal" not in source

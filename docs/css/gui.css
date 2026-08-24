@@ -484,9 +484,189 @@ table.data td.addr { word-break: break-all; }
 /* ---------- responsive --------------------------------------------------- */
 
 @media (max-width: 760px) {
-  #gui-root { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
   #gui-nav .win__body { padding: 8px; }
   .nav__list { display: flex; flex-wrap: wrap; gap: 4px; }
   .nav__item { width: auto; margin: 0; border: 1px solid var(--panel-lo); }
   .nav__sep, .nav__meter { display: none; }
+}
+
+/* ---------- journal rail ------------------------------------------------- */
+
+#gui-root { grid-template-columns: 208px minmax(0, 1fr) 268px; }
+#gui-root.rail-closed { grid-template-columns: 208px minmax(0, 1fr) 30px; }
+
+.rail.is-hidden { display: none; }
+
+.rail__body { padding: 8px; }
+
+.rail__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 7px;
+  margin-bottom: 7px;
+  border-bottom: 1px solid var(--panel-lo);
+}
+
+.rail__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rail__item { margin-bottom: 3px; }
+
+.rail__btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  width: 100%;
+  padding: 5px 7px;
+  font: inherit;
+  text-align: left;
+  color: var(--ink);
+  background: var(--panel-alt);
+  border: 1px solid var(--panel-lo);
+  border-left-width: 3px;
+  cursor: pointer;
+}
+
+.rail__btn:hover { background: var(--panel-hi); border-color: var(--ink); border-left-width: 3px; }
+
+.rail__item--ok .rail__btn { border-left-color: var(--ok); }
+.rail__item--warn .rail__btn { border-left-color: var(--warn); }
+.rail__item--danger .rail__btn { border-left-color: var(--danger); }
+.rail__item--info .rail__btn { border-left-color: var(--info); }
+
+.rail__glyph {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+  flex: none;
+  width: 12px;
+  text-align: center;
+}
+
+.rail__text { min-width: 0; flex: 1; }
+
+.rail__title {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rail__meta {
+  display: block;
+  font-size: 9.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 1px;
+}
+
+.rail__pin { color: var(--warn); font-size: 10px; }
+
+.win__collapse {
+  font: inherit;
+  font-size: 12px;
+  line-height: 1;
+  width: 16px;
+  height: 14px;
+  padding: 0;
+  color: var(--ink);
+  background: var(--panel-hi);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  flex: none;
+}
+
+/* The tab that brings a collapsed rail back. */
+.rail-tab {
+  align-self: start;
+  width: 30px;
+  padding: 10px 0;
+  font-size: 13px;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+}
+
+.rail-tab:hover { background: var(--panel-hi); }
+.rail-tab.is-hidden { display: none; }
+
+/* ---------- journal panel ------------------------------------------------ */
+
+.log { background: var(--panel-alt); }
+
+.log__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  border-left: 3px solid var(--panel-lo);
+}
+
+.log--ok .log__row { border-left-color: var(--ok); }
+.log--warn .log__row { border-left-color: var(--warn); }
+.log--danger .log__row { border-left-color: var(--danger); }
+.log--info .log__row { border-left-color: var(--info); }
+
+.log__n {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-soft);
+  min-width: 20px;
+  text-align: right;
+  flex: none;
+  padding-top: 2px;
+}
+
+.log__glyph {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-soft);
+  flex: none;
+  width: 14px;
+  text-align: center;
+}
+
+.log__body { flex: 1; min-width: 0; }
+
+.log__title {
+  font-family: var(--mono);
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.log__detail {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-top: 2px;
+  word-break: break-all;
+}
+
+.log__meta {
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 3px;
+}
+
+@media (max-width: 1080px) {
+  #gui-root,
+  #gui-root.rail-closed { grid-template-columns: 208px minmax(0, 1fr); }
+  .rail, .rail-tab { display: none; }
+}
+
+@media (max-width: 760px) {
+  #gui-root,
+  #gui-root.rail-closed { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
 }

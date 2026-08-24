@@ -76,6 +76,10 @@ python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # one-shot commands
 | `DERIVE` | re-print the addresses |
 | `SYNC_LEDGER [addr]` | live balance query against Bitcoin mainnet |
 | `SWEEP` | check all three derived addresses at once |
+| `JOURNAL [tool]` | the investigation journal, newest first |
+| `RECALL <n>` | replay entry n in the tool that made it |
+| `PIN <n>` | pin an entry so `PURGE` keeps it |
+| `PURGE [all]` | clear the journal |
 | `ARCHIVE <text>` | full-text search across the case files |
 | `RANDOM [12..24]` | generate a fresh seed phrase |
 | `COMPLETE <phrase ?>` | recover the missing word of a phrase |
@@ -89,6 +93,27 @@ python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # one-shot commands
 
 Progress persists in `~/.neon_terminal/progress.json` (override with `NEON_TERMINAL_HOME`)
 for the terminal, and in `localStorage` for the web build.
+
+## The investigation journal
+
+Every move — a derivation, a balance query, a sweep, a wordlist or archive search, a word
+recovery, a generated phrase, a hint taken, a case closed — lands in the journal. It is shared
+between the GUI and the command line, survives a reload, and lives in `localStorage` (or in
+`~/.neon_terminal/journal.json` for the terminal build).
+
+In the GUI it is always at hand: a rail of recent entries sits beside every panel, and a full
+panel adds per-tool filters, pinning and a text export. **Recall** replays an entry in the tool
+that produced it, with the same address, query or phrase. On the command line, `JOURNAL` and
+`RECALL <n>` do the same.
+
+Panels no longer reset when you switch: a half-typed phrase, a query and its results are still
+there when you come back from another tool.
+
+**What the journal will not remember.** A seed phrase the game does not recognise is never
+written out in full — only a masked trace like `absurd … camera (12 words) — NOT STORED`, and
+`RECALL` on such an entry says plainly that there is nothing to replay. Only the eight case
+answers (published test vectors) and phrases this page generated itself are stored whole. So
+pasting a live wallet into the terminal does not leave it sitting on disk.
 
 ## Search and randomisation
 
@@ -170,9 +195,10 @@ docs/                 web build, published by GitHub Pages
   js/term.js          the canvas terminal
   js/crt.js           WebGL bloom, curvature, aberration, mask, noise
   js/glitch.js        the glitch banner above both modes
+  js/journal.js       the investigation journal, shared by both modes
   js/gui/             GUI mode, over the same core
 tools/build_web_data.py   regenerates docs/js/{wordlist,campaign}.js from data/
-tests/                185 tests, including the Python↔JavaScript parity check
+tests/                219 tests, including the Python↔JavaScript parity check
 ```
 
 ## Development
