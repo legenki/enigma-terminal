@@ -2,13 +2,15 @@
 // terminal (neon_terminal/game.py) so both builds play identically.
 
 import { CAMPAIGN } from './campaign.js';
+import {
+  ProgressStore, caseForMnemonic, completeMnemonic, pick, randomMnemonic, searchCases,
+} from './core.js';
 import { WORDLIST_SHA256 } from './wordlist.js';
 import { ChainClient, ChainError, formatBtc, PROVIDERS } from './chain.js';
 import { deriveWallet } from './crypto/wallet.js';
 import {
   MnemonicError,
   entropyToMnemonic,
-  fingerprint,
   indexOf,
   mnemonicToEntropy,
   normalize,
@@ -17,7 +19,6 @@ import {
 } from './crypto/bip39.js';
 import { fromHex, toHex } from './crypto/hash.js';
 
-const STORAGE_KEY = 'neon-terminal/progress/v1';
 const OFFICIAL_WORDLIST_SHA256 =
   '2f5eed53a4727b4bf8880d8f3f199efc90e58503646d9ff8eff3a2ed3b24dbda';
 
@@ -50,6 +51,9 @@ const HELP = {
     ['WORD <1..2048>', 'read one entry of the BIP-39 wordlist'],
     ['INDEX <word>', "find a word's position in the wordlist"],
     ['SEARCH <prefix>', 'list wordlist entries by prefix'],
+    ['ARCHIVE <text>', 'full-text search across the case files'],
+    ['RANDOM [12..24]', 'generate a fresh seed phrase from secure randomness'],
+    ['COMPLETE <phrase ?>', 'find the missing word of a phrase (one ? marks it)'],
     ['ENTROPY <hex>', 'rebuild a mnemonic from raw entropy (32 hex chars)'],
     ['DECRYPT <12 words>', 'validate a seed phrase and derive its addresses'],
     ['DERIVE', 're-print the derivation grid of the loaded seed'],
@@ -75,6 +79,9 @@ const HELP = {
     ['WORD <1..2048>', 'показать слово словаря BIP-39'],
     ['INDEX <слово>', 'найти позицию слова в словаре'],
     ['SEARCH <префикс>', 'искать слова словаря по началу'],
+    ['ARCHIVE <текст>', 'полнотекстовый поиск по делам'],
+    ['RANDOM [12..24]', 'сгенерировать новую сид-фразу'],
+    ['COMPLETE <фраза ?>', 'найти недостающее слово фразы (его место — ?)'],
     ['ENTROPY <hex>', 'собрать мнемонику из энтропии (32 hex-символа)'],
     ['DECRYPT <12 слов>', 'проверить фразу и вывести адреса'],
     ['DERIVE', 'повторить сетку деривации загруженного сида'],
@@ -172,9 +179,6 @@ const TEXT = {
   },
 };
 
-const pick = (bundle, lang) =>
-  (bundle && (bundle[lang] || bundle.en)) || bundle;
-
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export class Engine {
@@ -186,7 +190,7 @@ export class Engine {
     this.campaign = CAMPAIGN;
     this.active = null;
     this.wallet = null;
-    this.progress = this.loadProgress();
+    this.progress = new ProgressStore();
   }
 
   t(key, values = {}) {
@@ -198,27 +202,8 @@ export class Engine {
 
   // -- persistence ---------------------------------------------------------
 
-  loadProgress() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return { solved: [], hints: {} };
-      const data = JSON.parse(raw);
-      return { solved: data.solved || [], hints: data.hints || {} };
-    } catch {
-      return { solved: [], hints: {} };
-    }
-  }
-
-  saveProgress() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.progress));
-    } catch {
-      /* private mode or blocked storage: the session simply is not persisted */
-    }
-  }
-
   isSolved(id) {
-    return this.progress.solved.includes(id);
+    return this.progress.isSolved(id);
   }
 
   isUnlocked(caseFile) {
@@ -285,6 +270,9 @@ export class Engine {
       WORD: this.cmdWord,
       INDEX: this.cmdIndex,
       SEARCH: this.cmdSearch,
+      ARCHIVE: this.cmdArchive,
+      RANDOM: this.cmdRandom, ROLL: this.cmdRandom,
+      COMPLETE: this.cmdComplete, FIND: this.cmdComplete,
       ENTROPY: this.cmdEntropy,
       DECRYPT: this.cmdDecrypt,
       DERIVE: this.cmdDerive,
@@ -409,13 +397,12 @@ export class Engine {
     const caseFile = this.requireCase();
     if (!caseFile) return;
     const hints = pick(caseFile.hints, this.lang);
-    const used = this.progress.hints[caseFile.id] || 0;
+    const used = this.progress.hintsUsed(caseFile.id);
     if (used >= hints.length) {
       this.term.print(`[WARN] ${this.t('hintsDone')}`, 'amber');
       return;
     }
-    this.progress.hints[caseFile.id] = used + 1;
-    this.saveProgress();
+    this.progress.useHint(caseFile.id);
     this.term.print(`[HINT ${used + 1}/${hints.length}] ${hints[used]}`, 'amber');
   }
 
@@ -467,6 +454,92 @@ export class Engine {
       );
     }
     this.term.print(`  ${hits.length} MATCH(ES)`, 'grey');
+  }
+
+  cmdArchive(argument) {
+    const query = argument.trim();
+    if (!query) {
+      this.term.print('[WARN] USAGE: ARCHIVE <text>', 'amber');
+      return;
+    }
+    const results = searchCases(query, this.lang, this.progress);
+    if (!results.length) {
+      this.term.print(`[WARN] NOTHING IN THE ARCHIVE MATCHES '${query.toUpperCase()}'.`, 'amber');
+      return;
+    }
+    this.term.blank();
+    for (const result of results) {
+      this.term.print(
+        `  CASE ${String(result.case.id).padStart(2, '0')} // ${pick(result.case.codename, this.lang)}`,
+        'magenta',
+      );
+      for (const hit of result.hits.slice(0, 4)) {
+        this.term.print(`      ${hit.line.trim()}`, 'grey');
+      }
+    }
+    this.term.print(`  ${results.length} CASE(S) MATCHED`, 'grey');
+    this.term.blank();
+  }
+
+  async cmdRandom(argument) {
+    const count = argument.trim() ? parseInt(argument.trim(), 10) : 12;
+    let generated;
+    try {
+      generated = randomMnemonic(count);
+    } catch (error) {
+      this.term.print(`[FATAL] ${error.message}`, 'red');
+      return;
+    }
+    const { mnemonic, entropy } = generated;
+    this.term.blank();
+    this.term.print('[RNG] DRAWING FROM crypto.getRandomValues...', 'cyan');
+    this.term.keyValue('ENTROPY', toHex(entropy), 'grey', 'cyan');
+    this.term.keyValue('BITS', String(entropy.length * 8), 'grey', 'cyan');
+    this.term.type(`${'MNEMONIC'.padEnd(18)}: ${mnemonic}`, 'green', 90);
+    this.term.blank();
+    this.term.print(
+      this.lang === 'ru'
+        ? '[WARN] ЭТО НАСТОЯЩИЙ КОШЕЛЁК. НЕ КЛАДИ НА НЕГО ДЕНЬГИ — ФРАЗА НИГДЕ НЕ СОХРАНЯЕТСЯ.'
+        : '[WARN] THIS IS A REAL WALLET. DO NOT FUND IT — THE PHRASE IS STORED NOWHERE.',
+      'amber',
+    );
+    this.term.print(`[INFO] RUN: DECRYPT ${mnemonic}`, 'cyan');
+  }
+
+  async cmdComplete(argument) {
+    const phrase = argument.trim();
+    if (!phrase) {
+      this.term.print('[WARN] USAGE: COMPLETE <phrase with ? in place of the missing word>', 'amber');
+      return;
+    }
+    this.term.blank();
+    let found;
+    try {
+      found = await this.withLogs(
+        ['[~] enumerating candidate words...', '[~] verifying sha256 checksums...'],
+        () => completeMnemonic(phrase),
+      );
+    } catch (error) {
+      this.term.print(`[FATAL] ${error.message}`, 'red');
+      return;
+    }
+    const { position, candidates } = found;
+    this.term.print(
+      `[ OK ] POSITION ${position + 1}: ${candidates.length} WORD(S) SATISFY THE CHECKSUM.`,
+      'green',
+    );
+    for (let i = 0; i < candidates.length; i += 6) {
+      this.term.print('  ' + candidates.slice(i, i + 6)
+        .map((candidate) => candidate.word.padEnd(12)).join(''), 'green');
+    }
+    const hit = candidates.find((candidate) => candidate.case);
+    if (hit) {
+      this.term.print(
+        `[HIT ] '${hit.word}' COMPLETES THE KEY TO CASE ${hit.case.id}.`,
+        'magenta',
+      );
+    }
+    this.term.blank();
   }
 
   cmdEntropy(argument) {
@@ -577,7 +650,7 @@ export class Engine {
     this.term.print('[ OK ] MNEMONIC CHECKSUM VALID.', 'green');
     this.printDerivation(wallet);
 
-    const owner = this.campaign.cases.find((c) => c.fingerprint === fingerprint(wallet.mnemonic));
+    const owner = caseForMnemonic(wallet.mnemonic);
     if (this.active && owner && owner.id === this.active.id) {
       this.closeCase(this.active);
     } else if (owner && !this.isSolved(owner.id)) {
@@ -596,11 +669,7 @@ export class Engine {
   }
 
   closeCase(caseFile) {
-    const firstTime = !this.isSolved(caseFile.id);
-    if (firstTime) {
-      this.progress.solved.push(caseFile.id);
-      this.saveProgress();
-    }
+    const firstTime = this.progress.markSolved(caseFile.id);
     const term = this.term;
     term.blank();
     term.print(`  ${this.t('solved', { id: caseFile.id })}`, 'magenta');
@@ -843,8 +912,7 @@ export class Engine {
   }
 
   cmdReset() {
-    this.progress = { solved: [], hints: {} };
-    this.saveProgress();
+    this.progress.reset();
     this.active = null;
     this.wallet = null;
     this.term.print('[ OK ] PROGRESS ERASED. ARCHIVE SEALED AGAIN.', 'green');

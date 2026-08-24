@@ -150,3 +150,31 @@ class Campaign:
 
     def find_by_mnemonic(self, mnemonic: str) -> Case | None:
         return next((c for c in self.cases if c.matches(mnemonic)), None)
+
+    def search(self, query: str, lang: str,
+               progress: Progress | None = None) -> list[tuple[Case, list[str]]]:
+        """Full-text search across the archive in one language.
+
+        Epilogues join the index only once a case is closed — searching them
+        earlier would hand the player the ending.
+        """
+        needle = query.strip().lower()
+        if not needle:
+            return []
+        results: list[tuple[Case, list[str]]] = []
+        for case in self.cases:
+            hits: list[str] = []
+            if needle in case.codename(lang).lower():
+                hits.append(case.codename(lang))
+            for field in ("brief", "evidence", "clues"):
+                hits += [
+                    line for line in getattr(case, field)(lang)
+                    if needle in line.lower()
+                ]
+            if progress is None or case.id in progress.solved:
+                hits += [
+                    line for line in case.epilogue(lang) if needle in line.lower()
+                ]
+            if hits:
+                results.append((case, hits))
+        return results

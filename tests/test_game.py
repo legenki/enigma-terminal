@@ -265,3 +265,80 @@ def test_sweep_survives_one_unreachable_provider(session, capsys, monkeypatch):
     out = capsys.readouterr().out
     assert "UNREACHABLE" in out
     assert "2/3 PATHS CARRY ON-CHAIN HISTORY" in out
+
+
+# --- seed tools in the command loop ---------------------------------------
+
+def test_random_prints_a_usable_phrase(session, capsys):
+    run(session, "RANDOM")
+    out = capsys.readouterr().out
+    assert "DRAWING FROM THE OS CRYPTOGRAPHIC RANDOM SOURCE" in out
+    assert "THIS IS A REAL WALLET" in out
+    mnemonic = next(
+        line.split(":", 1)[1].strip() for line in out.splitlines()
+        if line.startswith("MNEMONIC")
+    )
+    assert len(mnemonic.split()) == 12
+    run(session, f"DECRYPT {mnemonic}")
+    assert "MNEMONIC CHECKSUM VALID" in capsys.readouterr().out
+
+
+def test_random_honours_a_word_count(session, capsys):
+    run(session, "RANDOM 24")
+    out = capsys.readouterr().out
+    mnemonic = next(
+        line.split(":", 1)[1].strip() for line in out.splitlines()
+        if line.startswith("MNEMONIC")
+    )
+    assert len(mnemonic.split()) == 24
+
+
+def test_random_rejects_a_bad_word_count(session, capsys):
+    run(session, "RANDOM 13", "RANDOM twelve")
+    out = capsys.readouterr().out
+    assert "WORD COUNT 13 INVALID" in out
+    assert "USAGE: RANDOM" in out
+
+
+def test_complete_recovers_a_missing_word(session, capsys):
+    phrase = " ".join(SOLUTIONS[1].split()[:-1] + ["?"])
+    run(session, f"COMPLETE {phrase}")
+    out = capsys.readouterr().out
+    assert "POSITION 12: 128 WORD(S) SATISFY THE CHECKSUM" in out
+    assert "about" in out
+    assert "COMPLETES THE KEY TO CASE 1" in out
+
+
+def test_complete_refuses_more_than_one_blank(session, capsys):
+    words = SOLUTIONS[1].split()
+    words[0] = words[11] = "?"
+    run(session, "COMPLETE " + " ".join(words))
+    assert "THIS TOOL RESOLVES EXACTLY ONE" in capsys.readouterr().out
+
+
+def test_complete_without_arguments_explains_itself(session, capsys):
+    run(session, "COMPLETE")
+    assert "USAGE: COMPLETE" in capsys.readouterr().out
+
+
+def test_archive_searches_the_case_files(session, capsys):
+    run(session, "ARCHIVE churn")
+    out = capsys.readouterr().out
+    assert "CASE 06" in out
+    assert "1 CASE(S) MATCHED" in out
+
+
+def test_archive_hides_epilogues_until_a_case_is_closed(session, capsys):
+    """'mocking' appears only in case 4's epilogue, so it must stay unsearchable."""
+    run(session, "ARCHIVE mocking")
+    assert "NOTHING IN THE ARCHIVE MATCHES" in capsys.readouterr().out
+
+    run(session, f"DECRYPT {SOLUTIONS[4]}")
+    capsys.readouterr()
+    run(session, "ARCHIVE mocking")
+    assert "CASE 04" in capsys.readouterr().out
+
+
+def test_archive_without_arguments_explains_itself(session, capsys):
+    run(session, "ARCHIVE")
+    assert "USAGE: ARCHIVE" in capsys.readouterr().out

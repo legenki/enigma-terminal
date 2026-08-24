@@ -33,20 +33,9 @@ body::before {
   z-index: 0;
 }
 
-#bezel {
-  position: relative;
-  z-index: 1;
-  height: 100%;
-  padding: clamp(10px, 2.2vmin, 28px);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
 #screen-frame {
-  position: relative;
-  flex: 1;
-  min-height: 0;
+  position: absolute;
+  inset: 0;
   border-radius: clamp(10px, 2.4vmin, 26px);
   background: var(--tube);
   border: clamp(6px, 1.2vmin, 14px) solid var(--bezel);
@@ -79,22 +68,96 @@ body::before {
   opacity: 0;
 }
 
-#status-bar {
+/* ---------- shell: glitch banner, mode switcher ------------------------- */
+
+#shell {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: grid;
+  grid-template-rows: clamp(52px, 8vh, 78px) 1fr auto;
+  gap: 8px;
+  padding: clamp(8px, 1.6vmin, 18px);
+}
+
+#glitch-bar {
+  position: relative;
+  border: 1px solid #143a26;
+  background: #05070a;
+  overflow: hidden;
+}
+
+#glitch-bar canvas { display: block; width: 100%; height: 100%; }
+
+#stage { position: relative; min-height: 0; }
+
+/* The terminal frame becomes one of two stacked modes. */
+#screen-frame.is-hidden { display: none; }
+
+/* ---------- retro rocker switch ----------------------------------------- */
+
+#switch-bar {
   display: flex;
   align-items: center;
-  gap: 14px;
-  font-size: clamp(9px, 1.5vmin, 12px);
+  gap: 12px;
+  padding: 0 2px;
+  user-select: none;
+}
+
+.rocker {
+  display: flex;
+  border: 1px solid #0c1a12;
+  background: #1b2620;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.rocker__btn {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  padding: 7px 20px;
+  color: #5f7a6c;
+  background: linear-gradient(180deg, #2a3830 0%, #1d2721 100%);
+  border: 0;
+  border-right: 1px solid #0c1a12;
+  cursor: pointer;
+  transition: color 120ms linear, background 120ms linear;
+}
+
+.rocker__btn:last-child { border-right: 0; }
+
+.rocker__btn:hover { color: #9dbfae; }
+
+.rocker__btn[aria-pressed="true"] {
+  color: #06120b;
+  background: linear-gradient(180deg, #57ffa0 0%, #23c46e 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.rocker__btn:focus-visible { outline: 2px solid #4df3ff; outline-offset: 2px; }
+
+#switch-hint {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--phosphor-dim);
-  padding: 0 4px;
-  user-select: none;
+}
+
+#switch-bar .spacer { flex: 1; }
+
+@media (max-width: 640px) {
+  #switch-hint { display: none; }
+  .rocker__btn { padding: 7px 14px; }
 }
 
 #power-led {
   width: 9px;
   height: 9px;
   border-radius: 50%;
+  flex: none;
   background: var(--phosphor);
   box-shadow: 0 0 10px var(--phosphor);
   transition: background 120ms linear, box-shadow 120ms linear;
@@ -105,31 +168,16 @@ body::before {
   box-shadow: 0 0 12px #ffc23d;
 }
 
-#status-bar .spacer { flex: 1; }
-
-#status-bar a {
+#switch-bar a {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
   color: var(--phosphor-dim);
   text-decoration: none;
   border-bottom: 1px dotted currentColor;
 }
 
-#status-bar a:hover { color: var(--phosphor); }
-
-#noscript-notice {
-  position: fixed;
-  inset: 0;
-  display: grid;
-  place-content: center;
-  padding: 2rem;
-  text-align: center;
-  background: var(--room);
-  z-index: 10;
-  line-height: 1.7;
-}
-
-@media (max-width: 640px) {
-  #status-bar .optional { display: none; }
-}
+#switch-bar a:hover { color: var(--phosphor); }
 
 @media (prefers-reduced-motion: reduce) {
   #power-led { transition: none; }

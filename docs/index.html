@@ -12,25 +12,41 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🖥️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/terminal.css">
+<link rel="stylesheet" href="css/gui.css">
 </head>
 <body>
-<div id="bezel">
-  <div id="screen-frame">
-    <canvas id="term-layer"></canvas>
-    <canvas id="crt-layer"></canvas>
-    <input id="keyboard-input" type="text" autocomplete="off" autocorrect="off"
-           autocapitalize="none" spellcheck="false" aria-label="Terminal input">
-  </div>
-  <div id="status-bar">
+<div id="shell">
+
+  <!-- The glitch banner stays above both modes. -->
+  <header id="glitch-bar">
+    <canvas id="glitch-canvas" role="img" aria-label="BIP-39: Neon Terminal"></canvas>
+  </header>
+
+  <main id="stage">
+    <!-- GUI mode -->
+    <div id="gui-root" class="is-hidden"></div>
+
+    <!-- Command-line mode -->
+    <div id="screen-frame" class="is-hidden">
+      <canvas id="term-layer"></canvas>
+      <canvas id="crt-layer"></canvas>
+      <input id="keyboard-input" type="text" autocomplete="off" autocorrect="off"
+             autocapitalize="none" spellcheck="false" aria-label="Terminal input">
+    </div>
+  </main>
+
+  <footer id="switch-bar">
     <span id="power-led" aria-hidden="true"></span>
-    <span>BIP-39 // NEON TERMINAL</span>
-    <span class="optional">REAL NET BUILD</span>
+    <div class="rocker" role="group" aria-label="Interface mode">
+      <button id="mode-gui" class="rocker__btn" type="button" aria-pressed="false">GUI</button>
+      <button id="mode-cl" class="rocker__btn" type="button" aria-pressed="false">CL</button>
+    </div>
+    <span id="switch-hint">F2 switches · CL accepts HELP</span>
     <span class="spacer"></span>
-    <span class="optional">TYPE HELP</span>
     <a href="https://github.com/legenki/neon-terminal" target="_blank" rel="noopener">SOURCE</a>
-  </div>
+  </footer>
 </div>
 
 <noscript>

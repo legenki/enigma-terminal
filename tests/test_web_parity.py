@@ -32,12 +32,17 @@ def js_results():
     return json.loads(completed.stdout)
 
 
-def test_every_vector_is_covered(js_results, vectors):
-    assert len(js_results) == len(vectors)
+@pytest.fixture(scope="module")
+def js_vectors(js_results):
+    return js_results["vectors"]
 
 
-def test_javascript_matches_the_reference_vectors(js_results, vectors):
-    for js, expected in zip(js_results, vectors):
+def test_every_vector_is_covered(js_vectors, vectors):
+    assert len(js_vectors) == len(vectors)
+
+
+def test_javascript_matches_the_reference_vectors(js_vectors, vectors):
+    for js, expected in zip(js_vectors, vectors):
         assert js["mnemonic"] == expected["mnemonic"]
         assert js["seed"] == expected["seed"]
         assert js["seed_trezor_passphrase"] == expected["seed_trezor_passphrase"]
@@ -47,8 +52,8 @@ def test_javascript_matches_the_reference_vectors(js_results, vectors):
         assert js["round_trip_entropy"] == expected["entropy"]
 
 
-def test_javascript_matches_the_python_engine(js_results):
-    for js in js_results:
+def test_javascript_matches_the_python_engine(js_vectors):
+    for js in js_vectors:
         wallet = ce.derive_wallet(js["mnemonic"])
         assert js["seed"] == wallet.seed
         assert js["master_xprv"] == wallet.master_xprv
@@ -57,6 +62,20 @@ def test_javascript_matches_the_python_engine(js_results):
             derived = wallet.by_purpose(int(purpose))
             assert address == derived.address
             assert js["wif_44"] == wallet.by_purpose(44).wif
+
+
+def test_single_word_recovery_matches_between_builds(js_results):
+    """The GUI and the terminal must offer the player the identical candidates."""
+    phrases = {
+        "last": "abandon abandon abandon abandon abandon abandon abandon abandon "
+                "abandon abandon abandon ?",
+        "middle": "ozone drill grab fiber curtain ? pudding thank cruise elder eight picnic",
+        "first": "? swing flag economy stadium alone churn speed unique patch report train",
+    }
+    for label, phrase in phrases.items():
+        position, matches = ce.complete_mnemonic(phrase)
+        assert js_results["completions"][label]["position"] == position
+        assert js_results["completions"][label]["words"] == matches
 
 
 def test_web_data_is_in_sync_with_the_sources():

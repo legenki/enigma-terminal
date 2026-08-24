@@ -1,13 +1,39 @@
-// Wiring: terminal canvas -> CRT shader -> animation loop -> game engine.
+// Shell: glitch banner on top, two interchangeable modes below, retro rocker
+// switch at the bottom. The GUI is DOM; the command line is canvas + WebGL.
 
 import { Terminal } from './term.js';
 import { CrtRenderer } from './crt.js';
 import { Engine } from './engine.js';
+import { GlitchBanner } from './glitch.js';
+import { GuiApp } from './gui/app.js';
+
+const MODE_KEY = 'neon-terminal/mode/v1';
+const LANG_KEY = 'neon-terminal/lang/v1';
+
+const stored = (key, fallback) => {
+  try {
+    return localStorage.getItem(key) || fallback;
+  } catch {
+    return fallback;
+  }
+};
+const store = (key, value) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch { /* private mode: the choice just will not persist */ }
+};
+
+const lang = stored(LANG_KEY, navigator.language.startsWith('ru') ? 'ru' : 'en');
+
+const glitch = new GlitchBanner(document.getElementById('glitch-canvas'));
+
+// ---- command-line mode ----------------------------------------------------
 
 const termCanvas = document.getElementById('term-layer');
 const crtCanvas = document.getElementById('crt-layer');
 const keyboardInput = document.getElementById('keyboard-input');
-const bezel = document.getElementById('bezel');
+const screenFrame = document.getElementById('screen-frame');
+const guiRoot = document.getElementById('gui-root');
 const powerLed = document.getElementById('power-led');
 
 const terminal = new Terminal(termCanvas, {
@@ -18,56 +44,110 @@ const terminal = new Terminal(termCanvas, {
 let crt = null;
 try {
   crt = new CrtRenderer(crtCanvas, termCanvas);
-  termCanvas.classList.add('is-source');   // keep it laid out, but invisible
+  termCanvas.classList.add('is-source');
 } catch (error) {
-  // No WebGL: show the plain 2D canvas and say so once the engine has booted.
   crtCanvas.classList.add('is-hidden');
   console.warn('CRT shader unavailable:', error.message);
 }
 
-const engine = new Engine(terminal, { crt, lang: navigator.language.startsWith('ru') ? 'ru' : 'en' });
-
-let queueDepth = 0;
+const engine = new Engine(terminal, { crt, lang });
+let pending = 0;
 terminal.onCommand = (line) => {
-  queueDepth += 1;
-  engine.run(line).finally(() => { queueDepth -= 1; });
+  pending += 1;
+  engine.run(line).finally(() => {
+    pending -= 1;
+    // The GUI shares progress with the terminal — repaint after every command.
+    if (mode === 'gui') gui.syncFromStorage();
+  });
 };
 
-// -- input plumbing ---------------------------------------------------------
-// A hidden input keeps software keyboards and IME composition working; the
-// canvas itself cannot receive text events.
+// ---- GUI mode -------------------------------------------------------------
 
-const focusInput = () => keyboardInput.focus({ preventScroll: true });
+const gui = new GuiApp(guiRoot, {
+  lang,
+  onLangChange: (code) => {
+    store(LANG_KEY, code);
+    engine.lang = code;
+  },
+});
+
+// ---- mode switching -------------------------------------------------------
+
+let mode = stored(MODE_KEY, 'gui') === 'cl' ? 'cl' : 'gui';
+let booted = false;
+
+const buttons = {
+  gui: document.getElementById('mode-gui'),
+  cl: document.getElementById('mode-cl'),
+};
+
+function setMode(next, { animate = true } = {}) {
+  mode = next === 'cl' ? 'cl' : 'gui';
+  store(MODE_KEY, mode);
+  buttons.gui.setAttribute('aria-pressed', String(mode === 'gui'));
+  buttons.cl.setAttribute('aria-pressed', String(mode === 'cl'));
+  guiRoot.classList.toggle('is-hidden', mode !== 'gui');
+  screenFrame.classList.toggle('is-hidden', mode !== 'cl');
+  if (animate) glitch.kick(1.6);
+
+  if (mode === 'cl') {
+    // The terminal was display:none, so its box had no size to measure.
+    terminal.resize();
+    if (crt) crt.resize();
+    terminal.dirty = true;
+    keyboardInput.focus({ preventScroll: true });
+    if (!booted) {
+      booted = true;
+      engine.boot().then(() => {
+        if (!crt) {
+          terminal.print('[WARN] WEBGL UNAVAILABLE — CRT SHADER DISABLED, TEXT MODE ONLY.', 'amber');
+        }
+      });
+    }
+  } else {
+    gui.progress.refresh();
+    if (gui.mounted) gui.render();
+  }
+}
+
+buttons.gui.addEventListener('click', () => setMode('gui'));
+buttons.cl.addEventListener('click', () => setMode('cl'));
+
+// ---- input plumbing -------------------------------------------------------
 
 document.addEventListener('keydown', (event) => {
+  if (event.key === 'F2') {
+    event.preventDefault();
+    setMode(mode === 'cl' ? 'gui' : 'cl');
+    return;
+  }
+  if (mode !== 'cl') return;
   if (event.key === 'Tab') return;
   if ((event.ctrlKey || event.metaKey) && ['c', 'v', 'r', 'l'].includes(event.key.toLowerCase())) {
     if (event.key.toLowerCase() === 'l') { event.preventDefault(); terminal.clear(); }
     return;
   }
-  focusInput();
+  keyboardInput.focus({ preventScroll: true });
   terminal.handleKey(event);
 });
 
-// Mobile / IME: mirror whatever lands in the hidden input into the terminal.
 keyboardInput.addEventListener('input', () => {
-  if (keyboardInput.value) {
-    for (const char of keyboardInput.value) {
-      terminal.handleKey({ key: char, preventDefault() {} });
-    }
-    keyboardInput.value = '';
+  if (!keyboardInput.value) return;
+  for (const char of keyboardInput.value) {
+    terminal.handleKey({ key: char, preventDefault() {} });
   }
+  keyboardInput.value = '';
 });
 
 document.addEventListener('paste', (event) => {
+  if (mode !== 'cl') return;
   const text = (event.clipboardData || window.clipboardData).getData('text');
   if (!text) return;
   event.preventDefault();
   terminal.setInput(terminal.input + text.replace(/\s+/g, ' ').trim());
 });
 
-bezel.addEventListener('click', focusInput);
-bezel.addEventListener('touchend', focusInput);
+screenFrame.addEventListener('click', () => keyboardInput.focus({ preventScroll: true }));
 
 crtCanvas.addEventListener('wheel', (event) => {
   event.preventDefault();
@@ -78,43 +158,46 @@ let resizeTimer = null;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
-    terminal.fontSize = window.innerWidth < 640 ? 12 : 16;
-    terminal.resize();
-    if (crt) crt.resize();
+    glitch.resize();
+    if (mode === 'cl') {
+      terminal.fontSize = window.innerWidth < 640 ? 12 : 16;
+      terminal.resize();
+      if (crt) crt.resize();
+    }
   }, 120);
 });
 
-// -- animation loop ---------------------------------------------------------
+// Another tab (or the other mode) may have written progress.
+window.addEventListener('storage', () => {
+  if (mode === 'gui') gui.syncFromStorage();
+});
+
+// ---- animation loop -------------------------------------------------------
 
 let lastFrame = performance.now();
 function frame(now) {
   const delta = Math.min(now - lastFrame, 100);
   lastFrame = now;
 
-  terminal.tick(delta);
-  const redrew = terminal.render(now);
+  glitch.render(now);
 
-  if (crt && crt.enabled) {
-    // The CRT pass animates (noise, flicker, roll) even when text is static.
-    crt.render(now / 1000);
-  } else if (crt && !crt.enabled && redrew) {
-    termCanvas.classList.remove('is-source');
-    crtCanvas.classList.add('is-hidden');
-  }
-  if (crt && crt.enabled) {
-    termCanvas.classList.add('is-source');
-    crtCanvas.classList.remove('is-hidden');
+  if (mode === 'cl') {
+    terminal.tick(delta);
+    terminal.render(now);
+    if (crt && crt.enabled) {
+      termCanvas.classList.add('is-source');
+      crtCanvas.classList.remove('is-hidden');
+      crt.render(now / 1000);
+    } else if (crt) {
+      termCanvas.classList.remove('is-source');
+      crtCanvas.classList.add('is-hidden');
+    }
   }
 
-  powerLed.classList.toggle('is-busy', terminal.busy || queueDepth > 0);
+  powerLed.classList.toggle('is-busy', terminal.busy || pending > 0);
   requestAnimationFrame(frame);
 }
 
+gui.mount();
+setMode(mode, { animate: false });
 requestAnimationFrame(frame);
-focusInput();
-
-engine.boot().then(() => {
-  if (!crt) {
-    terminal.print('[WARN] WEBGL UNAVAILABLE — CRT SHADER DISABLED, TEXT MODE ONLY.', 'amber');
-  }
-});

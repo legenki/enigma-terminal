@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import secrets
 import unicodedata
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -432,3 +433,79 @@ def derive_wallet(mnemonic: str, passphrase: str = "", account: int = 0,
         master_xprv=master.to_extended(),
         addresses=derived,
     )
+
+
+# --------------------------------------------------------------------------- #
+# Seed tools: randomisation and single-word recovery
+# --------------------------------------------------------------------------- #
+
+_WORD_COUNT_TO_ENTROPY_BYTES = {12: 16, 15: 20, 18: 24, 21: 28, 24: 32}
+
+#: Tokens a player may type in place of a word they cannot remember.
+UNKNOWN_TOKENS = frozenset({"?", "*", "_", "...", "??", "???"})
+
+
+def random_mnemonic(word_count: int = 12) -> tuple[str, bytes]:
+    """Draw a fresh mnemonic from the OS cryptographic random source.
+
+    This is the same procedure a real wallet follows to create a seed, which is
+    exactly why the terminal shouts a warning before printing the result.
+    """
+    entropy_bytes = _WORD_COUNT_TO_ENTROPY_BYTES.get(word_count)
+    if entropy_bytes is None:
+        raise MnemonicError(
+            f"WORD COUNT {word_count} INVALID. EXPECTED 12/15/18/21/24.", kind="length"
+        )
+    entropy = secrets.token_bytes(entropy_bytes)
+    return entropy_to_mnemonic(entropy), entropy
+
+
+def complete_mnemonic(pattern: str) -> tuple[int, list[str]]:
+    """Resolve a phrase with exactly one unknown word marked by ``?``.
+
+    A 12-word phrase carries four checksum bits, so about one word in sixteen
+    fits — roughly 128 of the 2048 candidates survive. That makes this a recovery
+    aid for a phrase you almost have, not a search over unknown wallets: two
+    blanks would leave hundreds of thousands of valid answers, so they are
+    refused rather than enumerated.
+
+    Returns the 0-based blank position and the words that satisfy the checksum.
+    """
+    words = normalize(pattern).split()
+    if len(words) not in _WORD_COUNT_TO_ENTROPY_BYTES:
+        raise MnemonicError(
+            f"PHRASE LENGTH {len(words)} INVALID. EXPECTED 12/15/18/21/24 WORDS.",
+            kind="length",
+        )
+
+    blanks = [i for i, word in enumerate(words) if word in UNKNOWN_TOKENS]
+    if not blanks:
+        raise MnemonicError(
+            "NO UNKNOWN POSITION MARKED. USE ? FOR THE MISSING WORD.", kind="no_blank"
+        )
+    if len(blanks) > 1:
+        raise MnemonicError(
+            f"{len(blanks)} UNKNOWN POSITIONS. THIS TOOL RESOLVES EXACTLY ONE.",
+            kind="too_many_blanks",
+        )
+
+    unknown = [
+        word for i, word in enumerate(words)
+        if i != blanks[0] and word not in _WORD_INDEX
+    ]
+    if unknown:
+        raise MnemonicError(
+            "WORD NOT IN BIP-39 DICTIONARY: " + ", ".join(unknown), kind="dictionary"
+        )
+
+    position = blanks[0]
+    attempt = list(words)
+    matches: list[str] = []
+    for candidate in WORDLIST:
+        attempt[position] = candidate
+        try:
+            validate(" ".join(attempt))
+        except MnemonicError:
+            continue
+        matches.append(candidate)
+    return position, matches

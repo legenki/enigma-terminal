@@ -10,6 +10,10 @@ to public block explorers.
 
 ▶ **Play in the browser: <https://legenki.github.io/neon-terminal/>**
 
+The web build has two modes, switched by the rocker at the bottom of the screen (or **F2**):
+**GUI**, a windowed interface in the spirit of the early Macintosh and NeXTSTEP, and **CL**,
+the same game as a command line on a shader-driven CRT. Both share one save.
+
 *(Русская версия: [README.md](README.md))*
 
 ---
@@ -72,6 +76,9 @@ python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # one-shot commands
 | `DERIVE` | re-print the addresses |
 | `SYNC_LEDGER [addr]` | live balance query against Bitcoin mainnet |
 | `SWEEP` | check all three derived addresses at once |
+| `ARCHIVE <text>` | full-text search across the case files |
+| `RANDOM [12..24]` | generate a fresh seed phrase |
+| `COMPLETE <phrase ?>` | recover the missing word of a phrase |
 | `TXLOG [addr]` | most recent on-chain transactions |
 | `PROVIDER [name]` | `blockstream` \| `mempool` \| `blockchain` |
 | `EXPLORER` | open the address in a block explorer |
@@ -82,6 +89,27 @@ python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # one-shot commands
 
 Progress persists in `~/.neon_terminal/progress.json` (override with `NEON_TERMINAL_HOME`)
 for the terminal, and in `localStorage` for the web build.
+
+## Search and randomisation
+
+**`RANDOM`** builds a new seed phrase from cryptographic randomness (`secrets` in Python,
+`crypto.getRandomValues` in the browser) — the same way a real wallet does, which is why the
+output carries a warning: the addresses are genuine, and you must not fund them, because the
+phrase is stored nowhere.
+
+**`COMPLETE`** recovers a single forgotten word: put `?` where it belongs and the tool walks the
+wordlist, keeping the words that satisfy the checksum. A 12-word phrase carries four checksum
+bits, so roughly one word in sixteen fits — about 128 of 2048.
+
+Exactly one unknown position is a deliberate limit, not an unfinished feature: with two blanks
+hundreds of thousands of phrases stay valid and the list stops meaning anything. The tool helps
+recover a phrase you almost have; it is not a search over other people's wallets.
+
+**`ARCHIVE`** searches the case texts. Epilogues join the index only once a case is closed —
+otherwise the search would hand out the ending.
+
+In the GUI these live under the Search and Randomizer panels; on the command line they carry
+the same names.
 
 ## What a session looks like
 
@@ -137,11 +165,14 @@ fingerprint and compares it against whatever the player types.
 data/                 shared source of truth for both builds
 neon_terminal/        terminal build (crypto_engine, chain, ui, cases, game)
 docs/                 web build, published by GitHub Pages
+  js/core.js          shared core: progress, case rules, search, randomisation
   js/crypto/          hash.js, secp256k1.js, encoding.js, bip39.js, wallet.js
   js/term.js          the canvas terminal
   js/crt.js           WebGL bloom, curvature, aberration, mask, noise
+  js/glitch.js        the glitch banner above both modes
+  js/gui/             GUI mode, over the same core
 tools/build_web_data.py   regenerates docs/js/{wordlist,campaign}.js from data/
-tests/                109 tests, including the Python↔JavaScript parity check
+tests/                185 tests, including the Python↔JavaScript parity check
 ```
 
 ## Development

@@ -12,11 +12,14 @@ from .cases import Campaign, Case, Progress
 from .chain import ChainClient, ChainError, PROVIDERS
 from .crypto_engine import (
     MnemonicError,
+    normalize,
     Wallet,
+    complete_mnemonic,
     derive_wallet,
     entropy_to_mnemonic,
     index_of,
     mnemonic_to_entropy,
+    random_mnemonic,
     search,
     word_at,
     wordlist_is_authentic,
@@ -36,6 +39,9 @@ HELP_TEXT = {
         ("WORD <1..2048>", "read one entry of the BIP-39 wordlist"),
         ("INDEX <word>", "find a word's position in the wordlist"),
         ("SEARCH <prefix>", "list wordlist entries by prefix"),
+        ("ARCHIVE <text>", "full-text search across the case files"),
+        ("RANDOM [12..24]", "generate a fresh seed phrase from secure randomness"),
+        ("COMPLETE <phrase ?>", "find the missing word of a phrase (one ? marks it)"),
         ("ENTROPY <hex>", "rebuild a mnemonic from raw entropy (32 hex chars)"),
         ("DECRYPT <12 words>", "validate a seed phrase and derive its addresses"),
         ("DERIVE", "re-print the derivation grid of the loaded seed"),
@@ -60,6 +66,9 @@ HELP_TEXT = {
         ("WORD <1..2048>", "показать слово словаря BIP-39"),
         ("INDEX <слово>", "найти позицию слова в словаре"),
         ("SEARCH <префикс>", "искать слова словаря по началу"),
+        ("ARCHIVE <текст>", "полнотекстовый поиск по делам"),
+        ("RANDOM [12..24]", "сгенерировать новую сид-фразу"),
+        ("COMPLETE <фраза ?>", "найти недостающее слово фразы (его место — ?)"),
         ("ENTROPY <hex>", "собрать мнемонику из энтропии (32 hex-символа)"),
         ("DECRYPT <12 слов>", "проверить фразу и вывести адреса"),
         ("DERIVE", "повторить сетку деривации загруженного сида"),
@@ -320,6 +329,89 @@ def cmd_search(s: Session, arg: str) -> None:
         row = hits[chunk_start : chunk_start + 4]
         s.screen.write("  " + "".join(f"{i:>5}  {w:<14}" for i, w in row), "green")
     s.screen.write(f"  {len(hits)} MATCH(ES)", "grey")
+
+
+def cmd_archive(s: Session, arg: str) -> None:
+    """Full-text search over the case files."""
+    query = arg.strip()
+    if not query:
+        s.screen.warn("USAGE: ARCHIVE <text>")
+        return
+    results = s.campaign.search(query, s.lang, s.progress)
+    if not results:
+        s.screen.warn(f"NOTHING IN THE ARCHIVE MATCHES '{query.upper()}'.")
+        return
+    s.screen.write()
+    for case, hits in results:
+        s.screen.write(f"  CASE {case.id:02d} // {case.codename(s.lang)}", "magenta")
+        for line in hits[:4]:
+            s.screen.write(f"      {line.strip()}", "grey")
+    s.screen.write(f"  {len(results)} CASE(S) MATCHED", "grey")
+    s.screen.write()
+
+
+def cmd_random(s: Session, arg: str) -> None:
+    """Generate a brand-new seed phrase from the OS random source."""
+    try:
+        count = int(arg.strip()) if arg.strip() else 12
+    except ValueError:
+        s.screen.warn("USAGE: RANDOM [12|15|18|21|24]")
+        return
+    try:
+        mnemonic, entropy = random_mnemonic(count)
+    except MnemonicError as exc:
+        s.screen.error(str(exc))
+        return
+    s.screen.write()
+    s.screen.write("[RNG] DRAWING FROM THE OS CRYPTOGRAPHIC RANDOM SOURCE...", "cyan")
+    s.screen.kv("ENTROPY", entropy.hex(), value_styles=("cyan",))
+    s.screen.kv("BITS", str(len(entropy) * 8), value_styles=("cyan",))
+    s.screen.stream(f"{'MNEMONIC':<18}: {mnemonic}", "green", "bold", cps=120)
+    s.screen.write()
+    s.screen.warn(
+        "ЭТО НАСТОЯЩИЙ КОШЕЛЁК. НЕ КЛАДИ НА НЕГО ДЕНЬГИ — ФРАЗА НИГДЕ НЕ СОХРАНЯЕТСЯ."
+        if s.lang == "ru" else
+        "THIS IS A REAL WALLET. DO NOT FUND IT — THE PHRASE IS STORED NOWHERE."
+    )
+    s.screen.info(f"RUN: DECRYPT {mnemonic}")
+
+
+def cmd_complete(s: Session, arg: str) -> None:
+    """Recover the one word a player cannot remember."""
+    phrase = arg.strip()
+    if not phrase:
+        s.screen.warn("USAGE: COMPLETE <phrase with ? in place of the missing word>")
+        return
+    s.screen.write()
+    result, error = s.screen.run_with_logs(
+        lambda: complete_mnemonic(phrase),
+        ["[~] enumerating candidate words...", "[~] verifying sha256 checksums..."],
+    )
+    if isinstance(error, MnemonicError):
+        s.screen.error(str(error))
+        return
+    if error is not None or result is None:
+        s.screen.error(f"SEARCH FAILED: {error}")
+        return
+
+    position, matches = result
+    s.screen.ok(f"POSITION {position + 1}: {len(matches)} WORD(S) SATISFY THE CHECKSUM.")
+    for start in range(0, len(matches), 6):
+        s.screen.write("  " + "".join(w.ljust(12) for w in matches[start : start + 6]),
+                       "green")
+
+    # If one completion is a case key, the detective has just closed the gap.
+    words = normalize(phrase).split()
+    for candidate in matches:
+        attempt = list(words)
+        attempt[position] = candidate
+        owner = s.campaign.find_by_mnemonic(" ".join(attempt))
+        if owner is not None:
+            s.screen.write(
+                f"[HIT ] '{candidate}' COMPLETES THE KEY TO CASE {owner.id}.", "magenta"
+            )
+            break
+    s.screen.write()
 
 
 def cmd_entropy(s: Session, arg: str) -> None:
@@ -618,6 +710,9 @@ COMMANDS = {
     "WORD": cmd_word,
     "INDEX": cmd_index,
     "SEARCH": cmd_search,
+    "ARCHIVE": cmd_archive,
+    "RANDOM": cmd_random, "ROLL": cmd_random,
+    "COMPLETE": cmd_complete, "FIND": cmd_complete,
     "ENTROPY": cmd_entropy,
     "DECRYPT": cmd_decrypt,
     "DERIVE": cmd_derive,

@@ -29,4 +29,22 @@ const out = vectors.map((vector) => {
   };
 });
 
-process.stdout.write(JSON.stringify(out, null, 2));
+// The shared core's seed tools must agree with the Python ones too.
+globalThis.localStorage = {
+  store: {},
+  getItem(key) { return this.store[key] ?? null; },
+  setItem(key, value) { this.store[key] = value; },
+};
+const core = await import(join(root, 'docs/js/core.js'));
+
+const completions = {};
+for (const [label, phrase] of [
+  ['last', 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon ?'],
+  ['middle', 'ozone drill grab fiber curtain ? pudding thank cruise elder eight picnic'],
+  ['first', '? swing flag economy stadium alone churn speed unique patch report train'],
+]) {
+  const { position, candidates } = core.completeMnemonic(phrase);
+  completions[label] = { position, words: candidates.map((c) => c.word) };
+}
+
+process.stdout.write(JSON.stringify({ vectors: out, completions }, null, 2));
