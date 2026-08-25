@@ -182,3 +182,88 @@ body::before {
 @media (prefers-reduced-motion: reduce) {
   #power-led { transition: none; }
 }
+
+/* ---------- CRT overlay (covers the GUI, where WebGL cannot reach) -------- */
+
+/* The command line runs its scene through a real WebGL tube. The GUI is DOM,
+   so it gets the same treatment the only way DOM can: a fixed overlay with
+   scanlines, an aperture grille, a vignette and a slow flicker, plus a
+   phosphor bleed on the text underneath. */
+
+#crt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: none;
+  pointer-events: none;
+}
+
+body.crt-soft #crt-overlay { display: block; }
+
+#crt-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.22) 0 1px,
+      transparent 1px 3px),
+    repeating-linear-gradient(
+      to right,
+      rgba(255, 0, 90, 0.05) 0 1px,
+      rgba(0, 255, 130, 0.04) 1px 2px,
+      rgba(60, 140, 255, 0.05) 2px 3px);
+  animation: crt-flicker 5.5s steps(60) infinite;
+}
+
+/* Vignette plus a bright band drifting up the tube. */
+#crt-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 120% at 50% 50%,
+      transparent 52%, rgba(0, 0, 0, 0.42) 100%),
+    linear-gradient(to bottom,
+      transparent 0%, rgba(34, 255, 122, 0.05) 48%, transparent 60%);
+  background-size: 100% 100%, 100% 260%;
+  animation: crt-roll 9s linear infinite;
+}
+
+@keyframes crt-flicker {
+  0%, 96%, 100% { opacity: 1; }
+  97% { opacity: 0.86; }
+  98% { opacity: 1; }
+  99% { opacity: 0.92; }
+}
+
+@keyframes crt-roll {
+  from { background-position: 0 0, 0 -160%; }
+  to { background-position: 0 0, 0 100%; }
+}
+
+/* Phosphor bleed on the interface itself. */
+body.crt-soft #gui-root { text-shadow: 0 0 4px rgba(34, 255, 122, 0.35); }
+
+body.crt-soft #screen-frame,
+body.crt-soft #gui-root { filter: saturate(1.12) contrast(1.04); }
+
+@media (prefers-reduced-motion: reduce) {
+  #crt-overlay::before,
+  #crt-overlay::after { animation: none; }
+}
+
+/* ---------- CRT switch in the footer ------------------------------------- */
+
+#crt-switch { display: flex; align-items: center; gap: 7px; }
+
+#crt-switch .rocker__btn { padding: 7px 14px; }
+
+.switch-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--phosphor-dim);
+}

@@ -64,7 +64,6 @@ const HELP = {
     ['PROVIDER [name]', 'choose the explorer: blockstream|mempool|blockchain'],
     ['EXPLORER', 'open the loaded address in a block explorer'],
     ['COPY', 'copy the loaded addresses to the clipboard'],
-    ['CRT full|soft|flat|off', 'change the monitor simulation'],
     ['JOURNAL [tool]', 'the investigation journal, newest first'],
     ['RECALL <n>', 'replay entry n from the journal'],
     ['PURGE [all]', 'clear the journal (pinned entries survive unless "all")'],
@@ -95,7 +94,6 @@ const HELP = {
     ['PROVIDER [имя]', 'выбрать эксплорер: blockstream|mempool|blockchain'],
     ['EXPLORER', 'открыть адрес в блокчейн-эксплорере'],
     ['COPY', 'скопировать адреса в буфер обмена'],
-    ['CRT full|soft|flat|off', 'настройка симуляции монитора'],
     ['JOURNAL [инструмент]', 'журнал расследования, свежее сверху'],
     ['RECALL <n>', 'повторить запись n из журнала'],
     ['PURGE [all]', 'очистить журнал (закреплённые остаются, если не "all")'],
@@ -290,7 +288,6 @@ export class Engine {
       PROVIDER: this.cmdProvider,
       EXPLORER: this.cmdExplorer,
       COPY: this.cmdCopy,
-      CRT: this.cmdCrt,
       JOURNAL: this.cmdJournal, LOG: this.cmdJournal,
       RECALL: this.cmdRecall,
       PURGE: this.cmdPurge,
@@ -918,116 +915,6 @@ export class Engine {
     } catch {
       this.term.print('[WARN] CLIPBOARD BLOCKED BY THE BROWSER.', 'amber');
     }
-  }
-
-  cmdCrt(argument) {
-    const name = argument.trim().toLowerCase() || 'full';
-    if (!this.crt) {
-      this.term.print('[WARN] CRT SIMULATION UNAVAILABLE (NO WEBGL).', 'amber');
-      return;
-    }
-    if (!this.crt.applyPreset(name)) {
-      this.term.print('[FATAL] UNKNOWN PRESET. TRY: full | soft | flat | off', 'red');
-      return;
-    }
-    this.term.print(`[ OK ] MONITOR PROFILE: ${name.toUpperCase()}`, 'green');
-  }
-
-  /** Record one move; the GUI reads the same store. */
-  log(tool, title, { detail = '', status = 'info', payload = {} } = {}) {
-    return this.journal.push({ tool, title, detail, status, payload });
-  }
-
-  /**
-   * Journal a derivation. Only phrases the game already knows (case answers,
-   * all published test vectors) or ones this session generated are stored in
-   * full; anything else the player typed is masked before it reaches disk.
-   */
-  recordDecrypt(wallet, owner, { generated = false } = {}) {
-    const storable = Boolean(owner) || generated;
-    this.log(generated ? 'random' : 'decrypt', wallet.primary.address, {
-      status: owner ? 'ok' : 'info',
-      detail: storable ? wallet.mnemonic : `${maskMnemonic(wallet.mnemonic)} — NOT STORED`,
-      payload: storable ? { mnemonic: wallet.mnemonic } : { masked: true },
-    });
-  }
-
-  cmdJournal(argument) {
-    const filter = argument.trim().toLowerCase();
-    if (filter && !TOOLS[filter]) {
-      this.term.print(`[FATAL] UNKNOWN TOOL. TRY: ${Object.keys(TOOLS).join(', ')}`, 'red');
-      return;
-    }
-    this.journal.refresh();
-    const entries = this.journal.byTool(filter);
-    if (!entries.length) {
-      this.term.print('[WARN] JOURNAL EMPTY.', 'amber');
-      return;
-    }
-    this.term.blank();
-    this.term.print('  INVESTIGATION JOURNAL', 'cyan');
-    this.term.rule();
-    entries.slice(0, 30).forEach((entry, index) => {
-      const stamp = new Date(entry.at).toTimeString().slice(0, 8);
-      const tool = (TOOLS[entry.tool] || { label: { en: entry.tool } }).label.en.toUpperCase();
-      const style = { ok: 'green', warn: 'amber', danger: 'red' }[entry.status] || 'grey';
-      this.term.print([
-        { text: `${String(index + 1).padStart(3)}. `, style: 'dark' },
-        { text: `${stamp} `, style: 'dark' },
-        { text: `${tool.padEnd(12)}`, style: 'cyan' },
-        { text: entry.pinned ? '* ' : '  ', style: 'amber' },
-        { text: entry.title, style },
-      ]);
-      if (entry.detail) this.term.print(`      ${entry.detail}`, 'dark');
-    });
-    this.term.rule();
-    this.term.print(
-      `  ${entries.length} ENTRY(S) — RECALL <n> TO REPLAY`, 'grey',
-    );
-    this.term.blank();
-  }
-
-  async cmdRecall(argument) {
-    const position = parseInt(argument.trim(), 10);
-    if (!Number.isInteger(position)) {
-      this.term.print('[WARN] USAGE: RECALL <n>  (see JOURNAL)', 'amber');
-      return;
-    }
-    this.journal.refresh();
-    const entry = this.journal.at(position);
-    if (!entry) {
-      this.term.print(`[FATAL] NO JOURNAL ENTRY ${position}.`, 'red');
-      return;
-    }
-    const payload = entry.payload || {};
-    this.term.print(`[LOG ] REPLAYING #${position}: ${entry.title}`, 'cyan');
-
-    if (entry.tool === 'decrypt' || entry.tool === 'random') {
-      if (!payload.mnemonic) {
-        this.term.print('[WARN] PHRASE WAS NOT STORED — THE GAME DOES NOT KEEP UNKNOWN SEEDS.', 'amber');
-        return;
-      }
-      return this.cmdDecrypt(payload.mnemonic);
-    }
-    if (entry.tool === 'ledger') return this.cmdSync(payload.address || '');
-    if (entry.tool === 'sweep') return this.cmdSweep('');
-    if (entry.tool === 'txlog') return this.cmdTxlog(payload.address || '');
-    if (entry.tool === 'search') return this.cmdSearch(payload.query || '');
-    if (entry.tool === 'archive') return this.cmdArchive(payload.query || '');
-    if (entry.tool === 'complete') return this.cmdComplete(payload.pattern || '');
-    if (entry.tool === 'case' || entry.tool === 'hint') {
-      return this.cmdOpen(String(payload.caseId || ''));
-    }
-    this.term.print('[WARN] THIS ENTRY HAS NOTHING TO REPLAY.', 'amber');
-  }
-
-  cmdPurge(argument) {
-    const all = argument.trim().toLowerCase() === 'all';
-    this.journal.clear({ keepPinned: !all });
-    this.term.print(
-      all ? '[ OK ] JOURNAL CLEARED.' : '[ OK ] JOURNAL CLEARED, PINNED ENTRIES KEPT.',
-      'green',
-    );
   }
 
   cmdStatus() {

@@ -37,6 +37,9 @@
     </div>
   </main>
 
+  <!-- Scanlines and vignette for the GUI; the command line has its own shader. -->
+  <div id="crt-overlay" aria-hidden="true"></div>
+
   <footer id="switch-bar">
     <span id="power-led" aria-hidden="true"></span>
     <div class="rocker" role="group" aria-label="Interface mode">
@@ -45,7 +48,13 @@
     </div>
     <span id="switch-hint">F2 switches · CL accepts HELP</span>
     <span class="spacer"></span>
-    <a href="https://github.com/legenki/neon-terminal" target="_blank" rel="noopener">SOURCE</a>
+    <div id="crt-switch" role="group" aria-label="CRT simulation">
+      <span class="switch-label">CRT</span>
+      <div class="rocker">
+        <button id="crt-soft" class="rocker__btn" type="button" aria-pressed="false">SOFT</button>
+        <button id="crt-off" class="rocker__btn" type="button" aria-pressed="false">OFF</button>
+      </div>
+    </div>
   </footer>
 </div>
 

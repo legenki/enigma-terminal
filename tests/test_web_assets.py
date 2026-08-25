@@ -111,3 +111,73 @@ def test_both_builds_share_one_journal_key():
         assert "from './journal.js'" in source or "from '../journal.js'" in source
         # Neither front-end may keep its own private copy of the key.
         assert "neon-terminal/journal" not in source
+
+
+# --- vendored dependency ---------------------------------------------------
+
+def test_vendored_library_ships_its_licence():
+    """Vendoring is fine; vendoring without the licence is not."""
+    vendor = DOCS / "js" / "vendor"
+    assert (vendor / "minidenticons.js").is_file()
+    licence = (vendor / "LICENSE").read_text()
+    assert "MIT License" in licence
+    assert "Laurent Payot" in licence
+    source = (vendor / "minidenticons.js").read_text()
+    assert "laurentpayot/minidenticons" in source
+    assert "MIT License" in source
+
+
+def test_page_makes_no_third_party_requests():
+    """Everything but the font and the chain lookups must be served by us."""
+    html = (DOCS / "index.html").read_text()
+    external = re.findall(r'(?:href|src)="(https?://[^"]+)"', html)
+    for url in external:
+        assert url.startswith(("https://fonts.googleapis.com", "https://fonts.gstatic.com")), \
+            f"index.html pulls from {url}"
+    for path in JS_FILES:
+        code = strip_js_comments(path.read_text())
+        for url in re.findall(r"""from\s+['"](https?://[^'"]+)['"]""", code):
+            raise AssertionError(f"{path.name} imports from the network: {url}")
+
+
+# --- identicons ------------------------------------------------------------
+
+def test_sigils_are_keyed_by_fingerprint_not_by_words():
+    """A phrase must never be used as an identicon seed — that is a leak path."""
+    source = strip_js_comments((DOCS / "js" / "identicon.js").read_text())
+    assert "fingerprint(mnemonic)" in source
+    # The raw phrase may appear only as the argument being hashed.
+    assert "sigil(`neon-seed-${mnemonic}" not in source
+
+
+# --- CRT switch ------------------------------------------------------------
+
+def test_crt_is_a_switch_not_a_command():
+    """The CRT command was replaced by the footer switch; both modes obey it."""
+    html = (DOCS / "index.html").read_text()
+    assert 'id="crt-soft"' in html and 'id="crt-off"' in html
+    assert 'id="crt-overlay"' in html
+
+    engine = (DOCS / "js" / "engine.js").read_text()
+    assert "cmdCrt" not in engine
+    assert "CRT:" not in engine
+
+    main = strip_js_comments((DOCS / "js" / "main.js").read_text())
+    assert "setCrt" in main
+    assert "crt-soft" in main
+
+
+def test_crt_overlay_is_styled_and_inert():
+    css = (DOCS / "css" / "terminal.css").read_text()
+    block = css[css.index("#crt-overlay {"):]
+    assert "pointer-events: none" in block
+    assert "body.crt-soft #crt-overlay" in css
+
+
+def test_footer_no_longer_carries_the_source_link():
+    """The switch took its place; the link lives in the About panel instead."""
+    html = (DOCS / "index.html").read_text()
+    footer = html[html.index('<footer id="switch-bar">'):html.index("</footer>")]
+    assert "github.com" not in footer
+    assert 'id="crt-switch"' in footer
+    assert "github.com/legenki/neon-terminal" in (DOCS / "js" / "gui" / "app.js").read_text()

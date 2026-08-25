@@ -16,6 +16,7 @@ import { deriveWallet } from '../crypto/wallet.js';
 import { entropyToMnemonic, mnemonicToEntropy, wordAt, indexOf } from '../crypto/bip39.js';
 import { fromHex, toHex } from '../crypto/hash.js';
 import { ChainClient, formatBtc, PROVIDERS } from '../chain.js';
+import { addressSigil, caseSigil, mnemonicSigil, sigil } from '../identicon.js';
 
 const PANELS = [
   { id: 'cases', label: { en: 'Case files', ru: 'Дела' }, key: '1' },
@@ -267,6 +268,19 @@ export class GuiApp {
         : el('p', { class: 'hint-text', text: t('emptyJournal', lang) }));
   }
 
+  /** The sigil that identifies whatever a journal entry is about. */
+  entrySigil(entry, size) {
+    const payload = entry.payload || {};
+    if (payload.mnemonic) return mnemonicSigil(payload.mnemonic, { size });
+    if (payload.address) return addressSigil(payload.address, { size });
+    if (payload.caseId) {
+      const caseFile = caseById(payload.caseId);
+      if (caseFile) return caseSigil(caseFile, { size });
+    }
+    // Searches and masked phrases still deserve a stable mark of their own.
+    return sigil(`neon-${entry.tool}-${entry.title}`, { size });
+  }
+
   railEntry(entry) {
     const tool = TOOLS[entry.tool] || { glyph: '·', label: { en: entry.tool } };
     return el('li', { class: `rail__item rail__item--${entry.status}` },
@@ -275,7 +289,7 @@ export class GuiApp {
         title: `${entry.title}${entry.detail ? '\n' + entry.detail : ''}`,
         onClick: () => this.recall(entry),
       },
-      el('span', { class: 'rail__glyph', text: tool.glyph }),
+      this.entrySigil(entry, 16),
       el('span', { class: 'rail__text' },
         el('span', { class: 'rail__title', text: entry.title }),
         el('span', { class: 'rail__meta', text: `${clock(entry.at)} · ${pick(tool.label, this.lang)}` })),
@@ -326,6 +340,7 @@ export class GuiApp {
           return el('div', { class: `card log log--${entry.status}` },
             el('div', { class: 'log__row' },
               el('span', { class: 'log__n', text: String(index + 1) }),
+              this.entrySigil(entry, 22),
               el('span', { class: 'log__glyph', text: tool.glyph }),
               el('div', { class: 'log__body' },
                 el('div', { class: 'log__title', text: entry.title }),
@@ -424,6 +439,7 @@ export class GuiApp {
           disabled: state === 'locked',
           onClick: () => state !== 'locked' && this.go('cases', caseFile.id),
         },
+        caseSigil(caseFile, { size: 26 }),
         el('span', { class: 'card__id', text: String(caseFile.id).padStart(2, '0') }),
         el('span', { class: 'card__name', text: pick(caseFile.codename, this.lang) }),
         el('span', { class: 'card__spacer' }),
@@ -450,6 +466,7 @@ export class GuiApp {
           text: '← ' + (lang === 'ru' ? 'К списку' : 'All cases'),
           onClick: () => { this.activeCaseId = null; this.go('cases'); },
         }),
+        caseSigil(caseFile, { size: 30 }),
         el('span', { class: 'card__spacer' }),
         el('span', { class: 'stars', text: '★'.repeat(caseFile.difficulty) }),
         badge(state === 'solved' ? 'solved' : state === 'locked' ? 'locked' : 'open',
@@ -572,9 +589,14 @@ export class GuiApp {
 
   derivationTable(wallet) {
     return el('div', { class: 'stack' },
+      el('div', { class: 'row' },
+        mnemonicSigil(wallet.mnemonic, { size: 34 }),
+        el('span', { class: 'section__meta', text: this.lang === 'ru'
+          ? 'Знак этой фразы' : 'Sigil of this phrase' })),
       section(t('derivation', this.lang)),
-      table(['PATH', 'TYPE', 'ADDRESS'],
+      table(['', 'PATH', 'TYPE', 'ADDRESS'],
         wallet.addresses.map((entry) => [
+          { node: addressSigil(entry.address, { size: 20 }) },
           { text: entry.path },
           { text: entry.label },
           { class: 'addr', node: el('span', {}, entry.address, ' ',

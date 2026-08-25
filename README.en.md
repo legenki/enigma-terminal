@@ -11,8 +11,12 @@ to public block explorers.
 ▶ **Play in the browser: <https://legenki.github.io/neon-terminal/>**
 
 The web build has two modes, switched by the rocker at the bottom of the screen (or **F2**):
-**GUI**, a windowed interface in the spirit of the early Macintosh and NeXTSTEP, and **CL**,
-the same game as a command line on a shader-driven CRT. Both share one save.
+**GUI**, a windowed interface in cyberpunk dress — black glass, neon rules, HUD corner ticks —
+and **CL**, the same game as a command line. Progress and journal are shared.
+
+The CRT simulation now covers **both** modes and is switched by the `CRT` rocker at the bottom
+right: **SOFT** gives scanlines, an aperture grille, a vignette and a slow flicker (in CL a full
+WebGL shader with bloom and tube curvature runs underneath it), **OFF** gives a clean picture.
 
 *(Русская версия: [README.md](README.md))*
 
@@ -87,12 +91,22 @@ python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # one-shot commands
 | `PROVIDER [name]` | `blockstream` \| `mempool` \| `blockchain` |
 | `EXPLORER` | open the address in a block explorer |
 | `STATUS` | operator status and progress |
-| `CRT full\|soft\|flat\|off` | monitor profile (web only) |
 | `COPY` | copy addresses to the clipboard (web only) |
 | `CLEAR` / `RESET` / `EXIT` | clear screen / erase progress / quit |
 
 Progress persists in `~/.neon_terminal/progress.json` (override with `NEON_TERMINAL_HOME`)
 for the terminal, and in `localStorage` for the web build.
+
+## Generative sigils
+
+Every case, every seed phrase and every address carries its own mark, drawn with
+[minidenticons](https://github.com/laurentpayot/minidenticons) (MIT, vendored into
+`docs/js/vendor/` with its licence so the page pulls nothing from a third-party CDN). The marks
+appear in the case list, the derivation grid, the journal and the rail, so a wallet or a case is
+recognised by its shape rather than by a thirty-four character string.
+
+A phrase's sigil is keyed by its SHA-256 fingerprint, never by the words — the same rule the
+journal follows, so an unrecognised phrase still gets a stable icon while being stored nowhere.
 
 ## The investigation journal
 
@@ -196,9 +210,11 @@ docs/                 web build, published by GitHub Pages
   js/crt.js           WebGL bloom, curvature, aberration, mask, noise
   js/glitch.js        the glitch banner above both modes
   js/journal.js       the investigation journal, shared by both modes
+  js/identicon.js     generative sigils for cases, phrases and addresses
+  js/vendor/          minidenticons (MIT) plus its licence
   js/gui/             GUI mode, over the same core
 tools/build_web_data.py   regenerates docs/js/{wordlist,campaign}.js from data/
-tests/                219 tests, including the Python↔JavaScript parity check
+tests/                228 tests, including the Python↔JavaScript parity check
 ```
 
 ## Development

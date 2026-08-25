@@ -88,6 +88,19 @@ def test_journal_surface_matches_between_builds(js_results):
     )
 
 
+def test_sigils_are_stable_and_distinct(js_results):
+    """The mark a player learns to recognise must not drift between sessions."""
+    sigils = js_results["sigils"]
+    seeds = {entry["seed"] for entry in sigils}
+    assert len(seeds) == len(sigils), "two phrases share a sigil seed"
+    for entry in sigils:
+        # The seed is the fingerprint, never the words themselves.
+        assert entry["seed"] == f"neon-seed-{ce.fingerprint(entry['mnemonic'])}"
+        for word in set(entry["mnemonic"].split()):
+            assert word not in entry["seed"]
+        assert entry["svg"].startswith("<svg")
+
+
 def test_web_data_is_in_sync_with_the_sources():
     """docs/js/*.js are generated; a stale build would ship the wrong quest."""
     completed = subprocess.run(

@@ -9,6 +9,7 @@ import { GuiApp } from './gui/app.js';
 
 const MODE_KEY = 'neon-terminal/mode/v1';
 const LANG_KEY = 'neon-terminal/lang/v1';
+const CRT_KEY = 'neon-terminal/crt/v1';
 
 const stored = (key, fallback) => {
   try {
@@ -70,6 +71,35 @@ const gui = new GuiApp(guiRoot, {
     engine.lang = code;
   },
 });
+
+// ---- CRT simulation, over both modes --------------------------------------
+//
+// The command line runs a real WebGL tube; the GUI is DOM and gets a CSS
+// overlay instead. One switch drives both so the two modes always look like
+// the same monitor.
+
+let crtMode = stored(CRT_KEY, 'soft') === 'off' ? 'off' : 'soft';
+
+const crtButtons = {
+  soft: document.getElementById('crt-soft'),
+  off: document.getElementById('crt-off'),
+};
+
+function setCrt(next, { announce = true } = {}) {
+  crtMode = next === 'off' ? 'off' : 'soft';
+  store(CRT_KEY, crtMode);
+  crtButtons.soft.setAttribute('aria-pressed', String(crtMode === 'soft'));
+  crtButtons.off.setAttribute('aria-pressed', String(crtMode === 'off'));
+  document.body.classList.toggle('crt-soft', crtMode === 'soft');
+  if (crt) {
+    crt.applyPreset(crtMode === 'soft' ? 'soft' : 'off');
+    if (crtMode === 'soft') terminal.dirty = true;
+  }
+  if (announce) glitch.kick(0.8);
+}
+
+crtButtons.soft.addEventListener('click', () => setCrt('soft'));
+crtButtons.off.addEventListener('click', () => setCrt('off'));
 
 // ---- mode switching -------------------------------------------------------
 
@@ -199,5 +229,6 @@ function frame(now) {
 }
 
 gui.mount();
+setCrt(crtMode, { announce: false });
 setMode(mode, { animate: false });
 requestAnimationFrame(frame);
