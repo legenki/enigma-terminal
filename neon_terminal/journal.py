@@ -13,6 +13,7 @@ pasting a live wallet into the terminal cannot leave it sitting on disk.
 
 from __future__ import annotations
 
+import os
 import json
 from dataclasses import dataclass, field, replace
 import time
