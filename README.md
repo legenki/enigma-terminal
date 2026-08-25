@@ -1,4 +1,4 @@
-# BIP-39: NEON TERMINAL
+# BIP-39: ENIGMA TERMINAL
 
 **Текстовый детективный квест, играющий против настоящей сети Bitcoin.**
 
@@ -12,7 +12,7 @@ BIP-39 вместе с контрольной суммой, разворачив
 по BIP-32 на кривой secp256k1 выводятся адреса трёх типов — и их баланс запрашивается живым
 HTTP-запросом к публичным блокчейн-эксплорерам.
 
-▶ **Играть в браузере: <https://legenki.github.io/neon-terminal/>**
+▶ **Играть в браузере: <https://legenki.github.io/enigma-terminal/>**
 
 Веб-версия работает в двух режимах, переключаемых тумблером внизу экрана (или клавишей **F2**):
 **GUI** — оконный интерфейс в киберпанк-эстетике (чёрное стекло, неоновые контуры, HUD-уголки)
@@ -30,7 +30,7 @@ HTTP-запросом к публичным блокчейн-эксплорер�
 
 | | Терминал (Python) | Веб (GitHub Pages) |
 |---|---|---|
-| Запуск | `python -m neon_terminal` | браузер, без установки |
+| Запуск | `python -m enigma_terminal` | браузер, без установки |
 | Криптография | чистый Python, стандартная библиотека | чистый JavaScript, без зависимостей |
 | Сеть | `requests` (или `urllib`) | `fetch` прямо из браузера |
 | Картинка | ANSI-цвета, посимвольный вывод | Canvas + WebGL-шейдер ЭЛТ-монитора |
@@ -43,7 +43,7 @@ HTTP-запросом к публичным блокчейн-эксплорер�
 
 ### Веб-версия
 
-Просто откройте <https://legenki.github.io/neon-terminal/>. Локально:
+Просто откройте <https://legenki.github.io/enigma-terminal/>. Локально:
 
 ```bash
 python3 -m http.server 8000 --directory docs
@@ -53,9 +53,9 @@ python3 -m http.server 8000 --directory docs
 ### Терминальная версия
 
 ```bash
-git clone https://github.com/legenki/neon-terminal
-cd neon-terminal
-python -m neon_terminal            # зависимости не обязательны
+git clone https://github.com/legenki/enigma-terminal
+cd enigma-terminal
+python -m enigma_terminal            # зависимости не обязательны
 ```
 
 Опционально: `pip install -r requirements.txt` — `requests` даёт более аккуратную работу
@@ -64,11 +64,11 @@ python -m neon_terminal            # зависимости не обязате�
 Полезные флаги:
 
 ```bash
-python -m neon_terminal --lang en          # английский текст
-python -m neon_terminal --offline          # без сети (криптография работает по-настоящему)
-python -m neon_terminal --speed 0          # отключить анимацию
-python -m neon_terminal --provider mempool # выбрать эксплорер
-python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # разовый запуск команд
+python -m enigma_terminal --lang en          # английский текст
+python -m enigma_terminal --offline          # без сети (криптография работает по-настоящему)
+python -m enigma_terminal --speed 0          # отключить анимацию
+python -m enigma_terminal --provider mempool # выбрать эксплорер
+python -m enigma_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # разовый запуск команд
 ```
 
 ## Команды
@@ -104,8 +104,8 @@ python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # разовый з�
 | `COPY` | адреса в буфер обмена (только веб) |
 | `CLEAR` / `RESET` / `EXIT` | очистить экран / стереть прогресс / выйти |
 
-Прогресс сохраняется: в терминале — в `~/.neon_terminal/progress.json`
-(переопределяется переменной `NEON_TERMINAL_HOME`), в вебе — в `localStorage`.
+Прогресс сохраняется: в терминале — в `~/.enigma_terminal/progress.json`
+(переопределяется переменной `ENIGMA_TERMINAL_HOME`), в вебе — в `localStorage`.
 
 ## Доска контрактов: 8 заказчиков × 32 дела
 
@@ -160,7 +160,7 @@ python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # разовый з�
 Каждый шаг — деривация, запрос баланса, обход путей, поиск по словарю и по архиву,
 восстановление слова, генерация фразы, взятая подсказка, закрытое дело — попадает в журнал.
 Он общий для GUI и командной строки, переживает перезагрузку страницы и лежит в `localStorage`
-(в терминальной версии — в `~/.neon_terminal/journal.json`).
+(в терминальной версии — в `~/.enigma_terminal/journal.json`).
 
 В GUI журнал всегда под рукой: справа рейл с последними записями на любой вкладке, плюс полная
 панель с фильтрами по инструментам, закреплением и выгрузкой в текстовый файл. Кнопка
@@ -199,7 +199,7 @@ python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # разовый з�
 ## Как выглядит игра
 
 ```
-nullsec@neon:~$ DECRYPT abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+nullsec@enigma:~$ DECRYPT abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
 [~] decrypting master pre-image...
 [~] pbkdf2-hmac-sha512, 2048 rounds...
 [~] deriving public key coordinates (X, Y)...
@@ -211,7 +211,7 @@ PATH m/49'/0'/0'/0/0 (Nested SegWit)        : 37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf
 PATH m/84'/0'/0'/0/0 (Native SegWit)        : bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu
 ==================================================================
 
-nullsec@neon:~$ SYNC_LEDGER
+nullsec@enigma:~$ SYNC_LEDGER
 [NET] ESTABLISHING ENCRYPTED PROXY TO BLOCKSTREAM NODE... OK
 [NET] QUERYING ADDR: 1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA
 [NET] PARSING DATA STREAMS... SUCCESS
@@ -227,7 +227,7 @@ TX COUNT          : 48
 Ошибка контрольной суммы выглядит ровно так, как задумано ТЗ:
 
 ```
-nullsec@neon:~$ DECRYPT abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon
+nullsec@enigma:~$ DECRYPT abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon
 [FATAL] MNEMONIC CHECKSUM INVALID. DECRYPTION FAILED.
         THE LAST WORD CARRIES THE CHECKSUM. ONE WRONG WORD BREAKS IT.
 ```
@@ -247,7 +247,7 @@ BIP-39** (тех самых, из спецификации Trezor). Причин
 **Хотите свои кошельки?** Это ровно три шага:
 
 1. создайте кошелёк, запишите 12 слов, отправьте на него немного сатоши;
-2. посчитайте отпечаток: `python -c "from neon_terminal.crypto_engine import fingerprint; print(fingerprint('ваши 12 слов'))"`;
+2. посчитайте отпечаток: `python -c "from enigma_terminal.crypto_engine import fingerprint; print(fingerprint('ваши 12 слов'))"`;
 3. подставьте его в поле `fingerprint` нужного дела в `data/cases.json`, перепишите загадки
    и выполните `python tools/build_web_data.py`.
 
@@ -272,7 +272,7 @@ data/                 общий источник правды для обеих
   contracts.json      256 сгенерированных контрактов (+ спецификация решения)
   english.txt         официальный словарь BIP-39 (sha256 2f5eed53…)
   test_vectors.json   эталонные векторы, сгенерированные mnemonic + bip-utils
-neon_terminal/        терминальная версия
+enigma_terminal/        терминальная версия
   crypto_engine.py    BIP-39/32/44/49/84, secp256k1, base58check, bech32
   _ripemd160.py       запасной RIPEMD-160 для сборок OpenSSL 3 без legacy-провайдера
   chain.py            три эксплорера с автоматическим переключением

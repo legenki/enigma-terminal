@@ -38,7 +38,7 @@ BANNER = r"""
 """
 
 BOOT_LINES = [
-    "[BOOT] neon-terminal v{version}",
+    "[BOOT] enigma-terminal v{version}",
     "[BOOT] loading BIP-39 english wordlist ... 2048 entries OK",
     "[BOOT] verifying wordlist checksum ... {checksum}",
     "[BOOT] secp256k1 curve parameters ... LOADED",

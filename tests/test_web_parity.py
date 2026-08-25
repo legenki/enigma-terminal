@@ -12,8 +12,8 @@ from pathlib import Path
 
 import pytest
 
-from neon_terminal import crypto_engine as ce
-from neon_terminal.cases import Campaign
+from enigma_terminal import crypto_engine as ce
+from enigma_terminal.cases import Campaign
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -81,7 +81,7 @@ def test_single_word_recovery_matches_between_builds(js_results):
 
 def test_journal_surface_matches_between_builds(js_results):
     """Both front-ends write the same journal, so the vocabulary must match."""
-    from neon_terminal.journal import TOOLS, mask_mnemonic
+    from enigma_terminal.journal import TOOLS, mask_mnemonic
 
     assert js_results["journal"]["tools"] == list(TOOLS)
     assert js_results["journal"]["masked"] == mask_mnemonic(
@@ -96,7 +96,7 @@ def test_sigils_are_stable_and_distinct(js_results):
     assert len(seeds) == len(sigils), "two phrases share a sigil seed"
     for entry in sigils:
         # The seed is the fingerprint, never the words themselves.
-        assert entry["seed"] == f"neon-seed-{ce.fingerprint(entry['mnemonic'])}"
+        assert entry["seed"] == f"enigma-seed-{ce.fingerprint(entry['mnemonic'])}"
         for word in set(entry["mnemonic"].split()):
             assert word not in entry["seed"]
         assert entry["svg"].startswith("<svg")

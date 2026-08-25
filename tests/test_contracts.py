@@ -15,7 +15,7 @@ from pathlib import Path
 
 import pytest
 
-from neon_terminal import crypto_engine as ce
+from enigma_terminal import crypto_engine as ce
 
 ROOT = Path(__file__).resolve().parent.parent
 GRID_COLUMNS = 16

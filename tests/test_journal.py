@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from neon_terminal.journal import MAX_ENTRIES, Journal, mask_mnemonic
+from enigma_terminal.journal import MAX_ENTRIES, Journal, mask_mnemonic
 
 from .answers import SOLUTIONS, UNRELATED_MNEMONIC
 

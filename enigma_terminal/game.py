@@ -27,7 +27,7 @@ from .crypto_engine import (
 )
 from .ui import DECRYPT_LOGS, NET_LOGS, Screen
 
-PROMPT = "nullsec@neon:~$ "
+PROMPT = "nullsec@enigma:~$ "
 
 HELP_TEXT = {
     "en": [
@@ -145,7 +145,7 @@ TEXT = {
 
 ABOUT_TEXT = {
     "en": [
-        "BIP-39: NEON TERMINAL — a detective quest played against the real network.",
+        "BIP-39: ENIGMA TERMINAL — a detective quest played against the real network.",
         "",
         "Everything below the story is genuine:",
         "  * mnemonics are checked against the official BIP-39 English wordlist,",
@@ -164,7 +164,7 @@ ABOUT_TEXT = {
         "included.",
     ],
     "ru": [
-        "BIP-39: NEON TERMINAL — детективный квест, играющий против настоящей сети.",
+        "BIP-39: ENIGMA TERMINAL — детективный квест, играющий против настоящей сети.",
         "",
         "Всё, что находится под сюжетом, — подлинное:",
         "  * мнемоники проверяются по официальному словарю BIP-39,",
@@ -1044,8 +1044,8 @@ def run(session: Session) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        prog="neon-terminal",
-        description="BIP-39: NEON TERMINAL — a detective quest over the live Bitcoin network.",
+        prog="enigma-terminal",
+        description="BIP-39: ENIGMA TERMINAL — a detective quest over the live Bitcoin network.",
     )
     parser.add_argument("--lang", choices=("ru", "en"), default="ru",
                         help="narrative language (default: ru)")

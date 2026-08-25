@@ -4,8 +4,8 @@ import hashlib
 
 import pytest
 
-from neon_terminal import crypto_engine as ce
-from neon_terminal._ripemd160 import ripemd160
+from enigma_terminal import crypto_engine as ce
+from enigma_terminal._ripemd160 import ripemd160
 
 OFFICIAL_FIRST_VECTOR_SEED = (
     "c55257c360c07c72029aebc1b53c05ed0362ada38ead3e3e9efa3708e5349553"

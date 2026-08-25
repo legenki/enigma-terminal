@@ -1,5 +1,5 @@
 // Game logic for the browser build. Mirrors the command set of the Python
-// terminal (neon_terminal/game.py) so both builds play identically.
+// terminal (enigma_terminal/game.py) so both builds play identically.
 
 import { CAMPAIGN } from './campaign.js';
 import {
@@ -113,7 +113,7 @@ const HELP = {
 
 const ABOUT = {
   en: [
-    'BIP-39: NEON TERMINAL — a detective quest played against the real network.',
+    'BIP-39: ENIGMA TERMINAL — a detective quest played against the real network.',
     '',
     'Everything below the story is genuine:',
     '  * mnemonics are checked against the official BIP-39 English wordlist,',
@@ -134,7 +134,7 @@ const ABOUT = {
     'real funds into any program, this one included.',
   ],
   ru: [
-    'BIP-39: NEON TERMINAL — детективный квест, играющий против настоящей сети.',
+    'BIP-39: ENIGMA TERMINAL — детективный квест, играющий против настоящей сети.',
     '',
     'Всё, что находится под сюжетом, — подлинное:',
     '  * мнемоники проверяются по официальному словарю BIP-39,',
@@ -232,7 +232,7 @@ export class Engine {
     term.locked = true;
     const wordlistOk = WORDLIST_SHA256 === OFFICIAL_WORDLIST_SHA256;
     const lines = [
-      `[BOOT] neon-terminal ${this.campaign.meta.version}`,
+      `[BOOT] enigma-terminal ${this.campaign.meta.version}`,
       '[BOOT] loading BIP-39 english wordlist ... 2048 entries OK',
       `[BOOT] verifying wordlist checksum ... ${wordlistOk ? 'OK' : 'MODIFIED'}`,
       '[BOOT] secp256k1 curve parameters ... LOADED',

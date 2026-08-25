@@ -1,4 +1,4 @@
-# BIP-39: NEON TERMINAL
+# BIP-39: ENIGMA TERMINAL
 
 **A text detective quest played against the live Bitcoin network.**
 
@@ -12,7 +12,7 @@ checksum included — stretched into a seed with PBKDF2-HMAC-SHA512, derived ove
 through BIP-32 into three address types, and its balance is fetched with a real HTTP request
 to public block explorers.
 
-▶ **Play in the browser: <https://legenki.github.io/neon-terminal/>**
+▶ **Play in the browser: <https://legenki.github.io/enigma-terminal/>**
 
 The web build has two modes, switched by the rocker at the bottom of the screen (or **F2**):
 **GUI**, a windowed interface in cyberpunk dress — black glass, neon rules, HUD corner ticks —
@@ -30,7 +30,7 @@ WebGL shader with bloom and tube curvature runs underneath it), **OFF** gives a 
 
 | | Terminal (Python) | Web (GitHub Pages) |
 |---|---|---|
-| Launch | `python -m neon_terminal` | a browser, nothing to install |
+| Launch | `python -m enigma_terminal` | a browser, nothing to install |
 | Crypto | pure Python, standard library only | pure JavaScript, no dependencies |
 | Network | `requests` (or `urllib`) | `fetch` straight from the page |
 | Visuals | ANSI colour, typewriter output | Canvas + a WebGL CRT shader |
@@ -43,7 +43,7 @@ field against the Python engine.
 
 ### Web
 
-Open <https://legenki.github.io/neon-terminal/>, or serve it locally:
+Open <https://legenki.github.io/enigma-terminal/>, or serve it locally:
 
 ```bash
 python3 -m http.server 8000 --directory docs
@@ -52,20 +52,20 @@ python3 -m http.server 8000 --directory docs
 ### Terminal
 
 ```bash
-git clone https://github.com/legenki/neon-terminal
-cd neon-terminal
-python -m neon_terminal            # no dependencies required
+git clone https://github.com/legenki/enigma-terminal
+cd enigma-terminal
+python -m enigma_terminal            # no dependencies required
 ```
 
 Optionally `pip install -r requirements.txt`: `requests` improves timeout handling, while
 `mnemonic` and `bip-utils` are only needed by the tests as reference implementations.
 
 ```bash
-python -m neon_terminal --lang en          # English narrative
-python -m neon_terminal --offline          # no network; the crypto still runs for real
-python -m neon_terminal --speed 0          # disable animation
-python -m neon_terminal --provider mempool # pick an explorer
-python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # one-shot commands
+python -m enigma_terminal --lang en          # English narrative
+python -m enigma_terminal --offline          # no network; the crypto still runs for real
+python -m enigma_terminal --speed 0          # disable animation
+python -m enigma_terminal --provider mempool # pick an explorer
+python -m enigma_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # one-shot commands
 ```
 
 ## Commands
@@ -101,7 +101,7 @@ python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # one-shot commands
 | `COPY` | copy addresses to the clipboard (web only) |
 | `CLEAR` / `RESET` / `EXIT` | clear screen / erase progress / quit |
 
-Progress persists in `~/.neon_terminal/progress.json` (override with `NEON_TERMINAL_HOME`)
+Progress persists in `~/.enigma_terminal/progress.json` (override with `ENIGMA_TERMINAL_HOME`)
 for the terminal, and in `localStorage` for the web build.
 
 ## The contract board: 8 clients × 32 cases
@@ -158,7 +158,7 @@ journal follows, so an unrecognised phrase still gets a stable icon while being 
 Every move — a derivation, a balance query, a sweep, a wordlist or archive search, a word
 recovery, a generated phrase, a hint taken, a case closed — lands in the journal. It is shared
 between the GUI and the command line, survives a reload, and lives in `localStorage` (or in
-`~/.neon_terminal/journal.json` for the terminal build).
+`~/.enigma_terminal/journal.json` for the terminal build).
 
 In the GUI it is always at hand: a rail of recent entries sits beside every panel, and a full
 panel adds per-tool filters, pinning and a text export. **Recall** replays an entry in the tool
@@ -198,7 +198,7 @@ the same names.
 ## What a session looks like
 
 ```
-nullsec@neon:~$ DECRYPT abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
+nullsec@enigma:~$ DECRYPT abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
 [~] decrypting master pre-image...
 [~] pbkdf2-hmac-sha512, 2048 rounds...
 [~] deriving public key coordinates (X, Y)...
@@ -227,7 +227,7 @@ from the Trezor specification), because:
 
 1. create a wallet, write down the 12 words, send it a few satoshi;
 2. compute the fingerprint:
-   `python -c "from neon_terminal.crypto_engine import fingerprint; print(fingerprint('your 12 words'))"`;
+   `python -c "from enigma_terminal.crypto_engine import fingerprint; print(fingerprint('your 12 words'))"`;
 3. put it in the `fingerprint` field of a case in `data/cases.json`, rewrite the riddles, and
    run `python tools/build_web_data.py`.
 
@@ -247,7 +247,7 @@ fingerprint and compares it against whatever the player types.
 
 ```
 data/                 shared source of truth for both builds
-neon_terminal/        terminal build (crypto_engine, chain, ui, cases, game)
+enigma_terminal/        terminal build (crypto_engine, chain, ui, cases, game)
 docs/                 web build, published by GitHub Pages
   js/core.js          shared core: progress, case rules, search, randomisation
   js/crypto/          hash.js, secp256k1.js, encoding.js, bip39.js, wallet.js

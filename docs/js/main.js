@@ -8,9 +8,9 @@ import { GlitchBanner } from './glitch.js';
 import { GuiApp } from './gui/app.js';
 import { loadContracts } from './core.js';
 
-const MODE_KEY = 'neon-terminal/mode/v1';
-const LANG_KEY = 'neon-terminal/lang/v1';
-const CRT_KEY = 'neon-terminal/crt/v1';
+const MODE_KEY = 'enigma-terminal/mode/v1';
+const LANG_KEY = 'enigma-terminal/lang/v1';
+const CRT_KEY = 'enigma-terminal/crt/v1';
 
 const stored = (key, fallback) => {
   try {
@@ -40,7 +40,7 @@ const powerLed = document.getElementById('power-led');
 
 const terminal = new Terminal(termCanvas, {
   fontSize: window.innerWidth < 640 ? 12 : 16,
-  prompt: 'nullsec@neon:~$ ',
+  prompt: 'nullsec@enigma:~$ ',
 });
 
 let crt = null;

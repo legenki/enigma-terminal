@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "neon-terminal"
+name = "enigma-terminal"
 version = "1.0.0"
-description = "BIP-39: NEON TERMINAL — a cyberpunk detective quest over the live Bitcoin network"
+description = "BIP-39: ENIGMA TERMINAL — a cyberpunk detective quest over the live Bitcoin network"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
@@ -25,17 +25,17 @@ net = ["requests>=2.31"]
 dev = ["pytest>=8.0", "requests>=2.31", "mnemonic>=0.20", "bip-utils>=2.9"]
 
 [project.scripts]
-neon-terminal = "neon_terminal.game:main"
+enigma-terminal = "enigma_terminal.game:main"
 
 [project.urls]
-Homepage = "https://legenki.github.io/neon-terminal/"
-Source = "https://github.com/legenki/neon-terminal"
+Homepage = "https://legenki.github.io/enigma-terminal/"
+Source = "https://github.com/legenki/enigma-terminal"
 
 [tool.setuptools]
-packages = ["neon_terminal"]
+packages = ["enigma_terminal"]
 
 [tool.setuptools.package-data]
-neon_terminal = ["../data/*.json", "../data/*.txt"]
+enigma_terminal = ["../data/*.json", "../data/*.txt"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

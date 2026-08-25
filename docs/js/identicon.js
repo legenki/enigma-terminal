@@ -42,11 +42,11 @@ export function sigil(seed, { size = 20, title = '', ...options } = {}) {
 
 /** Sigil for a case file — stable across languages and sessions. */
 export const caseSigil = (caseFile, options) =>
-  sigil(`neon-case-${caseFile.id}-${caseFile.fingerprint.slice(0, 12)}`, options);
+  sigil(`enigma-case-${caseFile.id}-${caseFile.fingerprint.slice(0, 12)}`, options);
 
 /** Sigil for a seed phrase, keyed by its fingerprint rather than its words. */
 export const mnemonicSigil = (mnemonic, options) =>
-  sigil(`neon-seed-${fingerprint(mnemonic)}`, options);
+  sigil(`enigma-seed-${fingerprint(mnemonic)}`, options);
 
 /** Sigil for an address, so the same wallet always looks the same. */
-export const addressSigil = (address, options) => sigil(`neon-addr-${address}`, options);
+export const addressSigil = (address, options) => sigil(`enigma-addr-${address}`, options);

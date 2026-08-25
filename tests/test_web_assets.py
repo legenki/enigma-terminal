@@ -94,7 +94,7 @@ def test_every_journal_tool_is_recorded(module):
     silently failed to log wordlist searches because a patch matched nothing,
     and nothing in the suite noticed.
     """
-    from neon_terminal.journal import TOOLS
+    from enigma_terminal.journal import TOOLS
 
     recorded = journal_tools_written_by(DOCS / module)
     missing = set(TOOLS) - recorded
@@ -105,12 +105,12 @@ def test_both_builds_share_one_journal_key():
     """The GUI and the command line must read and write the same store."""
     journal = (DOCS / "js" / "journal.js").read_text()
     keys = re.findall(r"STORAGE_KEY\s*=\s*'([^']+)'", journal)
-    assert keys == ["neon-terminal/journal/v1"]
+    assert keys == ["enigma-terminal/journal/v1"]
     for module in ("js/engine.js", "js/gui/app.js"):
         source = (DOCS / module).read_text()
         assert "from './journal.js'" in source or "from '../journal.js'" in source
         # Neither front-end may keep its own private copy of the key.
-        assert "neon-terminal/journal" not in source
+        assert "enigma-terminal/journal" not in source
 
 
 # --- vendored dependency ---------------------------------------------------
@@ -147,7 +147,7 @@ def test_sigils_are_keyed_by_fingerprint_not_by_words():
     source = strip_js_comments((DOCS / "js" / "identicon.js").read_text())
     assert "fingerprint(mnemonic)" in source
     # The raw phrase may appear only as the argument being hashed.
-    assert "sigil(`neon-seed-${mnemonic}" not in source
+    assert "sigil(`enigma-seed-${mnemonic}" not in source
 
 
 # --- CRT switch ------------------------------------------------------------
@@ -180,7 +180,7 @@ def test_footer_no_longer_carries_the_source_link():
     footer = html[html.index('<footer id="switch-bar">'):html.index("</footer>")]
     assert "github.com" not in footer
     assert 'id="crt-switch"' in footer
-    assert "github.com/legenki/neon-terminal" in (DOCS / "js" / "gui" / "app.js").read_text()
+    assert "github.com/legenki/enigma-terminal" in (DOCS / "js" / "gui" / "app.js").read_text()
 
 
 def test_sidebar_clicks_open_the_section_not_the_last_item():

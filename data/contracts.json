@@ -1,6 +1,6 @@
 {
  "generated_by": "tools/generate_cases.py",
- "seed": "bip39-neon-terminal/contract-board/v1",
+ "seed": "bip39-enigma-terminal/contract-board/v1",
  "cases": [
   {
    "id": 9,

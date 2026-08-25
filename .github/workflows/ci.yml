@@ -39,7 +39,7 @@ jobs:
 
       - name: Smoke-test the terminal end to end
         run: |
-          python -m neon_terminal --speed 0 --no-color --lang en --offline \
+          python -m enigma_terminal --speed 0 --no-color --lang en --offline \
             -c "CASES" \
             -c "OPEN 1" \
             -c "ENTROPY 00000000000000000000000000000000" \

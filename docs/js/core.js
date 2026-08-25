@@ -16,7 +16,7 @@ import {
   WORD_INDEX,
 } from './crypto/bip39.js';
 
-const STORAGE_KEY = 'neon-terminal/progress/v1';
+const STORAGE_KEY = 'enigma-terminal/progress/v1';
 
 /** Resolve a `{ru, en}` bundle down to one language. */
 export const pick = (bundle, lang) => (bundle && (bundle[lang] || bundle.en)) || bundle;

@@ -2,7 +2,7 @@
 
 import pytest
 
-from neon_terminal import crypto_engine as ce
+from enigma_terminal import crypto_engine as ce
 
 from .answers import SOLUTIONS
 

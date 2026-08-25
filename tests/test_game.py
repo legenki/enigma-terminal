@@ -2,11 +2,11 @@
 
 import pytest
 
-from neon_terminal.cases import Campaign, Progress
-from neon_terminal.chain import ChainClient
-from neon_terminal.game import Session, dispatch
-from neon_terminal.journal import Journal
-from neon_terminal.ui import Screen
+from enigma_terminal.cases import Campaign, Progress
+from enigma_terminal.chain import ChainClient
+from enigma_terminal.game import Session, dispatch
+from enigma_terminal.journal import Journal
+from enigma_terminal.ui import Screen
 
 from .answers import LEGACY_ADDRESSES, SOLUTIONS, UNRELATED_MNEMONIC
 
@@ -207,7 +207,7 @@ def test_sweep_without_a_seed_asks_for_one(session, capsys):
 
 
 def test_sweep_reports_every_derived_path(session, capsys, monkeypatch):
-    from neon_terminal import chain
+    from enigma_terminal import chain
 
     stats = {
         "1PpJDjhMCChYbnonB1Ri3cC4PAiU2Ss6xC": (0, 0),
@@ -234,7 +234,7 @@ def test_sweep_reports_every_derived_path(session, capsys, monkeypatch):
 
 
 def test_sweep_says_so_when_a_seed_was_never_used(session, capsys, monkeypatch):
-    from neon_terminal import chain
+    from enigma_terminal import chain
 
     monkeypatch.setattr(
         chain.ChainClient, "address_stats",
@@ -250,7 +250,7 @@ def test_sweep_says_so_when_a_seed_was_never_used(session, capsys, monkeypatch):
 
 
 def test_sweep_survives_one_unreachable_provider(session, capsys, monkeypatch):
-    from neon_terminal import chain
+    from enigma_terminal import chain
 
     def flaky(self, address):
         if address.startswith("bc1"):
@@ -350,8 +350,8 @@ def test_archive_without_arguments_explains_itself(session, capsys):
 
 def test_every_tool_writes_to_the_journal(session, capsys, monkeypatch):
     """Every tool in TOOLS must leave a trace — a silent one is a hole in the record."""
-    from neon_terminal import chain
-    from neon_terminal.journal import TOOLS
+    from enigma_terminal import chain
+    from enigma_terminal.journal import TOOLS
 
     monkeypatch.setattr(
         chain.ChainClient, "address_stats",

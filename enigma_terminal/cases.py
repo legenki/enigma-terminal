@@ -77,10 +77,10 @@ class Progress:
 
     @classmethod
     def default_path(cls) -> Path:
-        base = os.environ.get("NEON_TERMINAL_HOME")
+        base = os.environ.get("ENIGMA_TERMINAL_HOME")
         if base:
             return Path(base) / "progress.json"
-        return Path.home() / ".neon_terminal" / "progress.json"
+        return Path.home() / ".enigma_terminal" / "progress.json"
 
     @classmethod
     def load(cls, path: Path | None = None) -> "Progress":

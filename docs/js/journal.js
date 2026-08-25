@@ -9,7 +9,7 @@
 // recorded masked, so pasting a live wallet into the terminal cannot leave the
 // phrase sitting in localStorage.
 
-const STORAGE_KEY = 'neon-terminal/journal/v1';
+const STORAGE_KEY = 'enigma-terminal/journal/v1';
 const MAX_ENTRIES = 400;
 
 export const TOOLS = {
@@ -173,10 +173,10 @@ export class Journal {
   /** Plain-text case file, for the clipboard or a download. */
   toText(lang = 'en') {
     const header = lang === 'ru'
-      ? ['ЖУРНАЛ РАССЛЕДОВАНИЯ // BIP-39: NEON TERMINAL',
+      ? ['ЖУРНАЛ РАССЛЕДОВАНИЯ // BIP-39: ENIGMA TERMINAL',
          `Выгружено: ${new Date().toISOString()}`,
          `Записей: ${this.entries.length}`, '']
-      : ['INVESTIGATION JOURNAL // BIP-39: NEON TERMINAL',
+      : ['INVESTIGATION JOURNAL // BIP-39: ENIGMA TERMINAL',
          `Exported: ${new Date().toISOString()}`,
          `Entries: ${this.entries.length}`, ''];
     const body = this.entries.map((entry, index) => {

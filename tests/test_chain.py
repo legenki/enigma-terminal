@@ -5,7 +5,7 @@ import urllib.error
 
 import pytest
 
-from neon_terminal import chain
+from enigma_terminal import chain
 
 BLOCKSTREAM_BODY = {
     "address": "1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA",

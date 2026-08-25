@@ -60,8 +60,8 @@ const { fingerprint } = await import(join(root, 'docs/js/crypto/bip39.js'));
 // Sigils are keyed by fingerprint, so Python can predict the exact seed string.
 const sigils = vectors.map((vector) => ({
   mnemonic: vector.mnemonic,
-  seed: `neon-seed-${fingerprint(vector.mnemonic)}`,
-  svg: minidenticon(`neon-seed-${fingerprint(vector.mnemonic)}`, 92, 62),
+  seed: `enigma-seed-${fingerprint(vector.mnemonic)}`,
+  svg: minidenticon(`enigma-seed-${fingerprint(vector.mnemonic)}`, 92, 62),
 }));
 
 process.stdout.write(

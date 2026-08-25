@@ -27,7 +27,7 @@ export class Terminal {
     this.fontSize = options.fontSize || 16;
     this.lineHeight = options.lineHeight || 1.35;
     this.maxScrollback = options.maxScrollback || 4000;
-    this.prompt = options.prompt || 'nullsec@neon:~$ ';
+    this.prompt = options.prompt || 'nullsec@enigma:~$ ';
     this.onCommand = options.onCommand || (() => {});
 
     this.lines = [];       // committed rows, each an array of {text, color}

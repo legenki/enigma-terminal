@@ -322,7 +322,7 @@ export class GuiApp {
       if (caseFile) return caseSigil(caseFile, { size });
     }
     // Searches and masked phrases still deserve a stable mark of their own.
-    return sigil(`neon-${entry.tool}-${entry.title}`, { size });
+    return sigil(`enigma-${entry.tool}-${entry.title}`, { size });
   }
 
   railEntry(entry) {
@@ -452,7 +452,7 @@ export class GuiApp {
             } catch { /* clipboard blocked; the download below still works */ }
             const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
-            const link = el('a', { href: url, download: 'neon-terminal-journal.txt' });
+            const link = el('a', { href: url, download: 'enigma-terminal-journal.txt' });
             document.body.append(link);
             link.click();
             link.remove();
@@ -557,7 +557,7 @@ export class GuiApp {
             class: 'card__row', type: 'button',
             onClick: () => { this.activeClient = client.slug; this.go('board'); },
           },
-          sigil(`neon-client-${client.slug}`, { size: 30 }),
+          sigil(`enigma-client-${client.slug}`, { size: 30 }),
           el('div', { class: 'client__head' },
             el('div', { class: 'card__name', text: pick(client.name, lang) }),
             el('div', { class: 'client__kind', text: pick(client.kind, lang) })),
@@ -623,7 +623,7 @@ export class GuiApp {
           class: 'btn', type: 'button', text: '← ' + t('backToClients', lang),
           onClick: () => { this.activeClient = null; this.go('board'); },
         }),
-        sigil(`neon-client-${slug}`, { size: 30 }),
+        sigil(`enigma-client-${slug}`, { size: 30 }),
         el('span', { class: 'card__spacer' }),
         el('span', { class: 'section__meta', text: pick(client.district, lang) })),
       section(pick(client.name, lang), pick(client.kind, lang)),
@@ -1351,10 +1351,10 @@ export class GuiApp {
       'This program cannot crack anyone’s wallet. Never type a seed phrase that controls real funds into any program, including this one.',
     ];
     const node = el('div', {},
-      section('BIP-39: NEON TERMINAL', META.version),
+      section('BIP-39: ENIGMA TERMINAL', META.version),
       el('div', { class: 'prose' }, ...lines.map((line) => el('p', { text: line }))),
       el('div', { class: 'row' },
-        el('a', { class: 'btn', href: 'https://github.com/legenki/neon-terminal',
+        el('a', { class: 'btn', href: 'https://github.com/legenki/enigma-terminal',
           target: '_blank', rel: 'noopener', text: 'Source on GitHub ↗' })));
     return { node, api: {} };
   }

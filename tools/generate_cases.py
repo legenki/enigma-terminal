@@ -29,7 +29,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from neon_terminal.crypto_engine import (  # noqa: E402
+from enigma_terminal.crypto_engine import (  # noqa: E402
     WORDLIST, entropy_to_mnemonic, fingerprint, index_of, validate, word_at,
 )
 
@@ -40,7 +40,7 @@ CASES_PER_ACT = CASES_PER_CLIENT // ACTS
 GRID_COLUMNS = 16                # 2048 words as 128 rows x 16 columns
 
 #: Deterministic: the same board every build, on every machine.
-MASTER_SEED = "bip39-neon-terminal/contract-board/v1"
+MASTER_SEED = "bip39-enigma-terminal/contract-board/v1"
 
 
 def rng_for(*parts: object) -> random.Random:

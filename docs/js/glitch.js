@@ -3,7 +3,7 @@
 // WebGL CRT pass belongs to the terminal, this only has to survive being on
 // screen all the time.
 
-const TITLE = 'BIP-39: NEON TERMINAL';
+const TITLE = 'BIP-39: ENIGMA TERMINAL';
 const SUBTITLE = 'REAL NET BUILD';
 
 export class GlitchBanner {

@@ -4,8 +4,8 @@ import re
 
 import pytest
 
-from neon_terminal import crypto_engine as ce
-from neon_terminal.cases import Campaign, Progress
+from enigma_terminal import crypto_engine as ce
+from enigma_terminal.cases import Campaign, Progress
 
 from .answers import LEGACY_ADDRESSES, SOLUTIONS, UNRELATED_MNEMONIC
 

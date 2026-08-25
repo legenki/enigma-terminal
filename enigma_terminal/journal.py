@@ -92,10 +92,10 @@ class Journal:
 
     @staticmethod
     def default_path() -> Path:
-        base = os.environ.get("NEON_TERMINAL_HOME")
+        base = os.environ.get("ENIGMA_TERMINAL_HOME")
         if base:
             return Path(base) / "journal.json"
-        return Path.home() / ".neon_terminal" / "journal.json"
+        return Path.home() / ".enigma_terminal" / "journal.json"
 
     def _read(self) -> list[Entry]:
         try:
@@ -182,7 +182,7 @@ class Journal:
 
     def to_text(self) -> str:
         lines = [
-            "INVESTIGATION JOURNAL // BIP-39: NEON TERMINAL",
+            "INVESTIGATION JOURNAL // BIP-39: ENIGMA TERMINAL",
             f"Exported: {time.strftime('%Y-%m-%d %H:%M:%S')}",
             f"Entries: {len(self.entries)}",
             "",
