@@ -22,12 +22,14 @@ except ImportError:
     exit(1)
 
 # Configure API key
-api_key = os.environ.get("GEMINI_API_KEY")
+api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
 if not api_key:
-    print("Warning: GEMINI_API_KEY is not set. The script will fail when making requests.")
-else:
-    genai.configure(api_key=api_key)
+    print("\n[!] ОШИБКА: Ключ API не найден!")
+    print("Пожалуйста, выполните команду перед запуском скрипта:")
+    print("export GEMINI_API_KEY='ваш_ключ_от_gemini'")
+    exit(1)
 
+genai.configure(api_key=api_key)
 # The model name from your dashboard
 MODEL_NAME = "gemini-3.1-flash-lite"
 # (If the API throws a "model not found" error, you can change this to "gemini-1.5-flash" or "gemini-2.5-flash")
