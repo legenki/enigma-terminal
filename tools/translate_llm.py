@@ -114,12 +114,16 @@ def process_dict(d, path=""):
             print(f"Translating to ES: {preview}...")
             d['es'] = translate(d['en'], "Spanish")
             modified = True
+            with open(current_filepath, 'w', encoding='utf-8') as f:
+                json.dump(global_data, f, ensure_ascii=False, indent=2)
             
         if 'pt' not in d or not d['pt'] or (isinstance(d['pt'], list) and not d['pt'][0]):
             preview = str(d['en'])[:40].replace('\n', ' ')
             print(f"Translating to PT: {preview}...")
             d['pt'] = translate(d['en'], "Portuguese")
             modified = True
+            with open(current_filepath, 'w', encoding='utf-8') as f:
+                json.dump(global_data, f, ensure_ascii=False, indent=2)
 
     for k, v in d.items():
         if isinstance(v, dict):
@@ -136,15 +140,14 @@ def process_dict(d, path=""):
 def translate_file(filepath):
     print(f"\nProcessing {filepath}...")
     with open(filepath, 'r', encoding='utf-8') as f:
-        data = json.load(f)
+        global global_data, current_filepath
+        global_data = json.load(f)
+        current_filepath = filepath
         
-    if process_dict(data):
-        with open(filepath, 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
-        print(f"Saved {filepath}")
+    if process_dict(global_data):
+        print(f"Finished {filepath}")
     else:
         print("No missing translations found.")
-
 if __name__ == "__main__":
     translate_file(ROOT / "data" / "cases.json")
     translate_file(ROOT / "data" / "clients.json")
