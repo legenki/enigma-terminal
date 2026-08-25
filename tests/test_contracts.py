@@ -427,3 +427,32 @@ def test_client_motifs_are_actually_translated(clients):
                     f"{client['slug']} {part}/{lang}: {same}/8 words are still "
                     "identical to the English — the list came back untranslated"
                 )
+
+
+def test_renaming_a_client_does_not_move_the_board():
+    """The slug is player-facing text: CLIENTS prints it and BOARD takes it as
+    an argument, so it has to follow the fiction. Seeding the answers from it
+    would mean every rename reshuffled 32 mnemonics under saved games."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "generate_cases", ROOT / "tools" / "generate_cases.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    source = (ROOT / "tools" / "generate_cases.py").read_text(encoding="utf-8")
+    assert 'rng_for(MASTER_SEED, "deck", client["slug"])' not in source
+    assert 'rng_for(MASTER_SEED, client["slug"], slot)' not in source
+
+    renamed = {"slug": "something-else", "board_key": "gost-9"}
+    assert module.board_key(renamed) == "gost-9"
+    # A client that predates board_key still seeds from its slug, unchanged.
+    assert module.board_key({"slug": "meridian"}) == "meridian"
+
+
+def test_every_client_pins_its_board_key(clients):
+    for client in clients:
+        assert client.get("board_key"), (
+            f"{client['slug']} has no board_key, so renaming it would silently "
+            "regenerate its 32 answers"
+        )

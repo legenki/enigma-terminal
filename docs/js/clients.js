@@ -350,7 +350,8 @@ export const CLIENTS = [
       "en": "MERIDIAN wires the fee within the hour and asks nothing about what else you saw.",
       "es": "MERIDIAN transfiere los honorarios en menos de una hora y no pregunta nada sobre qué más viste.",
       "pt": "A MERIDIAN transfere o pagamento dentro de uma hora e não faz perguntas sobre o que mais você viu."
-    }
+    },
+    "board_key": "meridian"
   },
   {
     "slug": "seventh-sign",
@@ -701,7 +702,8 @@ export const CLIENTS = [
       "en": "SEVENTH SIGN sends an envelope with no return address. Inside: a sum, and not one word.",
       "es": "SEVENTH SIGN envía un sobre sin remitente. Dentro: una suma, y ni una sola palabra.",
       "pt": "O SÉTIMO SINAL envia um envelope sem remetente. Dentro: uma quantia, e nenhuma palavra."
-    }
+    },
+    "board_key": "seventh-sign"
   },
   {
     "slug": "deephold",
@@ -1052,7 +1054,8 @@ export const CLIENTS = [
       "en": "DEEPHOLD pays one tide late and never explains why that particular delay.",
       "es": "DEEPHOLD paga con una marea de retraso y nunca explica el porqué de esa demora en particular.",
       "pt": "A DEEPHOLD paga com uma maré de atraso e nunca explica o porquê dessa demora em particular."
-    }
+    },
+    "board_key": "deephold"
   },
   {
     "slug": "vega-orbital",
@@ -1403,7 +1406,8 @@ export const CLIENTS = [
       "en": "VEGA acknowledges two and a half seconds after you have already closed the terminal.",
       "es": "VEGA acusa recibo dos segundos y medio después de que ya has cerrado el terminal.",
       "pt": "VEGA reconhece dois segundos e meio depois de você já ter fechado o terminal."
-    }
+    },
+    "board_key": "vega-orbital"
   },
   {
     "slug": "whitebone",
@@ -1754,7 +1758,8 @@ export const CLIENTS = [
       "en": "WHITEBONE thanks you and offers a check-up. Free of charge. The first time.",
       "es": "WHITEBONE te da las gracias y te ofrece un chequeo. Sin coste alguno. La primera vez.",
       "pt": "WHITEBONE agradece e oferece um check-up. Por conta da casa. Só desta vez."
-    }
+    },
+    "board_key": "whitebone"
   },
   {
     "slug": "gost-9",
@@ -2105,7 +2110,8 @@ export const CLIENTS = [
       "en": "GOST-9 sends notice that your request has been considered. The fee follows in a separate letter. In six months.",
       "es": "GOST-9 notifica que su solicitud ha sido considerada. Los honorarios llegarán en una carta aparte. En seis meses.",
       "pt": "A GOST-9 envia o aviso de que seu pedido foi analisado. A taxa segue em uma carta separada. Em seis meses."
-    }
+    },
+    "board_key": "gost-9"
   },
   {
     "slug": "mica",
@@ -2460,7 +2466,8 @@ export const CLIENTS = [
       "en": "MICA does not thank you. Next month the power bill for your block comes in slightly lower.",
       "es": "MICA no te da las gracias. El mes que viene, la factura de la luz de tu bloque llega un poco más baja.",
       "pt": "MICA não te agradece. No mês que vem, a conta de luz do seu quarteirão vem um pouco mais baixa."
-    }
+    },
+    "board_key": "mica"
   },
   {
     "slug": "last-archive",
@@ -2811,6 +2818,7 @@ export const CLIENTS = [
       "en": "LAST ARCHIVE transfers nothing. A week later a stranger settles your bar tab.",
       "es": "EL ÚLTIMO ARCHIVO no transfiere nada. Una semana después, un desconocido paga tu cuenta en el bar.",
       "pt": "O ÚLTIMO ARQUIVO não transfere nada. Uma semana depois, um estranho paga a sua conta no bar."
-    }
+    },
+    "board_key": "last-archive"
   }
 ];

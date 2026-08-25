@@ -43,6 +43,18 @@ GRID_COLUMNS = 16                # 2048 words as 128 rows x 16 columns
 MASTER_SEED = "bip39-neon-terminal/contract-board/v1"
 
 
+def board_key(client: dict) -> str:
+    """The string that seeds this client's 32 answers.
+
+    Deliberately *not* the slug. The slug is player-facing — it is printed by
+    CLIENTS and typed to open a board — so it has to be free to change with the
+    fiction. Seeding the RNG from it would mean every rename silently reshuffled
+    the client's mnemonics and invalidated saved games. `board_key` is written
+    once and never edited again.
+    """
+    return client.get("board_key", client["slug"])
+
+
 def rng_for(*parts: object) -> random.Random:
     digest = hashlib.sha256("|".join(str(p) for p in parts).encode()).hexdigest()
     return random.Random(int(digest[:16], 16))
@@ -444,14 +456,14 @@ def codename_deck(client: dict) -> list[tuple[int, int]]:
     adjectives = client["motifs"]["adjective"]["ru"]
     nouns = client["motifs"]["noun"]["ru"]
     deck = [(a, n) for a in range(len(adjectives)) for n in range(len(nouns))]
-    rng_for(MASTER_SEED, "deck", client["slug"]).shuffle(deck)
+    rng_for(MASTER_SEED, "deck", board_key(client)).shuffle(deck)
     return deck[:CASES_PER_CLIENT]
 
 
 def make_case(client: dict, slot: int, case_id: int, deck: list) -> dict:
     act = slot // CASES_PER_ACT
     act_index = slot % CASES_PER_ACT + 1
-    rng = rng_for(MASTER_SEED, client["slug"], slot)
+    rng = rng_for(MASTER_SEED, board_key(client), slot)
 
     archetype = client["archetypes"][slot % len(client["archetypes"])]
     # The final act of every client always ends on their signature dialect.
