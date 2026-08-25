@@ -45,7 +45,7 @@ const NET_LOGS = [
 const HELP = {
   en: [
     ['HELP', 'this list'],
-    ['LANG RU|EN', 'switch narrative language'],
+    ['LANG RU|EN|ES|PT', 'switch narrative language'],
     ['CASES', 'list every case file and its state'],
     ['CLIENTS', 'the eight employers and their contract counts'],
     ['BOARD <client>', "list one employer's thirty-two contracts"],
@@ -78,7 +78,7 @@ const HELP = {
   ],
   ru: [
     ['HELP', 'этот список'],
-    ['LANG RU|EN', 'язык повествования'],
+    ['LANG RU|EN|ES|PT', 'язык повествования'],
     ['CASES', 'список дел и их состояние'],
     ['CLIENTS', 'восемь заказчиков и их счётчики'],
     ['BOARD <заказчик>', 'список из 32 контрактов одного заказчика'],
