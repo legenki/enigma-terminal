@@ -1,6 +1,10 @@
 # BIP-39: NEON TERMINAL
 
-**A cyberpunk text detective quest played against the live Bitcoin network.**
+**A text detective quest played against the live Bitcoin network.**
+
+Buenos Aires, 2077. The sudestada has not let go in eighteen days, the Microcentro is ankle-deep,
+and on Calle Florida the arbolitos are quoting three dollar rates at once. The geography is real:
+La City, Recoleta, Dársena Sur, Paseo Colón, Barrio Norte, Balvanera, Catalinas Norte, San Telmo.
 
 You recover seed phrases from detective riddles and type them into a console. Underneath the
 story nothing is simulated: the phrase is validated against the official BIP-39 wordlist —
@@ -110,14 +114,14 @@ A client is not a skin. It sets the **hand**: the way words are hidden in their 
 
 | Client | What they are | Hand |
 |---|---|---|
-| MERIDIAN | private forensic bureau | entropy, plain indices, unique branches |
-| SEVENTH SIGN | grey fund, auction house | the index is sewn into the lot price |
-| DEEPHOLD | subsea data havens | the wordlist as a 128 × 16 grid |
-| VEGA ORBITAL | orbital key custody | the index has to be computed |
-| WHITEBONE | biotech and body-lease clinics | the one branch that fits |
-| GOST-9 | agency of a state that ended | one word redacted, recovered with `COMPLETE` |
-| MICA | mineral conglomerate | mirrored: index = 2049 − the number given |
-| LAST ARCHIVE | archivists, paid in information | a chain of wordlist neighbours |
+| MERIDIAN · Microcentro | private forensic bureau | entropy, plain indices, unique branches |
+| SEVENTH SIGN · Recoleta | grey fund, auction house | the index is sewn into the lot price |
+| DEEPHOLD · Dársena Sur | subsea data havens | the wordlist as a 128 × 16 grid |
+| VEGA ORBITAL · Paseo Colón | orbital key custody | the index has to be computed |
+| WHITEBONE · Barrio Norte | biotech and body-lease clinics | the one branch that fits |
+| GOST-9 · Balvanera | agency of a state that ended | one word redacted, recovered with `COMPLETE` |
+| MICA · Catalinas Norte | mineral conglomerate | mirrored: index = 2049 − the number given |
+| LAST ARCHIVE · San Telmo | archivists, paid in information | a chain of wordlist neighbours |
 
 **The board and the desk are different things.** Contracts is work on offer; Case files is your
 desk. Opening a contract puts it on the desk and keeps it there between sessions; an unsolved one

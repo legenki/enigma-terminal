@@ -26,23 +26,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 1 из восьми в фазе «ПРОВЕРКА».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 1 of eight in the 'VETTING' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: дамп памяти рабочей станции",
+     "ВЕЩДОК: выписка из терминала МЕРИДИАНА",
      "МЕРИДИАН думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли."
     ],
     "en": [
-     "EXHIBIT: a workstation memory dump",
+     "EXHIBIT: a MERIDIAN terminal statement",
      "MERIDIAN thinks in entropy. Their analysts recover not words but the bytes the words grew from."
     ]
    },
@@ -165,12 +165,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 2 из восьми в фазе «ПРОВЕРКА».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 2 of eight in the 'VETTING' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -326,12 +326,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 3 из восьми в фазе «ПРОВЕРКА».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 3 of eight in the 'VETTING' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -431,12 +431,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 4 из восьми в фазе «ПРОВЕРКА».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 4 of eight in the 'VETTING' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -570,23 +570,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 5 из восьми в фазе «ПРОВЕРКА».",
-     "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 5 of eight in the 'VETTING' phase.",
-     "The phrase was split between three people. Two of them are willing to cooperate."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: дамп памяти рабочей станции",
+     "ВЕЩДОК: лента аудита, распечатанная на матричном принтере",
      "МЕРИДИАН думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли."
     ],
     "en": [
-     "EXHIBIT: a workstation memory dump",
+     "EXHIBIT: an audit tape off a dot-matrix printer",
      "MERIDIAN thinks in entropy. Their analysts recover not words but the bytes the words grew from."
     ]
    },
@@ -731,12 +731,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 6 из восьми в фазе «ПРОВЕРКА».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 6 of eight in the 'VETTING' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -836,12 +836,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 7 из восьми в фазе «ПРОВЕРКА».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 7 of eight in the 'VETTING' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -975,23 +975,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 8 из восьми в фазе «ПРОВЕРКА».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 8 of eight in the 'VETTING' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: служебная записка без подписи",
+     "ВЕЩДОК: лента аудита, распечатанная на матричном принтере",
      "МЕРИДИАН думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли."
     ],
     "en": [
-     "EXHIBIT: an unsigned internal memo",
+     "EXHIBIT: an audit tape off a dot-matrix printer",
      "MERIDIAN thinks in entropy. Their analysts recover not words but the bytes the words grew from."
     ]
    },
@@ -1136,12 +1136,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 1 из восьми в фазе «ПОДРЯД».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 1 of eight in the 'CONTRACT' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -1241,12 +1241,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 2 из восьми в фазе «ПОДРЯД».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 2 of eight in the 'CONTRACT' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -1380,14 +1380,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 3 из восьми в фазе «ПОДРЯД».",
-     "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
+     "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 3 of eight in the 'CONTRACT' phase.",
-     "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
+     "The key travelled to Mar del Plata with a shipment and came back without its owner."
     ]
    },
    "evidence": {
@@ -1541,12 +1541,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 4 из восьми в фазе «ПОДРЯД».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 4 of eight in the 'CONTRACT' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -1646,23 +1646,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 5 из восьми в фазе «ПОДРЯД».",
-     "Кошелёк числится за человеком, которого не могут найти уже 2 года."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 5 of eight in the 'CONTRACT' phase.",
-     "The wallet is registered to someone nobody has found in 2 years."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: лента аудита, распечатанная на матричном принтере",
+     "ВЕЩДОК: выписка из терминала МЕРИДИАНА",
      "МЕРИДИАН думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли."
     ],
     "en": [
-     "EXHIBIT: an audit tape off a dot-matrix printer",
+     "EXHIBIT: a MERIDIAN terminal statement",
      "MERIDIAN thinks in entropy. Their analysts recover not words but the bytes the words grew from."
     ]
    },
@@ -1785,12 +1785,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 6 из восьми в фазе «ПОДРЯД».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 6 of eight in the 'CONTRACT' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -1946,23 +1946,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 7 из восьми в фазе «ПОДРЯД».",
-     "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 7 of eight in the 'CONTRACT' phase.",
-     "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: служебная записка без подписи",
+     "ВЕЩДОК: выписка из терминала МЕРИДИАНА",
      "МЕРИДИАН думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли."
     ],
     "en": [
-     "EXHIBIT: an unsigned internal memo",
+     "EXHIBIT: a MERIDIAN terminal statement",
      "MERIDIAN thinks in entropy. Their analysts recover not words but the bytes the words grew from."
     ]
    },
@@ -2051,12 +2051,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 8 из восьми в фазе «ПОДРЯД».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 8 of eight in the 'CONTRACT' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -2190,23 +2190,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 1 из восьми в фазе «АУДИТ».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 1 of eight in the 'AUDIT' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: выписка из терминала МЕРИДИАНА",
+     "ВЕЩДОК: лента аудита, распечатанная на матричном принтере",
      "МЕРИДИАН думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли."
     ],
     "en": [
-     "EXHIBIT: a MERIDIAN terminal statement",
+     "EXHIBIT: an audit tape off a dot-matrix printer",
      "MERIDIAN thinks in entropy. Their analysts recover not words but the bytes the words grew from."
     ]
    },
@@ -2351,12 +2351,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 2 из восьми в фазе «АУДИТ».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 2 of eight in the 'AUDIT' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -2456,12 +2456,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 3 из восьми в фазе «АУДИТ».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 3 of eight in the 'AUDIT' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -2595,23 +2595,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 4 из восьми в фазе «АУДИТ».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 4 of eight in the 'AUDIT' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: лента аудита, распечатанная на матричном принтере",
+     "ВЕЩДОК: дамп памяти рабочей станции",
      "МЕРИДИАН думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли."
     ],
     "en": [
-     "EXHIBIT: an audit tape off a dot-matrix printer",
+     "EXHIBIT: a workstation memory dump",
      "MERIDIAN thinks in entropy. Their analysts recover not words but the bytes the words grew from."
     ]
    },
@@ -2756,12 +2756,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 5 из восьми в фазе «АУДИТ».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 5 of eight in the 'AUDIT' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -2861,23 +2861,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 6 из восьми в фазе «АУДИТ».",
-     "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 6 of eight in the 'AUDIT' phase.",
-     "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: выписка из терминала МЕРИДИАНА",
+     "ВЕЩДОК: лента аудита, распечатанная на матричном принтере",
      "МЕРИДИАН думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли."
     ],
     "en": [
-     "EXHIBIT: a MERIDIAN terminal statement",
+     "EXHIBIT: an audit tape off a dot-matrix printer",
      "MERIDIAN thinks in entropy. Their analysts recover not words but the bytes the words grew from."
     ]
    },
@@ -3000,23 +3000,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 7 из восьми в фазе «АУДИТ».",
-     "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 11 года назад."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 7 of eight in the 'AUDIT' phase.",
-     "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
+     "The owner kept the key in a box on Reconquista. The bank moved out 11 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: лента аудита, распечатанная на матричном принтере",
+     "ВЕЩДОК: дамп памяти рабочей станции",
      "МЕРИДИАН думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли."
     ],
     "en": [
-     "EXHIBIT: an audit tape off a dot-matrix printer",
+     "EXHIBIT: a workstation memory dump",
      "MERIDIAN thinks in entropy. Their analysts recover not words but the bytes the words grew from."
     ]
    },
@@ -3161,23 +3161,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 8 из восьми в фазе «АУДИТ».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 5 года назад."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 8 of eight in the 'AUDIT' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "The owner kept the key in a box on Reconquista. The bank moved out 5 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: выписка из терминала МЕРИДИАНА",
+     "ВЕЩДОК: служебная записка без подписи",
      "МЕРИДИАН думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли."
     ],
     "en": [
-     "EXHIBIT: a MERIDIAN terminal statement",
+     "EXHIBIT: an unsigned internal memo",
      "MERIDIAN thinks in entropy. Their analysts recover not words but the bytes the words grew from."
     ]
    },
@@ -3266,23 +3266,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 1 из восьми в фазе «ЗАКРЫТЫЙ КОНТУР».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 1 of eight in the 'CLOSED LOOP' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "The key travelled to Mar del Plata with a shipment and came back without its owner."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: дамп памяти рабочей станции",
+     "ВЕЩДОК: выписка из терминала МЕРИДИАНА",
      "МЕРИДИАН думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли."
     ],
     "en": [
-     "EXHIBIT: a workstation memory dump",
+     "EXHIBIT: a MERIDIAN terminal statement",
      "MERIDIAN thinks in entropy. Their analysts recover not words but the bytes the words grew from."
     ]
    },
@@ -3349,12 +3349,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 2 из восьми в фазе «ЗАКРЫТЫЙ КОНТУР».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 2 of eight in the 'CLOSED LOOP' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -3432,12 +3432,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 3 из восьми в фазе «ЗАКРЫТЫЙ КОНТУР».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 3 of eight in the 'CLOSED LOOP' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -3515,12 +3515,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 4 из восьми в фазе «ЗАКРЫТЫЙ КОНТУР».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 4 of eight in the 'CLOSED LOOP' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -3598,12 +3598,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 5 из восьми в фазе «ЗАКРЫТЫЙ КОНТУР».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 5 of eight in the 'CLOSED LOOP' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -3681,12 +3681,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 6 из восьми в фазе «ЗАКРЫТЫЙ КОНТУР».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 6 of eight in the 'CLOSED LOOP' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -3764,12 +3764,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 7 из восьми в фазе «ЗАКРЫТЫЙ КОНТУР».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 7 of eight in the 'CLOSED LOOP' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -3847,12 +3847,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: МЕРИДИАН. Район: Старая Биржа.",
+     "Заказчик: МЕРИДИАН. Район: Микросентро, La City.",
      "Дело 8 из восьми в фазе «ЗАКРЫТЫЙ КОНТУР».",
      "Кошелёк числится за человеком, которого не могут найти уже 9 года."
     ],
     "en": [
-     "Client: MERIDIAN. District: The Old Exchange.",
+     "Client: MERIDIAN. District: Microcentro, La City.",
      "Case 8 of eight in the 'CLOSED LOOP' phase.",
      "The wallet is registered to someone nobody has found in 9 years."
     ]
@@ -3984,12 +3984,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 1 из восьми в фазе «ПРЕДПРОСМОТР».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 1 of eight in the 'PREVIEW' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -4145,12 +4145,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 2 из восьми в фазе «ПРЕДПРОСМОТР».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 2 of eight in the 'PREVIEW' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -4306,12 +4306,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 3 из восьми в фазе «ПРЕДПРОСМОТР».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 3 of eight in the 'PREVIEW' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -4467,23 +4467,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 4 из восьми в фазе «ПРЕДПРОСМОТР».",
-     "Кошелёк числится за человеком, которого не могут найти уже 5 года."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 2 года назад."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 4 of eight in the 'PREVIEW' phase.",
-     "The wallet is registered to someone nobody has found in 5 years."
+     "The owner kept the key in a box on Reconquista. The bank moved out 2 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: страница аукционного каталога",
+     "ВЕЩДОК: квитанция о переходе права",
      "СЕДЬМОЙ ЗНАК прячет слова в суммах. Смотри не на лот, а на последние цифры цены."
     ],
     "en": [
-     "EXHIBIT: a page from the auction catalogue",
+     "EXHIBIT: a transfer-of-title receipt",
      "SEVENTH SIGN hides words inside amounts. Never mind the lot — read the last digits of the price."
     ]
    },
@@ -4628,12 +4628,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 5 из восьми в фазе «ПРЕДПРОСМОТР».",
      "Кошелёк числится за человеком, которого не могут найти уже 6 года."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 5 of eight in the 'PREVIEW' phase.",
      "The wallet is registered to someone nobody has found in 6 years."
     ]
@@ -4789,12 +4789,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 6 из восьми в фазе «ПРЕДПРОСМОТР».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 6 of eight in the 'PREVIEW' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -4950,23 +4950,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 7 из восьми в фазе «ПРЕДПРОСМОТР».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 7 of eight in the 'PREVIEW' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: квитанция о переходе права",
+     "ВЕЩДОК: счёт, выписанный от руки",
      "СЕДЬМОЙ ЗНАК прячет слова в суммах. Смотри не на лот, а на последние цифры цены."
     ],
     "en": [
-     "EXHIBIT: a transfer-of-title receipt",
+     "EXHIBIT: a hand-written invoice",
      "SEVENTH SIGN hides words inside amounts. Never mind the lot — read the last digits of the price."
     ]
    },
@@ -5111,12 +5111,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 8 из восьми в фазе «ПРЕДПРОСМОТР».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 8 of eight in the 'PREVIEW' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -5272,14 +5272,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 1 из восьми в фазе «ТОРГИ».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 4 года назад."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 1 of eight in the 'BIDDING' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "The owner kept the key in a box on Reconquista. The bank moved out 4 years ago."
     ]
    },
    "evidence": {
@@ -5433,12 +5433,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 2 из восьми в фазе «ТОРГИ».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 2 of eight in the 'BIDDING' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -5594,12 +5594,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 3 из восьми в фазе «ТОРГИ».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 3 of eight in the 'BIDDING' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -5755,12 +5755,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 4 из восьми в фазе «ТОРГИ».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 4 of eight in the 'BIDDING' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -5916,12 +5916,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 5 из восьми в фазе «ТОРГИ».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 5 of eight in the 'BIDDING' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -6077,12 +6077,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 6 из восьми в фазе «ТОРГИ».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 6 of eight in the 'BIDDING' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -6238,12 +6238,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 7 из восьми в фазе «ТОРГИ».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 7 of eight in the 'BIDDING' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -6399,14 +6399,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 8 из восьми в фазе «ТОРГИ».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 8 of eight in the 'BIDDING' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
@@ -6560,12 +6560,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 1 из восьми в фазе «МОЛОТОК».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 1 of eight in the 'THE HAMMER' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -6721,23 +6721,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 2 из восьми в фазе «МОЛОТОК».",
-     "Кошелёк числится за человеком, которого не могут найти уже 2 года."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 2 of eight in the 'THE HAMMER' phase.",
-     "The wallet is registered to someone nobody has found in 2 years."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: список отозванных лотов",
+     "ВЕЩДОК: страница аукционного каталога",
      "СЕДЬМОЙ ЗНАК прячет слова в суммах. Смотри не на лот, а на последние цифры цены."
     ],
     "en": [
-     "EXHIBIT: a list of withdrawn lots",
+     "EXHIBIT: a page from the auction catalogue",
      "SEVENTH SIGN hides words inside amounts. Never mind the lot — read the last digits of the price."
     ]
    },
@@ -6882,12 +6882,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 3 из восьми в фазе «МОЛОТОК».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 3 of eight in the 'THE HAMMER' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -7043,12 +7043,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 4 из восьми в фазе «МОЛОТОК».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 4 of eight in the 'THE HAMMER' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -7204,14 +7204,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 5 из восьми в фазе «МОЛОТОК».",
-     "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 5 of eight in the 'THE HAMMER' phase.",
-     "The key left the office on closing day. Along with the coffee machine."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
@@ -7365,12 +7365,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 6 из восьми в фазе «МОЛОТОК».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 6 of eight in the 'THE HAMMER' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -7526,23 +7526,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 7 из восьми в фазе «МОЛОТОК».",
-     "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 7 of eight in the 'THE HAMMER' phase.",
-     "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: квитанция о переходе права",
+     "ВЕЩДОК: список отозванных лотов",
      "СЕДЬМОЙ ЗНАК прячет слова в суммах. Смотри не на лот, а на последние цифры цены."
     ],
     "en": [
-     "EXHIBIT: a transfer-of-title receipt",
+     "EXHIBIT: a list of withdrawn lots",
      "SEVENTH SIGN hides words inside amounts. Never mind the lot — read the last digits of the price."
     ]
    },
@@ -7687,12 +7687,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 8 из восьми в фазе «МОЛОТОК».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 8 of eight in the 'THE HAMMER' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -7848,23 +7848,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 1 из восьми в фазе «ЧАСТНАЯ ПРОДАЖА».",
-     "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 1 of eight in the 'PRIVATE SALE' phase.",
-     "The key left the office on closing day. Along with the coffee machine."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: страница аукционного каталога",
+     "ВЕЩДОК: список отозванных лотов",
      "СЕДЬМОЙ ЗНАК прячет слова в суммах. Смотри не на лот, а на последние цифры цены."
     ],
     "en": [
-     "EXHIBIT: a page from the auction catalogue",
+     "EXHIBIT: a list of withdrawn lots",
      "SEVENTH SIGN hides words inside amounts. Never mind the lot — read the last digits of the price."
     ]
    },
@@ -8009,23 +8009,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 2 из восьми в фазе «ЧАСТНАЯ ПРОДАЖА».",
-     "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 7 года назад."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 2 of eight in the 'PRIVATE SALE' phase.",
-     "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
+     "The owner kept the key in a box on Reconquista. The bank moved out 7 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: список отозванных лотов",
+     "ВЕЩДОК: квитанция о переходе права",
      "СЕДЬМОЙ ЗНАК прячет слова в суммах. Смотри не на лот, а на последние цифры цены."
     ],
     "en": [
-     "EXHIBIT: a list of withdrawn lots",
+     "EXHIBIT: a transfer-of-title receipt",
      "SEVENTH SIGN hides words inside amounts. Never mind the lot — read the last digits of the price."
     ]
    },
@@ -8170,23 +8170,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 3 из восьми в фазе «ЧАСТНАЯ ПРОДАЖА».",
-     "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 3 of eight in the 'PRIVATE SALE' phase.",
-     "The key left the office on closing day. Along with the coffee machine."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: список отозванных лотов",
+     "ВЕЩДОК: квитанция о переходе права",
      "СЕДЬМОЙ ЗНАК прячет слова в суммах. Смотри не на лот, а на последние цифры цены."
     ],
     "en": [
-     "EXHIBIT: a list of withdrawn lots",
+     "EXHIBIT: a transfer-of-title receipt",
      "SEVENTH SIGN hides words inside amounts. Never mind the lot — read the last digits of the price."
     ]
    },
@@ -8331,12 +8331,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 4 из восьми в фазе «ЧАСТНАЯ ПРОДАЖА».",
      "Кошелёк числится за человеком, которого не могут найти уже 7 года."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 4 of eight in the 'PRIVATE SALE' phase.",
      "The wallet is registered to someone nobody has found in 7 years."
     ]
@@ -8492,12 +8492,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 5 из восьми в фазе «ЧАСТНАЯ ПРОДАЖА».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 5 of eight in the 'PRIVATE SALE' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -8653,23 +8653,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 6 из восьми в фазе «ЧАСТНАЯ ПРОДАЖА».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 6 of eight in the 'PRIVATE SALE' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: страница аукционного каталога",
+     "ВЕЩДОК: счёт, выписанный от руки",
      "СЕДЬМОЙ ЗНАК прячет слова в суммах. Смотри не на лот, а на последние цифры цены."
     ],
     "en": [
-     "EXHIBIT: a page from the auction catalogue",
+     "EXHIBIT: a hand-written invoice",
      "SEVENTH SIGN hides words inside amounts. Never mind the lot — read the last digits of the price."
     ]
    },
@@ -8814,14 +8814,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 7 из восьми в фазе «ЧАСТНАЯ ПРОДАЖА».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 7 of eight in the 'PRIVATE SALE' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
@@ -8975,12 +8975,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Аукционный квартал.",
+     "Заказчик: СЕДЬМОЙ ЗНАК. Район: Реколета.",
      "Дело 8 из восьми в фазе «ЧАСТНАЯ ПРОДАЖА».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: SEVENTH SIGN. District: The Auction Quarter.",
+     "Client: SEVENTH SIGN. District: Recoleta.",
      "Case 8 of eight in the 'PRIVATE SALE' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -9146,12 +9146,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 1 из восьми в фазе «ПОГРУЖЕНИЕ».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 1 of eight in the 'DESCENT' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -9319,14 +9319,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 2 из восьми в фазе «ПОГРУЖЕНИЕ».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 2 of eight in the 'DESCENT' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "The key travelled to Mar del Plata with a shipment and came back without its owner."
     ]
    },
    "evidence": {
@@ -9424,12 +9424,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 3 из восьми в фазе «ПОГРУЖЕНИЕ».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 3 of eight in the 'DESCENT' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -9575,14 +9575,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 4 из восьми в фазе «ПОГРУЖЕНИЕ».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 4 of eight in the 'DESCENT' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "The key travelled to Mar del Plata with a shipment and came back without its owner."
     ]
    },
    "evidence": {
@@ -9748,14 +9748,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 5 из восьми в фазе «ПОГРУЖЕНИЕ».",
-     "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 5 of eight in the 'DESCENT' phase.",
-     "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
@@ -9853,12 +9853,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 6 из восьми в фазе «ПОГРУЖЕНИЕ».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 6 of eight in the 'DESCENT' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -10004,12 +10004,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 7 из восьми в фазе «ПОГРУЖЕНИЕ».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 7 of eight in the 'DESCENT' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -10177,12 +10177,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 8 из восьми в фазе «ПОГРУЖЕНИЕ».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 8 of eight in the 'DESCENT' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -10282,14 +10282,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 1 из восьми в фазе «ДАВЛЕНИЕ».",
-     "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 1 of eight in the 'PRESSURE' phase.",
-     "The phrase was split between three people. Two of them are willing to cooperate."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
@@ -10433,12 +10433,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 2 из восьми в фазе «ДАВЛЕНИЕ».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 2 of eight in the 'PRESSURE' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -10606,12 +10606,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 3 из восьми в фазе «ДАВЛЕНИЕ».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 3 of eight in the 'PRESSURE' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -10711,12 +10711,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 4 из восьми в фазе «ДАВЛЕНИЕ».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 4 of eight in the 'PRESSURE' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -10862,14 +10862,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 5 из восьми в фазе «ДАВЛЕНИЕ».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 3 года назад."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 5 of eight in the 'PRESSURE' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "The owner kept the key in a box on Reconquista. The bank moved out 3 years ago."
     ]
    },
    "evidence": {
@@ -11035,12 +11035,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 6 из восьми в фазе «ДАВЛЕНИЕ».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 6 of eight in the 'PRESSURE' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -11140,14 +11140,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 7 из восьми в фазе «ДАВЛЕНИЕ».",
-     "Кошелёк числится за человеком, которого не могут найти уже 5 года."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 7 of eight in the 'PRESSURE' phase.",
-     "The wallet is registered to someone nobody has found in 5 years."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
@@ -11291,12 +11291,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 8 из восьми в фазе «ДАВЛЕНИЕ».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 8 of eight in the 'PRESSURE' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -11464,12 +11464,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 1 из восьми в фазе «ТЕМНОТА».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 1 of eight in the 'DARKNESS' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -11569,14 +11569,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 2 из восьми в фазе «ТЕМНОТА».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 2 of eight in the 'DARKNESS' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
@@ -11720,12 +11720,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 3 из восьми в фазе «ТЕМНОТА».",
      "Кошелёк числится за человеком, которого не могут найти уже 9 года."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 3 of eight in the 'DARKNESS' phase.",
      "The wallet is registered to someone nobody has found in 9 years."
     ]
@@ -11893,12 +11893,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 4 из восьми в фазе «ТЕМНОТА».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 4 of eight in the 'DARKNESS' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -11998,14 +11998,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 5 из восьми в фазе «ТЕМНОТА».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 5 of eight in the 'DARKNESS' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "The key travelled to Mar del Plata with a shipment and came back without its owner."
     ]
    },
    "evidence": {
@@ -12149,23 +12149,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 6 из восьми в фазе «ТЕМНОТА».",
-     "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 6 of eight in the 'DARKNESS' phase.",
-     "The phrase was split between three people. Two of them are willing to cooperate."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: телеметрия с придонного датчика",
+     "ВЕЩДОК: карта сектора с пометками карандашом",
      "ГЛУБИНА раскладывает словарь по сетке: 128 рядов на 16 колонок. Слово — это точка на карте."
     ],
     "en": [
-     "EXHIBIT: telemetry from a seabed sensor",
+     "EXHIBIT: a sector chart marked in pencil",
      "DEEPHOLD lays the wordlist on a grid: 128 rows by 16 columns. A word is a point on a chart."
     ]
    },
@@ -12322,14 +12322,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 7 из восьми в фазе «ТЕМНОТА».",
-     "Кошелёк числится за человеком, которого не могут найти уже 3 года."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 7 of eight in the 'DARKNESS' phase.",
-     "The wallet is registered to someone nobody has found in 3 years."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
@@ -12427,23 +12427,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 8 из восьми в фазе «ТЕМНОТА».",
-     "Кошелёк числится за человеком, которого не могут найти уже 6 года."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 8 of eight in the 'DARKNESS' phase.",
-     "The wallet is registered to someone nobody has found in 6 years."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: вахтенный журнал платформы",
+     "ВЕЩДОК: радиограмма с борта",
      "ГЛУБИНА раскладывает словарь по сетке: 128 рядов на 16 колонок. Слово — это точка на карте."
     ],
     "en": [
-     "EXHIBIT: a platform watch log",
+     "EXHIBIT: a radio message from the deck",
      "DEEPHOLD lays the wordlist on a grid: 128 rows by 16 columns. A word is a point on a chart."
     ]
    },
@@ -12578,12 +12578,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 1 из восьми в фазе «ДНО».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 1 of eight in the 'THE FLOOR' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -12751,23 +12751,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 2 из восьми в фазе «ДНО».",
-     "Кошелёк числится за человеком, которого не могут найти уже 9 года."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 2 of eight in the 'THE FLOOR' phase.",
-     "The wallet is registered to someone nobody has found in 9 years."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: телеметрия с придонного датчика",
+     "ВЕЩДОК: карта сектора с пометками карандашом",
      "ГЛУБИНА раскладывает словарь по сетке: 128 рядов на 16 колонок. Слово — это точка на карте."
     ],
     "en": [
-     "EXHIBIT: telemetry from a seabed sensor",
+     "EXHIBIT: a sector chart marked in pencil",
      "DEEPHOLD lays the wordlist on a grid: 128 rows by 16 columns. A word is a point on a chart."
     ]
    },
@@ -12924,23 +12924,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 3 из восьми в фазе «ДНО».",
-     "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 3 of eight in the 'THE FLOOR' phase.",
-     "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: вахтенный журнал платформы",
+     "ВЕЩДОК: телеметрия с придонного датчика",
      "ГЛУБИНА раскладывает словарь по сетке: 128 рядов на 16 колонок. Слово — это точка на карте."
     ],
     "en": [
-     "EXHIBIT: a platform watch log",
+     "EXHIBIT: telemetry from a seabed sensor",
      "DEEPHOLD lays the wordlist on a grid: 128 rows by 16 columns. A word is a point on a chart."
     ]
    },
@@ -13097,12 +13097,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 4 из восьми в фазе «ДНО».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 4 of eight in the 'THE FLOOR' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -13270,12 +13270,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 5 из восьми в фазе «ДНО».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 5 of eight in the 'THE FLOOR' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -13443,12 +13443,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 6 из восьми в фазе «ДНО».",
      "Кошелёк числится за человеком, которого не могут найти уже 3 года."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 6 of eight in the 'THE FLOOR' phase.",
      "The wallet is registered to someone nobody has found in 3 years."
     ]
@@ -13616,12 +13616,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 7 из восьми в фазе «ДНО».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 7 of eight in the 'THE FLOOR' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -13789,12 +13789,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГЛУБИНА. Район: Шельф.",
+     "Заказчик: ГЛУБИНА. Район: Дарсена-Сур.",
      "Дело 8 из восьми в фазе «ДНО».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: DEEPHOLD. District: The Shelf.",
+     "Client: DEEPHOLD. District: Dársena Sur.",
      "Case 8 of eight in the 'THE FLOOR' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -13948,12 +13948,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 1 из восьми в фазе «ВЫВЕДЕНИЕ».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 1 of eight in the 'INSERTION' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -14109,23 +14109,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 2 из восьми в фазе «ВЫВЕДЕНИЕ».",
-     "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 2 of eight in the 'INSERTION' phase.",
-     "The key left the office on closing day. Along with the coffee machine."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: лог наземной станции",
+     "ВЕЩДОК: телеметрический пакет с задержкой 2,5 с",
      "ВЕГА диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить."
     ],
     "en": [
-     "EXHIBIT: a ground-station log",
+     "EXHIBIT: a telemetry packet 2.5 s late",
      "VEGA dictates numbers rather than words, and never plainly. The index has to be computed."
     ]
    },
@@ -14282,12 +14282,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 3 из восьми в фазе «ВЫВЕДЕНИЕ».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 3 of eight in the 'INSERTION' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -14443,23 +14443,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 4 из восьми в фазе «ВЫВЕДЕНИЕ».",
-     "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 4 of eight in the 'INSERTION' phase.",
-     "The key left the office on closing day. Along with the coffee machine."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: расчёт баллистика на полях распечатки",
+     "ВЕЩДОК: телеметрический пакет с задержкой 2,5 с",
      "ВЕГА диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить."
     ],
     "en": [
-     "EXHIBIT: a ballistician's working in a printout margin",
+     "EXHIBIT: a telemetry packet 2.5 s late",
      "VEGA dictates numbers rather than words, and never plainly. The index has to be computed."
     ]
    },
@@ -14604,12 +14604,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 5 из восьми в фазе «ВЫВЕДЕНИЕ».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 5 of eight in the 'INSERTION' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -14777,12 +14777,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 6 из восьми в фазе «ВЫВЕДЕНИЕ».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 6 of eight in the 'INSERTION' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -14938,12 +14938,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 7 из восьми в фазе «ВЫВЕДЕНИЕ».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 7 of eight in the 'INSERTION' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -15099,14 +15099,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 8 из восьми в фазе «ВЫВЕДЕНИЕ».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 8 of eight in the 'INSERTION' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
@@ -15272,12 +15272,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 1 из восьми в фазе «АПОГЕЙ».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 1 of eight in the 'APOGEE' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -15433,12 +15433,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 2 из восьми в фазе «АПОГЕЙ».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 2 of eight in the 'APOGEE' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -15594,23 +15594,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 3 из восьми в фазе «АПОГЕЙ».",
-     "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 9 года назад."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 3 of eight in the 'APOGEE' phase.",
-     "The key left the office on closing day. Along with the coffee machine."
+     "The owner kept the key in a box on Reconquista. The bank moved out 9 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: расчёт баллистика на полях распечатки",
+     "ВЕЩДОК: снимок с борта, сжатый до неузнаваемости",
      "ВЕГА диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить."
     ],
     "en": [
-     "EXHIBIT: a ballistician's working in a printout margin",
+     "EXHIBIT: an on-board image compressed past recognition",
      "VEGA dictates numbers rather than words, and never plainly. The index has to be computed."
     ]
    },
@@ -15767,23 +15767,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 4 из восьми в фазе «АПОГЕЙ».",
-     "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 4 of eight in the 'APOGEE' phase.",
-     "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: телеметрический пакет с задержкой 2,5 с",
+     "ВЕЩДОК: лог наземной станции",
      "ВЕГА диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить."
     ],
     "en": [
-     "EXHIBIT: a telemetry packet 2.5 s late",
+     "EXHIBIT: a ground-station log",
      "VEGA dictates numbers rather than words, and never plainly. The index has to be computed."
     ]
    },
@@ -15928,12 +15928,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 5 из восьми в фазе «АПОГЕЙ».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 5 of eight in the 'APOGEE' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -16089,14 +16089,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 6 из восьми в фазе «АПОГЕЙ».",
-     "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 6 of eight in the 'APOGEE' phase.",
-     "The key left the office on closing day. Along with the coffee machine."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
@@ -16262,12 +16262,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 7 из восьми в фазе «АПОГЕЙ».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 7 of eight in the 'APOGEE' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -16423,12 +16423,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 8 из восьми в фазе «АПОГЕЙ».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 8 of eight in the 'APOGEE' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -16584,12 +16584,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 1 из восьми в фазе «ТЕНЬ ЗЕМЛИ».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 1 of eight in the 'EARTH SHADOW' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -16757,12 +16757,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 2 из восьми в фазе «ТЕНЬ ЗЕМЛИ».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 2 of eight in the 'EARTH SHADOW' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -16918,12 +16918,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 3 из восьми в фазе «ТЕНЬ ЗЕМЛИ».",
      "Кошелёк числится за человеком, которого не могут найти уже 2 года."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 3 of eight in the 'EARTH SHADOW' phase.",
      "The wallet is registered to someone nobody has found in 2 years."
     ]
@@ -17079,12 +17079,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 4 из восьми в фазе «ТЕНЬ ЗЕМЛИ».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 4 of eight in the 'EARTH SHADOW' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -17252,12 +17252,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 5 из восьми в фазе «ТЕНЬ ЗЕМЛИ».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 5 of eight in the 'EARTH SHADOW' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -17413,12 +17413,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 6 из восьми в фазе «ТЕНЬ ЗЕМЛИ».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 6 of eight in the 'EARTH SHADOW' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -17574,23 +17574,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 7 из восьми в фазе «ТЕНЬ ЗЕМЛИ».",
-     "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
+     "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 7 of eight in the 'EARTH SHADOW' phase.",
-     "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
+     "The key travelled to Mar del Plata with a shipment and came back without its owner."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: снимок с борта, сжатый до неузнаваемости",
+     "ВЕЩДОК: телеметрический пакет с задержкой 2,5 с",
      "ВЕГА диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить."
     ],
     "en": [
-     "EXHIBIT: an on-board image compressed past recognition",
+     "EXHIBIT: a telemetry packet 2.5 s late",
      "VEGA dictates numbers rather than words, and never plainly. The index has to be computed."
     ]
    },
@@ -17747,12 +17747,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 8 из восьми в фазе «ТЕНЬ ЗЕМЛИ».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 8 of eight in the 'EARTH SHADOW' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -17908,23 +17908,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 1 из восьми в фазе «СХОД С ОРБИТЫ».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 1 of eight in the 'DEORBIT' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: расчёт баллистика на полях распечатки",
+     "ВЕЩДОК: телеметрический пакет с задержкой 2,5 с",
      "ВЕГА диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить."
     ],
     "en": [
-     "EXHIBIT: a ballistician's working in a printout margin",
+     "EXHIBIT: a telemetry packet 2.5 s late",
      "VEGA dictates numbers rather than words, and never plainly. The index has to be computed."
     ]
    },
@@ -18069,14 +18069,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 2 из восьми в фазе «СХОД С ОРБИТЫ».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 2 of eight in the 'DEORBIT' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
@@ -18230,12 +18230,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 3 из восьми в фазе «СХОД С ОРБИТЫ».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 3 of eight in the 'DEORBIT' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -18391,23 +18391,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 4 из восьми в фазе «СХОД С ОРБИТЫ».",
-     "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 11 года назад."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 4 of eight in the 'DEORBIT' phase.",
-     "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
+     "The owner kept the key in a box on Reconquista. The bank moved out 11 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: телеметрический пакет с задержкой 2,5 с",
+     "ВЕЩДОК: расчёт баллистика на полях распечатки",
      "ВЕГА диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить."
     ],
     "en": [
-     "EXHIBIT: a telemetry packet 2.5 s late",
+     "EXHIBIT: a ballistician's working in a printout margin",
      "VEGA dictates numbers rather than words, and never plainly. The index has to be computed."
     ]
    },
@@ -18552,23 +18552,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 5 из восьми в фазе «СХОД С ОРБИТЫ».",
-     "Кошелёк числится за человеком, которого не могут найти уже 5 года."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 5 of eight in the 'DEORBIT' phase.",
-     "The wallet is registered to someone nobody has found in 5 years."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: телеметрический пакет с задержкой 2,5 с",
+     "ВЕЩДОК: расчёт баллистика на полях распечатки",
      "ВЕГА диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить."
     ],
     "en": [
-     "EXHIBIT: a telemetry packet 2.5 s late",
+     "EXHIBIT: a ballistician's working in a printout margin",
      "VEGA dictates numbers rather than words, and never plainly. The index has to be computed."
     ]
    },
@@ -18713,12 +18713,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 6 из восьми в фазе «СХОД С ОРБИТЫ».",
      "Кошелёк числится за человеком, которого не могут найти уже 2 года."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 6 of eight in the 'DEORBIT' phase.",
      "The wallet is registered to someone nobody has found in 2 years."
     ]
@@ -18874,23 +18874,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 7 из восьми в фазе «СХОД С ОРБИТЫ».",
-     "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
+     "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 7 of eight in the 'DEORBIT' phase.",
-     "The key left the office on closing day. Along with the coffee machine."
+     "The key travelled to Mar del Plata with a shipment and came back without its owner."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: лог наземной станции",
+     "ВЕЩДОК: расчёт баллистика на полях распечатки",
      "ВЕГА диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить."
     ],
     "en": [
-     "EXHIBIT: a ground-station log",
+     "EXHIBIT: a ballistician's working in a printout margin",
      "VEGA dictates numbers rather than words, and never plainly. The index has to be computed."
     ]
    },
@@ -19035,23 +19035,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Лифт.",
+     "Заказчик: ВЕГА-ОРБИТАЛ. Район: Пасео Колон.",
      "Дело 8 из восьми в фазе «СХОД С ОРБИТЫ».",
-     "Кошелёк числится за человеком, которого не могут найти уже 5 года."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: VEGA ORBITAL. District: The Elevator.",
+     "Client: VEGA ORBITAL. District: Paseo Colón.",
      "Case 8 of eight in the 'DEORBIT' phase.",
-     "The wallet is registered to someone nobody has found in 5 years."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: снимок с борта, сжатый до неузнаваемости",
+     "ВЕЩДОК: расчёт баллистика на полях распечатки",
      "ВЕГА диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить."
     ],
     "en": [
-     "EXHIBIT: an on-board image compressed past recognition",
+     "EXHIBIT: a ballistician's working in a printout margin",
      "VEGA dictates numbers rather than words, and never plainly. The index has to be computed."
     ]
    },
@@ -19194,14 +19194,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 1 из восьми в фазе «ПРИЁМ».",
-     "Кошелёк числится за человеком, которого не могут найти уже 4 года."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 1 of eight in the 'ADMISSION' phase.",
-     "The wallet is registered to someone nobody has found in 4 years."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
@@ -19367,12 +19367,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 2 из восьми в фазе «ПРИЁМ».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 2 of eight in the 'ADMISSION' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -19474,12 +19474,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 3 из восьми в фазе «ПРИЁМ».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 3 of eight in the 'ADMISSION' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -19621,14 +19621,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 4 из восьми в фазе «ПРИЁМ».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 4 of eight in the 'ADMISSION' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
@@ -19794,12 +19794,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 5 из восьми в фазе «ПРИЁМ».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 5 of eight in the 'ADMISSION' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -19901,23 +19901,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 6 из восьми в фазе «ПРИЁМ».",
-     "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
+     "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 6 of eight in the 'ADMISSION' phase.",
-     "The key left the office on closing day. Along with the coffee machine."
+     "The key travelled to Mar del Plata with a shipment and came back without its owner."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: распечатка монитора у койки",
+     "ВЕЩДОК: опись личных вещей пациента",
      "БЕЛАЯ КОСТЬ описывает слово через его единственность: такая ветка в словаре одна."
     ],
     "en": [
-     "EXHIBIT: a bedside monitor printout",
+     "EXHIBIT: an inventory of a patient's effects",
      "WHITEBONE describes a word by its uniqueness: only one branch in the list fits."
     ]
    },
@@ -20048,23 +20048,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 7 из восьми в фазе «ПРИЁМ».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 4 года назад."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 7 of eight in the 'ADMISSION' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "The owner kept the key in a box on Reconquista. The bank moved out 4 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: опись личных вещей пациента",
+     "ВЕЩДОК: страница из истории болезни",
      "БЕЛАЯ КОСТЬ описывает слово через его единственность: такая ветка в словаре одна."
     ],
     "en": [
-     "EXHIBIT: an inventory of a patient's effects",
+     "EXHIBIT: a page from a medical history",
      "WHITEBONE describes a word by its uniqueness: only one branch in the list fits."
     ]
    },
@@ -20221,12 +20221,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 8 из восьми в фазе «ПРИЁМ».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 8 of eight in the 'ADMISSION' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -20328,23 +20328,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 1 из восьми в фазе «АНАМНЕЗ».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 1 of eight in the 'HISTORY' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "The key travelled to Mar del Plata with a shipment and came back without its owner."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: опись личных вещей пациента",
+     "ВЕЩДОК: распечатка монитора у койки",
      "БЕЛАЯ КОСТЬ описывает слово через его единственность: такая ветка в словаре одна."
     ],
     "en": [
-     "EXHIBIT: an inventory of a patient's effects",
+     "EXHIBIT: a bedside monitor printout",
      "WHITEBONE describes a word by its uniqueness: only one branch in the list fits."
     ]
    },
@@ -20475,12 +20475,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 2 из восьми в фазе «АНАМНЕЗ».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 2 of eight in the 'HISTORY' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -20648,23 +20648,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 3 из восьми в фазе «АНАМНЕЗ».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 3 of eight in the 'HISTORY' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: страница из истории болезни",
+     "ВЕЩДОК: распечатка монитора у койки",
      "БЕЛАЯ КОСТЬ описывает слово через его единственность: такая ветка в словаре одна."
     ],
     "en": [
-     "EXHIBIT: a page from a medical history",
+     "EXHIBIT: a bedside monitor printout",
      "WHITEBONE describes a word by its uniqueness: only one branch in the list fits."
     ]
    },
@@ -20755,12 +20755,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 4 из восьми в фазе «АНАМНЕЗ».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 4 of eight in the 'HISTORY' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -20902,23 +20902,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 5 из восьми в фазе «АНАМНЕЗ».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 5 of eight in the 'HISTORY' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: бланк информированного согласия",
+     "ВЕЩДОК: опись личных вещей пациента",
      "БЕЛАЯ КОСТЬ описывает слово через его единственность: такая ветка в словаре одна."
     ],
     "en": [
-     "EXHIBIT: an informed-consent form",
+     "EXHIBIT: an inventory of a patient's effects",
      "WHITEBONE describes a word by its uniqueness: only one branch in the list fits."
     ]
    },
@@ -21075,12 +21075,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 6 из восьми в фазе «АНАМНЕЗ».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 6 of eight in the 'HISTORY' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -21182,12 +21182,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 7 из восьми в фазе «АНАМНЕЗ».",
      "Кошелёк числится за человеком, которого не могут найти уже 4 года."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 7 of eight in the 'HISTORY' phase.",
      "The wallet is registered to someone nobody has found in 4 years."
     ]
@@ -21329,12 +21329,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 8 из восьми в фазе «АНАМНЕЗ».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 8 of eight in the 'HISTORY' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -21502,23 +21502,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 1 из восьми в фазе «ОПЕРАЦИЯ».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 1 of eight in the 'SURGERY' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: бланк информированного согласия",
+     "ВЕЩДОК: страница из истории болезни",
      "БЕЛАЯ КОСТЬ описывает слово через его единственность: такая ветка в словаре одна."
     ],
     "en": [
-     "EXHIBIT: an informed-consent form",
+     "EXHIBIT: a page from a medical history",
      "WHITEBONE describes a word by its uniqueness: only one branch in the list fits."
     ]
    },
@@ -21609,12 +21609,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 2 из восьми в фазе «ОПЕРАЦИЯ».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 2 of eight in the 'SURGERY' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -21756,12 +21756,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 3 из восьми в фазе «ОПЕРАЦИЯ».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 3 of eight in the 'SURGERY' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -21929,12 +21929,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 4 из восьми в фазе «ОПЕРАЦИЯ».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 4 of eight in the 'SURGERY' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -22036,23 +22036,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 5 из восьми в фазе «ОПЕРАЦИЯ».",
-     "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
+     "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 5 of eight in the 'SURGERY' phase.",
-     "The phrase was split between three people. Two of them are willing to cooperate."
+     "The key travelled to Mar del Plata with a shipment and came back without its owner."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: распечатка монитора у койки",
+     "ВЕЩДОК: опись личных вещей пациента",
      "БЕЛАЯ КОСТЬ описывает слово через его единственность: такая ветка в словаре одна."
     ],
     "en": [
-     "EXHIBIT: a bedside monitor printout",
+     "EXHIBIT: an inventory of a patient's effects",
      "WHITEBONE describes a word by its uniqueness: only one branch in the list fits."
     ]
    },
@@ -22183,12 +22183,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 6 из восьми в фазе «ОПЕРАЦИЯ».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 6 of eight in the 'SURGERY' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -22356,12 +22356,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 7 из восьми в фазе «ОПЕРАЦИЯ».",
      "Кошелёк числится за человеком, которого не могут найти уже 4 года."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 7 of eight in the 'SURGERY' phase.",
      "The wallet is registered to someone nobody has found in 4 years."
     ]
@@ -22463,12 +22463,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 8 из восьми в фазе «ОПЕРАЦИЯ».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 8 of eight in the 'SURGERY' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -22610,12 +22610,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 1 из восьми в фазе «ВЫПИСКА».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 1 of eight in the 'DISCHARGE' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -22771,12 +22771,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 2 из восьми в фазе «ВЫПИСКА».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 2 of eight in the 'DISCHARGE' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -22932,23 +22932,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 3 из восьми в фазе «ВЫПИСКА».",
-     "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 6 года назад."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 3 of eight in the 'DISCHARGE' phase.",
-     "The phrase was split between three people. Two of them are willing to cooperate."
+     "The owner kept the key in a box on Reconquista. The bank moved out 6 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: опись личных вещей пациента",
+     "ВЕЩДОК: бланк информированного согласия",
      "БЕЛАЯ КОСТЬ описывает слово через его единственность: такая ветка в словаре одна."
     ],
     "en": [
-     "EXHIBIT: an inventory of a patient's effects",
+     "EXHIBIT: an informed-consent form",
      "WHITEBONE describes a word by its uniqueness: only one branch in the list fits."
     ]
    },
@@ -23093,12 +23093,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 4 из восьми в фазе «ВЫПИСКА».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 4 of eight in the 'DISCHARGE' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -23254,23 +23254,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 5 из восьми в фазе «ВЫПИСКА».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 5 года назад."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 5 of eight in the 'DISCHARGE' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "The owner kept the key in a box on Reconquista. The bank moved out 5 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: опись личных вещей пациента",
+     "ВЕЩДОК: страница из истории болезни",
      "БЕЛАЯ КОСТЬ описывает слово через его единственность: такая ветка в словаре одна."
     ],
     "en": [
-     "EXHIBIT: an inventory of a patient's effects",
+     "EXHIBIT: a page from a medical history",
      "WHITEBONE describes a word by its uniqueness: only one branch in the list fits."
     ]
    },
@@ -23415,23 +23415,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 6 из восьми в фазе «ВЫПИСКА».",
-     "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 6 of eight in the 'DISCHARGE' phase.",
-     "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: опись личных вещей пациента",
+     "ВЕЩДОК: бланк информированного согласия",
      "БЕЛАЯ КОСТЬ описывает слово через его единственность: такая ветка в словаре одна."
     ],
     "en": [
-     "EXHIBIT: an inventory of a patient's effects",
+     "EXHIBIT: an informed-consent form",
      "WHITEBONE describes a word by its uniqueness: only one branch in the list fits."
     ]
    },
@@ -23576,23 +23576,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 7 из восьми в фазе «ВЫПИСКА».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 7 of eight in the 'DISCHARGE' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: опись личных вещей пациента",
+     "ВЕЩДОК: страница из истории болезни",
      "БЕЛАЯ КОСТЬ описывает слово через его единственность: такая ветка в словаре одна."
     ],
     "en": [
-     "EXHIBIT: an inventory of a patient's effects",
+     "EXHIBIT: a page from a medical history",
      "WHITEBONE describes a word by its uniqueness: only one branch in the list fits."
     ]
    },
@@ -23737,12 +23737,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: БЕЛАЯ КОСТЬ. Район: Санаторий.",
+     "Заказчик: БЕЛАЯ КОСТЬ. Район: Баррио-Норте.",
      "Дело 8 из восьми в фазе «ВЫПИСКА».",
      "Кошелёк числится за человеком, которого не могут найти уже 7 года."
     ],
     "en": [
-     "Client: WHITEBONE. District: The Sanatorium.",
+     "Client: WHITEBONE. District: Barrio Norte.",
      "Case 8 of eight in the 'DISCHARGE' phase.",
      "The wallet is registered to someone nobody has found in 7 years."
     ]
@@ -23842,12 +23842,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 1 из восьми в фазе «ВХОДЯЩИЙ».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 1 of eight in the 'INCOMING' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -23989,12 +23989,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 2 из восьми в фазе «ВХОДЯЩИЙ».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 2 of eight in the 'INCOMING' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -24150,12 +24150,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 3 из восьми в фазе «ВХОДЯЩИЙ».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 3 of eight in the 'INCOMING' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -24257,23 +24257,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 4 из восьми в фазе «ВХОДЯЩИЙ».",
-     "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 4 of eight in the 'INCOMING' phase.",
-     "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: лист из особой папки с вымаранной строкой",
+     "ВЕЩДОК: циркуляр без адресата",
      "ГОСТ-9 выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE."
     ],
     "en": [
-     "EXHIBIT: a special-folder sheet with one line blacked out",
+     "EXHIBIT: a circular with no addressee",
      "GOST-9 releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE."
     ]
    },
@@ -24404,12 +24404,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 5 из восьми в фазе «ВХОДЯЩИЙ».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 5 of eight in the 'INCOMING' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -24565,23 +24565,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 6 из восьми в фазе «ВХОДЯЩИЙ».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 6 of eight in the 'INCOMING' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: циркуляр без адресата",
+     "ВЕЩДОК: формуляр с оттиском несуществующей печати",
      "ГОСТ-9 выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE."
     ],
     "en": [
-     "EXHIBIT: a circular with no addressee",
+     "EXHIBIT: a form bearing the stamp of a state that ended",
      "GOST-9 releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE."
     ]
    },
@@ -24672,23 +24672,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 7 из восьми в фазе «ВХОДЯЩИЙ».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 7 of eight in the 'INCOMING' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: опись дел, сданных в архив",
+     "ВЕЩДОК: лист из особой папки с вымаранной строкой",
      "ГОСТ-9 выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE."
     ],
     "en": [
-     "EXHIBIT: an inventory of archived files",
+     "EXHIBIT: a special-folder sheet with one line blacked out",
      "GOST-9 releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE."
     ]
    },
@@ -24819,12 +24819,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 8 из восьми в фазе «ВХОДЯЩИЙ».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 8 of eight in the 'INCOMING' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -24980,12 +24980,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 1 из восьми в фазе «СОГЛАСОВАНИЕ».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 1 of eight in the 'APPROVAL' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -25087,12 +25087,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 2 из восьми в фазе «СОГЛАСОВАНИЕ».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 2 of eight in the 'APPROVAL' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -25234,23 +25234,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 3 из восьми в фазе «СОГЛАСОВАНИЕ».",
-     "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
+     "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 3 of eight in the 'APPROVAL' phase.",
-     "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
+     "The key travelled to Mar del Plata with a shipment and came back without its owner."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: циркуляр без адресата",
+     "ВЕЩДОК: лист из особой папки с вымаранной строкой",
      "ГОСТ-9 выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE."
     ],
     "en": [
-     "EXHIBIT: a circular with no addressee",
+     "EXHIBIT: a special-folder sheet with one line blacked out",
      "GOST-9 releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE."
     ]
    },
@@ -25395,12 +25395,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 4 из восьми в фазе «СОГЛАСОВАНИЕ».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 4 of eight in the 'APPROVAL' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -25502,12 +25502,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 5 из восьми в фазе «СОГЛАСОВАНИЕ».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 5 of eight in the 'APPROVAL' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -25649,14 +25649,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 6 из восьми в фазе «СОГЛАСОВАНИЕ».",
-     "Кошелёк числится за человеком, которого не могут найти уже 11 года."
+     "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 6 of eight in the 'APPROVAL' phase.",
-     "The wallet is registered to someone nobody has found in 11 years."
+     "An arbolito on Florida took the wallet as collateral and has not been seen since."
     ]
    },
    "evidence": {
@@ -25810,23 +25810,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 7 из восьми в фазе «СОГЛАСОВАНИЕ».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 7 of eight in the 'APPROVAL' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: циркуляр без адресата",
+     "ВЕЩДОК: формуляр с оттиском несуществующей печати",
      "ГОСТ-9 выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE."
     ],
     "en": [
-     "EXHIBIT: a circular with no addressee",
+     "EXHIBIT: a form bearing the stamp of a state that ended",
      "GOST-9 releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE."
     ]
    },
@@ -25917,12 +25917,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 8 из восьми в фазе «СОГЛАСОВАНИЕ».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 8 of eight in the 'APPROVAL' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -26064,14 +26064,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 1 из восьми в фазе «ОСОБАЯ ПАПКА».",
-     "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 1 of eight in the 'SPECIAL FOLDER' phase.",
-     "The phrase was split between three people. Two of them are willing to cooperate."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
@@ -26225,12 +26225,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 2 из восьми в фазе «ОСОБАЯ ПАПКА».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 2 of eight in the 'SPECIAL FOLDER' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -26332,12 +26332,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 3 из восьми в фазе «ОСОБАЯ ПАПКА».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 3 of eight in the 'SPECIAL FOLDER' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -26479,23 +26479,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 4 из восьми в фазе «ОСОБАЯ ПАПКА».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 4 of eight in the 'SPECIAL FOLDER' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: формуляр с оттиском несуществующей печати",
+     "ВЕЩДОК: опись дел, сданных в архив",
      "ГОСТ-9 выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE."
     ],
     "en": [
-     "EXHIBIT: a form bearing the stamp of a state that ended",
+     "EXHIBIT: an inventory of archived files",
      "GOST-9 releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE."
     ]
    },
@@ -26640,12 +26640,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 5 из восьми в фазе «ОСОБАЯ ПАПКА».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 5 of eight in the 'SPECIAL FOLDER' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -26747,12 +26747,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 6 из восьми в фазе «ОСОБАЯ ПАПКА».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 6 of eight in the 'SPECIAL FOLDER' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -26894,23 +26894,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 7 из восьми в фазе «ОСОБАЯ ПАПКА».",
-     "Кошелёк числится за человеком, которого не могут найти уже 6 года."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 7 of eight in the 'SPECIAL FOLDER' phase.",
-     "The wallet is registered to someone nobody has found in 6 years."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: формуляр с оттиском несуществующей печати",
+     "ВЕЩДОК: циркуляр без адресата",
      "ГОСТ-9 выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE."
     ],
     "en": [
-     "EXHIBIT: a form bearing the stamp of a state that ended",
+     "EXHIBIT: a circular with no addressee",
      "GOST-9 releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE."
     ]
    },
@@ -27055,12 +27055,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 8 из восьми в фазе «ОСОБАЯ ПАПКА».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 8 of eight in the 'SPECIAL FOLDER' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -27162,23 +27162,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 1 из восьми в фазе «СПИСАНИЕ».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 1 of eight in the 'WRITE-OFF' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "The key travelled to Mar del Plata with a shipment and came back without its owner."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: формуляр с оттиском несуществующей печати",
+     "ВЕЩДОК: опись дел, сданных в архив",
      "ГОСТ-9 выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE."
     ],
     "en": [
-     "EXHIBIT: a form bearing the stamp of a state that ended",
+     "EXHIBIT: an inventory of archived files",
      "GOST-9 releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE."
     ]
    },
@@ -27255,23 +27255,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 2 из восьми в фазе «СПИСАНИЕ».",
-     "Кошелёк числится за человеком, которого не могут найти уже 4 года."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 2 of eight in the 'WRITE-OFF' phase.",
-     "The wallet is registered to someone nobody has found in 4 years."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: лист из особой папки с вымаранной строкой",
+     "ВЕЩДОК: опись дел, сданных в архив",
      "ГОСТ-9 выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE."
     ],
     "en": [
-     "EXHIBIT: a special-folder sheet with one line blacked out",
+     "EXHIBIT: an inventory of archived files",
      "GOST-9 releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE."
     ]
    },
@@ -27348,14 +27348,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 3 из восьми в фазе «СПИСАНИЕ».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 3 of eight in the 'WRITE-OFF' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
@@ -27441,12 +27441,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 4 из восьми в фазе «СПИСАНИЕ».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 4 of eight in the 'WRITE-OFF' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -27534,12 +27534,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 5 из восьми в фазе «СПИСАНИЕ».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 5 of eight in the 'WRITE-OFF' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -27627,23 +27627,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 6 из восьми в фазе «СПИСАНИЕ».",
-     "Кошелёк числится за человеком, которого не могут найти уже 6 года."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 6 of eight in the 'WRITE-OFF' phase.",
-     "The wallet is registered to someone nobody has found in 6 years."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: формуляр с оттиском несуществующей печати",
+     "ВЕЩДОК: циркуляр без адресата",
      "ГОСТ-9 выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE."
     ],
     "en": [
-     "EXHIBIT: a form bearing the stamp of a state that ended",
+     "EXHIBIT: a circular with no addressee",
      "GOST-9 releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE."
     ]
    },
@@ -27720,12 +27720,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 7 из восьми в фазе «СПИСАНИЕ».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 7 of eight in the 'WRITE-OFF' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -27813,12 +27813,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ГОСТ-9. Район: Архив.",
+     "Заказчик: ГОСТ-9. Район: Бальванера.",
      "Дело 8 из восьми в фазе «СПИСАНИЕ».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: GOST-9. District: The Registry.",
+     "Client: GOST-9. District: Balvanera.",
      "Case 8 of eight in the 'WRITE-OFF' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -27958,23 +27958,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 1 из восьми в фазе «РАЗВЕДКА».",
-     "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 1 of eight in the 'SURVEY' phase.",
-     "The key left the office on closing day. Along with the coffee machine."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: акт о погашении выработки",
+     "ВЕЩДОК: маркшейдерский план с зеркальной разметкой",
      "СЛЮДА зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N."
     ],
     "en": [
-     "EXHIBIT: a deed extinguishing a working",
+     "EXHIBIT: a surveyor's plan with mirrored notation",
      "MICA mirrors the wordlist: the word at N answers to the word at 2049 − N."
     ]
    },
@@ -28131,12 +28131,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 2 из восьми в фазе «РАЗВЕДКА».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 2 of eight in the 'SURVEY' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -28292,12 +28292,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 3 из восьми в фазе «РАЗВЕДКА».",
      "Кошелёк числится за человеком, которого не могут найти уже 9 года."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 3 of eight in the 'SURVEY' phase.",
      "The wallet is registered to someone nobody has found in 9 years."
     ]
@@ -28453,12 +28453,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 4 из восьми в фазе «РАЗВЕДКА».",
      "Кошелёк числится за человеком, которого не могут найти уже 6 года."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 4 of eight in the 'SURVEY' phase.",
      "The wallet is registered to someone nobody has found in 6 years."
     ]
@@ -28626,23 +28626,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 5 из восьми в фазе «РАЗВЕДКА».",
-     "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 5 of eight in the 'SURVEY' phase.",
-     "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: график нагрузки на подстанцию",
+     "ВЕЩДОК: маркшейдерский план с зеркальной разметкой",
      "СЛЮДА зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N."
     ],
     "en": [
-     "EXHIBIT: a substation load chart",
+     "EXHIBIT: a surveyor's plan with mirrored notation",
      "MICA mirrors the wordlist: the word at N answers to the word at 2049 − N."
     ]
    },
@@ -28787,12 +28787,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 6 из восьми в фазе «РАЗВЕДКА».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 6 of eight in the 'SURVEY' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -28948,14 +28948,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 7 из восьми в фазе «РАЗВЕДКА».",
-     "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 7 of eight in the 'SURVEY' phase.",
-     "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
@@ -29121,12 +29121,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 8 из восьми в фазе «РАЗВЕДКА».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 8 of eight in the 'SURVEY' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -29282,23 +29282,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 1 из восьми в фазе «ВСКРЫША».",
-     "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 1 of eight in the 'OVERBURDEN' phase.",
-     "The key left the office on closing day. Along with the coffee machine."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: маркшейдерский план с зеркальной разметкой",
+     "ВЕЩДОК: график нагрузки на подстанцию",
      "СЛЮДА зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N."
     ],
     "en": [
-     "EXHIBIT: a surveyor's plan with mirrored notation",
+     "EXHIBIT: a substation load chart",
      "MICA mirrors the wordlist: the word at N answers to the word at 2049 − N."
     ]
    },
@@ -29443,23 +29443,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 2 из восьми в фазе «ВСКРЫША».",
-     "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 11 года назад."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 2 of eight in the 'OVERBURDEN' phase.",
-     "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
+     "The owner kept the key in a box on Reconquista. The bank moved out 11 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: график нагрузки на подстанцию",
+     "ВЕЩДОК: акт о погашении выработки",
      "СЛЮДА зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N."
     ],
     "en": [
-     "EXHIBIT: a substation load chart",
+     "EXHIBIT: a deed extinguishing a working",
      "MICA mirrors the wordlist: the word at N answers to the word at 2049 − N."
     ]
    },
@@ -29616,23 +29616,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 3 из восьми в фазе «ВСКРЫША».",
-     "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 3 of eight in the 'OVERBURDEN' phase.",
-     "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: график нагрузки на подстанцию",
+     "ВЕЩДОК: описание керна из разведочной скважины",
      "СЛЮДА зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N."
     ],
     "en": [
-     "EXHIBIT: a substation load chart",
+     "EXHIBIT: a core log from an exploration hole",
      "MICA mirrors the wordlist: the word at N answers to the word at 2049 − N."
     ]
    },
@@ -29777,12 +29777,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 4 из восьми в фазе «ВСКРЫША».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 4 of eight in the 'OVERBURDEN' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -29938,12 +29938,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 5 из восьми в фазе «ВСКРЫША».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 5 of eight in the 'OVERBURDEN' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -30111,23 +30111,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 6 из восьми в фазе «ВСКРЫША».",
-     "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 6 of eight in the 'OVERBURDEN' phase.",
-     "The key left the office on closing day. Along with the coffee machine."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: график нагрузки на подстанцию",
+     "ВЕЩДОК: маркшейдерский план с зеркальной разметкой",
      "СЛЮДА зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N."
     ],
     "en": [
-     "EXHIBIT: a substation load chart",
+     "EXHIBIT: a surveyor's plan with mirrored notation",
      "MICA mirrors the wordlist: the word at N answers to the word at 2049 − N."
     ]
    },
@@ -30272,12 +30272,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 7 из восьми в фазе «ВСКРЫША».",
      "Кошелёк числится за человеком, которого не могут найти уже 6 года."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 7 of eight in the 'OVERBURDEN' phase.",
      "The wallet is registered to someone nobody has found in 6 years."
     ]
@@ -30433,14 +30433,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 8 из восьми в фазе «ВСКРЫША».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 8 of eight in the 'OVERBURDEN' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
@@ -30606,12 +30606,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 1 из восьми в фазе «ЖИЛА».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 1 of eight in the 'THE SEAM' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -30767,12 +30767,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 2 из восьми в фазе «ЖИЛА».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 2 of eight in the 'THE SEAM' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -30928,12 +30928,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 3 из восьми в фазе «ЖИЛА».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 3 of eight in the 'THE SEAM' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -31101,12 +31101,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 4 из восьми в фазе «ЖИЛА».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 4 of eight in the 'THE SEAM' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -31262,23 +31262,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 5 из восьми в фазе «ЖИЛА».",
-     "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 5 of eight in the 'THE SEAM' phase.",
-     "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: описание керна из разведочной скважины",
+     "ВЕЩДОК: график нагрузки на подстанцию",
      "СЛЮДА зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N."
     ],
     "en": [
-     "EXHIBIT: a core log from an exploration hole",
+     "EXHIBIT: a substation load chart",
      "MICA mirrors the wordlist: the word at N answers to the word at 2049 − N."
     ]
    },
@@ -31423,12 +31423,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 6 из восьми в фазе «ЖИЛА».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 6 of eight in the 'THE SEAM' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -31596,23 +31596,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 7 из восьми в фазе «ЖИЛА».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 4 года назад."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 7 of eight in the 'THE SEAM' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "The owner kept the key in a box on Reconquista. The bank moved out 4 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: график нагрузки на подстанцию",
+     "ВЕЩДОК: акт о погашении выработки",
      "СЛЮДА зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N."
     ],
     "en": [
-     "EXHIBIT: a substation load chart",
+     "EXHIBIT: a deed extinguishing a working",
      "MICA mirrors the wordlist: the word at N answers to the word at 2049 − N."
     ]
    },
@@ -31757,12 +31757,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 8 из восьми в фазе «ЖИЛА».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 8 of eight in the 'THE SEAM' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -31918,14 +31918,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 1 из восьми в фазе «ЗАКЛАДКА».",
-     "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
+     "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 1 of eight in the 'BACKFILL' phase.",
-     "The key left the office on closing day. Along with the coffee machine."
+     "The key travelled to Mar del Plata with a shipment and came back without its owner."
     ]
    },
    "evidence": {
@@ -32079,12 +32079,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 2 из восьми в фазе «ЗАКЛАДКА».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 2 of eight in the 'BACKFILL' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -32240,23 +32240,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 3 из восьми в фазе «ЗАКЛАДКА».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 3 года назад."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 3 of eight in the 'BACKFILL' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "The owner kept the key in a box on Reconquista. The bank moved out 3 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: описание керна из разведочной скважины",
+     "ВЕЩДОК: маркшейдерский план с зеркальной разметкой",
      "СЛЮДА зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N."
     ],
     "en": [
-     "EXHIBIT: a core log from an exploration hole",
+     "EXHIBIT: a surveyor's plan with mirrored notation",
      "MICA mirrors the wordlist: the word at N answers to the word at 2049 − N."
     ]
    },
@@ -32401,12 +32401,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 4 из восьми в фазе «ЗАКЛАДКА».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 4 of eight in the 'BACKFILL' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]
@@ -32562,12 +32562,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 5 из восьми в фазе «ЗАКЛАДКА».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 5 of eight in the 'BACKFILL' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -32723,12 +32723,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 6 из восьми в фазе «ЗАКЛАДКА».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 6 of eight in the 'BACKFILL' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -32884,12 +32884,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 7 из восьми в фазе «ЗАКЛАДКА».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 7 of eight in the 'BACKFILL' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -33045,12 +33045,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: СЛЮДА. Район: Разрез.",
+     "Заказчик: СЛЮДА. Район: Каталинас-Норте.",
      "Дело 8 из восьми в фазе «ЗАКЛАДКА».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: MICA. District: The Cut.",
+     "Client: MICA. District: Catalinas Norte.",
      "Case 8 of eight in the 'BACKFILL' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -33216,12 +33216,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 1 из восьми в фазе «СЛУХ».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 1 of eight in the 'RUMOUR' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -33323,12 +33323,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 2 из восьми в фазе «СЛУХ».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 2 of eight in the 'RUMOUR' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -33470,14 +33470,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 3 из восьми в фазе «СЛУХ».",
-     "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 3 of eight in the 'RUMOUR' phase.",
-     "The phrase was split between three people. Two of them are willing to cooperate."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
@@ -33643,12 +33643,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 4 из восьми в фазе «СЛУХ».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 4 of eight in the 'RUMOUR' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -33750,23 +33750,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 5 из восьми в фазе «СЛУХ».",
-     "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 5 of eight in the 'RUMOUR' phase.",
-     "The phrase was split between three people. Two of them are willing to cooperate."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: распечатка из зеркала архива",
+     "ВЕЩДОК: письмо от человека, который уже умер",
      "ПОСЛЕДНИЙ АРХИВ ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39."
     ],
     "en": [
-     "EXHIBIT: a printout from an archive mirror",
+     "EXHIBIT: a letter from someone already dead",
      "LAST ARCHIVE leads word to word: each one stands beside a known word in the BIP-39 list."
     ]
    },
@@ -33897,12 +33897,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 6 из восьми в фазе «СЛУХ».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 6 of eight in the 'RUMOUR' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -34070,12 +34070,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 7 из восьми в фазе «СЛУХ».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 7 of eight in the 'RUMOUR' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -34177,12 +34177,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 8 из восьми в фазе «СЛУХ».",
      "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 8 of eight in the 'RUMOUR' phase.",
      "The phrase was split between three people. Two of them are willing to cooperate."
     ]
@@ -34324,23 +34324,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 1 из восьми в фазе «СЛЕД».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 1 of eight in the 'TRAIL' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: распечатка из зеркала архива",
+     "ВЕЩДОК: список имён, вычеркнутых по одному",
      "ПОСЛЕДНИЙ АРХИВ ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39."
     ],
     "en": [
-     "EXHIBIT: a printout from an archive mirror",
+     "EXHIBIT: a list of names crossed off one at a time",
      "LAST ARCHIVE leads word to word: each one stands beside a known word in the BIP-39 list."
     ]
    },
@@ -34497,12 +34497,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 2 из восьми в фазе «СЛЕД».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 2 of eight in the 'TRAIL' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -34604,23 +34604,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 3 из восьми в фазе «СЛЕД».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 5 года назад."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 3 of eight in the 'TRAIL' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "The owner kept the key in a box on Reconquista. The bank moved out 5 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: фрагмент чата без начала и конца",
+     "ВЕЩДОК: письмо от человека, который уже умер",
      "ПОСЛЕДНИЙ АРХИВ ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39."
     ],
     "en": [
-     "EXHIBIT: a chat fragment with no beginning and no end",
+     "EXHIBIT: a letter from someone already dead",
      "LAST ARCHIVE leads word to word: each one stands beside a known word in the BIP-39 list."
     ]
    },
@@ -34751,14 +34751,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 4 из восьми в фазе «СЛЕД».",
-     "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
+     "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 4 of eight in the 'TRAIL' phase.",
-     "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
+     "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive."
     ]
    },
    "evidence": {
@@ -34924,12 +34924,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 5 из восьми в фазе «СЛЕД».",
      "Кошелёк числится за человеком, которого не могут найти уже 5 года."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 5 of eight in the 'TRAIL' phase.",
      "The wallet is registered to someone nobody has found in 5 years."
     ]
@@ -35031,23 +35031,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 6 из восьми в фазе «СЛЕД».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 6 of eight in the 'TRAIL' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: распечатка из зеркала архива",
+     "ВЕЩДОК: список имён, вычеркнутых по одному",
      "ПОСЛЕДНИЙ АРХИВ ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39."
     ],
     "en": [
-     "EXHIBIT: a printout from an archive mirror",
+     "EXHIBIT: a list of names crossed off one at a time",
      "LAST ARCHIVE leads word to word: each one stands beside a known word in the BIP-39 list."
     ]
    },
@@ -35178,23 +35178,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 7 из восьми в фазе «СЛЕД».",
-     "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
+     "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал 3 года назад."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 7 of eight in the 'TRAIL' phase.",
-     "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
+     "The owner kept the key in a box on Reconquista. The bank moved out 3 years ago."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: фрагмент чата без начала и конца",
+     "ВЕЩДОК: список имён, вычеркнутых по одному",
      "ПОСЛЕДНИЙ АРХИВ ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39."
     ],
     "en": [
-     "EXHIBIT: a chat fragment with no beginning and no end",
+     "EXHIBIT: a list of names crossed off one at a time",
      "LAST ARCHIVE leads word to word: each one stands beside a known word in the BIP-39 list."
     ]
    },
@@ -35351,23 +35351,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 8 из восьми в фазе «СЛЕД».",
-     "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 8 of eight in the 'TRAIL' phase.",
-     "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: фрагмент чата без начала и конца",
+     "ВЕЩДОК: список имён, вычеркнутых по одному",
      "ПОСЛЕДНИЙ АРХИВ ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39."
     ],
     "en": [
-     "EXHIBIT: a chat fragment with no beginning and no end",
+     "EXHIBIT: a list of names crossed off one at a time",
      "LAST ARCHIVE leads word to word: each one stands beside a known word in the BIP-39 list."
     ]
    },
@@ -35458,23 +35458,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 1 из восьми в фазе «ЗЕРКАЛО».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 1 of eight in the 'MIRROR' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: список имён, вычеркнутых по одному",
+     "ВЕЩДОК: письмо от человека, который уже умер",
      "ПОСЛЕДНИЙ АРХИВ ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39."
     ],
     "en": [
-     "EXHIBIT: a list of names crossed off one at a time",
+     "EXHIBIT: a letter from someone already dead",
      "LAST ARCHIVE leads word to word: each one stands beside a known word in the BIP-39 list."
     ]
    },
@@ -35605,14 +35605,14 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 2 из восьми в фазе «ЗЕРКАЛО».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 2 of eight in the 'MIRROR' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
@@ -35778,12 +35778,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 3 из восьми в фазе «ЗЕРКАЛО».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 3 of eight in the 'MIRROR' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -35885,12 +35885,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 4 из восьми в фазе «ЗЕРКАЛО».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 4 of eight in the 'MIRROR' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -36032,12 +36032,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 5 из восьми в фазе «ЗЕРКАЛО».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 5 of eight in the 'MIRROR' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -36205,23 +36205,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 6 из восьми в фазе «ЗЕРКАЛО».",
-     "Счёт заморожен формально. Фактически его просто некому разморозить."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 6 of eight in the 'MIRROR' phase.",
-     "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: распечатка из зеркала архива",
+     "ВЕЩДОК: фрагмент чата без начала и конца",
      "ПОСЛЕДНИЙ АРХИВ ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39."
     ],
     "en": [
-     "EXHIBIT: a printout from an archive mirror",
+     "EXHIBIT: a chat fragment with no beginning and no end",
      "LAST ARCHIVE leads word to word: each one stands beside a known word in the BIP-39 list."
     ]
    },
@@ -36312,12 +36312,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 7 из восьми в фазе «ЗЕРКАЛО».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 7 of eight in the 'MIRROR' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -36459,12 +36459,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 8 из восьми в фазе «ЗЕРКАЛО».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 8 of eight in the 'MIRROR' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -36632,12 +36632,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 1 из восьми в фазе «ВОЗВРАТ».",
      "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее»."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 1 of eight in the 'RESTITUTION' phase.",
      "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'."
     ]
@@ -36805,12 +36805,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 2 из восьми в фазе «ВОЗВРАТ».",
      "Ключ был у подрядчика. Подрядчик закрылся, документы уехали в макулатуру, кошелёк остался."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 2 of eight in the 'RESTITUTION' phase.",
      "A contractor held the key. The contractor folded, the papers went to pulp, the wallet stayed."
     ]
@@ -36978,23 +36978,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 3 из восьми в фазе «ВОЗВРАТ».",
-     "Эту фразу разделили на части между тремя людьми. Двое согласны сотрудничать."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 3 of eight in the 'RESTITUTION' phase.",
-     "The phrase was split between three people. Two of them are willing to cooperate."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: распечатка из зеркала архива",
+     "ВЕЩДОК: список имён, вычеркнутых по одному",
      "ПОСЛЕДНИЙ АРХИВ ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39."
     ],
     "en": [
-     "EXHIBIT: a printout from an archive mirror",
+     "EXHIBIT: a list of names crossed off one at a time",
      "LAST ARCHIVE leads word to word: each one stands beside a known word in the BIP-39 list."
     ]
    },
@@ -37151,12 +37151,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 4 из восьми в фазе «ВОЗВРАТ».",
      "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 4 of eight in the 'RESTITUTION' phase.",
      "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
     ]
@@ -37324,23 +37324,23 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 5 из восьми в фазе «ВОЗВРАТ».",
-     "Владелец умер, наследники судятся, а фраза лежит в сейфе, который никто не может открыть."
+     "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 5 of eight in the 'RESTITUTION' phase.",
-     "The owner died, the heirs are in court, and the phrase sits in a safe nobody can open."
+     "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all."
     ]
    },
    "evidence": {
     "ru": [
-     "ВЕЩДОК: список имён, вычеркнутых по одному",
+     "ВЕЩДОК: письмо от человека, который уже умер",
      "ПОСЛЕДНИЙ АРХИВ ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39."
     ],
     "en": [
-     "EXHIBIT: a list of names crossed off one at a time",
+     "EXHIBIT: a letter from someone already dead",
      "LAST ARCHIVE leads word to word: each one stands beside a known word in the BIP-39 list."
     ]
    },
@@ -37497,12 +37497,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 6 из восьми в фазе «ВОЗВРАТ».",
      "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 6 of eight in the 'RESTITUTION' phase.",
      "This wallet was forgotten so thoroughly that a tax query had to remind everyone."
     ]
@@ -37670,12 +37670,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 7 из восьми в фазе «ВОЗВРАТ».",
      "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 7 of eight in the 'RESTITUTION' phase.",
      "The key left the office on closing day. Along with the coffee machine."
     ]
@@ -37843,12 +37843,12 @@
    },
    "brief": {
     "ru": [
-     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: везде и нигде.",
+     "Заказчик: ПОСЛЕДНИЙ АРХИВ. Район: Сан-Тельмо, если верить слухам.",
      "Дело 8 из восьми в фазе «ВОЗВРАТ».",
      "Счёт заморожен формально. Фактически его просто некому разморозить."
     ],
     "en": [
-     "Client: LAST ARCHIVE. District: everywhere and nowhere.",
+     "Client: LAST ARCHIVE. District: San Telmo, if the rumours are true.",
      "Case 8 of eight in the 'RESTITUTION' phase.",
      "The account is frozen on paper. In practice there is simply no one left to unfreeze it."
     ]

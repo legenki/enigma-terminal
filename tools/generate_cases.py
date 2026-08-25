@@ -294,6 +294,12 @@ HOOKS = {
         "Кошелёк всплыл при инвентаризации. В описи он значится как «прочее».",
         "Ключ вынесли из офиса в день закрытия. Вместе с кофемашиной.",
         "Про этот кошелёк забыли настолько прочно, что о нём напомнил налоговый запрос.",
+        "Расчёт шёл через cueva на Флориде. Cueva закрылась в ту же неделю, вместе с ключом.",
+        "Фразу записали на обороте билета в Субте. Билет нашли, обратную сторону — нет.",
+        "Владелец держал ключ в депозитной ячейке на Реконкисте. Банк съехал {years} года назад.",
+        "Судестада залила подвал, и вместе с архивом ушёл единственный человек, знавший фразу.",
+        "Арболито с Флориды взял кошелёк в залог и с тех пор не выходит на связь.",
+        "Ключ уехал с грузом в Мар-дель-Плату и вернулся без хозяина.",
     ],
     "en": [
         "The wallet is registered to someone nobody has found in {years} years.",
@@ -304,6 +310,12 @@ HOOKS = {
         "The wallet surfaced during an inventory. The schedule lists it as 'miscellaneous'.",
         "The key left the office on closing day. Along with the coffee machine.",
         "This wallet was forgotten so thoroughly that a tax query had to remind everyone.",
+        "Settlement ran through a cueva off Florida. The cueva shut that same week, key and all.",
+        "The phrase was written on the back of a Subte ticket. The ticket turned up; the back did not.",
+        "The owner kept the key in a box on Reconquista. The bank moved out {years} years ago.",
+        "The sudestada flooded the cellar, and the one person who knew the phrase went with the archive.",
+        "An arbolito on Florida took the wallet as collateral and has not been seen since.",
+        "The key travelled to Mar del Plata with a shipment and came back without its owner.",
     ],
 }
 

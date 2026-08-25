@@ -13,8 +13,8 @@ export const CLIENTS = [
       "en": "private forensic bureau"
     },
     "district": {
-      "ru": "Старая Биржа",
-      "en": "The Old Exchange"
+      "ru": "Микросентро, La City",
+      "en": "Microcentro, La City"
     },
     "difficulty": [
       1,
@@ -23,15 +23,17 @@ export const CLIENTS = [
     "creed": {
       "ru": [
         "МЕРИДИАН не владеет ничем и не хочет владеть. Он находит.",
-        "Восемь этажей серверов, ни одного окна, и договор, в котором нет слова «изъятие» —",
-        "только «восстановление законного доступа». Платят аккуратно и в срок.",
-        "Это единственный заказчик, который скажет тебе правду о том, что ты нашёл."
+        "Восемь этажей серверов в переулке за Реконкистой, ни одного окна, и договор,",
+        "в котором нет слова «изъятие» — только «восстановление законного доступа».",
+        "Платят аккуратно, в срок и по официальному курсу. Это единственный заказчик,",
+        "который скажет тебе правду о том, что ты нашёл."
       ],
       "en": [
         "MERIDIAN owns nothing and wants to own nothing. It finds.",
-        "Eight floors of servers, not one window, and a contract that never says 'seizure' —",
-        "only 'restoration of lawful access'. They pay carefully and on time.",
-        "This is the one client who will tell you the truth about what you found."
+        "Eight floors of servers in a lane off Reconquista, not one window, and a contract",
+        "that never says 'seizure' — only 'restoration of lawful access'.",
+        "They pay carefully, on time, and at the official rate. This is the one client",
+        "who will tell you the truth about what you found."
       ]
     },
     "dialect": {
@@ -186,8 +188,8 @@ export const CLIENTS = [
       "en": "grey fund, auction house"
     },
     "district": {
-      "ru": "Аукционный квартал",
-      "en": "The Auction Quarter"
+      "ru": "Реколета",
+      "en": "Recoleta"
     },
     "difficulty": [
       2,
@@ -196,15 +198,17 @@ export const CLIENTS = [
     "creed": {
       "ru": [
         "СЕДЬМОЙ ЗНАК продаёт картины, которых никто не видел, людям, которых никто не знает.",
-        "В их бумагах не встречается слово «деньги» — только «предмет», «оценка» и «переход права».",
-        "Каждый лот уходит по цене, в которой зашит номер. Числа тут важнее холста.",
-        "Они улыбаются, наливают вино и никогда не говорят, кто был предыдущим владельцем."
+        "Зал на Кинтана, вход со двора, каталог печатают в двенадцати экземплярах.",
+        "В их бумагах не встречается слово «деньги» — только «предмет», «оценка» и «переход права»,",
+        "а расчёт идёт через cueva на Флориде, где курс называют шёпотом.",
+        "Каждый лот уходит по цене, в которой зашит номер. Числа тут важнее холста."
       ],
       "en": [
         "SEVENTH SIGN sells paintings nobody has seen to people nobody knows.",
-        "Their paperwork never contains the word 'money' — only 'lot', 'appraisal' and 'transfer of title'.",
-        "Every lot closes at a price with a number sewn into it. Here the figures matter more than the canvas.",
-        "They smile, pour the wine, and never say who the previous owner was."
+        "A room on Quintana, entrance through the courtyard, catalogue printed in twelve copies.",
+        "Their paperwork never says 'money' — only 'lot', 'appraisal' and 'transfer of title',",
+        "and settlement runs through a cueva off Florida where the rate is quoted in a whisper.",
+        "Every lot closes at a price with a number sewn into it. The figures matter more than the canvas."
       ]
     },
     "dialect": {
@@ -359,8 +363,8 @@ export const CLIENTS = [
       "en": "subsea data havens"
     },
     "district": {
-      "ru": "Шельф",
-      "en": "The Shelf"
+      "ru": "Дарсена-Сур",
+      "en": "Dársena Sur"
     },
     "difficulty": [
       2,
@@ -369,14 +373,16 @@ export const CLIENTS = [
     "creed": {
       "ru": [
         "ГЛУБИНА выкупила семь списанных буровых и утопила в них по дата-центру.",
-        "Сто девяносто метров воды — лучший фаервол из придуманных: до него не доедет ни один ордер.",
-        "Их инженеры говорят о данных как о грузе, а о клиентах — как о балласте.",
+        "Ла-Плата для этого слишком мелкая — платформы стоят дальше, за Мар-дель-Платой,",
+        "где шельф наконец обрывается. В городе у них только контора в Дарсена-Сур и катер.",
+        "Сто девяносто метров воды — лучший фаервол из придуманных: до него не доплывёт ни один ордер.",
         "Всё, что попадает на платформу, они кладут в сетку координат. Даже слова."
       ],
       "en": [
         "DEEPHOLD bought seven decommissioned rigs and sank a data centre into each.",
+        "The Plata is far too shallow for that — the platforms sit out past Mar del Plata,",
+        "where the shelf finally drops away. In the city they keep an office at Dársena Sur and a launch.",
         "A hundred and ninety metres of water is the finest firewall ever devised: no warrant swims that far.",
-        "Their engineers speak of data as cargo and of clients as ballast.",
         "Everything that reaches a platform gets filed into a coordinate grid. Words included."
       ]
     },
@@ -532,8 +538,8 @@ export const CLIENTS = [
       "en": "orbital key custody"
     },
     "district": {
-      "ru": "Лифт",
-      "en": "The Elevator"
+      "ru": "Пасео Колон",
+      "en": "Paseo Colón"
     },
     "difficulty": [
       3,
@@ -542,12 +548,14 @@ export const CLIENTS = [
     "creed": {
       "ru": [
         "ВЕГА держит ключи там, куда не дотянется ни один суд: на высоте четырёхсот километров.",
+        "Наземная станция — четыре этажа на Пасео Колон, антенны на крыше, окна заклеены плёнкой.",
         "Их главный продукт — не хранилище, а задержка. Запрос идёт наверх две с половиной секунды,",
         "и за эти секунды успевает умереть большинство плохих идей.",
         "Всё, что они делают, они считают. Даже имена у них — результат арифметики."
       ],
       "en": [
         "VEGA keeps keys where no court can reach: four hundred kilometres up.",
+        "The ground station is four floors on Paseo Colón, antennas on the roof, windows filmed over.",
         "Their real product is not storage but latency. A request climbs for two and a half seconds,",
         "and in those seconds most bad ideas die of natural causes.",
         "Everything they do, they compute. Even their names come out of arithmetic."
@@ -705,8 +713,8 @@ export const CLIENTS = [
       "en": "biotech and body-lease clinics"
     },
     "district": {
-      "ru": "Санаторий",
-      "en": "The Sanatorium"
+      "ru": "Баррио-Норте",
+      "en": "Barrio Norte"
     },
     "difficulty": [
       3,
@@ -715,12 +723,14 @@ export const CLIENTS = [
     "creed": {
       "ru": [
         "БЕЛАЯ КОСТЬ разговаривает с тобой голосом медсестры, которая уже всё решила.",
+        "Три санатория между Пуэйрредон и Санта-Фе, мрамор в холле, очередь с семи утра.",
         "Они сдают в аренду печень, роговицу и двадцать лет жизни — в рассрочку, под залог кошелька.",
         "Если клиент перестал платить, ключ переходит к ним. Если клиент перестал дышать — тоже.",
         "Их каталог устроен как определитель видов: каждая вещь занимает единственную ветку."
       ],
       "en": [
         "WHITEBONE speaks to you in the voice of a nurse who has already decided.",
+        "Three sanatorios between Pueyrredón and Santa Fe, marble in the lobby, a queue from seven.",
         "They lease out livers, corneas and twenty years of life, in instalments, against a wallet.",
         "If the client stops paying, the key becomes theirs. If the client stops breathing, likewise.",
         "Their catalogue works like a species key: every item sits on exactly one branch."
@@ -878,8 +888,8 @@ export const CLIENTS = [
       "en": "residual agency of a state that no longer exists"
     },
     "district": {
-      "ru": "Архив",
-      "en": "The Registry"
+      "ru": "Бальванера",
+      "en": "Balvanera"
     },
     "difficulty": [
       3,
@@ -887,13 +897,15 @@ export const CLIENTS = [
     ],
     "creed": {
       "ru": [
-        "Страны нет уже девятнадцать лет. Ведомство работает.",
+        "Ведомства нет уже девятнадцать лет. Ведомство работает.",
+        "Второй этаж над галантерейной лавкой на Ринкон, вывеска снята, номер кабинета остался.",
         "ГОСТ-9 продолжает ставить печати, нумеровать входящие и вымарывать то, что не положено знать.",
         "Зарплату им платит кто-то, кого они называют «правопреемником» и никогда — по имени.",
         "В их бумагах всегда чего-то не хватает. Ровно одного слова. Это не небрежность, это метод."
       ],
       "en": [
-        "The country has been gone nineteen years. The agency is still working.",
+        "The department has been gone nineteen years. The department is still working.",
+        "First floor above a haberdashery on Rincón, the sign taken down, the room number left up.",
         "GOST-9 goes on stamping, numbering the incoming, and blacking out what must not be known.",
         "Someone pays their salaries — someone they call 'the successor' and never by name.",
         "Their papers are always missing something. Exactly one word. That is not sloppiness, it is method."
@@ -1051,8 +1063,8 @@ export const CLIENTS = [
       "en": "mineral and energy conglomerate"
     },
     "district": {
-      "ru": "Разрез",
-      "en": "The Cut"
+      "ru": "Каталинас-Норте",
+      "en": "Catalinas Norte"
     },
     "difficulty": [
       4,
@@ -1061,12 +1073,16 @@ export const CLIENTS = [
     "creed": {
       "ru": [
         "СЛЮДА владеет сетью. Не социальной — электрической. Той, без которой не работает ничего.",
+        "Башня в Каталинас-Норте, тридцать один этаж, лифт до двадцать восьмого для всех остальных.",
+        "Разрезы у них на северо-западе, в Хухуе и Катамарке, за две тысячи километров отсюда.",
         "Они мыслят десятилетиями и говорят так, будто человек — это короткий геологический эпизод.",
         "Каждый их документ симметричен: слюда расслаивается ровными зеркальными пластинами,",
         "и то же самое они делают со словами. Смотри с конца."
       ],
       "en": [
         "MICA owns the grid. Not the social one — the electrical one, without which nothing runs.",
+        "A tower in Catalinas Norte, thirty-one floors, the lift stopping at twenty-eight for everyone else.",
+        "Their cuts are in the north-west, in Jujuy and Catamarca, two thousand kilometres from here.",
         "They think in decades and speak as though a person were a brief geological episode.",
         "Every document of theirs is symmetrical: mica cleaves into even mirrored sheets,",
         "and they do the same to words. Read from the far end."
@@ -1224,8 +1240,8 @@ export const CLIENTS = [
       "en": "archivist collective, does not pay in money"
     },
     "district": {
-      "ru": "везде и нигде",
-      "en": "everywhere and nowhere"
+      "ru": "Сан-Тельмо, если верить слухам",
+      "en": "San Telmo, if the rumours are true"
     },
     "difficulty": [
       4,
@@ -1234,12 +1250,14 @@ export const CLIENTS = [
     "creed": {
       "ru": [
         "ПОСЛЕДНИЙ АРХИВ считает, что забытый кошелёк — это забытый человек, и не согласен с этим.",
+        "Говорят, они собираются по воскресеньям на Дефенса, среди развалов с открытками и ложками.",
         "У них нет офиса, счёта и юридического лица. Есть двенадцать тысяч зеркал и упрямство.",
         "Они не платят гонораров. Они отдают то, что нашли сами: имя, адрес, дату, чужую ошибку.",
         "Их подсказки идут цепочкой: каждое слово держится за соседа по словарю."
       ],
       "en": [
         "LAST ARCHIVE holds that a forgotten wallet is a forgotten person, and refuses to accept that.",
+        "They are said to meet on Sundays on Defensa, among the stalls of postcards and old spoons.",
         "They have no office, no account and no legal existence. They have twelve thousand mirrors and stubbornness.",
         "They pay no fees. They hand over what they found themselves: a name, an address, a date, someone else's mistake.",
         "Their clues run in a chain: every word holds on to its neighbour in the list."

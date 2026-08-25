@@ -13,7 +13,11 @@ export const CAMPAIGN = {
   },
   "prologue": {
     "ru": [
-      "НЕО-КИТЕЖ, 2077. ДОЖДЬ ИДЁТ ВОСЕМНАДЦАТЫЙ ДЕНЬ.",
+      "БУЭНОС-АЙРЕС, 2077. СУДЕСТАДА НЕ УХОДИТ ВОСЕМНАДЦАТЫЙ ДЕНЬ.",
+      "",
+      "Ветер с юго-востока гонит воду Ла-Платы обратно в город. Микросентро стоит по щиколотку,",
+      "в подвалах La City вторую неделю работают насосы, а на Флориде арболитос продают доллар",
+      "по трём разным курсам сразу — и ни один из них не настоящий.",
       "",
       "Архивариус по прозвищу ORACLE пропал вместе с восемью холодными кошельками.",
       "Он не доверял облакам, серверам и людям. Он доверял только словам.",
@@ -26,7 +30,11 @@ export const CAMPAIGN = {
       "Введи HELP, чтобы увидеть список команд. Введи CASES, чтобы открыть дела."
     ],
     "en": [
-      "NEO-KITEZH, 2077. IT HAS BEEN RAINING FOR EIGHTEEN DAYS.",
+      "BUENOS AIRES, 2077. THE SUDESTADA HAS NOT LET GO IN EIGHTEEN DAYS.",
+      "",
+      "The southeasterly is pushing the Río de la Plata back into the city. The Microcentro is",
+      "ankle-deep, the cellars under La City have been pumping for a fortnight, and on Calle",
+      "Florida the arbolitos are quoting three different dollar rates at once — none of them real.",
       "",
       "An archivist known as ORACLE vanished along with eight cold wallets.",
       "He trusted no cloud, no server, no person. He trusted only words.",
