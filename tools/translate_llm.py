@@ -1,27 +1,37 @@
 #!/usr/bin/env python3
-"""Automated translator for Enigma Terminal narrative files.
+"""Automated translator for Enigma Terminal narrative files using Gemini.
 
-This script uses an LLM (like OpenAI) to translate the game's story, client 
-profiles, and riddle templates into Spanish (es) and Portuguese (pt), while 
-strictly preserving formatting and English cryptographic terms.
+This script uses Google's Gemini API to translate the game's story, client 
+profiles, and riddle templates into Spanish (es) and Portuguese (pt).
+It respects the 15 RPM (Requests Per Minute) rate limit by waiting between calls.
 
 Requirements:
-pip install openai
-export OPENAI_API_KEY="your-key-here"
+pip install google-generativeai
+export GEMINI_API_KEY="your-key-here"
 """
 
 import json
 import os
-import re
+import time
 from pathlib import Path
 
 try:
-    from openai import OpenAI
+    import google.generativeai as genai
 except ImportError:
-    print("Please install the OpenAI client: pip install openai")
+    print("Please install the Gemini client: pip install google-generativeai")
     exit(1)
 
-client = OpenAI()
+# Configure API key
+api_key = os.environ.get("GEMINI_API_KEY")
+if not api_key:
+    print("Warning: GEMINI_API_KEY is not set. The script will fail when making requests.")
+else:
+    genai.configure(api_key=api_key)
+
+# The model name from your dashboard
+MODEL_NAME = "gemini-3.1-flash-lite"
+# (If the API throws a "model not found" error, you can change this to "gemini-1.5-flash" or "gemini-2.5-flash")
+
 ROOT = Path(__file__).resolve().parent.parent
 
 SYSTEM_PROMPT = """You are a professional localizer for a cyberpunk/noir detective game.
@@ -33,33 +43,60 @@ STRICT RULES:
 3. DO NOT translate English BIP-39 words or prefixes if they are part of a puzzle. 
    Examples: "word begins with 'aban'" -> "la palabra comienza con 'aban'".
 4. Maintain exact capitalization and line breaks.
-5. If the input is a list of strings, return a JSON list of strings.
-6. If the input is a single string, return the translated string.
-7. Return ONLY valid JSON if the input is a JSON list. Return plain text if the input is plain text.
+5. If the input is a list of strings, return ONLY a valid JSON list of strings.
+6. If the input is a single string, return ONLY the translated string.
+7. Return raw text only! Do NOT wrap in ```json or ``` markdown blocks.
 """
 
 def translate(content, target_language):
     is_list = isinstance(content, list)
     prompt = json.dumps(content, ensure_ascii=False) if is_list else content
     
-    response = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT.format(target_language=target_language)},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.3
-    )
+    # We combine system instructions into the prompt for maximum compatibility with all Gemini SDK versions
+    full_prompt = SYSTEM_PROMPT.format(target_language=target_language) + "\n\nTEXT TO TRANSLATE:\n" + prompt
     
-    result = response.choices[0].message.content.strip()
-    if is_list:
+    model = genai.GenerativeModel(MODEL_NAME)
+    
+    max_retries = 4
+    for attempt in range(max_retries):
         try:
-            return json.loads(result)
-        except:
-            # Fallback simple array parse
-            import ast
-            return ast.literal_eval(result)
-    return result
+            # RATE LIMIT PROTECTION: 15 RPM = 1 request every 4 seconds.
+            # We wait 4.5 seconds to be perfectly safe.
+            print("  [Waiting 4.5s to respect 15 RPM limit...]")
+            time.sleep(4.5)
+            
+            response = model.generate_content(
+                full_prompt,
+                generation_config=genai.types.GenerationConfig(
+                    temperature=0.3,
+                )
+            )
+            
+            result = response.text.strip()
+            
+            # Strip markdown formatting just in case Gemini ignored rule #7
+            if result.startswith("```json"):
+                result = result[7:-3].strip()
+            elif result.startswith("```"):
+                result = result[3:-3].strip()
+
+            if is_list:
+                try:
+                    return json.loads(result)
+                except Exception:
+                    import ast
+                    return ast.literal_eval(result)
+            return result
+
+        except Exception as e:
+            print(f"  [Error]: {e}")
+            if attempt < max_retries - 1:
+                wait_time = 15 * (attempt + 1)
+                print(f"  [Retrying in {wait_time}s...]")
+                time.sleep(wait_time)
+            else:
+                print("  [Failed after retries].")
+                raise
 
 def process_dict(d, path=""):
     """Recursively search for dictionaries that have 'en' and 'ru' but lack 'es' or 'pt'."""
@@ -68,24 +105,22 @@ def process_dict(d, path=""):
         
     modified = False
     
-    # Specific case for clients.json forms (m/f)
     if 'm' in d and 'f' in d and isinstance(d['m'], str) and d['m'] == "":
-        # We handle this manually or via a separate pass for grammar
         return False
 
     if 'en' in d and isinstance(d['en'], (str, list)) and 'ru' in d:
-        # We found a localization bundle!
         if 'es' not in d or not d['es'] or (isinstance(d['es'], list) and not d['es'][0]):
-            print(f"Translating to ES: {str(d['en'])[:50]}...")
+            preview = str(d['en'])[:40].replace('\n', ' ')
+            print(f"Translating to ES: {preview}...")
             d['es'] = translate(d['en'], "Spanish")
             modified = True
             
         if 'pt' not in d or not d['pt'] or (isinstance(d['pt'], list) and not d['pt'][0]):
-            print(f"Translating to PT: {str(d['en'])[:50]}...")
+            preview = str(d['en'])[:40].replace('\n', ' ')
+            print(f"Translating to PT: {preview}...")
             d['pt'] = translate(d['en'], "Portuguese")
             modified = True
 
-    # Recurse
     for k, v in d.items():
         if isinstance(v, dict):
             if process_dict(v, path + f".{k}"):
@@ -111,13 +146,8 @@ def translate_file(filepath):
         print("No missing translations found.")
 
 if __name__ == "__main__":
-    if not os.environ.get("OPENAI_API_KEY"):
-        print("Warning: OPENAI_API_KEY is not set. The script will fail when making requests.")
-        
     translate_file(ROOT / "data" / "cases.json")
     translate_file(ROOT / "data" / "clients.json")
     
-    print("\nNote: tools/generate_cases.py contains dictionaries (DIALECT_PRIMER, ENTROPY_CLUES, etc.)")
-    print("that should be translated manually or by extracting them to JSON first.")
-    print("Then run `python3 tools/generate_cases.py` and `python3 tools/build_web_data.py` to rebuild.")
-
+    print("\nNote: tools/generate_cases.py contains a few dictionaries.")
+    print("Run `python3 tools/generate_cases.py` and `python3 tools/build_web_data.py` to rebuild after translation.")
