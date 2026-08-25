@@ -269,3 +269,64 @@ def test_the_real_wallet_warning_is_never_left_in_english():
     block = block[:block.index("};")]
     for lang in LANGS:
         assert re.search(rf"^  {lang}: '", block, re.M), f"no {lang} wallet warning"
+
+
+# --- sidebar, rail and surface layering ------------------------------------
+
+def test_the_sidebar_names_panels_with_glyphs_not_numbers():
+    source = strip_js_comments((DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8"))
+    assert "from '../vendor/feather.js'" in source
+    assert "icon(panel.glyph)" in source
+    assert "class: 'nav__key'" not in source, "the numbered column is back"
+
+    css = (DOCS / "css" / "gui.css").read_text(encoding="utf-8")
+    assert ".nav__key" not in css
+
+    feather = (DOCS / "js" / "vendor" / "feather.js").read_text(encoding="utf-8")
+    for glyph in ("folder", "grid", "key", "database", "search", "shuffle",
+                  "bookOpen", "info"):
+        assert f"  {glyph}: [" in feather, f"no {glyph} icon"
+    assert (DOCS / "js" / "vendor" / "LICENSE-feather").exists(), "Feather is MIT; ship the licence"
+
+
+def test_the_panel_digits_actually_do_something():
+    """The sidebar printed 1-8 beside every row from the day it was built and
+    nothing listened for them. The number moved into the row's title, so the
+    handler has to exist or the tooltip is lying in its place."""
+    app = strip_js_comments((DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8"))
+    assert "openByKey(digit)" in app
+
+    main = strip_js_comments((DOCS / "js" / "main.js").read_text(encoding="utf-8"))
+    assert "gui.openByKey(event.key)" in main
+    assert "'INPUT', 'TEXTAREA'" in main, "digits would fire while typing a seed"
+
+
+def test_the_rail_searches_rather_than_mirroring_the_journal():
+    source = strip_js_comments((DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8"))
+    assert "paintRailResults()" in source
+    assert "searchCases(query, lang, this.progress)" in source
+    # Slice from the method definition, not the first call site.
+    block = source[source.index("  paintRail() {"):source.index("  logRailSearch() {")]
+    assert "journal.all()" not in block, "the rail is mirroring the journal again"
+
+    css = (DOCS / "css" / "gui.css").read_text(encoding="utf-8")
+    columns = re.search(r"grid-template-columns: 210px minmax\(0, 1fr\) (\d+)px", css)
+    assert columns and int(columns.group(1)) >= 320, "the search rail lost its width"
+
+
+def test_surfaces_are_layered_not_flattened():
+    """A window body painted the same colour as the cards inside it makes word
+    tiles and case rows dissolve into their own container — which is exactly
+    what shipped the first time."""
+    css = (DOCS / "css" / "gui.css").read_text(encoding="utf-8")
+
+    def background(selector):
+        block = css[css.index(selector):]
+        block = block[:block.index("}")]
+        found = re.search(r"background: var\((--[\w-]+)\)", block)
+        return found.group(1) if found else None
+
+    assert background(".win {") == "--bg"
+    assert background(".word {") == "--surface"
+    assert background(".card {") == "--surface"
+    assert background(".notice {") == "--tint"

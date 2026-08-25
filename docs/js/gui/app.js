@@ -18,16 +18,19 @@ import { entropyToMnemonic, mnemonicToEntropy, wordAt, indexOf } from '../crypto
 import { fromHex, toHex } from '../crypto/hash.js';
 import { ChainClient, formatBtc, PROVIDERS } from '../chain.js';
 import { addressSigil, caseSigil, mnemonicSigil, sigil } from '../identicon.js';
+import { icon } from '../vendor/feather.js';
 
+//: `key` still works as a shortcut — it moved off the row and into the row's
+//: title, so the sidebar reads as a list of places rather than a numbered menu.
 const PANELS = [
-  { id: 'cases', label: { en: 'Case files', ru: 'Дела', es: 'Casos', pt: 'Casos' }, key: '1' },
-  { id: 'board', label: { en: 'Contracts', ru: 'Контракты', es: 'Contratos', pt: 'Contratos' }, key: '2' },
-  { id: 'decrypt', label: { en: 'Decrypt', ru: 'Дешифровка', es: 'Descifrado', pt: 'Decifração' }, key: '3' },
-  { id: 'ledger', label: { en: 'Ledger', ru: 'Реестр', es: 'Registro', pt: 'Registro' }, key: '4' },
-  { id: 'search', label: { en: 'Search', ru: 'Поиск', es: 'Búsqueda', pt: 'Busca' }, key: '5' },
-  { id: 'random', label: { en: 'Randomizer', ru: 'Рандомайзер', es: 'Aleatorio', pt: 'Aleatório' }, key: '6' },
-  { id: 'journal', label: { en: 'Journal', ru: 'Журнал', es: 'Diario', pt: 'Diário' }, key: '7' },
-  { id: 'about', label: { en: 'About', ru: 'О программе', es: 'Acerca de', pt: 'Sobre' }, key: '8' },
+  { id: 'cases', glyph: 'folder', label: { en: 'Case files', ru: 'Дела', es: 'Casos', pt: 'Casos' }, key: '1' },
+  { id: 'board', glyph: 'grid', label: { en: 'Contracts', ru: 'Контракты', es: 'Contratos', pt: 'Contratos' }, key: '2' },
+  { id: 'decrypt', glyph: 'key', label: { en: 'Decrypt', ru: 'Дешифровка', es: 'Descifrado', pt: 'Decifração' }, key: '3' },
+  { id: 'ledger', glyph: 'database', label: { en: 'Ledger', ru: 'Реестр', es: 'Registro', pt: 'Registro' }, key: '4' },
+  { id: 'search', glyph: 'search', label: { en: 'Search', ru: 'Поиск', es: 'Búsqueda', pt: 'Busca' }, key: '5' },
+  { id: 'random', glyph: 'shuffle', label: { en: 'Randomizer', ru: 'Рандомайзер', es: 'Aleatorio', pt: 'Aleatório' }, key: '6' },
+  { id: 'journal', glyph: 'bookOpen', label: { en: 'Journal', ru: 'Журнал', es: 'Diario', pt: 'Diário' }, key: '7' },
+  { id: 'about', glyph: 'info', label: { en: 'About', ru: 'О программе', es: 'Acerca de', pt: 'Sobre' }, key: '8' },
 ];
 
 // Every fixed string the GUI shows. Keys carrying {braces} are filled by `tf`.
@@ -69,6 +72,17 @@ const T = {
   copied: { en: 'Copied', ru: 'Скопировано', es: 'Copiado', pt: 'Copiado' },
   journal: { en: 'Journal', ru: 'Журнал', es: 'Diario', pt: 'Diário' },
   recent: { en: 'Recent', ru: 'Последнее', es: 'Reciente', pt: 'Recente' },
+  railTitle: { en: 'Search', ru: 'Поиск', es: 'Búsqueda', pt: 'Busca' },
+  railPlaceholder: {
+    en: 'a word from a case', ru: 'слово из дела',
+    es: 'una palabra de un caso', pt: 'uma palavra de um caso',
+  },
+  railHint: {
+    en: 'Search every case file without leaving the one you are reading. Epilogues join the index only once a case is closed.',
+    ru: 'Ищи по всем делам, не уходя с того, что читаешь. Эпилоги попадают в поиск только после закрытия дела.',
+    es: 'Busca en todos los casos sin salir del que estás leyendo. Los epílogos entran en el índice sólo cuando el caso está cerrado.',
+    pt: 'Busque em todos os casos sem sair do que está lendo. Os epílogos entram no índice só quando o caso está fechado.',
+  },
   navTitle: { en: 'Archive', ru: 'Архив', es: 'Archivo', pt: 'Arquivo' },
   openJournal: { en: 'Open journal', ru: 'Открыть журнал', es: 'Abrir el diario', pt: 'Abrir o diário' },
   recall: { en: 'Recall', ru: 'Вернуться', es: 'Retomar', pt: 'Retomar' },
@@ -349,13 +363,13 @@ export class GuiApp {
     if (!this.navWindow) return;
     const titles = [
       [this.navWindow, t('navTitle', this.lang)],
-      [this.railWindow, t('recent', this.lang)],
+      [this.railWindow, t('railTitle', this.lang)],
     ];
     for (const [frame, title] of titles) {
       const node = frame && frame.querySelector('.win__title');
       if (node) node.textContent = title;
     }
-    if (this.railTab) this.railTab.title = t('recent', this.lang);
+    if (this.railTab) this.railTab.title = t('railTitle', this.lang);
   }
 
   /** The other mode may have written progress or journal entries. */
@@ -376,7 +390,7 @@ export class GuiApp {
 
     this.navWindow = win(t('navTitle', this.lang), this.nav);
     this.contentWindow = win('—', this.content);
-    this.railWindow = win(t('recent', this.lang), this.railBody,
+    this.railWindow = win(t('railTitle', this.lang), this.railBody,
       el('button', {
         class: 'win__collapse', type: 'button', title: 'Collapse',
         text: '–',
@@ -385,8 +399,8 @@ export class GuiApp {
     this.railWindow.classList.add('rail');
 
     this.railTab = el('button', {
-      class: 'rail-tab', type: 'button', text: '▤',
-      title: t('recent', this.lang),
+      class: 'rail-tab', type: 'button', text: '⌕',
+      title: t('railTitle', this.lang),
       onClick: () => this.toggleRail(),
     });
 
@@ -429,6 +443,19 @@ export class GuiApp {
     if (panel === 'cases') this.activeCaseId = null;
     if (panel === 'board') this.activeClient = null;
     this.go(panel);
+  }
+
+  /**
+   * Open the panel a digit names. The sidebar printed 1-8 beside every row
+   * from the day it was built and nothing ever listened for them; the number
+   * has moved into the row's title, so the promise is kept now rather than
+   * merely displayed.
+   */
+  openByKey(digit) {
+    const panel = PANELS.find((entry) => entry.key === digit);
+    if (!panel) return false;
+    this.openSection(panel.id);
+    return true;
   }
 
   panelKey() {
@@ -490,11 +517,12 @@ export class GuiApp {
             el('button', {
               class: 'nav__item',
               type: 'button',
+              title: `${pick(panel.label, this.lang)} · ${panel.key}`,
               'aria-current': this.panel === panel.id ? 'true' : 'false',
               onClick: () => this.openSection(panel.id),
             },
-            el('span', { text: pick(panel.label, this.lang) }),
-            el('span', { class: 'nav__key', text: panel.key }))))),
+            icon(panel.glyph),
+            el('span', { text: pick(panel.label, this.lang) }))))),
       el('div', { class: 'nav__sep' }),
       el('div', { class: 'nav__meter' },
         el('div', { text: `${solved}/${desk.length} ${t('closedCount', this.lang)}` }),
@@ -525,22 +553,74 @@ export class GuiApp {
     return this.journal.push({ tool, title, detail, status, payload });
   }
 
+  /**
+   * The rail searches the case files.
+   *
+   * It used to mirror the journal, which the Journal panel already shows in
+   * full. Search is the thing a detective reaches for without leaving what
+   * they are reading, so it earns the permanent column instead.
+   */
   paintRail() {
     const lang = this.lang;
-    const entries = this.journal.all().slice(0, 40);
-    replace(this.railBody,
-      el('div', { class: 'rail__head' },
-        el('span', { class: 'section__meta', text: `${this.journal.all().length}` }),
-        el('span', { class: 'card__spacer' }),
-        el('button', {
-          class: 'btn', style: 'padding:2px 8px;font-size:10px',
-          type: 'button', text: t('openJournal', lang),
-          onClick: () => this.go('journal'),
-        })),
-      entries.length
-        ? el('ol', { class: 'rail__list' },
-          ...entries.map((entry) => this.railEntry(entry)))
-        : el('p', { class: 'hint-text', text: t('emptyJournal', lang) }));
+    if (!this.railInput) {
+      this.railInput = el('input', {
+        class: 'field', type: 'search', value: this.railQuery || '',
+        placeholder: t('railPlaceholder', lang),
+        'aria-label': t('railTitle', lang),
+        onInput: (event) => {
+          this.railQuery = event.currentTarget.value;
+          this.paintRailResults();
+          clearTimeout(this._railTimer);
+          this._railTimer = setTimeout(() => this.logRailSearch(), 900);
+        },
+      });
+      this.railResults = el('div', { class: 'rail__results' });
+    }
+    this.railInput.placeholder = t('railPlaceholder', lang);
+    replace(this.railBody, this.railInput, this.railResults);
+    this.paintRailResults();
+  }
+
+  paintRailResults() {
+    const lang = this.lang;
+    const query = (this.railQuery || '').trim();
+    if (!query) {
+      replace(this.railResults,
+        el('p', { class: 'hint-text', text: t('railHint', lang) }));
+      return;
+    }
+    const results = searchCases(query, lang, this.progress);
+    if (!results.length) {
+      replace(this.railResults, empty(t('nothingInArchive', lang)));
+      return;
+    }
+    replace(this.railResults,
+      el('p', { class: 'section__meta', style: 'margin-bottom:7px',
+        text: `${results.length} ${t('casesCount', lang)}` }),
+      el('ol', { class: 'rail__list' },
+        ...results.slice(0, 30).map((result) => el('li', { class: 'rail__item' },
+          el('button', {
+            class: 'rail__btn', type: 'button',
+            onClick: () => this.go('cases', result.case.id),
+          },
+          caseSigil(result.case, { size: 22 }),
+          el('span', { class: 'rail__text' },
+            el('span', { class: 'rail__title',
+              text: pick(result.case.codename, lang) }),
+            el('span', { class: 'rail__hit',
+              text: (result.hits.find((hit) => hit.field !== 'codename')
+                || result.hits[0] || {}).line || '' })))))));
+  }
+
+  logRailSearch() {
+    const query = (this.railQuery || '').trim();
+    if (!query || query === this._railLogged) return;
+    this._railLogged = query;
+    const results = searchCases(query, this.lang, this.progress);
+    this.log('archive', query, {
+      detail: `${results.length} ${t('casesCount', this.lang)}`,
+      payload: { query },
+    });
   }
 
   /** The sigil that identifies whatever a journal entry is about. */
@@ -1010,12 +1090,12 @@ export class GuiApp {
   derivationTable(wallet) {
     return el('div', { class: 'stack' },
       el('div', { class: 'row' },
-        mnemonicSigil(wallet.mnemonic, { size: 34 }),
+        mnemonicSigil(wallet.mnemonic, { size: 44 }),
         el('span', { class: 'section__meta', text: t('sigilOfPhrase', this.lang) })),
       section(t('derivation', this.lang)),
       table(['', 'PATH', 'TYPE', 'ADDRESS'],
         wallet.addresses.map((entry) => [
-          { node: addressSigil(entry.address, { size: 20 }) },
+          { node: addressSigil(entry.address, { size: 30 }) },
           { text: entry.path },
           { text: entry.label },
           { class: 'addr', node: el('span', {}, entry.address, ' ',

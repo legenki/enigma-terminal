@@ -190,7 +190,17 @@ document.addEventListener('keydown', (event) => {
     setMode(mode === 'cl' ? 'gui' : 'cl');
     return;
   }
-  if (mode !== 'cl') return;
+  if (mode !== 'cl') {
+    // Digits jump between panels, but never while the player is typing into
+    // the rail search or a seed field.
+    const typing = event.target instanceof HTMLElement
+      && ['INPUT', 'TEXTAREA'].includes(event.target.tagName);
+    if (!typing && !event.ctrlKey && !event.metaKey && !event.altKey
+        && gui.openByKey(event.key)) {
+      event.preventDefault();
+    }
+    return;
+  }
   if (event.key === 'Tab') return;
   if ((event.ctrlKey || event.metaKey) && ['c', 'v', 'r', 'l'].includes(event.key.toLowerCase())) {
     if (event.key.toLowerCase() === 'l') { event.preventDefault(); terminal.clear(); }
