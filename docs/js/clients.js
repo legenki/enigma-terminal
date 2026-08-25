@@ -1,0 +1,1388 @@
+// GENERATED FILE — edit data/clients.json and run tools/build_web_data.py instead.
+
+export const CLIENTS = [
+  {
+    "slug": "meridian",
+    "order": 1,
+    "name": {
+      "ru": "МЕРИДИАН",
+      "en": "MERIDIAN"
+    },
+    "kind": {
+      "ru": "частное бюро криминалистики",
+      "en": "private forensic bureau"
+    },
+    "district": {
+      "ru": "Старая Биржа",
+      "en": "The Old Exchange"
+    },
+    "difficulty": [
+      1,
+      3
+    ],
+    "creed": {
+      "ru": [
+        "МЕРИДИАН не владеет ничем и не хочет владеть. Он находит.",
+        "Восемь этажей серверов, ни одного окна, и договор, в котором нет слова «изъятие» —",
+        "только «восстановление законного доступа». Платят аккуратно и в срок.",
+        "Это единственный заказчик, который скажет тебе правду о том, что ты нашёл."
+      ],
+      "en": [
+        "MERIDIAN owns nothing and wants to own nothing. It finds.",
+        "Eight floors of servers, not one window, and a contract that never says 'seizure' —",
+        "only 'restoration of lawful access'. They pay carefully and on time.",
+        "This is the one client who will tell you the truth about what you found."
+      ]
+    },
+    "dialect": {
+      "ru": "МЕРИДИАН думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли.",
+      "en": "MERIDIAN thinks in entropy. Their analysts recover not words but the bytes the words grew from."
+    },
+    "archetypes": [
+      "entropy_pattern",
+      "index_math",
+      "unique_prefix"
+    ],
+    "acts": {
+      "ru": [
+        "ПРОВЕРКА",
+        "ПОДРЯД",
+        "АУДИТ",
+        "ЗАКРЫТЫЙ КОНТУР"
+      ],
+      "en": [
+        "VETTING",
+        "CONTRACT",
+        "AUDIT",
+        "CLOSED LOOP"
+      ]
+    },
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "ХОЛОДНЫЙ",
+          "ЧИСТЫЙ",
+          "ЗАВЕРЕННЫЙ",
+          "НУЛЕВОЙ",
+          "ТИХИЙ",
+          "ПРЯМОЙ",
+          "СУХОЙ",
+          "ЗАКРЫТЫЙ"
+        ],
+        "en": [
+          "COLD",
+          "CLEAN",
+          "CERTIFIED",
+          "ZERO",
+          "QUIET",
+          "DIRECT",
+          "DRY",
+          "SEALED"
+        ],
+        "ru_forms": [
+          {
+            "m": "ХОЛОДНЫЙ",
+            "f": "ХОЛОДНАЯ",
+            "n": "ХОЛОДНОЕ"
+          },
+          {
+            "m": "ЧИСТЫЙ",
+            "f": "ЧИСТАЯ",
+            "n": "ЧИСТОЕ"
+          },
+          {
+            "m": "ЗАВЕРЕННЫЙ",
+            "f": "ЗАВЕРЕННАЯ",
+            "n": "ЗАВЕРЕННОЕ"
+          },
+          {
+            "m": "НУЛЕВОЙ",
+            "f": "НУЛЕВАЯ",
+            "n": "НУЛЕВОЕ"
+          },
+          {
+            "m": "ТИХИЙ",
+            "f": "ТИХАЯ",
+            "n": "ТИХОЕ"
+          },
+          {
+            "m": "ПРЯМОЙ",
+            "f": "ПРЯМАЯ",
+            "n": "ПРЯМОЕ"
+          },
+          {
+            "m": "СУХОЙ",
+            "f": "СУХАЯ",
+            "n": "СУХОЕ"
+          },
+          {
+            "m": "ЗАКРЫТЫЙ",
+            "f": "ЗАКРЫТАЯ",
+            "n": "ЗАКРЫТОЕ"
+          }
+        ]
+      },
+      "noun": {
+        "ru": [
+          "ПРОТОКОЛ",
+          "РЕЕСТР",
+          "ОСТАТОК",
+          "ПЕРЕВОД",
+          "ДЕПОЗИТ",
+          "ОРДЕР",
+          "БАЛАНС",
+          "ИНДЕКС"
+        ],
+        "en": [
+          "PROTOCOL",
+          "LEDGER",
+          "REMAINDER",
+          "TRANSFER",
+          "DEPOSIT",
+          "WARRANT",
+          "BALANCE",
+          "INDEX"
+        ],
+        "ru_gender": [
+          "m",
+          "m",
+          "m",
+          "m",
+          "m",
+          "m",
+          "m",
+          "m"
+        ]
+      }
+    },
+    "evidence_sources": {
+      "ru": [
+        "выписка из терминала МЕРИДИАНА",
+        "лента аудита, распечатанная на матричном принтере",
+        "служебная записка без подписи",
+        "дамп памяти рабочей станции"
+      ],
+      "en": [
+        "a MERIDIAN terminal statement",
+        "an audit tape off a dot-matrix printer",
+        "an unsigned internal memo",
+        "a workstation memory dump"
+      ]
+    },
+    "payoff": {
+      "ru": "МЕРИДИАН переводит гонорар в течение часа и не задаёт вопросов о том, что ещё ты видел.",
+      "en": "MERIDIAN wires the fee within the hour and asks nothing about what else you saw."
+    }
+  },
+  {
+    "slug": "seventh-sign",
+    "order": 2,
+    "name": {
+      "ru": "СЕДЬМОЙ ЗНАК",
+      "en": "SEVENTH SIGN"
+    },
+    "kind": {
+      "ru": "серый фонд, аукционный дом",
+      "en": "grey fund, auction house"
+    },
+    "district": {
+      "ru": "Аукционный квартал",
+      "en": "The Auction Quarter"
+    },
+    "difficulty": [
+      2,
+      4
+    ],
+    "creed": {
+      "ru": [
+        "СЕДЬМОЙ ЗНАК продаёт картины, которых никто не видел, людям, которых никто не знает.",
+        "В их бумагах не встречается слово «деньги» — только «предмет», «оценка» и «переход права».",
+        "Каждый лот уходит по цене, в которой зашит номер. Числа тут важнее холста.",
+        "Они улыбаются, наливают вино и никогда не говорят, кто был предыдущим владельцем."
+      ],
+      "en": [
+        "SEVENTH SIGN sells paintings nobody has seen to people nobody knows.",
+        "Their paperwork never contains the word 'money' — only 'lot', 'appraisal' and 'transfer of title'.",
+        "Every lot closes at a price with a number sewn into it. Here the figures matter more than the canvas.",
+        "They smile, pour the wine, and never say who the previous owner was."
+      ]
+    },
+    "dialect": {
+      "ru": "СЕДЬМОЙ ЗНАК прячет слова в суммах. Смотри не на лот, а на последние цифры цены.",
+      "en": "SEVENTH SIGN hides words inside amounts. Never mind the lot — read the last digits of the price."
+    },
+    "archetypes": [
+      "ledger_amounts",
+      "mirror_index",
+      "index_math"
+    ],
+    "acts": {
+      "ru": [
+        "ПРЕДПРОСМОТР",
+        "ТОРГИ",
+        "МОЛОТОК",
+        "ЧАСТНАЯ ПРОДАЖА"
+      ],
+      "en": [
+        "PREVIEW",
+        "BIDDING",
+        "THE HAMMER",
+        "PRIVATE SALE"
+      ]
+    },
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "ПОЗДНИЙ",
+          "БАРХАТНЫЙ",
+          "АНОНИМНЫЙ",
+          "ЗАКРЫТЫЙ",
+          "ВЕЧЕРНИЙ",
+          "ФАЛЬШИВЫЙ",
+          "ЗОЛОЧЁНЫЙ",
+          "СНЯТЫЙ"
+        ],
+        "en": [
+          "LATE",
+          "VELVET",
+          "ANONYMOUS",
+          "CLOSED",
+          "EVENING",
+          "FORGED",
+          "GILDED",
+          "WITHDRAWN"
+        ],
+        "ru_forms": [
+          {
+            "m": "ПОЗДНИЙ",
+            "f": "ПОЗДНЯЯ",
+            "n": "ПОЗДНЕЕ"
+          },
+          {
+            "m": "БАРХАТНЫЙ",
+            "f": "БАРХАТНАЯ",
+            "n": "БАРХАТНОЕ"
+          },
+          {
+            "m": "АНОНИМНЫЙ",
+            "f": "АНОНИМНАЯ",
+            "n": "АНОНИМНОЕ"
+          },
+          {
+            "m": "ЗАКРЫТЫЙ",
+            "f": "ЗАКРЫТАЯ",
+            "n": "ЗАКРЫТОЕ"
+          },
+          {
+            "m": "ВЕЧЕРНИЙ",
+            "f": "ВЕЧЕРНЯЯ",
+            "n": "ВЕЧЕРНЕЕ"
+          },
+          {
+            "m": "ФАЛЬШИВЫЙ",
+            "f": "ФАЛЬШИВАЯ",
+            "n": "ФАЛЬШИВОЕ"
+          },
+          {
+            "m": "ЗОЛОЧЁНЫЙ",
+            "f": "ЗОЛОЧЁНАЯ",
+            "n": "ЗОЛОЧЁНОЕ"
+          },
+          {
+            "m": "СНЯТЫЙ",
+            "f": "СНЯТАЯ",
+            "n": "СНЯТОЕ"
+          }
+        ]
+      },
+      "noun": {
+        "ru": [
+          "ЛОТ",
+          "МОЛОТОК",
+          "КАТАЛОГ",
+          "ОЦЕНКА",
+          "ПОДПИСЬ",
+          "РАМА",
+          "ЗАЛОГ",
+          "КОМИССИЯ"
+        ],
+        "en": [
+          "LOT",
+          "HAMMER",
+          "CATALOGUE",
+          "APPRAISAL",
+          "SIGNATURE",
+          "FRAME",
+          "PLEDGE",
+          "COMMISSION"
+        ],
+        "ru_gender": [
+          "m",
+          "m",
+          "m",
+          "f",
+          "f",
+          "f",
+          "m",
+          "f"
+        ]
+      }
+    },
+    "evidence_sources": {
+      "ru": [
+        "страница аукционного каталога",
+        "квитанция о переходе права",
+        "счёт, выписанный от руки",
+        "список отозванных лотов"
+      ],
+      "en": [
+        "a page from the auction catalogue",
+        "a transfer-of-title receipt",
+        "a hand-written invoice",
+        "a list of withdrawn lots"
+      ]
+    },
+    "payoff": {
+      "ru": "СЕДЬМОЙ ЗНАК присылает конверт без обратного адреса. Внутри — сумма и ни одного слова.",
+      "en": "SEVENTH SIGN sends an envelope with no return address. Inside: a sum, and not one word."
+    }
+  },
+  {
+    "slug": "deephold",
+    "order": 3,
+    "name": {
+      "ru": "ГЛУБИНА",
+      "en": "DEEPHOLD"
+    },
+    "kind": {
+      "ru": "подводные дата-убежища",
+      "en": "subsea data havens"
+    },
+    "district": {
+      "ru": "Шельф",
+      "en": "The Shelf"
+    },
+    "difficulty": [
+      2,
+      4
+    ],
+    "creed": {
+      "ru": [
+        "ГЛУБИНА выкупила семь списанных буровых и утопила в них по дата-центру.",
+        "Сто девяносто метров воды — лучший фаервол из придуманных: до него не доедет ни один ордер.",
+        "Их инженеры говорят о данных как о грузе, а о клиентах — как о балласте.",
+        "Всё, что попадает на платформу, они кладут в сетку координат. Даже слова."
+      ],
+      "en": [
+        "DEEPHOLD bought seven decommissioned rigs and sank a data centre into each.",
+        "A hundred and ninety metres of water is the finest firewall ever devised: no warrant swims that far.",
+        "Their engineers speak of data as cargo and of clients as ballast.",
+        "Everything that reaches a platform gets filed into a coordinate grid. Words included."
+      ]
+    },
+    "dialect": {
+      "ru": "ГЛУБИНА раскладывает словарь по сетке: 128 рядов на 16 колонок. Слово — это точка на карте.",
+      "en": "DEEPHOLD lays the wordlist on a grid: 128 rows by 16 columns. A word is a point on a chart."
+    },
+    "archetypes": [
+      "grid_coords",
+      "neighbour",
+      "entropy_pattern"
+    ],
+    "acts": {
+      "ru": [
+        "ПОГРУЖЕНИЕ",
+        "ДАВЛЕНИЕ",
+        "ТЕМНОТА",
+        "ДНО"
+      ],
+      "en": [
+        "DESCENT",
+        "PRESSURE",
+        "DARKNESS",
+        "THE FLOOR"
+      ]
+    },
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "СОЛЁНЫЙ",
+          "ЗАТОПЛЕННЫЙ",
+          "ГЛУХОЙ",
+          "ПРИДОННЫЙ",
+          "ШТОРМОВОЙ",
+          "РЖАВЫЙ",
+          "ХОЛОДНЫЙ",
+          "СЛЕПОЙ"
+        ],
+        "en": [
+          "SALT",
+          "FLOODED",
+          "MUFFLED",
+          "BENTHIC",
+          "STORM",
+          "RUSTED",
+          "COLD",
+          "BLIND"
+        ],
+        "ru_forms": [
+          {
+            "m": "СОЛЁНЫЙ",
+            "f": "СОЛЁНАЯ",
+            "n": "СОЛЁНОЕ"
+          },
+          {
+            "m": "ЗАТОПЛЕННЫЙ",
+            "f": "ЗАТОПЛЕННАЯ",
+            "n": "ЗАТОПЛЕННОЕ"
+          },
+          {
+            "m": "ГЛУХОЙ",
+            "f": "ГЛУХАЯ",
+            "n": "ГЛУХОЕ"
+          },
+          {
+            "m": "ПРИДОННЫЙ",
+            "f": "ПРИДОННАЯ",
+            "n": "ПРИДОННОЕ"
+          },
+          {
+            "m": "ШТОРМОВОЙ",
+            "f": "ШТОРМОВАЯ",
+            "n": "ШТОРМОВОЕ"
+          },
+          {
+            "m": "РЖАВЫЙ",
+            "f": "РЖАВАЯ",
+            "n": "РЖАВОЕ"
+          },
+          {
+            "m": "ХОЛОДНЫЙ",
+            "f": "ХОЛОДНАЯ",
+            "n": "ХОЛОДНОЕ"
+          },
+          {
+            "m": "СЛЕПОЙ",
+            "f": "СЛЕПАЯ",
+            "n": "СЛЕПОЕ"
+          }
+        ]
+      },
+      "noun": {
+        "ru": [
+          "ГОРИЗОНТ",
+          "КЕССОН",
+          "ЯКОРЬ",
+          "ТРЮМ",
+          "МАЯК",
+          "КИЛЬ",
+          "ФАРВАТЕР",
+          "БАЛЛАСТ"
+        ],
+        "en": [
+          "HORIZON",
+          "CAISSON",
+          "ANCHOR",
+          "HOLD",
+          "BEACON",
+          "KEEL",
+          "CHANNEL",
+          "BALLAST"
+        ],
+        "ru_gender": [
+          "m",
+          "m",
+          "m",
+          "m",
+          "m",
+          "m",
+          "m",
+          "m"
+        ]
+      }
+    },
+    "evidence_sources": {
+      "ru": [
+        "вахтенный журнал платформы",
+        "телеметрия с придонного датчика",
+        "радиограмма с борта",
+        "карта сектора с пометками карандашом"
+      ],
+      "en": [
+        "a platform watch log",
+        "telemetry from a seabed sensor",
+        "a radio message from the deck",
+        "a sector chart marked in pencil"
+      ]
+    },
+    "payoff": {
+      "ru": "ГЛУБИНА платит с задержкой в один прилив и никогда не объясняет, почему именно так.",
+      "en": "DEEPHOLD pays one tide late and never explains why that particular delay."
+    }
+  },
+  {
+    "slug": "vega-orbital",
+    "order": 4,
+    "name": {
+      "ru": "ВЕГА-ОРБИТАЛ",
+      "en": "VEGA ORBITAL"
+    },
+    "kind": {
+      "ru": "орбитальное хранение ключей",
+      "en": "orbital key custody"
+    },
+    "district": {
+      "ru": "Лифт",
+      "en": "The Elevator"
+    },
+    "difficulty": [
+      3,
+      5
+    ],
+    "creed": {
+      "ru": [
+        "ВЕГА держит ключи там, куда не дотянется ни один суд: на высоте четырёхсот километров.",
+        "Их главный продукт — не хранилище, а задержка. Запрос идёт наверх две с половиной секунды,",
+        "и за эти секунды успевает умереть большинство плохих идей.",
+        "Всё, что они делают, они считают. Даже имена у них — результат арифметики."
+      ],
+      "en": [
+        "VEGA keeps keys where no court can reach: four hundred kilometres up.",
+        "Their real product is not storage but latency. A request climbs for two and a half seconds,",
+        "and in those seconds most bad ideas die of natural causes.",
+        "Everything they do, they compute. Even their names come out of arithmetic."
+      ]
+    },
+    "dialect": {
+      "ru": "ВЕГА диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить.",
+      "en": "VEGA dictates numbers rather than words, and never plainly. The index has to be computed."
+    },
+    "archetypes": [
+      "index_math",
+      "mirror_index",
+      "grid_coords"
+    ],
+    "acts": {
+      "ru": [
+        "ВЫВЕДЕНИЕ",
+        "АПОГЕЙ",
+        "ТЕНЬ ЗЕМЛИ",
+        "СХОД С ОРБИТЫ"
+      ],
+      "en": [
+        "INSERTION",
+        "APOGEE",
+        "EARTH SHADOW",
+        "DEORBIT"
+      ]
+    },
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "ВЫСОКИЙ",
+          "ЗАДЕРЖАННЫЙ",
+          "БЕЗВОЗДУШНЫЙ",
+          "СОЛНЕЧНЫЙ",
+          "ТЕНЕВОЙ",
+          "ГЕОСТАЦИОНАРНЫЙ",
+          "СБИТЫЙ",
+          "ЯСНЫЙ"
+        ],
+        "en": [
+          "HIGH",
+          "DELAYED",
+          "AIRLESS",
+          "SOLAR",
+          "SHADOWED",
+          "GEOSTATIONARY",
+          "DOWNED",
+          "CLEAR"
+        ],
+        "ru_forms": [
+          {
+            "m": "ВЫСОКИЙ",
+            "f": "ВЫСОКАЯ",
+            "n": "ВЫСОКОЕ"
+          },
+          {
+            "m": "ЗАДЕРЖАННЫЙ",
+            "f": "ЗАДЕРЖАННАЯ",
+            "n": "ЗАДЕРЖАННОЕ"
+          },
+          {
+            "m": "БЕЗВОЗДУШНЫЙ",
+            "f": "БЕЗВОЗДУШНАЯ",
+            "n": "БЕЗВОЗДУШНОЕ"
+          },
+          {
+            "m": "СОЛНЕЧНЫЙ",
+            "f": "СОЛНЕЧНАЯ",
+            "n": "СОЛНЕЧНОЕ"
+          },
+          {
+            "m": "ТЕНЕВОЙ",
+            "f": "ТЕНЕВАЯ",
+            "n": "ТЕНЕВОЕ"
+          },
+          {
+            "m": "ГЕОСТАЦИОНАРНЫЙ",
+            "f": "ГЕОСТАЦИОНАРНАЯ",
+            "n": "ГЕОСТАЦИОНАРНОЕ"
+          },
+          {
+            "m": "СБИТЫЙ",
+            "f": "СБИТАЯ",
+            "n": "СБИТОЕ"
+          },
+          {
+            "m": "ЯСНЫЙ",
+            "f": "ЯСНАЯ",
+            "n": "ЯСНОЕ"
+          }
+        ]
+      },
+      "noun": {
+        "ru": [
+          "АПОГЕЙ",
+          "ВИТОК",
+          "ТРАНЗИТ",
+          "МАЯК",
+          "ОКНО",
+          "ВЕКТОР",
+          "ПЕРИГЕЙ",
+          "КАНАЛ"
+        ],
+        "en": [
+          "APOGEE",
+          "ORBIT",
+          "TRANSIT",
+          "BEACON",
+          "WINDOW",
+          "VECTOR",
+          "PERIGEE",
+          "DOWNLINK"
+        ],
+        "ru_gender": [
+          "m",
+          "m",
+          "m",
+          "m",
+          "n",
+          "m",
+          "m",
+          "m"
+        ]
+      }
+    },
+    "evidence_sources": {
+      "ru": [
+        "телеметрический пакет с задержкой 2,5 с",
+        "расчёт баллистика на полях распечатки",
+        "лог наземной станции",
+        "снимок с борта, сжатый до неузнаваемости"
+      ],
+      "en": [
+        "a telemetry packet 2.5 s late",
+        "a ballistician's working in a printout margin",
+        "a ground-station log",
+        "an on-board image compressed past recognition"
+      ]
+    },
+    "payoff": {
+      "ru": "ВЕГА подтверждает приём через две с половиной секунды после того, как ты закрыл терминал.",
+      "en": "VEGA acknowledges two and a half seconds after you have already closed the terminal."
+    }
+  },
+  {
+    "slug": "whitebone",
+    "order": 5,
+    "name": {
+      "ru": "БЕЛАЯ КОСТЬ",
+      "en": "WHITEBONE"
+    },
+    "kind": {
+      "ru": "биотех и клиники аренды тела",
+      "en": "biotech and body-lease clinics"
+    },
+    "district": {
+      "ru": "Санаторий",
+      "en": "The Sanatorium"
+    },
+    "difficulty": [
+      3,
+      5
+    ],
+    "creed": {
+      "ru": [
+        "БЕЛАЯ КОСТЬ разговаривает с тобой голосом медсестры, которая уже всё решила.",
+        "Они сдают в аренду печень, роговицу и двадцать лет жизни — в рассрочку, под залог кошелька.",
+        "Если клиент перестал платить, ключ переходит к ним. Если клиент перестал дышать — тоже.",
+        "Их каталог устроен как определитель видов: каждая вещь занимает единственную ветку."
+      ],
+      "en": [
+        "WHITEBONE speaks to you in the voice of a nurse who has already decided.",
+        "They lease out livers, corneas and twenty years of life, in instalments, against a wallet.",
+        "If the client stops paying, the key becomes theirs. If the client stops breathing, likewise.",
+        "Their catalogue works like a species key: every item sits on exactly one branch."
+      ]
+    },
+    "dialect": {
+      "ru": "БЕЛАЯ КОСТЬ описывает слово через его единственность: такая ветка в словаре одна.",
+      "en": "WHITEBONE describes a word by its uniqueness: only one branch in the list fits."
+    },
+    "archetypes": [
+      "unique_prefix",
+      "neighbour",
+      "redacted"
+    ],
+    "acts": {
+      "ru": [
+        "ПРИЁМ",
+        "АНАМНЕЗ",
+        "ОПЕРАЦИЯ",
+        "ВЫПИСКА"
+      ],
+      "en": [
+        "ADMISSION",
+        "HISTORY",
+        "SURGERY",
+        "DISCHARGE"
+      ]
+    },
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "СТЕРИЛЬНЫЙ",
+          "ХРОНИЧЕСКИЙ",
+          "ДОНОРСКИЙ",
+          "ОТСРОЧЕННЫЙ",
+          "БЕЛЫЙ",
+          "ПОСМЕРТНЫЙ",
+          "МЯГКИЙ",
+          "ОПЛАЧЕННЫЙ"
+        ],
+        "en": [
+          "STERILE",
+          "CHRONIC",
+          "DONOR",
+          "DEFERRED",
+          "WHITE",
+          "POSTHUMOUS",
+          "SOFT",
+          "PREPAID"
+        ],
+        "ru_forms": [
+          {
+            "m": "СТЕРИЛЬНЫЙ",
+            "f": "СТЕРИЛЬНАЯ",
+            "n": "СТЕРИЛЬНОЕ"
+          },
+          {
+            "m": "ХРОНИЧЕСКИЙ",
+            "f": "ХРОНИЧЕСКАЯ",
+            "n": "ХРОНИЧЕСКОЕ"
+          },
+          {
+            "m": "ДОНОРСКИЙ",
+            "f": "ДОНОРСКАЯ",
+            "n": "ДОНОРСКОЕ"
+          },
+          {
+            "m": "ОТСРОЧЕННЫЙ",
+            "f": "ОТСРОЧЕННАЯ",
+            "n": "ОТСРОЧЕННОЕ"
+          },
+          {
+            "m": "БЕЛЫЙ",
+            "f": "БЕЛАЯ",
+            "n": "БЕЛОЕ"
+          },
+          {
+            "m": "ПОСМЕРТНЫЙ",
+            "f": "ПОСМЕРТНАЯ",
+            "n": "ПОСМЕРТНОЕ"
+          },
+          {
+            "m": "МЯГКИЙ",
+            "f": "МЯГКАЯ",
+            "n": "МЯГКОЕ"
+          },
+          {
+            "m": "ОПЛАЧЕННЫЙ",
+            "f": "ОПЛАЧЕННАЯ",
+            "n": "ОПЛАЧЕННОЕ"
+          }
+        ]
+      },
+      "noun": {
+        "ru": [
+          "КАРТА",
+          "ШОВ",
+          "ПАЛАТА",
+          "ДИАГНОЗ",
+          "СОГЛАСИЕ",
+          "ПУЛЬС",
+          "РЕЦЕПТ",
+          "ОБРАЗЕЦ"
+        ],
+        "en": [
+          "CHART",
+          "SUTURE",
+          "WARD",
+          "DIAGNOSIS",
+          "CONSENT",
+          "PULSE",
+          "SCRIPT",
+          "SPECIMEN"
+        ],
+        "ru_gender": [
+          "f",
+          "m",
+          "f",
+          "m",
+          "n",
+          "m",
+          "m",
+          "m"
+        ]
+      }
+    },
+    "evidence_sources": {
+      "ru": [
+        "страница из истории болезни",
+        "бланк информированного согласия",
+        "распечатка монитора у койки",
+        "опись личных вещей пациента"
+      ],
+      "en": [
+        "a page from a medical history",
+        "an informed-consent form",
+        "a bedside monitor printout",
+        "an inventory of a patient's effects"
+      ]
+    },
+    "payoff": {
+      "ru": "БЕЛАЯ КОСТЬ благодарит и предлагает тебе обследование. Бесплатно. В первый раз.",
+      "en": "WHITEBONE thanks you and offers a check-up. Free of charge. The first time."
+    }
+  },
+  {
+    "slug": "gost-9",
+    "order": 6,
+    "name": {
+      "ru": "ГОСТ-9",
+      "en": "GOST-9"
+    },
+    "kind": {
+      "ru": "остаточное ведомство несуществующего государства",
+      "en": "residual agency of a state that no longer exists"
+    },
+    "district": {
+      "ru": "Архив",
+      "en": "The Registry"
+    },
+    "difficulty": [
+      3,
+      5
+    ],
+    "creed": {
+      "ru": [
+        "Страны нет уже девятнадцать лет. Ведомство работает.",
+        "ГОСТ-9 продолжает ставить печати, нумеровать входящие и вымарывать то, что не положено знать.",
+        "Зарплату им платит кто-то, кого они называют «правопреемником» и никогда — по имени.",
+        "В их бумагах всегда чего-то не хватает. Ровно одного слова. Это не небрежность, это метод."
+      ],
+      "en": [
+        "The country has been gone nineteen years. The agency is still working.",
+        "GOST-9 goes on stamping, numbering the incoming, and blacking out what must not be known.",
+        "Someone pays their salaries — someone they call 'the successor' and never by name.",
+        "Their papers are always missing something. Exactly one word. That is not sloppiness, it is method."
+      ]
+    },
+    "dialect": {
+      "ru": "ГОСТ-9 выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE.",
+      "en": "GOST-9 releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE."
+    },
+    "archetypes": [
+      "redacted",
+      "unique_prefix",
+      "mirror_index"
+    ],
+    "acts": {
+      "ru": [
+        "ВХОДЯЩИЙ",
+        "СОГЛАСОВАНИЕ",
+        "ОСОБАЯ ПАПКА",
+        "СПИСАНИЕ"
+      ],
+      "en": [
+        "INCOMING",
+        "APPROVAL",
+        "SPECIAL FOLDER",
+        "WRITE-OFF"
+      ]
+    },
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "ВЫМАРАННЫЙ",
+          "ПОДШИТЫЙ",
+          "СЕКРЕТНЫЙ",
+          "ПРОСРОЧЕННЫЙ",
+          "ГЕРБОВЫЙ",
+          "УТРАЧЕННЫЙ",
+          "ЗАВЕРЕННЫЙ",
+          "ЛИШНИЙ"
+        ],
+        "en": [
+          "REDACTED",
+          "FILED",
+          "CLASSIFIED",
+          "EXPIRED",
+          "STAMPED",
+          "LOST",
+          "NOTARISED",
+          "SURPLUS"
+        ],
+        "ru_forms": [
+          {
+            "m": "ВЫМАРАННЫЙ",
+            "f": "ВЫМАРАННАЯ",
+            "n": "ВЫМАРАННОЕ"
+          },
+          {
+            "m": "ПОДШИТЫЙ",
+            "f": "ПОДШИТАЯ",
+            "n": "ПОДШИТОЕ"
+          },
+          {
+            "m": "СЕКРЕТНЫЙ",
+            "f": "СЕКРЕТНАЯ",
+            "n": "СЕКРЕТНОЕ"
+          },
+          {
+            "m": "ПРОСРОЧЕННЫЙ",
+            "f": "ПРОСРОЧЕННАЯ",
+            "n": "ПРОСРОЧЕННОЕ"
+          },
+          {
+            "m": "ГЕРБОВЫЙ",
+            "f": "ГЕРБОВАЯ",
+            "n": "ГЕРБОВОЕ"
+          },
+          {
+            "m": "УТРАЧЕННЫЙ",
+            "f": "УТРАЧЕННАЯ",
+            "n": "УТРАЧЕННОЕ"
+          },
+          {
+            "m": "ЗАВЕРЕННЫЙ",
+            "f": "ЗАВЕРЕННАЯ",
+            "n": "ЗАВЕРЕННОЕ"
+          },
+          {
+            "m": "ЛИШНИЙ",
+            "f": "ЛИШНЯЯ",
+            "n": "ЛИШНЕЕ"
+          }
+        ]
+      },
+      "noun": {
+        "ru": [
+          "ЛИСТ",
+          "ПЕЧАТЬ",
+          "ОПИСЬ",
+          "ЦИРКУЛЯР",
+          "ФОРМУЛЯР",
+          "ГРИФ",
+          "ПРОТОКОЛ",
+          "ПОДПИСЬ"
+        ],
+        "en": [
+          "SHEET",
+          "SEAL",
+          "INVENTORY",
+          "CIRCULAR",
+          "RECORD",
+          "CLASSIFICATION",
+          "MINUTES",
+          "SIGNATURE"
+        ],
+        "ru_gender": [
+          "m",
+          "f",
+          "f",
+          "m",
+          "m",
+          "m",
+          "m",
+          "f"
+        ]
+      }
+    },
+    "evidence_sources": {
+      "ru": [
+        "лист из особой папки с вымаранной строкой",
+        "опись дел, сданных в архив",
+        "циркуляр без адресата",
+        "формуляр с оттиском несуществующей печати"
+      ],
+      "en": [
+        "a special-folder sheet with one line blacked out",
+        "an inventory of archived files",
+        "a circular with no addressee",
+        "a form bearing the stamp of a state that ended"
+      ]
+    },
+    "payoff": {
+      "ru": "ГОСТ-9 присылает уведомление о том, что твоё обращение рассмотрено. Гонорар придёт отдельным письмом. Через полгода.",
+      "en": "GOST-9 sends notice that your request has been considered. The fee follows in a separate letter. In six months."
+    }
+  },
+  {
+    "slug": "mica",
+    "order": 7,
+    "name": {
+      "ru": "СЛЮДА",
+      "en": "MICA"
+    },
+    "kind": {
+      "ru": "минеральный и энергетический конгломерат",
+      "en": "mineral and energy conglomerate"
+    },
+    "district": {
+      "ru": "Разрез",
+      "en": "The Cut"
+    },
+    "difficulty": [
+      4,
+      5
+    ],
+    "creed": {
+      "ru": [
+        "СЛЮДА владеет сетью. Не социальной — электрической. Той, без которой не работает ничего.",
+        "Они мыслят десятилетиями и говорят так, будто человек — это короткий геологический эпизод.",
+        "Каждый их документ симметричен: слюда расслаивается ровными зеркальными пластинами,",
+        "и то же самое они делают со словами. Смотри с конца."
+      ],
+      "en": [
+        "MICA owns the grid. Not the social one — the electrical one, without which nothing runs.",
+        "They think in decades and speak as though a person were a brief geological episode.",
+        "Every document of theirs is symmetrical: mica cleaves into even mirrored sheets,",
+        "and they do the same to words. Read from the far end."
+      ]
+    },
+    "dialect": {
+      "ru": "СЛЮДА зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N.",
+      "en": "MICA mirrors the wordlist: the word at N answers to the word at 2049 − N."
+    },
+    "archetypes": [
+      "mirror_index",
+      "grid_coords",
+      "ledger_amounts"
+    ],
+    "acts": {
+      "ru": [
+        "РАЗВЕДКА",
+        "ВСКРЫША",
+        "ЖИЛА",
+        "ЗАКЛАДКА"
+      ],
+      "en": [
+        "SURVEY",
+        "OVERBURDEN",
+        "THE SEAM",
+        "BACKFILL"
+      ]
+    },
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "ЗЕРКАЛЬНЫЙ",
+          "СЛОИСТЫЙ",
+          "ГЛУБИННЫЙ",
+          "ОБРАТНЫЙ",
+          "КРИСТАЛЛИЧЕСКИЙ",
+          "ВЫРАБОТАННЫЙ",
+          "ТВЁРДЫЙ",
+          "ПОГАШЕННЫЙ"
+        ],
+        "en": [
+          "MIRRORED",
+          "LAYERED",
+          "DEEP",
+          "REVERSED",
+          "CRYSTALLINE",
+          "EXHAUSTED",
+          "HARD",
+          "EXTINGUISHED"
+        ],
+        "ru_forms": [
+          {
+            "m": "ЗЕРКАЛЬНЫЙ",
+            "f": "ЗЕРКАЛЬНАЯ",
+            "n": "ЗЕРКАЛЬНОЕ"
+          },
+          {
+            "m": "СЛОИСТЫЙ",
+            "f": "СЛОИСТАЯ",
+            "n": "СЛОИСТОЕ"
+          },
+          {
+            "m": "ГЛУБИННЫЙ",
+            "f": "ГЛУБИННАЯ",
+            "n": "ГЛУБИННОЕ"
+          },
+          {
+            "m": "ОБРАТНЫЙ",
+            "f": "ОБРАТНАЯ",
+            "n": "ОБРАТНОЕ"
+          },
+          {
+            "m": "КРИСТАЛЛИЧЕСКИЙ",
+            "f": "КРИСТАЛЛИЧЕСКАЯ",
+            "n": "КРИСТАЛЛИЧЕСКОЕ"
+          },
+          {
+            "m": "ВЫРАБОТАННЫЙ",
+            "f": "ВЫРАБОТАННАЯ",
+            "n": "ВЫРАБОТАННОЕ"
+          },
+          {
+            "m": "ТВЁРДЫЙ",
+            "f": "ТВЁРДАЯ",
+            "n": "ТВЁРДОЕ"
+          },
+          {
+            "m": "ПОГАШЕННЫЙ",
+            "f": "ПОГАШЕННАЯ",
+            "n": "ПОГАШЕННОЕ"
+          }
+        ]
+      },
+      "noun": {
+        "ru": [
+          "ЖИЛА",
+          "ПЛАСТ",
+          "РАЗРЕЗ",
+          "КЕРН",
+          "ШТОЛЬНЯ",
+          "ОТВАЛ",
+          "ГРАНЬ",
+          "ЗАБОЙ"
+        ],
+        "en": [
+          "SEAM",
+          "STRATUM",
+          "CUT",
+          "CORE",
+          "ADIT",
+          "SPOIL",
+          "FACET",
+          "FACE"
+        ],
+        "ru_gender": [
+          "f",
+          "m",
+          "m",
+          "m",
+          "f",
+          "m",
+          "f",
+          "m"
+        ]
+      }
+    },
+    "evidence_sources": {
+      "ru": [
+        "описание керна из разведочной скважины",
+        "график нагрузки на подстанцию",
+        "маркшейдерский план с зеркальной разметкой",
+        "акт о погашении выработки"
+      ],
+      "en": [
+        "a core log from an exploration hole",
+        "a substation load chart",
+        "a surveyor's plan with mirrored notation",
+        "a deed extinguishing a working"
+      ]
+    },
+    "payoff": {
+      "ru": "СЛЮДА не благодарит. В следующем месяце счёт за электричество в твоём квартале оказывается чуть меньше.",
+      "en": "MICA does not thank you. Next month the power bill for your block comes in slightly lower."
+    }
+  },
+  {
+    "slug": "last-archive",
+    "order": 8,
+    "name": {
+      "ru": "ПОСЛЕДНИЙ АРХИВ",
+      "en": "LAST ARCHIVE"
+    },
+    "kind": {
+      "ru": "коллектив архивистов, платит не деньгами",
+      "en": "archivist collective, does not pay in money"
+    },
+    "district": {
+      "ru": "везде и нигде",
+      "en": "everywhere and nowhere"
+    },
+    "difficulty": [
+      4,
+      5
+    ],
+    "creed": {
+      "ru": [
+        "ПОСЛЕДНИЙ АРХИВ считает, что забытый кошелёк — это забытый человек, и не согласен с этим.",
+        "У них нет офиса, счёта и юридического лица. Есть двенадцать тысяч зеркал и упрямство.",
+        "Они не платят гонораров. Они отдают то, что нашли сами: имя, адрес, дату, чужую ошибку.",
+        "Их подсказки идут цепочкой: каждое слово держится за соседа по словарю."
+      ],
+      "en": [
+        "LAST ARCHIVE holds that a forgotten wallet is a forgotten person, and refuses to accept that.",
+        "They have no office, no account and no legal existence. They have twelve thousand mirrors and stubbornness.",
+        "They pay no fees. They hand over what they found themselves: a name, an address, a date, someone else's mistake.",
+        "Their clues run in a chain: every word holds on to its neighbour in the list."
+      ]
+    },
+    "dialect": {
+      "ru": "ПОСЛЕДНИЙ АРХИВ ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39.",
+      "en": "LAST ARCHIVE leads word to word: each one stands beside a known word in the BIP-39 list."
+    },
+    "archetypes": [
+      "neighbour",
+      "redacted",
+      "unique_prefix"
+    ],
+    "acts": {
+      "ru": [
+        "СЛУХ",
+        "СЛЕД",
+        "ЗЕРКАЛО",
+        "ВОЗВРАТ"
+      ],
+      "en": [
+        "RUMOUR",
+        "TRAIL",
+        "MIRROR",
+        "RESTITUTION"
+      ]
+    },
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "ЗАБЫТЫЙ",
+          "УПРЯМЫЙ",
+          "ОТКРЫТЫЙ",
+          "ЧУЖОЙ",
+          "НАЙДЕННЫЙ",
+          "ПОСЛЕДНИЙ",
+          "ЖИВОЙ",
+          "ВОЗВРАЩЁННЫЙ"
+        ],
+        "en": [
+          "FORGOTTEN",
+          "STUBBORN",
+          "OPEN",
+          "BORROWED",
+          "FOUND",
+          "LAST",
+          "LIVING",
+          "RETURNED"
+        ],
+        "ru_forms": [
+          {
+            "m": "ЗАБЫТЫЙ",
+            "f": "ЗАБЫТАЯ",
+            "n": "ЗАБЫТОЕ"
+          },
+          {
+            "m": "УПРЯМЫЙ",
+            "f": "УПРЯМАЯ",
+            "n": "УПРЯМОЕ"
+          },
+          {
+            "m": "ОТКРЫТЫЙ",
+            "f": "ОТКРЫТАЯ",
+            "n": "ОТКРЫТОЕ"
+          },
+          {
+            "m": "ЧУЖОЙ",
+            "f": "ЧУЖАЯ",
+            "n": "ЧУЖОЕ"
+          },
+          {
+            "m": "НАЙДЕННЫЙ",
+            "f": "НАЙДЕННАЯ",
+            "n": "НАЙДЕННОЕ"
+          },
+          {
+            "m": "ПОСЛЕДНИЙ",
+            "f": "ПОСЛЕДНЯЯ",
+            "n": "ПОСЛЕДНЕЕ"
+          },
+          {
+            "m": "ЖИВОЙ",
+            "f": "ЖИВАЯ",
+            "n": "ЖИВОЕ"
+          },
+          {
+            "m": "ВОЗВРАЩЁННЫЙ",
+            "f": "ВОЗВРАЩЁННАЯ",
+            "n": "ВОЗВРАЩЁННОЕ"
+          }
+        ]
+      },
+      "noun": {
+        "ru": [
+          "СЛЕД",
+          "ЗЕРКАЛО",
+          "ИМЯ",
+          "СВИДЕТЕЛЬ",
+          "ПАМЯТЬ",
+          "УЗЕЛ",
+          "КОПИЯ",
+          "ДОЛГ"
+        ],
+        "en": [
+          "TRAIL",
+          "MIRROR",
+          "NAME",
+          "WITNESS",
+          "MEMORY",
+          "NODE",
+          "COPY",
+          "DEBT"
+        ],
+        "ru_gender": [
+          "m",
+          "n",
+          "n",
+          "m",
+          "f",
+          "m",
+          "f",
+          "m"
+        ]
+      }
+    },
+    "evidence_sources": {
+      "ru": [
+        "распечатка из зеркала архива",
+        "письмо от человека, который уже умер",
+        "фрагмент чата без начала и конца",
+        "список имён, вычеркнутых по одному"
+      ],
+      "en": [
+        "a printout from an archive mirror",
+        "a letter from someone already dead",
+        "a chat fragment with no beginning and no end",
+        "a list of names crossed off one at a time"
+      ]
+    },
+    "payoff": {
+      "ru": "ПОСЛЕДНИЙ АРХИВ не переводит ничего. Через неделю кто-то незнакомый оплачивает твой счёт в баре.",
+      "en": "LAST ARCHIVE transfers nothing. A week later a stranger settles your bar tab."
+    }
+  }
+];

@@ -3,7 +3,8 @@
 
 import { CAMPAIGN } from './campaign.js';
 import {
-  ProgressStore, caseForMnemonic, completeMnemonic, pick, randomMnemonic, searchCases,
+  CLIENTS, ProgressStore, caseForMnemonic, casesForClient, clientBySlug,
+  completeMnemonic, contractsLoaded, loadContracts, pick, randomMnemonic, searchCases,
 } from './core.js';
 import { WORDLIST_SHA256 } from './wordlist.js';
 import { ChainClient, ChainError, formatBtc, PROVIDERS } from './chain.js';
@@ -46,6 +47,8 @@ const HELP = {
     ['HELP', 'this list'],
     ['LANG RU|EN', 'switch narrative language'],
     ['CASES', 'list every case file and its state'],
+    ['CLIENTS', 'the eight employers and their contract counts'],
+    ['BOARD <client>', "list one employer's thirty-two contracts"],
     ['OPEN <id>', 'open a case file and make it active'],
     ['BRIEF / EVIDENCE / CLUES', 're-read the active case'],
     ['HINT', 'spend a hint on the active case'],
@@ -76,6 +79,8 @@ const HELP = {
     ['HELP', 'этот список'],
     ['LANG RU|EN', 'язык повествования'],
     ['CASES', 'список дел и их состояние'],
+    ['CLIENTS', 'восемь заказчиков и их счётчики'],
+    ['BOARD <заказчик>', 'список из 32 контрактов одного заказчика'],
     ['OPEN <id>', 'открыть дело и сделать его активным'],
     ['BRIEF / EVIDENCE / CLUES', 'перечитать активное дело'],
     ['HINT', 'потратить подсказку по активному делу'],
@@ -163,9 +168,10 @@ const TEXT = {
     ru: 'ДЕЛО ЗАБЛОКИРОВАНО. СНАЧАЛА ЗАКРОЙ ДЕЛА: {req}',
   },
   solved: {
-    en: 'CASE {id} CLOSED — SEED MATCHES ORACLE’S FINGERPRINT',
-    ru: 'ДЕЛО {id} ЗАКРЫТО — СИД СОВПАЛ С ОТПЕЧАТКОМ ORACLE',
+    en: 'CASE {id} CLOSED — SEED MATCHES THE STORED FINGERPRINT',
+    ru: 'ДЕЛО {id} ЗАКРЫТО — СИД СОВПАЛ С СОХРАНЁННЫМ ОТПЕЧАТКОМ',
   },
+  filedWith: { en: 'FILED WITH {client}.', ru: 'СДАНО ЗАКАЗЧИКУ: {client}.' },
   notThisCase: {
     en: 'VALID MNEMONIC, BUT IT IS NOT THE KEY TO CASE {id}.',
     ru: 'МНЕМОНИКА ВАЛИДНА, НО ЭТО НЕ КЛЮЧ К ДЕЛУ {id}.',
@@ -268,6 +274,8 @@ export class Engine {
       ABOUT: this.cmdAbout,
       LANG: this.cmdLang,
       CASES: this.cmdCases, LS: this.cmdCases,
+      CLIENTS: this.cmdClients,
+      BOARD: this.cmdBoard,
       OPEN: this.cmdOpen,
       BRIEF: this.cmdBrief,
       EVIDENCE: this.cmdEvidence,
@@ -344,6 +352,66 @@ export class Engine {
     }
     term.rule();
     term.print(`  ${this.progress.solved.length}/${this.campaign.cases.length} CLOSED`, 'amber');
+    term.blank();
+  }
+
+  async cmdClients() {
+    await loadContracts();
+    const term = this.term;
+    term.blank();
+    term.print('  CONTRACT BOARD // EIGHT EMPLOYERS', 'cyan');
+    term.rule();
+    for (const client of CLIENTS) {
+      const cases = casesForClient(client.slug);
+      const solved = cases.filter((entry) => this.progress.isSolved(entry.id)).length;
+      term.print([
+        { text: `  ${String(client.order).padStart(2, '0')} `, style: 'dark' },
+        { text: pick(client.name, this.lang).padEnd(20), style: 'magenta' },
+        { text: `${String(solved).padStart(2)}/${cases.length} `, style: solved ? 'green' : 'grey' },
+        { text: pick(client.kind, this.lang), style: 'grey' },
+      ]);
+      term.print(`     ${client.slug} · ${pick(client.district, this.lang)}`, 'dark');
+    }
+    term.rule();
+    term.print('  BOARD <client> TO OPEN ONE', 'grey');
+    term.blank();
+  }
+
+  async cmdBoard(argument) {
+    const slug = argument.trim().toLowerCase();
+    if (!slug) {
+      this.term.print('[WARN] USAGE: BOARD <client>  (see CLIENTS)', 'amber');
+      return;
+    }
+    await loadContracts();
+    const client = clientBySlug(slug);
+    if (!client) {
+      this.term.print(`[FATAL] NO CLIENT '${slug.toUpperCase()}'. RUN CLIENTS.`, 'red');
+      return;
+    }
+    if (!contractsLoaded()) {
+      this.term.print('[FATAL] CONTRACT BOARD UNAVAILABLE.', 'red');
+      return;
+    }
+    const term = this.term;
+    term.blank();
+    term.print(`  ${pick(client.name, this.lang)} // ${pick(client.district, this.lang)}`, 'magenta');
+    term.printLines(pick(client.creed, this.lang), 'white');
+    term.blank();
+    term.print(`  ${pick(client.dialect, this.lang)}`, 'cyan');
+    term.rule();
+    for (const caseFile of casesForClient(slug)) {
+      const solved = this.progress.isSolved(caseFile.id);
+      const locked = (caseFile.requires || []).some((req) => !this.progress.isSolved(req));
+      const mark = solved ? '[CLOSED]' : locked ? '[LOCKED]' : '[  OPEN]';
+      term.print(
+        `  ${mark} ${String(caseFile.id).padStart(3, '0')}  `
+        + `${pick(caseFile.codename, this.lang).padEnd(24)} `
+        + `${'*'.repeat(caseFile.difficulty).padEnd(5)} ${caseFile.archetype}`,
+        solved ? 'dark' : locked ? 'grey' : 'green',
+      );
+    }
+    term.rule();
     term.blank();
   }
 
@@ -711,6 +779,10 @@ export class Engine {
     const term = this.term;
     term.blank();
     term.print(`  ${this.t('solved', { id: caseFile.id })}`, 'magenta');
+    const client = caseFile.client ? clientBySlug(caseFile.client) : null;
+    if (client) {
+      term.print(`  ${this.t('filedWith', { client: pick(client.name, this.lang) })}`, 'cyan');
+    }
     term.rule('=');
     const epilogue = pick(caseFile.epilogue, this.lang);
     if (firstTime) term.typeLines(epilogue, 'white', 320);

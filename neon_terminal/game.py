@@ -108,8 +108,12 @@ TEXT = {
         "ru": "ДЕЛО ЗАБЛОКИРОВАНО. СНАЧАЛА ЗАКРОЙ ДЕЛА: {req}",
     },
     "solved_banner": {
-        "en": "CASE {id} CLOSED — SEED MATCHES ORACLE'S FINGERPRINT",
-        "ru": "ДЕЛО {id} ЗАКРЫТО — СИД СОВПАЛ С ОТПЕЧАТКОМ ORACLE",
+        "en": "CASE {id} CLOSED — SEED MATCHES THE STORED FINGERPRINT",
+        "ru": "ДЕЛО {id} ЗАКРЫТО — СИД СОВПАЛ С СОХРАНЁННЫМ ОТПЕЧАТКОМ",
+    },
+    "filed_with": {
+        "en": "FILED WITH {client}.",
+        "ru": "СДАНО ЗАКАЗЧИКУ: {client}.",
     },
     "not_this_case": {
         "en": "VALID MNEMONIC, BUT IT IS NOT THE KEY TO CASE {id}.",
@@ -525,6 +529,9 @@ def _close_case(s: Session, case: Case) -> None:
              payload={"caseId": case.id})
     s.screen.write()
     s.screen.write("  " + s.t("solved_banner", id=case.id), "magenta", "bold")
+    client = s.campaign.client(case.client) if case.client else None
+    if client is not None:
+        s.screen.write("  " + s.t("filed_with", client=client["name"][s.lang]), "cyan")
     s.screen.rule("=")
     if first_time:
         s.screen.lines(case.epilogue(s.lang), "white", typed=True)

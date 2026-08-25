@@ -72,6 +72,8 @@ python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # one-shot commands
 | `LANG RU\|EN` | narrative language |
 | `CASES` | the eight case files and their state |
 | `OPEN <id>` | open a case: brief, evidence, decoding table |
+| `CLIENTS` | the eight employers and their counts |
+| `BOARD <client>` | one employer's thirty-two contracts |
 | `BRIEF` / `EVIDENCE` / `CLUES` | re-read the active case |
 | `HINT` | spend one of three hints |
 | `WORD <n>` / `INDEX <word>` / `SEARCH <prefix>` | BIP-39 wordlist tools |
@@ -96,6 +98,39 @@ python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # one-shot commands
 
 Progress persists in `~/.neon_terminal/progress.json` (override with `NEON_TERMINAL_HOME`)
 for the terminal, and in `localStorage` for the web build.
+
+## The contract board: 8 clients × 32 cases
+
+Beyond the eight hand-written campaign cases there is a board of **256 contracts** spread across
+eight employers, from a private forensic bureau to an archivist collective that does not pay in
+money. Thirty-two cases each, in four phases.
+
+A client is not a skin. It sets the **hand**: the way words are hidden in their cases.
+
+| Client | What they are | Hand |
+|---|---|---|
+| MERIDIAN | private forensic bureau | entropy, plain indices, unique branches |
+| SEVENTH SIGN | grey fund, auction house | the index is sewn into the lot price |
+| DEEPHOLD | subsea data havens | the wordlist as a 128 × 16 grid |
+| VEGA ORBITAL | orbital key custody | the index has to be computed |
+| WHITEBONE | biotech and body-lease clinics | the one branch that fits |
+| GOST-9 | agency of a state that ended | one word redacted, recovered with `COMPLETE` |
+| MICA | mineral conglomerate | mirrored: index = 2049 − the number given |
+| LAST ARCHIVE | archivists, paid in information | a chain of wordlist neighbours |
+
+Hand-writing 256 cases means three thousand riddles, and they would be bad ones. So the creative
+work sits in two places that scale: `data/clients.json` holds the voices and
+`tools/generate_cases.py` holds the eight hands. The board is assembled deterministically — the
+same seed gives the same board, so a rebuild never reshuffles someone's game.
+
+The hard constraint is the checksum: twelve arbitrary words are almost never a valid BIP-39
+phrase. So a case is built the other way round — a valid mnemonic is drawn first, then each of
+its words is described in the client's hand. The answer exists before the puzzle does.
+
+**All 256 are machine-verified solvable.** The suite carries a solver that follows nothing but
+the clues, reconstructs twelve words and checks them against the stored fingerprint. If a hand
+ever emits a clue that leads nowhere, the board fails to build rather than costing a player their
+evening.
 
 ## Generative sigils
 
@@ -214,7 +249,7 @@ docs/                 web build, published by GitHub Pages
   js/vendor/          minidenticons (MIT) plus its licence
   js/gui/             GUI mode, over the same core
 tools/build_web_data.py   regenerates docs/js/{wordlist,campaign}.js from data/
-tests/                228 tests, including the Python↔JavaScript parity check
+tests/                253 tests, including the Python↔JavaScript parity check
 ```
 
 ## Development

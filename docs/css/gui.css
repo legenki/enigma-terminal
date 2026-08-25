@@ -678,3 +678,29 @@ a { color: var(--cyan); }
   .nav__item { width: auto; margin: 0; border-left-width: 2px; }
   .nav__sep, .nav__meter { display: none; }
 }
+
+/* ---------- contract board ----------------------------------------------- */
+
+.client__head { min-width: 0; }
+
+.client__kind {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+
+.client__bar {
+  height: 3px;
+  background: #020c08;
+  border-top: 1px solid var(--neon-deep);
+}
+
+.client__bar span {
+  display: block;
+  height: 100%;
+  background: var(--neon);
+  box-shadow: var(--glow);
+}
+
+.card.client + .card.client { margin-top: 6px; }

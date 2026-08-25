@@ -6,6 +6,7 @@ import { CrtRenderer } from './crt.js';
 import { Engine } from './engine.js';
 import { GlitchBanner } from './glitch.js';
 import { GuiApp } from './gui/app.js';
+import { loadContracts } from './core.js';
 
 const MODE_KEY = 'neon-terminal/mode/v1';
 const LANG_KEY = 'neon-terminal/lang/v1';
@@ -229,6 +230,11 @@ function frame(now) {
 }
 
 gui.mount();
+// The board is fetched in the background: the campaign plays immediately, and
+// contract answers start being recognised the moment it lands.
+loadContracts().then((cases) => {
+  if (cases.length) gui.syncFromStorage();
+});
 setCrt(crtMode, { announce: false });
 setMode(mode, { animate: false });
 requestAnimationFrame(frame);

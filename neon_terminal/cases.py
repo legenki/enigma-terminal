@@ -18,6 +18,8 @@ from .crypto_engine import fingerprint
 
 _ROOT = Path(__file__).resolve().parent.parent
 CASES_FILE = _ROOT / "data" / "cases.json"
+CONTRACTS_FILE = _ROOT / "data" / "contracts.json"
+CLIENTS_FILE = _ROOT / "data" / "clients.json"
 
 LANGUAGES = ("ru", "en")
 
@@ -37,6 +39,9 @@ class Case:
     fingerprint: str
     raw: dict
     requires: tuple[int, ...] = ()
+    client: str | None = None
+    act: int = 0
+    archetype: str = ""
 
     def codename(self, lang: str) -> str:
         return _pick(self.raw["codename"], lang)
@@ -120,40 +125,72 @@ class Progress:
         self.save()
 
 
-class Campaign:
-    """The eight cases plus the rules for unlocking them."""
+def _to_case(item: dict) -> Case:
+    return Case(
+        id=item["id"],
+        difficulty=item["difficulty"],
+        kind=item["kind"],
+        fingerprint=item["fingerprint"],
+        requires=tuple(item.get("requires", ())),
+        client=item.get("client"),
+        act=item.get("act", 0),
+        archetype=item.get("archetype", ""),
+        raw=item,
+    )
 
-    def __init__(self, path: Path | None = None) -> None:
+
+class Campaign:
+    """The eight hand-written cases, plus the 256-case contract board."""
+
+    def __init__(self, path: Path | None = None, *, contracts: bool = True) -> None:
         data = json.loads((path or CASES_FILE).read_text(encoding="utf-8"))
         self.meta: dict = data["meta"]
         self._prologue: dict = data["prologue"]
-        self.cases: list[Case] = [
-            Case(
-                id=item["id"],
-                difficulty=item["difficulty"],
-                kind=item["kind"],
-                fingerprint=item["fingerprint"],
-                requires=tuple(item.get("requires", ())),
-                raw=item,
-            )
-            for item in data["cases"]
-        ]
+        self.cases: list[Case] = [_to_case(item) for item in data["cases"]]
+
+        self.clients: list[dict] = []
+        self.contracts: list[Case] = []
+        if contracts:
+            try:
+                board = json.loads(CONTRACTS_FILE.read_text(encoding="utf-8"))
+                self.contracts = [_to_case(item) for item in board["cases"]]
+            except (FileNotFoundError, ValueError, KeyError):
+                self.contracts = []   # the campaign stands on its own
+            try:
+                roster = json.loads(CLIENTS_FILE.read_text(encoding="utf-8"))
+                self.clients = roster["clients"]
+            except (FileNotFoundError, ValueError, KeyError):
+                self.clients = []
+
+    @property
+    def all_cases(self) -> list[Case]:
+        return self.cases + self.contracts
+
+    def client(self, slug: str) -> dict | None:
+        return next((c for c in self.clients if c["slug"] == slug), None)
+
+    def cases_for_client(self, slug: str) -> list[Case]:
+        return [case for case in self.contracts if case.client == slug]
 
     def prologue(self, lang: str) -> list[str]:
         return list(_pick(self._prologue, lang))
 
     def get(self, case_id: int) -> Case | None:
-        return next((c for c in self.cases if c.id == case_id), None)
+        return next((c for c in self.all_cases if c.id == case_id), None)
 
     def is_unlocked(self, case: Case, progress: Progress) -> bool:
         return all(req in progress.solved for req in case.requires)
 
     def find_by_mnemonic(self, mnemonic: str) -> Case | None:
-        return next((c for c in self.cases if c.matches(mnemonic)), None)
+        return next((c for c in self.all_cases if c.matches(mnemonic)), None)
 
     def search(self, query: str, lang: str,
                progress: Progress | None = None) -> list[tuple[Case, list[str]]]:
         """Full-text search across the archive in one language.
+
+        Narrative only: briefs, evidence and codenames. Clue lines are the
+        puzzle itself, and indexing them would turn this into a lookup table
+        that answers cases rather than finding them.
 
         Epilogues join the index only once a case is closed — searching them
         earlier would hand the player the ending.
@@ -162,11 +199,11 @@ class Campaign:
         if not needle:
             return []
         results: list[tuple[Case, list[str]]] = []
-        for case in self.cases:
+        for case in self.all_cases:
             hits: list[str] = []
             if needle in case.codename(lang).lower():
                 hits.append(case.codename(lang))
-            for field in ("brief", "evidence", "clues"):
+            for field in ("brief", "evidence"):
                 hits += [
                     line for line in getattr(case, field)(lang)
                     if needle in line.lower()

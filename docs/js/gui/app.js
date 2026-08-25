@@ -7,8 +7,9 @@
 
 import { el, replace, win, section, notice, badge, kv, table, empty } from './dom.js';
 import {
-  CASES, META, ProgressStore, caseById, caseForMnemonic, caseState,
-  completeMnemonic, isUnlocked, missingRequirements, pick, randomMnemonic,
+  CAMPAIGN_CASES, CLIENTS, META, ProgressStore, allCases, caseById, caseForMnemonic,
+  caseState, casesForClient, clientBySlug, completeMnemonic, contractsLoaded,
+  isUnlocked, loadContracts, missingRequirements, pick, randomMnemonic,
   searchCases, searchWordlist, MnemonicError,
 } from '../core.js';
 import { Journal, TOOLS, maskMnemonic } from '../journal.js';
@@ -20,12 +21,13 @@ import { addressSigil, caseSigil, mnemonicSigil, sigil } from '../identicon.js';
 
 const PANELS = [
   { id: 'cases', label: { en: 'Case files', ru: 'Дела' }, key: '1' },
-  { id: 'decrypt', label: { en: 'Decrypt', ru: 'Дешифровка' }, key: '2' },
-  { id: 'ledger', label: { en: 'Ledger', ru: 'Реестр' }, key: '3' },
-  { id: 'search', label: { en: 'Search', ru: 'Поиск' }, key: '4' },
-  { id: 'random', label: { en: 'Randomizer', ru: 'Рандомайзер' }, key: '5' },
-  { id: 'journal', label: { en: 'Journal', ru: 'Журнал' }, key: '6' },
-  { id: 'about', label: { en: 'About', ru: 'О программе' }, key: '7' },
+  { id: 'board', label: { en: 'Contracts', ru: 'Контракты' }, key: '2' },
+  { id: 'decrypt', label: { en: 'Decrypt', ru: 'Дешифровка' }, key: '3' },
+  { id: 'ledger', label: { en: 'Ledger', ru: 'Реестр' }, key: '4' },
+  { id: 'search', label: { en: 'Search', ru: 'Поиск' }, key: '5' },
+  { id: 'random', label: { en: 'Randomizer', ru: 'Рандомайзер' }, key: '6' },
+  { id: 'journal', label: { en: 'Journal', ru: 'Журнал' }, key: '7' },
+  { id: 'about', label: { en: 'About', ru: 'О программе' }, key: '8' },
 ];
 
 const T = {
@@ -76,6 +78,17 @@ const T = {
   purge: { en: 'Purge', ru: 'Очистить' },
   keepPinned: { en: 'Keep pinned', ru: 'Кроме закреплённых' },
   all: { en: 'All', ru: 'Все' },
+  board: { en: 'Contract board', ru: 'Доска контрактов' },
+  clients: { en: 'Clients', ru: 'Заказчики' },
+  dossier: { en: 'Dossier', ru: 'Досье' },
+  dialect: { en: 'Puzzle dialect', ru: 'Почерк заказчика' },
+  loadingBoard: { en: 'Pulling the contract board…', ru: 'Тяну доску контрактов…' },
+  boardOffline: {
+    en: 'The contract board did not load. The eight campaign cases still work.',
+    ru: 'Доска контрактов не загрузилась. Восемь дел кампании работают.',
+  },
+  acts: { en: 'Acts', ru: 'Фазы' },
+  backToClients: { en: 'All clients', ru: 'К заказчикам' },
 };
 
 const t = (key, lang) => T[key][lang] || T[key].en;
@@ -92,6 +105,7 @@ export class GuiApp {
     this.chain = new ChainClient();
     this.panel = 'cases';
     this.activeCaseId = null;
+    this.activeClient = null;
     this.wallet = null;
     this.railOpen = true;
     this.panels = new Map();     // key -> { node, api }
@@ -170,6 +184,9 @@ export class GuiApp {
     if (this.panel === 'cases' && this.activeCaseId !== null) {
       return `cases:${this.activeCaseId}`;
     }
+    if (this.panel === 'board' && this.activeClient) {
+      return `client:${this.activeClient}`;
+    }
     return this.panel;
   }
 
@@ -182,8 +199,12 @@ export class GuiApp {
     if (key.startsWith('cases:')) {
       return this.buildCaseDetail(caseById(key.slice(6)));
     }
+    if (key.startsWith('client:')) {
+      return this.buildClientBoard(key.slice(7));
+    }
     return {
       cases: () => this.buildCaseList(),
+      board: () => this.buildBoard(),
       decrypt: () => this.buildDecrypt(),
       ledger: () => this.buildLedger(),
       search: () => this.buildSearch(),
@@ -207,7 +228,7 @@ export class GuiApp {
 
   paintNav() {
     const solved = this.progress.solved.length;
-    const percent = Math.round((solved / CASES.length) * 100);
+    const percent = Math.round((solved / CAMPAIGN_CASES.length) * 100);
     replace(this.nav,
       el('ul', { class: 'nav__list' },
         ...PANELS.map((panel) =>
@@ -222,7 +243,7 @@ export class GuiApp {
             el('span', { class: 'nav__key', text: panel.key }))))),
       el('div', { class: 'nav__sep' }),
       el('div', { class: 'nav__meter' },
-        el('div', { text: `${solved}/${CASES.length} ${t('closedCount', this.lang)}` }),
+        el('div', { text: `${solved}/${CAMPAIGN_CASES.length} ${t('closedCount', this.lang)}` }),
         el('div', { class: 'nav__bar' }, el('span', { style: `width:${percent}%` }))),
       el('div', { class: 'nav__sep' }),
       el('div', { class: 'nav__meter' },
@@ -430,7 +451,7 @@ export class GuiApp {
   // ---- cases ------------------------------------------------------------
 
   buildCaseList() {
-    const rows = CASES.map((caseFile) => {
+    const rows = CAMPAIGN_CASES.map((caseFile) => {
       const state = caseState(caseFile, this.progress);
       return el('div', { class: 'card' },
         el('button', {
@@ -448,8 +469,105 @@ export class GuiApp {
           t(state, this.lang))));
     });
     const node = el('div', {},
-      section('ORACLE ARCHIVE', `${this.progress.solved.length}/${CASES.length}`),
+      section('ORACLE ARCHIVE', `${this.progress.solved.length}/${CAMPAIGN_CASES.length}`),
       ...rows);
+    return { node, api: {} };
+  }
+
+  /** The roster: eight employers, thirty-two contracts each. */
+  buildBoard() {
+    const lang = this.lang;
+    const node = el('div', {});
+    const body = el('div', {});
+
+    const paint = () => {
+      if (!contractsLoaded()) {
+        replace(body, el('p', { class: 'spinner-line', text: t('loadingBoard', lang) }));
+        return;
+      }
+      replace(body, ...CLIENTS.map((client) => {
+        const cases = casesForClient(client.slug);
+        const solved = cases.filter((entry) => this.progress.isSolved(entry.id)).length;
+        const percent = cases.length ? Math.round((solved / cases.length) * 100) : 0;
+        return el('div', { class: 'card client' },
+          el('button', {
+            class: 'card__row', type: 'button',
+            onClick: () => { this.activeClient = client.slug; this.go('board'); },
+          },
+          sigil(`neon-client-${client.slug}`, { size: 30 }),
+          el('div', { class: 'client__head' },
+            el('div', { class: 'card__name', text: pick(client.name, lang) }),
+            el('div', { class: 'client__kind', text: pick(client.kind, lang) })),
+          el('span', { class: 'card__spacer' }),
+          el('span', { class: 'section__meta', text: pick(client.district, lang) }),
+          badge(solved === cases.length && cases.length ? 'solved' : 'open',
+            `${solved}/${cases.length}`)),
+          el('div', { class: 'client__bar' }, el('span', { style: `width:${percent}%` })));
+      }));
+    };
+
+    replace(node,
+      section(t('board', lang), `${CLIENTS.length} × 32 = 256`),
+      el('p', { class: 'hint-text', text: lang === 'ru'
+        ? 'У каждого заказчика свой почерк: он определяет не только тон брифа, но и способ, которым в деле спрятаны слова. Научиться читать заказчика — половина работы.'
+        : 'Every client has a hand of their own: it sets the tone of the brief and, more to the point, the way the words are hidden. Learning to read a client is half the job.' }),
+      body);
+
+    if (!contractsLoaded()) {
+      loadContracts().then(() => {
+        this.panels.delete('board');
+        if (this.panel === 'board' && !this.activeClient) this.render();
+      });
+    }
+    paint();
+    return { node, api: { paint } };
+  }
+
+  /** One employer's thirty-two contracts, grouped into four acts. */
+  buildClientBoard(slug) {
+    const lang = this.lang;
+    const client = clientBySlug(slug);
+    const cases = casesForClient(slug);
+    const node = el('div', {});
+
+    const acts = [1, 2, 3, 4].map((act) => {
+      const inAct = cases.filter((entry) => entry.act === act);
+      return el('div', { class: 'stack' },
+        section(`${act}. ${client.acts[lang][act - 1]}`,
+          `${inAct.filter((e) => this.progress.isSolved(e.id)).length}/${inAct.length}`),
+        ...inAct.map((caseFile) => {
+          const state = caseState(caseFile, this.progress);
+          return el('div', { class: 'card' },
+            el('button', {
+              class: 'card__row', type: 'button',
+              disabled: state === 'locked',
+              onClick: () => state !== 'locked' && this.go('cases', caseFile.id),
+            },
+            caseSigil(caseFile, { size: 24 }),
+            el('span', { class: 'card__id', text: String(caseFile.id).padStart(3, '0') }),
+            el('span', { class: 'card__name', text: pick(caseFile.codename, lang) }),
+            el('span', { class: 'card__spacer' }),
+            el('span', { class: 'section__meta', text: caseFile.archetype.replace('_', ' ') }),
+            el('span', { class: 'stars', text: '★'.repeat(caseFile.difficulty) }),
+            badge(state === 'solved' ? 'solved' : state === 'locked' ? 'locked' : 'open',
+              t(state, lang))));
+        }));
+    });
+
+    replace(node,
+      el('div', { class: 'row', style: 'margin-bottom:12px' },
+        el('button', {
+          class: 'btn', type: 'button', text: '← ' + t('backToClients', lang),
+          onClick: () => { this.activeClient = null; this.go('board'); },
+        }),
+        sigil(`neon-client-${slug}`, { size: 30 }),
+        el('span', { class: 'card__spacer' }),
+        el('span', { class: 'section__meta', text: pick(client.district, lang) })),
+      section(pick(client.name, lang), pick(client.kind, lang)),
+      el('div', { class: 'prose' },
+        ...pick(client.creed, lang).map((line) => el('p', { text: line }))),
+      notice('info', t('dialect', lang), pick(client.dialect, lang)),
+      el('div', { class: 'stack', style: 'margin-top:14px' }, ...acts));
     return { node, api: {} };
   }
 
@@ -526,10 +644,14 @@ export class GuiApp {
                 { detail: wallet.primary.address, status: 'ok',
                   payload: { caseId: caseFile.id, mnemonic: wallet.mnemonic } });
             }
+            const employer = caseFile.client ? clientBySlug(caseFile.client) : null;
             out.push(notice('ok',
               lang === 'ru' ? `Дело ${caseFile.id} закрыто` : `Case ${caseFile.id} closed`,
+              ...(employer
+                ? [this.t('filedWith', { client: pick(employer.name, lang) })]
+                : []),
               ...pick(caseFile.epilogue, lang)));
-            if (first && this.progress.solved.length === CASES.length) {
+            if (first && this.progress.solved.length === CAMPAIGN_CASES.length) {
               out.push(notice('ok', lang === 'ru'
                 ? 'Все восемь дел закрыты.' : 'All eight cases closed.'));
             }

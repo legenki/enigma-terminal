@@ -5,6 +5,7 @@
 // two modes can never drift apart or disagree about what is solved.
 
 import { CAMPAIGN } from './campaign.js';
+import { CLIENTS } from './clients.js';
 import { WORDLIST } from './wordlist.js';
 import {
   MnemonicError,
@@ -93,10 +94,48 @@ export class ProgressStore {
 // Campaign rules
 // --------------------------------------------------------------------------
 
-export const CASES = CAMPAIGN.cases;
+export const CAMPAIGN_CASES = CAMPAIGN.cases;
 export const META = CAMPAIGN.meta;
+export { CLIENTS };
 
-export const caseById = (id) => CASES.find((entry) => entry.id === Number(id)) || null;
+//: The 256-case contract board, fetched on demand. The eight-case campaign has
+//: to be playable the moment the page opens, and the board is an order of
+//: magnitude larger than everything else the page loads combined.
+let contracts = [];
+let contractsPromise = null;
+
+export const CASES = CAMPAIGN_CASES;
+
+/** Campaign plus whatever of the board has arrived. */
+export const allCases = () => contracts.length ? [...CAMPAIGN_CASES, ...contracts] : CAMPAIGN_CASES;
+
+export const contractsLoaded = () => contracts.length > 0;
+
+export function loadContracts() {
+  if (contractsPromise) return contractsPromise;
+  contractsPromise = fetch(new URL('../data/contracts.json', import.meta.url))
+    .then((response) => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    })
+    .then((payload) => {
+      contracts = payload.cases || [];
+      return contracts;
+    })
+    .catch((error) => {
+      // A missing board must never take the campaign down with it.
+      contractsPromise = null;
+      console.warn('contract board unavailable:', error.message);
+      return [];
+    });
+  return contractsPromise;
+}
+
+export const clientBySlug = (slug) => CLIENTS.find((client) => client.slug === slug) || null;
+
+export const casesForClient = (slug) => contracts.filter((entry) => entry.client === slug);
+
+export const caseById = (id) => allCases().find((entry) => entry.id === Number(id)) || null;
 
 export const isUnlocked = (caseFile, progress) =>
   (caseFile.requires || []).every((req) => progress.isSolved(req));
@@ -107,7 +146,7 @@ export const missingRequirements = (caseFile, progress) =>
 /** Which case, if any, a mnemonic unlocks. */
 export const caseForMnemonic = (mnemonic) => {
   const digest = fingerprint(mnemonic);
-  return CASES.find((entry) => entry.fingerprint === digest) || null;
+  return allCases().find((entry) => entry.fingerprint === digest) || null;
 };
 
 export const caseState = (caseFile, progress) => {
@@ -213,14 +252,16 @@ export function searchWordlist(query, limit = 60) {
   return [...prefix, ...contains].slice(0, limit);
 }
 
-const CASE_TEXT_FIELDS = ['brief', 'evidence', 'clues', 'epilogue'];
+//: Narrative only. Clue lines are the puzzle itself: indexing them would turn
+//: archive search into a lookup table that answers cases instead of finding them.
+const CASE_TEXT_FIELDS = ['brief', 'evidence', 'epilogue'];
 
 /** Full-text search across the case archive, in the active language. */
 export function searchCases(query, lang = 'en', progress = null) {
   const needle = String(query).trim().toLowerCase();
   if (!needle) return [];
   const results = [];
-  for (const caseFile of CASES) {
+  for (const caseFile of allCases()) {
     const hits = [];
     const codename = pick(caseFile.codename, lang);
     if (codename.toLowerCase().includes(needle)) {
