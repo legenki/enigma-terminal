@@ -104,6 +104,18 @@ body::before {
   user-select: none;
 }
 
+/* ---------- the shell follows the hour, in GUI mode ----------------------- */
+/* The command line is a phosphor tube and keeps its own room; the GUI is a
+   daylit desktop, so the ground and the footer around it move with the
+   palette rather than staying a black slab under a pale window. */
+
+body.is-gui { background: var(--bg); }
+body.is-gui::before { opacity: 0; }
+body.is-gui #switch-bar { color: var(--soft); }
+body.is-gui #switch-hint,
+body.is-gui .switch-label { color: var(--soft); }
+body.is-gui #glitch-canvas { border-radius: var(--radius, 12px); }
+
 .rocker {
   display: flex;
   border: 1px solid #0c1a12;
@@ -254,11 +266,20 @@ body.crt-soft #gui-root { filter: saturate(1.12) contrast(1.04); }
   #crt-overlay::after { animation: none; }
 }
 
-/* ---------- CRT switch in the footer ------------------------------------- */
+/* ---------- footer switches ---------------------------------------------- */
+/* The slot on the right holds one of two: daylight for the GUI, CRT for the
+   tube. setMode() swaps them, so they are never both on screen. */
 
-#crt-switch { display: flex; align-items: center; gap: 7px; }
+#crt-switch,
+#light-switch { display: flex; align-items: center; gap: 7px; }
 
-#crt-switch .rocker__btn { padding: 7px 14px; }
+#crt-switch.is-hidden,
+#light-switch.is-hidden { display: none; }
+
+#crt-switch .rocker__btn,
+#light-switch .rocker__btn { padding: 7px 14px; }
+
+#light-switch .rocker__btn { padding-inline: 11px; }
 
 .switch-label {
   font-family: "IBM Plex Mono", monospace;

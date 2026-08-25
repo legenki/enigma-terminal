@@ -48,6 +48,18 @@
     </div>
     <span id="switch-hint">F2 switches · CL accepts HELP</span>
     <span class="spacer"></span>
+    <!-- One slot, two controls. The GUI follows the hour, so it gets the
+         daylight switch; the command line is a phosphor tube, so it keeps
+         CRT. Showing both at once would offer the CRT wash over a daylit
+         interface, which is not a thing anyone wants. -->
+    <div id="light-switch" role="group" aria-label="Daylight">
+      <span class="switch-label">СВЕТ</span>
+      <div class="rocker">
+        <button id="light-live" class="rocker__btn" type="button" aria-pressed="false">LIVE</button>
+        <button id="light-day" class="rocker__btn" type="button" aria-pressed="false">ДЕНЬ</button>
+        <button id="light-night" class="rocker__btn" type="button" aria-pressed="false">НОЧЬ</button>
+      </div>
+    </div>
     <div id="crt-switch" role="group" aria-label="CRT simulation">
       <span class="switch-label">CRT</span>
       <div class="rocker">

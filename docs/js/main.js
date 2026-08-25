@@ -8,10 +8,12 @@ import { GlitchBanner } from './glitch.js';
 import { GuiApp } from './gui/app.js';
 import { LANGS, loadContracts } from './core.js';
 import { migrated } from './storage.js';
+import { Daylight } from './daylight.js';
 
 const MODE_KEY = 'enigma-terminal/mode/v1';
 const LANG_KEY = 'enigma-terminal/lang/v1';
 const CRT_KEY = 'enigma-terminal/crt/v1';
+const LIGHT_KEY = 'enigma-terminal/light/v1';
 
 const stored = (key, fallback) => migrated(key) || fallback;
 const store = (key, value) => {
@@ -78,6 +80,9 @@ const gui = new GuiApp(guiRoot, {
 // overlay instead. One switch drives both so the two modes always look like
 // the same monitor.
 
+const lightSwitch = document.getElementById('light-switch');
+const crtSwitch = document.getElementById('crt-switch');
+
 let crtMode = stored(CRT_KEY, 'soft') === 'off' ? 'off' : 'soft';
 
 const crtButtons = {
@@ -90,7 +95,7 @@ function setCrt(next, { announce = true } = {}) {
   store(CRT_KEY, crtMode);
   crtButtons.soft.setAttribute('aria-pressed', String(crtMode === 'soft'));
   crtButtons.off.setAttribute('aria-pressed', String(crtMode === 'off'));
-  document.body.classList.toggle('crt-soft', crtMode === 'soft');
+  document.body.classList.toggle('crt-soft', crtMode === 'soft' && mode === 'cl');
   if (crt) {
     crt.applyPreset(crtMode === 'soft' ? 'soft' : 'off');
     if (crtMode === 'soft') terminal.dirty = true;
@@ -100,6 +105,34 @@ function setCrt(next, { announce = true } = {}) {
 
 crtButtons.soft.addEventListener('click', () => setCrt('soft'));
 crtButtons.off.addEventListener('click', () => setCrt('off'));
+
+// ---- daylight -------------------------------------------------------------
+// The GUI takes its whole palette from the hour. Two pinned modes are there
+// for players who want one look and no drift.
+
+const lightButtons = {
+  live: document.getElementById('light-live'),
+  light: document.getElementById('light-day'),
+  dark: document.getElementById('light-night'),
+};
+
+// Written on the document root, not the GUI: the shell around it — footer,
+// ground, switch labels — belongs to the same daylight.
+const daylight = new Daylight(document.documentElement, {
+  mode: stored(LIGHT_KEY, 'live'),
+});
+
+function setLight(next) {
+  daylight.setMode(next);
+  store(LIGHT_KEY, daylight.mode);
+  for (const [key, button] of Object.entries(lightButtons)) {
+    button.setAttribute('aria-pressed', String(daylight.mode === key));
+  }
+}
+
+for (const [key, button] of Object.entries(lightButtons)) {
+  button.addEventListener('click', () => setLight(key));
+}
 
 // ---- mode switching -------------------------------------------------------
 
@@ -118,6 +151,12 @@ function setMode(next, { animate = true } = {}) {
   buttons.cl.setAttribute('aria-pressed', String(mode === 'cl'));
   guiRoot.classList.toggle('is-hidden', mode !== 'gui');
   screenFrame.classList.toggle('is-hidden', mode !== 'cl');
+  // The daylight switch belongs to the GUI, the CRT switch to the tube.
+  document.body.classList.toggle('is-gui', mode === 'gui');
+  lightSwitch.classList.toggle('is-hidden', mode !== 'gui');
+  crtSwitch.classList.toggle('is-hidden', mode !== 'cl');
+  // Scanlines over a daylit interface look like a fault, not a filter.
+  document.body.classList.toggle('crt-soft', crtMode === 'soft' && mode === 'cl');
   if (animate) glitch.kick(1.6);
 
   if (mode === 'cl') {
@@ -235,5 +274,6 @@ loadContracts().then((cases) => {
   if (cases.length) gui.syncFromStorage();
 });
 setCrt(crtMode, { announce: false });
+setLight(daylight.mode);
 setMode(mode, { animate: false });
 requestAnimationFrame(frame);
