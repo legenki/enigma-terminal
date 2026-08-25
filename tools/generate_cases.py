@@ -69,7 +69,7 @@ def draw_entropy(rng: random.Random) -> bytes:
 
 
 def patterned_entropy(rng: random.Random) -> tuple[bytes, dict]:
-    """Entropy a person could describe out loud — the MERIDIAN/DEEPHOLD style."""
+    """Entropy a person could describe out loud — the ESCRIBANÍA/BAJOFONDO style."""
     style = rng.choice(["repeat", "alternate", "ascend", "ascii"])
     if style == "repeat":
         byte = rng.randrange(256)

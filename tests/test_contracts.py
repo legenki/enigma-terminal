@@ -205,7 +205,7 @@ def _eval_math(expr: str) -> int:
     raise ValueError(f"Unknown math expression: {expr}")
 
 def test_arithmetic_clues_actually_evaluate_to_their_index(cases):
-    """The sums MERIDIAN and VEGA print must be true sums."""
+    """The sums ESCRIBANÍA CERO and CRUZ DEL SUR print must be true sums."""
     checked = 0
     for case in cases:
         if case["archetype"] != "index_math":
@@ -325,7 +325,7 @@ def test_russian_codenames_agree_in_gender(cases):
 
 
 def test_each_client_keeps_its_own_vocabulary(cases, clients):
-    """A MICA case must not be named out of WHITEBONE's word pool."""
+    """A SALAR case must not be named out of SANATORIO NORTE's word pool."""
     for client in clients:
         nouns = set(client["motifs"]["noun"]["ru"])
         for case in cases:

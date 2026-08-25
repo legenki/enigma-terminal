@@ -12,13 +12,13 @@
   },
   "clients": [
     {
-      "slug": "meridian",
+      "slug": "escribania",
       "order": 1,
       "name": {
-        "ru": "МЕРИДИАН",
-        "en": "MERIDIAN",
-        "es": "MERIDIAN",
-        "pt": "MERIDIAN"
+        "ru": "ESCRIBANÍA CERO",
+        "en": "ESCRIBANÍA CERO",
+        "es": "ESCRIBANÍA CERO",
+        "pt": "ESCRIBANÍA CERO"
       },
       "kind": {
         "ru": "частное бюро криминалистики",
@@ -38,28 +38,28 @@
       ],
       "creed": {
         "ru": [
-          "МЕРИДИАН не владеет ничем и не хочет владеть. Он находит.",
+          "ESCRIBANÍA CERO не владеет ничем и не хочет владеть. Он находит.",
           "Восемь этажей серверов в переулке за Реконкистой, ни одного окна, и договор,",
           "в котором нет слова «изъятие» — только «восстановление законного доступа».",
           "Платят аккуратно, в срок и по официальному курсу. Это единственный заказчик,",
           "который скажет тебе правду о том, что ты нашёл."
         ],
         "en": [
-          "MERIDIAN owns nothing and wants to own nothing. It finds.",
+          "ESCRIBANÍA CERO owns nothing and wants to own nothing. It finds.",
           "Eight floors of servers in a lane off Reconquista, not one window, and a contract",
           "that never says 'seizure' — only 'restoration of lawful access'.",
           "They pay carefully, on time, and at the official rate. This is the one client",
           "who will tell you the truth about what you found."
         ],
         "es": [
-          "MERIDIAN no posee nada y no quiere poseer nada. Solo encuentra.",
+          "ESCRIBANÍA CERO no posee nada y no quiere poseer nada. Solo encuentra.",
           "Ocho pisos de servidores en un callejón cerca de Reconquista, ni una sola ventana, y un contrato",
           "que nunca dice 'incautación', solo 'restauración de acceso legal'.",
           "Pagan con cuidado, a tiempo y a la tarifa oficial. Este es el único cliente",
           "que te dirá la verdad sobre lo que encontraste."
         ],
         "pt": [
-          "A MERIDIAN não possui nada e não quer possuir nada. Ela encontra.",
+          "A ESCRIBANÍA CERO não possui nada e não quer possuir nada. Ela encontra.",
           "Oito andares de servidores em um beco perto da Reconquista, nem uma janela sequer, e um contrato",
           "que nunca diz 'apreensão' — apenas 'restauração de acesso legal'.",
           "Eles pagam com cuidado, em dia e na taxa oficial. Este é o único cliente",
@@ -67,10 +67,10 @@
         ]
       },
       "dialect": {
-        "ru": "МЕРИДИАН думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли.",
-        "en": "MERIDIAN thinks in entropy. Their analysts recover not words but the bytes the words grew from.",
-        "es": "MERIDIAN piensa en entropía. Sus analistas no recuperan palabras, sino los bytes de los que nacieron esas palabras.",
-        "pt": "A MERIDIAN pensa em entropia. Seus analistas não recuperam palavras, mas os bytes dos quais as palavras brotaram."
+        "ru": "ESCRIBANÍA CERO думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли.",
+        "en": "ESCRIBANÍA CERO thinks in entropy. Their analysts recover not words but the bytes the words grew from.",
+        "es": "ESCRIBANÍA CERO piensa en entropía. Sus analistas no recuperan palabras, sino los bytes de los que nacieron esas palabras.",
+        "pt": "A ESCRIBANÍA CERO pensa em entropia. Seus analistas não recuperam palavras, mas os bytes dos quais as palavras brotaram."
       },
       "archetypes": [
         "entropy_pattern",
@@ -331,46 +331,46 @@
       },
       "evidence_sources": {
         "ru": [
-          "выписка из терминала МЕРИДИАНА",
+          "выписка из терминала ESCRIBANÍA CERO",
           "лента аудита, распечатанная на матричном принтере",
           "служебная записка без подписи",
           "дамп памяти рабочей станции"
         ],
         "en": [
-          "a MERIDIAN terminal statement",
+          "a ESCRIBANÍA CERO terminal statement",
           "an audit tape off a dot-matrix printer",
           "an unsigned internal memo",
           "a workstation memory dump"
         ],
         "es": [
-          "un extracto de terminal MERIDIAN",
+          "un extracto de terminal ESCRIBANÍA CERO",
           "una cinta de auditoría de una impresora matricial",
           "un memorando interno sin firma",
           "un volcado de memoria de estación de trabajo"
         ],
         "pt": [
-          "um extrato de terminal da MERIDIAN",
+          "um extrato de terminal da ESCRIBANÍA CERO",
           "uma fita de auditoria de uma impressora matricial",
           "um memorando interno sem assinatura",
           "um despejo de memória de estação de trabalho"
         ]
       },
       "payoff": {
-        "ru": "МЕРИДИАН переводит гонорар в течение часа и не задаёт вопросов о том, что ещё ты видел.",
-        "en": "MERIDIAN wires the fee within the hour and asks nothing about what else you saw.",
-        "es": "MERIDIAN transfiere los honorarios en menos de una hora y no pregunta nada sobre qué más viste.",
-        "pt": "A MERIDIAN transfere o pagamento dentro de uma hora e não faz perguntas sobre o que mais você viu."
+        "ru": "ESCRIBANÍA CERO переводит гонорар в течение часа и не задаёт вопросов о том, что ещё ты видел.",
+        "en": "ESCRIBANÍA CERO wires the fee within the hour and asks nothing about what else you saw.",
+        "es": "ESCRIBANÍA CERO transfiere los honorarios en menos de una hora y no pregunta nada sobre qué más viste.",
+        "pt": "A ESCRIBANÍA CERO transfere o pagamento dentro de uma hora e não faz perguntas sobre o que mais você viu."
       },
       "board_key": "meridian"
     },
     {
-      "slug": "seventh-sign",
+      "slug": "martillero",
       "order": 2,
       "name": {
-        "ru": "СЕДЬМОЙ ЗНАК",
-        "en": "SEVENTH SIGN",
-        "es": "SÉPTIMO SIGNO",
-        "pt": "SÉTIMO SINAL"
+        "ru": "MARTILLERO",
+        "en": "MARTILLERO",
+        "es": "MARTILLERO",
+        "pt": "MARTILLERO"
       },
       "kind": {
         "ru": "серый фонд, аукционный дом",
@@ -390,21 +390,21 @@
       ],
       "creed": {
         "ru": [
-          "СЕДЬМОЙ ЗНАК продаёт картины, которых никто не видел, людям, которых никто не знает.",
+          "MARTILLERO продаёт картины, которых никто не видел, людям, которых никто не знает.",
           "Зал на Кинтана, вход со двора, каталог печатают в двенадцати экземплярах.",
           "В их бумагах не встречается слово «деньги» — только «предмет», «оценка» и «переход права»,",
           "а расчёт идёт через cueva на Флориде, где курс называют шёпотом.",
           "Каждый лот уходит по цене, в которой зашит номер. Числа тут важнее холста."
         ],
         "en": [
-          "SEVENTH SIGN sells paintings nobody has seen to people nobody knows.",
+          "MARTILLERO sells paintings nobody has seen to people nobody knows.",
           "A room on Quintana, entrance through the courtyard, catalogue printed in twelve copies.",
           "Their paperwork never says 'money' — only 'lot', 'appraisal' and 'transfer of title',",
           "and settlement runs through a cueva off Florida where the rate is quoted in a whisper.",
           "Every lot closes at a price with a number sewn into it. The figures matter more than the canvas."
         ],
         "es": [
-          "SEVENTH SIGN vende cuadros que nadie ha visto a gente que nadie conoce.",
+          "MARTILLERO vende cuadros que nadie ha visto a gente que nadie conoce.",
           "Una habitación en Quintana, entrada por el patio, catálogo impreso en doce copias.",
           "Su papeleo nunca dice 'dinero', solo 'lote', 'tasación' y 'transferencia de título',",
           "y la liquidación se hace en una cueva cerca de Florida donde la tasa se cotiza en un susurro.",
@@ -419,10 +419,10 @@
         ]
       },
       "dialect": {
-        "ru": "СЕДЬМОЙ ЗНАК прячет слова в суммах. Смотри не на лот, а на последние цифры цены.",
-        "en": "SEVENTH SIGN hides words inside amounts. Never mind the lot — read the last digits of the price.",
-        "es": "EL SÉPTIMO SIGNO esconde palabras en los importes. Olvida el resto: lee los últimos dígitos del precio.",
-        "pt": "O SÉTIMO SINAL esconde palavras dentro de quantias. Esqueça o lote — leia os últimos dígitos do preço."
+        "ru": "MARTILLERO прячет слова в суммах. Смотри не на лот, а на последние цифры цены.",
+        "en": "MARTILLERO hides words inside amounts. Never mind the lot — read the last digits of the price.",
+        "es": "EL MARTILLERO esconde palabras en los importes. Olvida el resto: lee los últimos dígitos del precio.",
+        "pt": "O MARTILLERO esconde palavras dentro de quantias. Esqueça o lote — leia os últimos dígitos do preço."
       },
       "archetypes": [
         "ledger_amounts",
@@ -708,21 +708,21 @@
         ]
       },
       "payoff": {
-        "ru": "СЕДЬМОЙ ЗНАК присылает конверт без обратного адреса. Внутри — сумма и ни одного слова.",
-        "en": "SEVENTH SIGN sends an envelope with no return address. Inside: a sum, and not one word.",
-        "es": "SEVENTH SIGN envía un sobre sin remitente. Dentro: una suma, y ni una sola palabra.",
-        "pt": "O SÉTIMO SINAL envia um envelope sem remetente. Dentro: uma quantia, e nenhuma palavra."
+        "ru": "MARTILLERO присылает конверт без обратного адреса. Внутри — сумма и ни одного слова.",
+        "en": "MARTILLERO sends an envelope with no return address. Inside: a sum, and not one word.",
+        "es": "MARTILLERO envía un sobre sin remitente. Dentro: una suma, y ni una sola palabra.",
+        "pt": "O MARTILLERO envia um envelope sem remetente. Dentro: uma quantia, e nenhuma palavra."
       },
       "board_key": "seventh-sign"
     },
     {
-      "slug": "deephold",
+      "slug": "bajofondo",
       "order": 3,
       "name": {
-        "ru": "ГЛУБИНА",
-        "en": "DEEPHOLD",
-        "es": "DEEPHOLD",
-        "pt": "ABISMO"
+        "ru": "BAJOFONDO",
+        "en": "BAJOFONDO",
+        "es": "BAJOFONDO",
+        "pt": "BAJOFONDO"
       },
       "kind": {
         "ru": "подводные дата-убежища",
@@ -742,28 +742,28 @@
       ],
       "creed": {
         "ru": [
-          "ГЛУБИНА выкупила семь списанных буровых и утопила в них по дата-центру.",
+          "BAJOFONDO выкупила семь списанных буровых и утопила в них по дата-центру.",
           "Ла-Плата для этого слишком мелкая — платформы стоят дальше, за Мар-дель-Платой,",
           "где шельф наконец обрывается. В городе у них только контора в Дарсена-Сур и катер.",
           "Сто девяносто метров воды — лучший фаервол из придуманных: до него не доплывёт ни один ордер.",
           "Всё, что попадает на платформу, они кладут в сетку координат. Даже слова."
         ],
         "en": [
-          "DEEPHOLD bought seven decommissioned rigs and sank a data centre into each.",
+          "BAJOFONDO bought seven decommissioned rigs and sank a data centre into each.",
           "The Plata is far too shallow for that — the platforms sit out past Mar del Plata,",
           "where the shelf finally drops away. In the city they keep an office at Dársena Sur and a launch.",
           "A hundred and ninety metres of water is the finest firewall ever devised: no warrant swims that far.",
           "Everything that reaches a platform gets filed into a coordinate grid. Words included."
         ],
         "es": [
-          "DEEPHOLD compró siete plataformas fuera de servicio y hundió un centro de datos en cada una.",
+          "BAJOFONDO compró siete plataformas fuera de servicio y hundió un centro de datos en cada una.",
           "El Plata es demasiado poco profundo para eso; las plataformas se asientan más allá de Mar del Plata,",
           "donde la plataforma continental finalmente cae. En la ciudad mantienen una oficina en Dársena Sur y una lancha.",
           "Ciento noventa metros de agua son el mejor firewall jamás diseñado: ninguna orden judicial nada tan profundo.",
           "Todo lo que llega a una plataforma se archiva en una cuadrícula de coordenadas. Palabras incluidas."
         ],
         "pt": [
-          "A DEEPHOLD comprou sete plataformas descomissionadas e afundou um centro de dados em cada uma.",
+          "O BAJOFONDO comprou sete plataformas descomissionadas e afundou um centro de dados em cada uma.",
           "O Plata é raso demais para isso — as plataformas ficam além de Mar del Plata,",
           "onde a plataforma continental finalmente despenca. Na cidade, eles mantêm um escritório em Dársena Sur e uma lancha.",
           "Cento e noventa metros de água são o melhor firewall já criado: nenhum mandado nada tão fundo.",
@@ -771,10 +771,10 @@
         ]
       },
       "dialect": {
-        "ru": "ГЛУБИНА раскладывает словарь по сетке: 128 рядов на 16 колонок. Слово — это точка на карте.",
-        "en": "DEEPHOLD lays the wordlist on a grid: 128 rows by 16 columns. A word is a point on a chart.",
-        "es": "DEEPHOLD despliega la lista de palabras en una cuadrícula: 128 filas por 16 columnas. Una palabra es un punto en el mapa.",
-        "pt": "DEEPHOLD dispõe a lista de palavras em uma grade: 128 linhas por 16 colunas. Uma palavra é um ponto em um gráfico."
+        "ru": "BAJOFONDO раскладывает словарь по сетке: 128 рядов на 16 колонок. Слово — это точка на карте.",
+        "en": "BAJOFONDO lays the wordlist on a grid: 128 rows by 16 columns. A word is a point on a chart.",
+        "es": "BAJOFONDO despliega la lista de palabras en una cuadrícula: 128 filas por 16 columnas. Una palabra es un punto en el mapa.",
+        "pt": "BAJOFONDO dispõe a lista de palavras em uma grade: 128 linhas por 16 colunas. Uma palavra é um ponto em um gráfico."
       },
       "archetypes": [
         "grid_coords",
@@ -1060,21 +1060,21 @@
         ]
       },
       "payoff": {
-        "ru": "ГЛУБИНА платит с задержкой в один прилив и никогда не объясняет, почему именно так.",
-        "en": "DEEPHOLD pays one tide late and never explains why that particular delay.",
-        "es": "DEEPHOLD paga con una marea de retraso y nunca explica el porqué de esa demora en particular.",
-        "pt": "A DEEPHOLD paga com uma maré de atraso e nunca explica o porquê dessa demora em particular."
+        "ru": "BAJOFONDO платит с задержкой в один прилив и никогда не объясняет, почему именно так.",
+        "en": "BAJOFONDO pays one tide late and never explains why that particular delay.",
+        "es": "BAJOFONDO paga con una marea de retraso y nunca explica el porqué de esa demora en particular.",
+        "pt": "O BAJOFONDO paga com uma maré de atraso e nunca explica o porquê dessa demora em particular."
       },
       "board_key": "deephold"
     },
     {
-      "slug": "vega-orbital",
+      "slug": "cruz-del-sur",
       "order": 4,
       "name": {
-        "ru": "ВЕГА-ОРБИТАЛ",
-        "en": "VEGA ORBITAL",
-        "es": "ÓRBITA VEGA",
-        "pt": "ÓRBITA VEGA"
+        "ru": "CRUZ DEL SUR",
+        "en": "CRUZ DEL SUR",
+        "es": "CRUZ DEL SUR",
+        "pt": "CRUZ DEL SUR"
       },
       "kind": {
         "ru": "орбитальное хранение ключей",
@@ -1094,28 +1094,28 @@
       ],
       "creed": {
         "ru": [
-          "ВЕГА держит ключи там, куда не дотянется ни один суд: на высоте четырёхсот километров.",
+          "CRUZ DEL SUR держит ключи там, куда не дотянется ни один суд: на высоте четырёхсот километров.",
           "Наземная станция — четыре этажа на Пасео Колон, антенны на крыше, окна заклеены плёнкой.",
           "Их главный продукт — не хранилище, а задержка. Запрос идёт наверх две с половиной секунды,",
           "и за эти секунды успевает умереть большинство плохих идей.",
           "Всё, что они делают, они считают. Даже имена у них — результат арифметики."
         ],
         "en": [
-          "VEGA keeps keys where no court can reach: four hundred kilometres up.",
+          "CRUZ DEL SUR keeps keys where no court can reach: four hundred kilometres up.",
           "The ground station is four floors on Paseo Colón, antennas on the roof, windows filmed over.",
           "Their real product is not storage but latency. A request climbs for two and a half seconds,",
           "and in those seconds most bad ideas die of natural causes.",
           "Everything they do, they compute. Even their names come out of arithmetic."
         ],
         "es": [
-          "VEGA guarda las llaves donde ningún tribunal puede llegar: a cuatrocientos kilómetros de altura.",
+          "CRUZ DEL SUR guarda las llaves donde ningún tribunal puede llegar: a cuatrocientos kilómetros de altura.",
           "La estación terrestre ocupa cuatro pisos en el Paseo Colón, con antenas en la azotea y ventanas polarizadas.",
           "Su verdadero producto no es el almacenamiento, sino la latencia. Una solicitud asciende durante dos segundos y medio,",
           "y en esos segundos, la mayoría de las malas ideas mueren por causas naturales.",
           "Todo lo que hacen, lo calculan. Incluso sus nombres surgen de la aritmética."
         ],
         "pt": [
-          "A VEGA guarda chaves onde nenhum tribunal alcança: a quatrocentos quilômetros de altitude.",
+          "A CRUZ DEL SUR guarda chaves onde nenhum tribunal alcança: a quatrocentos quilômetros de altitude.",
           "A estação terrestre fica em quatro andares no Paseo Colón, antenas no teto, janelas com película.",
           "O produto real deles não é armazenamento, é latência. Uma requisição sobe por dois segundos e meio,",
           "e nesses segundos a maioria das más ideias morre de causas naturais.",
@@ -1123,10 +1123,10 @@
         ]
       },
       "dialect": {
-        "ru": "ВЕГА диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить.",
-        "en": "VEGA dictates numbers rather than words, and never plainly. The index has to be computed.",
-        "es": "VEGA dicta números en lugar de palabras, y nunca de forma directa. El índice debe ser calculado.",
-        "pt": "VEGA dita números em vez de palavras, e nunca de forma clara. O índice precisa ser calculado."
+        "ru": "CRUZ DEL SUR диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить.",
+        "en": "CRUZ DEL SUR dictates numbers rather than words, and never plainly. The index has to be computed.",
+        "es": "CRUZ DEL SUR dicta números en lugar de palabras, y nunca de forma directa. El índice debe ser calculado.",
+        "pt": "CRUZ DEL SUR dita números em vez de palavras, e nunca de forma clara. O índice precisa ser calculado."
       },
       "archetypes": [
         "index_math",
@@ -1412,21 +1412,21 @@
         ]
       },
       "payoff": {
-        "ru": "ВЕГА подтверждает приём через две с половиной секунды после того, как ты закрыл терминал.",
-        "en": "VEGA acknowledges two and a half seconds after you have already closed the terminal.",
-        "es": "VEGA acusa recibo dos segundos y medio después de que ya has cerrado el terminal.",
-        "pt": "VEGA reconhece dois segundos e meio depois de você já ter fechado o terminal."
+        "ru": "CRUZ DEL SUR подтверждает приём через две с половиной секунды после того, как ты закрыл терминал.",
+        "en": "CRUZ DEL SUR acknowledges two and a half seconds after you have already closed the terminal.",
+        "es": "CRUZ DEL SUR acusa recibo dos segundos y medio después de que ya has cerrado el terminal.",
+        "pt": "CRUZ DEL SUR reconhece dois segundos e meio depois de você já ter fechado o terminal."
       },
       "board_key": "vega-orbital"
     },
     {
-      "slug": "whitebone",
+      "slug": "sanatorio",
       "order": 5,
       "name": {
-        "ru": "БЕЛАЯ КОСТЬ",
-        "en": "WHITEBONE",
-        "es": "HUESOBLANCO",
-        "pt": "OSSOBRANCO"
+        "ru": "SANATORIO NORTE",
+        "en": "SANATORIO NORTE",
+        "es": "SANATORIO NORTE",
+        "pt": "SANATORIO NORTE"
       },
       "kind": {
         "ru": "биотех и клиники аренды тела",
@@ -1446,28 +1446,28 @@
       ],
       "creed": {
         "ru": [
-          "БЕЛАЯ КОСТЬ разговаривает с тобой голосом медсестры, которая уже всё решила.",
+          "SANATORIO NORTE разговаривает с тобой голосом медсестры, которая уже всё решила.",
           "Три санатория между Пуэйрредон и Санта-Фе, мрамор в холле, очередь с семи утра.",
           "Они сдают в аренду печень, роговицу и двадцать лет жизни — в рассрочку, под залог кошелька.",
           "Если клиент перестал платить, ключ переходит к ним. Если клиент перестал дышать — тоже.",
           "Их каталог устроен как определитель видов: каждая вещь занимает единственную ветку."
         ],
         "en": [
-          "WHITEBONE speaks to you in the voice of a nurse who has already decided.",
+          "SANATORIO NORTE speaks to you in the voice of a nurse who has already decided.",
           "Three sanatorios between Pueyrredón and Santa Fe, marble in the lobby, a queue from seven.",
           "They lease out livers, corneas and twenty years of life, in instalments, against a wallet.",
           "If the client stops paying, the key becomes theirs. If the client stops breathing, likewise.",
           "Their catalogue works like a species key: every item sits on exactly one branch."
         ],
         "es": [
-          "WHITEBONE te habla con la voz de una enfermera que ya ha tomado una decisión.",
+          "SANATORIO NORTE te habla con la voz de una enfermera que ya ha tomado una decisión.",
           "Tres sanatorios entre Pueyrredón y Santa Fe, mármol en el vestíbulo, una fila desde las siete.",
           "Arriendan hígados, córneas y veinte años de vida, en cuotas, contra una billetera.",
           "Si el cliente deja de pagar, la llave pasa a ser suya. Si el cliente deja de respirar, lo mismo.",
           "Su catálogo funciona como una clave de especie: cada elemento se asienta exactamente en una rama."
         ],
         "pt": [
-          "WHITEBONE fala com você com a voz de uma enfermeira que já tomou sua decisão.",
+          "SANATORIO NORTE fala com você com a voz de uma enfermeira que já tomou sua decisão.",
           "Três sanatórios entre Pueyrredón e Santa Fe, mármore no saguão, fila desde as sete.",
           "Eles alugam fígados, córneas e vinte anos de vida, em parcelas, contra uma carteira.",
           "Se o cliente para de pagar, a chave torna-se deles. Se o cliente para de respirar, da mesma forma.",
@@ -1475,10 +1475,10 @@
         ]
       },
       "dialect": {
-        "ru": "БЕЛАЯ КОСТЬ описывает слово через его единственность: такая ветка в словаре одна.",
-        "en": "WHITEBONE describes a word by its uniqueness: only one branch in the list fits.",
-        "es": "WHITEBONE describe una palabra por su singularidad: solo una rama en la lista encaja.",
-        "pt": "WHITEBONE descreve uma palavra por sua singularidade: apenas um ramo na lista se encaixa."
+        "ru": "SANATORIO NORTE описывает слово через его единственность: такая ветка в словаре одна.",
+        "en": "SANATORIO NORTE describes a word by its uniqueness: only one branch in the list fits.",
+        "es": "SANATORIO NORTE describe una palabra por su singularidad: solo una rama en la lista encaja.",
+        "pt": "SANATORIO NORTE descreve uma palavra por sua singularidade: apenas um ramo na lista se encaixa."
       },
       "archetypes": [
         "unique_prefix",
@@ -1764,21 +1764,21 @@
         ]
       },
       "payoff": {
-        "ru": "БЕЛАЯ КОСТЬ благодарит и предлагает тебе обследование. Бесплатно. В первый раз.",
-        "en": "WHITEBONE thanks you and offers a check-up. Free of charge. The first time.",
-        "es": "WHITEBONE te da las gracias y te ofrece un chequeo. Sin coste alguno. La primera vez.",
-        "pt": "WHITEBONE agradece e oferece um check-up. Por conta da casa. Só desta vez."
+        "ru": "SANATORIO NORTE благодарит и предлагает тебе обследование. Бесплатно. В первый раз.",
+        "en": "SANATORIO NORTE thanks you and offers a check-up. Free of charge. The first time.",
+        "es": "SANATORIO NORTE te da las gracias y te ofrece un chequeo. Sin coste alguno. La primera vez.",
+        "pt": "SANATORIO NORTE agradece e oferece um check-up. Por conta da casa. Só desta vez."
       },
       "board_key": "whitebone"
     },
     {
-      "slug": "gost-9",
+      "slug": "mesa-entradas",
       "order": 6,
       "name": {
-        "ru": "ГОСТ-9",
-        "en": "GOST-9",
-        "es": "GOST-9",
-        "pt": "GOST-9"
+        "ru": "MESA DE ENTRADAS",
+        "en": "MESA DE ENTRADAS",
+        "es": "MESA DE ENTRADAS",
+        "pt": "MESA DE ENTRADAS"
       },
       "kind": {
         "ru": "остаточное ведомство несуществующего государства",
@@ -1800,37 +1800,37 @@
         "ru": [
           "Ведомства нет уже девятнадцать лет. Ведомство работает.",
           "Второй этаж над галантерейной лавкой на Ринкон, вывеска снята, номер кабинета остался.",
-          "ГОСТ-9 продолжает ставить печати, нумеровать входящие и вымарывать то, что не положено знать.",
+          "MESA DE ENTRADAS продолжает ставить печати, нумеровать входящие и вымарывать то, что не положено знать.",
           "Зарплату им платит кто-то, кого они называют «правопреемником» и никогда — по имени.",
           "В их бумагах всегда чего-то не хватает. Ровно одного слова. Это не небрежность, это метод."
         ],
         "en": [
           "The department has been gone nineteen years. The department is still working.",
           "First floor above a haberdashery on Rincón, the sign taken down, the room number left up.",
-          "GOST-9 goes on stamping, numbering the incoming, and blacking out what must not be known.",
+          "MESA DE ENTRADAS goes on stamping, numbering the incoming, and blacking out what must not be known.",
           "Someone pays their salaries — someone they call 'the successor' and never by name.",
           "Their papers are always missing something. Exactly one word. That is not sloppiness, it is method."
         ],
         "es": [
           "El departamento desapareció hace diecinueve años. El departamento sigue trabajando.",
           "Primer piso sobre una mercería en Rincón, el letrero retirado, el número de habitación aún en la puerta.",
-          "GOST-9 sigue sellando, numerando lo que llega y tachando lo que no debe saberse.",
+          "MESA DE ENTRADAS sigue sellando, numerando lo que llega y tachando lo que no debe saberse.",
           "Alguien paga sus salarios; alguien a quien llaman 'el sucesor' y nunca por su nombre.",
           "A sus documentos siempre les falta algo. Exactamente una palabra. No es descuido, es método."
         ],
         "pt": [
           "O departamento acabou há dezenove anos. O departamento ainda está trabalhando.",
           "Primeiro andar acima de uma loja de roupas na Rincón, a placa foi removida, o número da sala continua lá.",
-          "GOST-9 continua carimbando, numerando o que chega e apagando o que não deve ser conhecido.",
+          "MESA DE ENTRADAS continua carimbando, numerando o que chega e apagando o que não deve ser conhecido.",
           "Alguém paga os salários deles — alguém a quem chamam de 'o sucessor' e nunca pelo nome.",
           "Sempre falta algo nos documentos deles. Exatamente uma palavra. Isso não é desleixo, é método."
         ]
       },
       "dialect": {
-        "ru": "ГОСТ-9 выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE.",
-        "en": "GOST-9 releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE.",
-        "es": "GOST-9 lo suelta todo menos una palabra: esa está censurada. Recupérala mediante la suma de comprobación — COMPLETADO.",
-        "pt": "O GOST-9 libera tudo, menos uma palavra: essa foi censurada. Recupere-a via checksum — CONCLUÍDO."
+        "ru": "MESA DE ENTRADAS выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE.",
+        "en": "MESA DE ENTRADAS releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE.",
+        "es": "MESA DE ENTRADAS lo suelta todo menos una palabra: esa está censurada. Recupérala mediante la suma de comprobación — COMPLETADO.",
+        "pt": "A MESA DE ENTRADAS libera tudo, menos uma palavra: essa foi censurada. Recupere-a via checksum — CONCLUÍDO."
       },
       "archetypes": [
         "redacted",
@@ -2116,21 +2116,21 @@
         ]
       },
       "payoff": {
-        "ru": "ГОСТ-9 присылает уведомление о том, что твоё обращение рассмотрено. Гонорар придёт отдельным письмом. Через полгода.",
-        "en": "GOST-9 sends notice that your request has been considered. The fee follows in a separate letter. In six months.",
-        "es": "GOST-9 notifica que su solicitud ha sido considerada. Los honorarios llegarán en una carta aparte. En seis meses.",
-        "pt": "A GOST-9 envia o aviso de que seu pedido foi analisado. A taxa segue em uma carta separada. Em seis meses."
+        "ru": "MESA DE ENTRADAS присылает уведомление о том, что твоё обращение рассмотрено. Гонорар придёт отдельным письмом. Через полгода.",
+        "en": "MESA DE ENTRADAS sends notice that your request has been considered. The fee follows in a separate letter. In six months.",
+        "es": "MESA DE ENTRADAS notifica que su solicitud ha sido considerada. Los honorarios llegarán en una carta aparte. En seis meses.",
+        "pt": "A MESA DE ENTRADAS envia o aviso de que seu pedido foi analisado. A taxa segue em uma carta separada. Em seis meses."
       },
       "board_key": "gost-9"
     },
     {
-      "slug": "mica",
+      "slug": "salar",
       "order": 7,
       "name": {
-        "ru": "СЛЮДА",
-        "en": "MICA",
-        "es": "MICA",
-        "pt": "MICA"
+        "ru": "SALAR",
+        "en": "SALAR",
+        "es": "SALAR",
+        "pt": "SALAR"
       },
       "kind": {
         "ru": "минеральный и энергетический конгломерат",
@@ -2150,43 +2150,43 @@
       ],
       "creed": {
         "ru": [
-          "СЛЮДА владеет сетью. Не социальной — электрической. Той, без которой не работает ничего.",
+          "SALAR владеет сетью. Не социальной — электрической. Той, без которой не работает ничего.",
           "Башня в Каталинас-Норте, тридцать один этаж, лифт до двадцать восьмого для всех остальных.",
           "Разрезы у них на северо-западе, в Хухуе и Катамарке, за две тысячи километров отсюда.",
           "Они мыслят десятилетиями и говорят так, будто человек — это короткий геологический эпизод.",
-          "Каждый их документ симметричен: слюда расслаивается ровными зеркальными пластинами,",
+          "Каждый их документ симметричен: солончак — это зеркало размером с провинцию,",
           "и то же самое они делают со словами. Смотри с конца."
         ],
         "en": [
-          "MICA owns the grid. Not the social one — the electrical one, without which nothing runs.",
+          "SALAR owns the grid. Not the social one — the electrical one, without which nothing runs.",
           "A tower in Catalinas Norte, thirty-one floors, the lift stopping at twenty-eight for everyone else.",
           "Their cuts are in the north-west, in Jujuy and Catamarca, two thousand kilometres from here.",
           "They think in decades and speak as though a person were a brief geological episode.",
-          "Every document of theirs is symmetrical: mica cleaves into even mirrored sheets,",
+          "Every document of theirs is symmetrical: a salt flat is a mirror the size of a province,",
           "and they do the same to words. Read from the far end."
         ],
         "es": [
-          "MICA es dueña de la red. No la social, sino la eléctrica; sin ella, nada funciona.",
+          "SALAR es dueño de la red. No la social, sino la eléctrica; sin ella, nada funciona.",
           "Una torre en Catalinas Norte, treinta y un pisos, el ascensor se detiene en el veintiocho para el resto de los mortales.",
           "Sus tajadas están en el noroeste, en Jujuy y Catamarca, a dos mil kilómetros de aquí.",
           "Piensan en décadas y hablan como si una persona fuera un breve episodio geológico.",
-          "Cada uno de sus documentos es simétrico: la mica se divide en láminas espejadas uniformes,",
+          "Cada uno de sus documentos es simétrico: un salar es un espejo del tamaño de una provincia,",
           "y ellos hacen lo mismo con las palabras. Lee desde el extremo opuesto."
         ],
         "pt": [
-          "A MICA é dona da rede. Não a social — a elétrica, sem a qual nada funciona.",
+          "O SALAR é dono da rede. Não a social — a elétrica, sem a qual nada funciona.",
           "Uma torre em Catalinas Norte, trinta e um andares, o elevador parando no vigésimo oitavo para todos os outros.",
           "Seus cortes ficam no noroeste, em Jujuy e Catamarca, a dois mil quilômetros daqui.",
           "Eles pensam em décadas e falam como se uma pessoa fosse um breve episódio geológico.",
-          "Cada documento deles é simétrico: a mica se divide em lâminas espelhadas e uniformes,",
+          "Cada documento deles é simétrico: um salar é um espelho do tamanho de uma província,",
           "e eles fazem o mesmo com as palavras. Leia a partir da extremidade oposta."
         ]
       },
       "dialect": {
-        "ru": "СЛЮДА зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N.",
-        "en": "MICA mirrors the wordlist: the word at N answers to the word at 2049 − N.",
-        "es": "MICA refleja la lista de palabras: la palabra en la posición N corresponde a la palabra en la posición 2049 − N.",
-        "pt": "MICA espelha a lista de palavras: a palavra em N corresponde à palavra em 2049 − N."
+        "ru": "SALAR зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N.",
+        "en": "SALAR mirrors the wordlist: the word at N answers to the word at 2049 − N.",
+        "es": "SALAR refleja la lista de palabras: la palabra en la posición N corresponde a la palabra en la posición 2049 − N.",
+        "pt": "SALAR espelha a lista de palavras: a palavra em N corresponde à palavra em 2049 − N."
       },
       "archetypes": [
         "mirror_index",
@@ -2472,21 +2472,21 @@
         ]
       },
       "payoff": {
-        "ru": "СЛЮДА не благодарит. В следующем месяце счёт за электричество в твоём квартале оказывается чуть меньше.",
-        "en": "MICA does not thank you. Next month the power bill for your block comes in slightly lower.",
-        "es": "MICA no te da las gracias. El mes que viene, la factura de la luz de tu bloque llega un poco más baja.",
-        "pt": "MICA não te agradece. No mês que vem, a conta de luz do seu quarteirão vem um pouco mais baixa."
+        "ru": "SALAR не благодарит. В следующем месяце счёт за электричество в твоём квартале оказывается чуть меньше.",
+        "en": "SALAR does not thank you. Next month the power bill for your block comes in slightly lower.",
+        "es": "SALAR no te da las gracias. El mes que viene, la factura de la luz de tu bloque llega un poco más baja.",
+        "pt": "SALAR não te agradece. No mês que vem, a conta de luz do seu quarteirão vem um pouco mais baixa."
       },
       "board_key": "mica"
     },
     {
-      "slug": "last-archive",
+      "slug": "aleph",
       "order": 8,
       "name": {
-        "ru": "ПОСЛЕДНИЙ АРХИВ",
-        "en": "LAST ARCHIVE",
-        "es": "ÚLTIMO ARCHIVO",
-        "pt": "ÚLTIMO ARQUIVO"
+        "ru": "ALEPH",
+        "en": "ALEPH",
+        "es": "ALEPH",
+        "pt": "ALEPH"
       },
       "kind": {
         "ru": "коллектив архивистов, платит не деньгами",
@@ -2506,28 +2506,28 @@
       ],
       "creed": {
         "ru": [
-          "ПОСЛЕДНИЙ АРХИВ считает, что забытый кошелёк — это забытый человек, и не согласен с этим.",
+          "ALEPH считает, что забытый кошелёк — это забытый человек, и не согласен с этим.",
           "Говорят, они собираются по воскресеньям на Дефенса, среди развалов с открытками и ложками.",
           "У них нет офиса, счёта и юридического лица. Есть двенадцать тысяч зеркал и упрямство.",
           "Они не платят гонораров. Они отдают то, что нашли сами: имя, адрес, дату, чужую ошибку.",
           "Их подсказки идут цепочкой: каждое слово держится за соседа по словарю."
         ],
         "en": [
-          "LAST ARCHIVE holds that a forgotten wallet is a forgotten person, and refuses to accept that.",
+          "ALEPH holds that a forgotten wallet is a forgotten person, and refuses to accept that.",
           "They are said to meet on Sundays on Defensa, among the stalls of postcards and old spoons.",
           "They have no office, no account and no legal existence. They have twelve thousand mirrors and stubbornness.",
           "They pay no fees. They hand over what they found themselves: a name, an address, a date, someone else's mistake.",
           "Their clues run in a chain: every word holds on to its neighbour in the list."
         ],
         "es": [
-          "LAST ARCHIVE sostiene que una billetera olvidada es una persona olvidada, y se niega a aceptarlo.",
+          "ALEPH sostiene que una billetera olvidada es una persona olvidada, y se niega a aceptarlo.",
           "Se dice que se reúnen los domingos en Defensa, entre puestos de postales y cucharas viejas.",
           "No tienen oficina, ni cuenta, ni existencia legal. Tienen doce mil espejos y terquedad.",
           "No pagan cuotas. Entregan lo que ellos mismos encontraron: un nombre, una dirección, una fecha, el error de alguien más.",
           "Sus pistas corren en cadena: cada palabra se aferra a su vecina en la lista."
         ],
         "pt": [
-          "O LAST ARCHIVE sustenta que uma carteira esquecida é uma pessoa esquecida, e recusa-se a aceitar isso.",
+          "O ALEPH sustenta que uma carteira esquecida é uma pessoa esquecida, e recusa-se a aceitar isso.",
           "Dizem que se encontram aos domingos na Defensa, entre as bancas de postais e colheres velhas.",
           "Não têm escritório, nem conta, nem existência legal. Têm doze mil espelhos e teimosia.",
           "Não pagam taxas. Entregam o que eles próprios encontraram: um nome, uma morada, uma data, o erro de outra pessoa.",
@@ -2535,10 +2535,10 @@
         ]
       },
       "dialect": {
-        "ru": "ПОСЛЕДНИЙ АРХИВ ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39.",
-        "en": "LAST ARCHIVE leads word to word: each one stands beside a known word in the BIP-39 list.",
-        "es": "EL ÚLTIMO ARCHIVO guía palabra por palabra: cada una se sitúa junto a una palabra conocida en la lista BIP-39.",
-        "pt": "ÚLTIMO ARQUIVO leva palavra por palavra: cada uma se posiciona ao lado de uma palavra conhecida na lista BIP-39."
+        "ru": "ALEPH ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39.",
+        "en": "ALEPH leads word to word: each one stands beside a known word in the BIP-39 list.",
+        "es": "EL ALEPH guía palabra por palabra: cada una se sitúa junto a una palabra conocida en la lista BIP-39.",
+        "pt": "ALEPH leva palavra por palavra: cada uma se posiciona ao lado de uma palavra conhecida na lista BIP-39."
       },
       "archetypes": [
         "neighbour",
@@ -2824,10 +2824,10 @@
         ]
       },
       "payoff": {
-        "ru": "ПОСЛЕДНИЙ АРХИВ не переводит ничего. Через неделю кто-то незнакомый оплачивает твой счёт в баре.",
-        "en": "LAST ARCHIVE transfers nothing. A week later a stranger settles your bar tab.",
-        "es": "EL ÚLTIMO ARCHIVO no transfiere nada. Una semana después, un desconocido paga tu cuenta en el bar.",
-        "pt": "O ÚLTIMO ARQUIVO não transfere nada. Uma semana depois, um estranho paga a sua conta no bar."
+        "ru": "ALEPH не переводит ничего. Через неделю кто-то незнакомый оплачивает твой счёт в баре.",
+        "en": "ALEPH transfers nothing. A week later a stranger settles your bar tab.",
+        "es": "EL ALEPH no transfiere nada. Una semana después, un desconocido paga tu cuenta en el bar.",
+        "pt": "O ALEPH não transfere nada. Uma semana depois, um estranho paga a sua conta no bar."
       },
       "board_key": "last-archive"
     }

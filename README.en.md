@@ -114,14 +114,14 @@ A client is not a skin. It sets the **hand**: the way words are hidden in their 
 
 | Client | What they are | Hand |
 |---|---|---|
-| MERIDIAN · Microcentro | private forensic bureau | entropy, plain indices, unique branches |
-| SEVENTH SIGN · Recoleta | grey fund, auction house | the index is sewn into the lot price |
-| DEEPHOLD · Dársena Sur | subsea data havens | the wordlist as a 128 × 16 grid |
-| VEGA ORBITAL · Paseo Colón | orbital key custody | the index has to be computed |
-| WHITEBONE · Barrio Norte | biotech and body-lease clinics | the one branch that fits |
-| GOST-9 · Balvanera | agency of a state that ended | one word redacted, recovered with `COMPLETE` |
-| MICA · Catalinas Norte | mineral conglomerate | mirrored: index = 2049 − the number given |
-| LAST ARCHIVE · San Telmo | archivists, paid in information | a chain of wordlist neighbours |
+| ESCRIBANÍA CERO · Microcentro | private forensic bureau | entropy, plain indices, unique branches |
+| MARTILLERO · Recoleta | grey fund, auction house | the index is sewn into the lot price |
+| BAJOFONDO · Dársena Sur | subsea data havens | the wordlist as a 128 × 16 grid |
+| CRUZ DEL SUR · Paseo Colón | orbital key custody | the index has to be computed |
+| SANATORIO NORTE · Barrio Norte | biotech and body-lease clinics | the one branch that fits |
+| MESA DE ENTRADAS · Balvanera | agency of a state that ended | one word redacted, recovered with `COMPLETE` |
+| SALAR · Catalinas Norte | mineral conglomerate | mirrored: index = 2049 − the number given |
+| ALEPH · San Telmo | archivists, paid in information | a chain of wordlist neighbours |
 
 **The board and the desk are different things.** Contracts is work on offer; Case files is your
 desk. Opening a contract puts it on the desk and keeps it there between sessions; an unsolved one

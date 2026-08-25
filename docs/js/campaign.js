@@ -11,7 +11,7 @@ export const CAMPAIGN = {
     },
     "version": "1.0.0-realnet",
     "operator": "NULLSEC",
-    "client": "MERIDIAN"
+    "client": "ESCRIBANÍA CERO"
   },
   "prologue": {
     "ru": [
@@ -25,7 +25,7 @@ export const CAMPAIGN = {
       "Он не доверял облакам, серверам и людям. Он доверял только словам.",
       "Двенадцать слов на кошелёк — и ни строчки на бумаге.",
       "",
-      "Заказчик MERIDIAN платит за каждый восстановленный сид.",
+      "Заказчик ESCRIBANÍA CERO платит за каждый восстановленный сид.",
       "Ключи ORACLE спрятал в загадках, разбросанных по своим архивам.",
       "Терминал перед тобой считает адреса по-настоящему и стучится в живую сеть Bitcoin.",
       "",
@@ -42,7 +42,7 @@ export const CAMPAIGN = {
       "He trusted no cloud, no server, no person. He trusted only words.",
       "Twelve words per wallet — and not a single line on paper.",
       "",
-      "The client, MERIDIAN, pays for every recovered seed.",
+      "The client, ESCRIBANÍA CERO, pays for every recovered seed.",
       "ORACLE hid the keys inside riddles scattered through his archives.",
       "This terminal derives addresses for real and knocks on the live Bitcoin network.",
       "",
@@ -59,7 +59,7 @@ export const CAMPAIGN = {
       "No confiaba en la nube, ni en servidores, ni en nadie. Solo confiaba en las palabras.",
       "Doce palabras por billetera, y ni una sola línea en papel.",
       "",
-      "El cliente, MERIDIAN, paga por cada semilla recuperada.",
+      "El cliente, ESCRIBANÍA CERO, paga por cada semilla recuperada.",
       "ORACLE escondió las claves en acertijos dispersos por sus archivos.",
       "Esta terminal deriva direcciones reales y toca a la puerta de la red Bitcoin en vivo.",
       "",
@@ -76,7 +76,7 @@ export const CAMPAIGN = {
       "Ele não confiava em nuvem, servidor ou pessoa alguma. Ele confiava apenas em palavras.",
       "Doze palavras por carteira — e nem uma única linha no papel.",
       "",
-      "O cliente, MERIDIAN, paga por cada seed recuperada.",
+      "O cliente, ESCRIBANÍA CERO, paga por cada seed recuperada.",
       "ORACLE escondeu as chaves em enigmas espalhados por seus arquivos.",
       "Este terminal deriva endereços reais e bate à porta da rede Bitcoin ativa.",
       "",
@@ -1108,22 +1108,22 @@ export const CAMPAIGN = {
       ],
       "brief": {
         "ru": [
-          "Восьмой кошелёк ORACLE не прятал. Он оставил его на виду — в открытом письме на имя МЕРИДИАНА.",
+          "Восьмой кошелёк ORACLE не прятал. Он оставил его на виду — в открытом письме на имя ESCRIBANÍA CERO.",
           "«Если ты читаешь это, детектив, значит семь предыдущих ты уже открыл.",
           " Последние двенадцать слов — про то, как всё началось.»"
         ],
         "en": [
-          "ORACLE did not hide the eighth wallet. He left it in plain sight — in an open letter addressed to MERIDIAN.",
+          "ORACLE did not hide the eighth wallet. He left it in plain sight — in an open letter addressed to ESCRIBANÍA CERO.",
           "'If you are reading this, detective, you have already opened the previous seven.",
           " These last twelve words are about how it all began.'"
         ],
         "es": [
-          "ORACLE no ocultó la octava billetera. La dejó a la vista, en una carta abierta dirigida a MERIDIAN.",
+          "ORACLE no ocultó la octava billetera. La dejó a la vista, en una carta abierta dirigida a ESCRIBANÍA CERO.",
           "'Si estás leyendo esto, detective, es que ya has abierto las siete anteriores.",
           " Estas últimas doce palabras tratan sobre cómo empezó todo.'"
         ],
         "pt": [
-          "ORACLE não escondeu a oitava carteira. Ele a deixou à vista — em uma carta aberta endereçada a MERIDIAN.",
+          "ORACLE não escondeu a oitava carteira. Ele a deixou à vista — em uma carta aberta endereçada a ESCRIBANÍA CERO.",
           "'Se você está lendo isto, detetive, você já abriu as sete anteriores.",
           " Estas últimas doze palavras são sobre como tudo começou.'"
         ]

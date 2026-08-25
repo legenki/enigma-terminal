@@ -501,7 +501,7 @@ def test_status_reports_the_journal_size(session, capsys):
 
 # --- the desk: contracts taken off the board ------------------------------
 
-CONTRACT_ID = 201        # MICA, act 1, first of its client's thirty-two
+CONTRACT_ID = 201        # SALAR, act 1, first of its client's thirty-two
 
 
 def test_the_desk_starts_as_the_campaign_alone(session, capsys):
@@ -591,12 +591,12 @@ def test_clients_lists_the_roster(session, capsys):
     run(session, "CLIENTS")
     out = capsys.readouterr().out
     assert "EIGHT EMPLOYERS" in out
-    assert "СЛЮДА" in out or "MICA" in out
+    assert "SALAR" in out
     assert "0/32" in out
 
 
 def test_board_shows_one_employer(session, capsys):
-    run(session, "BOARD mica")
+    run(session, "BOARD salar")
     out = capsys.readouterr().out
     assert "201" in out
     assert out.count("[  OPEN]") + out.count("[LOCKED]") == 32
