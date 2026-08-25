@@ -374,8 +374,14 @@ def make_case(client: dict, slot: int, case_id: int, deck: list) -> dict:
     nouns = client["motifs"]["noun"]
     a_i, n_i = deck[slot]
     # Russian adjectives agree with the noun; English ones do not care.
-    gender = nouns["ru_gender"][n_i]
-    russian_adjective = adjectives["ru_forms"][a_i][gender]
+    ru_gender = nouns["ru_gender"][n_i]
+    russian_adjective = adjectives["ru_forms"][a_i][ru_gender]
+
+    es_gender = nouns.get("es_gender", ["m"] * len(nouns["en"]))[n_i] or "m"
+    es_adjective = adjectives.get("es_forms", [{"m": "", "f": ""}] * len(adjectives["en"]))[a_i].get(es_gender, "")
+
+    pt_gender = nouns.get("pt_gender", ["m"] * len(nouns["en"]))[n_i] or "m"
+    pt_adjective = adjectives.get("pt_forms", [{"m": "", "f": ""}] * len(adjectives["en"]))[a_i].get(pt_gender, "")
 
     low, high = client["difficulty"]
     difficulty = min(high, low + act * (high - low) // max(ACTS - 1, 1))
@@ -395,6 +401,8 @@ def make_case(client: dict, slot: int, case_id: int, deck: list) -> dict:
         "codename": {
             "ru": f"{russian_adjective} {nouns['ru'][n_i]}",
             "en": f"{adjectives['en'][a_i]} {nouns['en'][n_i]}",
+            "es": f"{nouns.get('es', nouns['en'])[n_i]} {es_adjective}".strip(),
+            "pt": f"{nouns.get('pt', nouns['en'])[n_i]} {pt_adjective}".strip(),
         },
         "requires": [case_id - 1] if act_index > 1 or act > 0 else [],
         "solution": {"archetype": archetype, "steps": steps},
