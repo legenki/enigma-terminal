@@ -12,7 +12,7 @@ BIP-39 вместе с контрольной суммой, разворачив
 по BIP-32 на кривой secp256k1 выводятся адреса трёх типов — и их баланс запрашивается живым
 HTTP-запросом к публичным блокчейн-эксплорерам.
 
-▶ **Играть в браузере: <https://legenki.github.io/enigma-terminal/>**
+▶ **Играть в браузере: <https://legenki.github.io/neon-terminal/>**
 
 Веб-версия работает в двух режимах, переключаемых тумблером внизу экрана (или клавишей **F2**):
 **GUI** — оконный интерфейс в киберпанк-эстетике (чёрное стекло, неоновые контуры, HUD-уголки)
@@ -43,7 +43,7 @@ HTTP-запросом к публичным блокчейн-эксплорер�
 
 ### Веб-версия
 
-Просто откройте <https://legenki.github.io/enigma-terminal/>. Локально:
+Просто откройте <https://legenki.github.io/neon-terminal/>. Локально:
 
 ```bash
 python3 -m http.server 8000 --directory docs
@@ -53,7 +53,7 @@ python3 -m http.server 8000 --directory docs
 ### Терминальная версия
 
 ```bash
-git clone https://github.com/legenki/enigma-terminal
+git clone https://github.com/legenki/neon-terminal
 cd enigma-terminal
 python -m enigma_terminal            # зависимости не обязательны
 ```

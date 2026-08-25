@@ -123,3 +123,36 @@ def test_case_fingerprints_are_identical_in_both_builds():
     campaign_js = (ROOT / "docs" / "js" / "campaign.js").read_text(encoding="utf-8")
     for case in Campaign().cases:
         assert case.fingerprint in campaign_js
+
+
+@pytest.mark.skipif(
+    shutil.which("node") is None, reason="node is required to parse the modules"
+)
+def test_every_web_module_actually_parses_as_a_module():
+    """`node --check` reads a .js file as a classic script and waves through
+    syntax the browser rejects — a stray ternary branch once shipped this way
+    and took the whole GUI down. Import each module instead: that is the same
+    parse the browser does.
+    """
+    modules = sorted((ROOT / "docs" / "js").rglob("*.js"))
+    assert len(modules) > 10, "the web build lost its modules"
+
+    # main.js touches the DOM at import time, so parse without evaluating.
+    script = """
+    const { readFileSync } = require('node:fs');
+    const vm = require('node:vm');
+    let bad = [];
+    for (const file of process.argv.slice(1)) {
+      try {
+        new vm.SourceTextModule(readFileSync(file, 'utf8'), { identifier: file });
+      } catch (error) {
+        bad.push(file + ': ' + error.message.split('\\n')[0]);
+      }
+    }
+    if (bad.length) { console.log(bad.join('\\n')); process.exit(1); }
+    """
+    completed = subprocess.run(
+        ["node", "--experimental-vm-modules", "-e", script, *map(str, modules)],
+        capture_output=True, text=True, timeout=120,
+    )
+    assert completed.returncode == 0, completed.stdout + completed.stderr

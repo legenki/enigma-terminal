@@ -7,7 +7,7 @@
 
 import { el, replace, win, section, notice, badge, kv, table, empty } from './dom.js';
 import {
-  CAMPAIGN_CASES, CLIENTS, META, ProgressStore, allCases, caseById, caseForMnemonic,
+  CAMPAIGN_CASES, CLIENTS, LANGS, LANG_NAMES, META, ProgressStore, allCases, caseById, caseForMnemonic,
   caseState, caseload, casesForClient, clientBySlug, completeMnemonic, contractsLoaded,
   isUnlocked, loadContracts, missingRequirements, pick, randomMnemonic,
   searchCases, searchWordlist, MnemonicError,
@@ -20,87 +20,303 @@ import { ChainClient, formatBtc, PROVIDERS } from '../chain.js';
 import { addressSigil, caseSigil, mnemonicSigil, sigil } from '../identicon.js';
 
 const PANELS = [
-  { id: 'cases', label: { en: 'Case files', ru: 'Дела' }, key: '1' },
-  { id: 'board', label: { en: 'Contracts', ru: 'Контракты' }, key: '2' },
-  { id: 'decrypt', label: { en: 'Decrypt', ru: 'Дешифровка' }, key: '3' },
-  { id: 'ledger', label: { en: 'Ledger', ru: 'Реестр' }, key: '4' },
-  { id: 'search', label: { en: 'Search', ru: 'Поиск' }, key: '5' },
-  { id: 'random', label: { en: 'Randomizer', ru: 'Рандомайзер' }, key: '6' },
-  { id: 'journal', label: { en: 'Journal', ru: 'Журнал' }, key: '7' },
-  { id: 'about', label: { en: 'About', ru: 'О программе' }, key: '8' },
+  { id: 'cases', label: { en: 'Case files', ru: 'Дела', es: 'Casos', pt: 'Casos' }, key: '1' },
+  { id: 'board', label: { en: 'Contracts', ru: 'Контракты', es: 'Contratos', pt: 'Contratos' }, key: '2' },
+  { id: 'decrypt', label: { en: 'Decrypt', ru: 'Дешифровка', es: 'Descifrado', pt: 'Decifração' }, key: '3' },
+  { id: 'ledger', label: { en: 'Ledger', ru: 'Реестр', es: 'Registro', pt: 'Registro' }, key: '4' },
+  { id: 'search', label: { en: 'Search', ru: 'Поиск', es: 'Búsqueda', pt: 'Busca' }, key: '5' },
+  { id: 'random', label: { en: 'Randomizer', ru: 'Рандомайзер', es: 'Aleatorio', pt: 'Aleatório' }, key: '6' },
+  { id: 'journal', label: { en: 'Journal', ru: 'Журнал', es: 'Diario', pt: 'Diário' }, key: '7' },
+  { id: 'about', label: { en: 'About', ru: 'О программе', es: 'Acerca de', pt: 'Sobre' }, key: '8' },
 ];
 
+// Every fixed string the GUI shows. Keys carrying {braces} are filled by `tf`.
 const T = {
-  solved: { en: 'Closed', ru: 'Закрыто' },
-  open: { en: 'Open', ru: 'Открыто' },
-  locked: { en: 'Locked', ru: 'Заперто' },
-  closedCount: { en: 'closed', ru: 'закрыто' },
-  evidence: { en: 'Evidence', ru: 'Улики' },
-  clues: { en: 'Decoding table', ru: 'Таблица дешифровки' },
-  hints: { en: 'Hints', ru: 'Подсказки' },
-  spendHint: { en: 'Spend a hint', ru: 'Взять подсказку' },
-  noHints: { en: 'No hints left on this case.', ru: 'Подсказки по этому делу закончились.' },
-  submit: { en: 'Submit seed phrase', ru: 'Проверить сид-фразу' },
-  derive: { en: 'Derive', ru: 'Вывести адреса' },
-  epilogue: { en: 'Epilogue', ru: 'Эпилог' },
-  lockedMsg: { en: 'Close these cases first:', ru: 'Сначала закрой дела:' },
-  seedLabel: { en: 'Seed phrase (12 words)', ru: 'Сид-фраза (12 слов)' },
-  checksumOk: { en: 'Mnemonic checksum valid', ru: 'Контрольная сумма верна' },
-  derivation: { en: 'Derivation grid', ru: 'Сетка деривации' },
+  solved: { en: 'Closed', ru: 'Закрыто', es: 'Cerrado', pt: 'Fechado' },
+  open: { en: 'Open', ru: 'Открыто', es: 'Abierto', pt: 'Aberto' },
+  locked: { en: 'Locked', ru: 'Заперто', es: 'Bloqueado', pt: 'Bloqueado' },
+  closedCount: { en: 'closed', ru: 'закрыто', es: 'cerrados', pt: 'fechados' },
+  evidence: { en: 'Evidence', ru: 'Улики', es: 'Pruebas', pt: 'Provas' },
+  clues: { en: 'Decoding table', ru: 'Таблица дешифровки', es: 'Tabla de descifrado', pt: 'Tabela de decifração' },
+  hints: { en: 'Hints', ru: 'Подсказки', es: 'Pistas', pt: 'Dicas' },
+  spendHint: { en: 'Spend a hint', ru: 'Взять подсказку', es: 'Gastar una pista', pt: 'Gastar uma dica' },
+  noHints: {
+    en: 'No hints left on this case.', ru: 'Подсказки по этому делу закончились.',
+    es: 'No quedan pistas en este caso.', pt: 'Não há mais dicas neste caso.',
+  },
+  submit: { en: 'Submit seed phrase', ru: 'Проверить сид-фразу', es: 'Enviar frase semilla', pt: 'Enviar frase semente' },
+  derive: { en: 'Derive', ru: 'Вывести адреса', es: 'Derivar', pt: 'Derivar' },
+  epilogue: { en: 'Epilogue', ru: 'Эпилог', es: 'Epílogo', pt: 'Epílogo' },
+  lockedMsg: { en: 'Close these cases first:', ru: 'Сначала закрой дела:', es: 'Cierra primero estos casos:', pt: 'Feche estes casos primeiro:' },
+  seedLabel: { en: 'Seed phrase (12 words)', ru: 'Сид-фраза (12 слов)', es: 'Frase semilla (12 palabras)', pt: 'Frase semente (12 palavras)' },
+  checksumOk: { en: 'Mnemonic checksum valid', ru: 'Контрольная сумма верна', es: 'Suma de comprobación válida', pt: 'Soma de verificação válida' },
+  derivation: { en: 'Derivation grid', ru: 'Сетка деривации', es: 'Cuadrícula de derivación', pt: 'Grade de derivação' },
   noWallet: {
     en: 'No seed loaded yet. Derive one in the Decrypt panel first.',
     ru: 'Сид не загружен. Сначала выведи адреса на вкладке «Дешифровка».',
+    es: 'Aún no hay semilla cargada. Deriva una en el panel Descifrado.',
+    pt: 'Nenhuma semente carregada ainda. Derive uma no painel Decifração.',
   },
-  syncOne: { en: 'Query balance', ru: 'Запросить баланс' },
-  sweep: { en: 'Sweep all paths', ru: 'Проверить все пути' },
-  txlog: { en: 'Transactions', ru: 'Транзакции' },
-  working: { en: 'Querying the live chain…', ru: 'Запрос к живой сети…' },
-  deriving: { en: 'Deriving keys…', ru: 'Вывожу ключи…' },
-  searching: { en: 'Searching…', ru: 'Ищу…' },
-  generate: { en: 'Generate', ru: 'Сгенерировать' },
-  words: { en: 'Words', ru: 'Слов' },
-  copy: { en: 'Copy', ru: 'Копировать' },
-  copied: { en: 'Copied', ru: 'Скопировано' },
-  journal: { en: 'Journal', ru: 'Журнал' },
-  recent: { en: 'Recent', ru: 'Последнее' },
-  openJournal: { en: 'Open journal', ru: 'Открыть журнал' },
-  recall: { en: 'Recall', ru: 'Вернуться' },
-  pin: { en: 'Pin', ru: 'Закрепить' },
+  syncOne: { en: 'Query balance', ru: 'Запросить баланс', es: 'Consultar saldo', pt: 'Consultar saldo' },
+  sweep: { en: 'Sweep all paths', ru: 'Проверить все пути', es: 'Recorrer todas las rutas', pt: 'Percorrer todas as rotas' },
+  txlog: { en: 'Transactions', ru: 'Транзакции', es: 'Transacciones', pt: 'Transações' },
+  working: { en: 'Querying the live chain…', ru: 'Запрос к живой сети…', es: 'Consultando la cadena en vivo…', pt: 'Consultando a cadeia ao vivo…' },
+  deriving: { en: 'Deriving keys…', ru: 'Вывожу ключи…', es: 'Derivando claves…', pt: 'Derivando chaves…' },
+  searching: { en: 'Searching…', ru: 'Ищу…', es: 'Buscando…', pt: 'Buscando…' },
+  generate: { en: 'Generate', ru: 'Сгенерировать', es: 'Generar', pt: 'Gerar' },
+  words: { en: 'Words', ru: 'Слов', es: 'Palabras', pt: 'Palavras' },
+  copy: { en: 'Copy', ru: 'Копировать', es: 'Copiar', pt: 'Copiar' },
+  copied: { en: 'Copied', ru: 'Скопировано', es: 'Copiado', pt: 'Copiado' },
+  journal: { en: 'Journal', ru: 'Журнал', es: 'Diario', pt: 'Diário' },
+  recent: { en: 'Recent', ru: 'Последнее', es: 'Reciente', pt: 'Recente' },
+  navTitle: { en: 'Archive', ru: 'Архив', es: 'Archivo', pt: 'Arquivo' },
+  openJournal: { en: 'Open journal', ru: 'Открыть журнал', es: 'Abrir el diario', pt: 'Abrir o diário' },
+  recall: { en: 'Recall', ru: 'Вернуться', es: 'Retomar', pt: 'Retomar' },
+  pin: { en: 'Pin', ru: 'Закрепить', es: 'Fijar', pt: 'Fixar' },
   emptyJournal: {
     en: 'Nothing recorded yet. Every derivation, query and search lands here.',
     ru: 'Пока пусто. Сюда попадает каждая деривация, запрос и поиск.',
+    es: 'Nada registrado aún. Cada derivación, consulta y búsqueda llega aquí.',
+    pt: 'Nada registrado ainda. Cada derivação, consulta e busca chega aqui.',
   },
   maskedNote: {
     en: 'Phrase not stored — the game does not keep unknown seed phrases.',
     ru: 'Фраза не сохранена — игра не хранит незнакомые сид-фразы.',
+    es: 'Frase no guardada: el juego no conserva frases semilla desconocidas.',
+    pt: 'Frase não guardada: o jogo não conserva frases semente desconhecidas.',
   },
-  exportTxt: { en: 'Export', ru: 'Выгрузить' },
-  purge: { en: 'Purge', ru: 'Очистить' },
-  keepPinned: { en: 'Keep pinned', ru: 'Кроме закреплённых' },
-  all: { en: 'All', ru: 'Все' },
-  board: { en: 'Contract board', ru: 'Доска контрактов' },
-  clients: { en: 'Clients', ru: 'Заказчики' },
-  dossier: { en: 'Dossier', ru: 'Досье' },
-  dialect: { en: 'Puzzle dialect', ru: 'Почерк заказчика' },
-  loadingBoard: { en: 'Pulling the contract board…', ru: 'Тяну доску контрактов…' },
+  exportTxt: { en: 'Export', ru: 'Выгрузить', es: 'Exportar', pt: 'Exportar' },
+  purge: { en: 'Purge', ru: 'Очистить', es: 'Purgar', pt: 'Purgar' },
+  keepPinned: { en: 'Keep pinned', ru: 'Кроме закреплённых', es: 'Salvo las fijadas', pt: 'Exceto as fixadas' },
+  all: { en: 'All', ru: 'Все', es: 'Todo', pt: 'Tudo' },
+  board: { en: 'Contract board', ru: 'Доска контрактов', es: 'Tablero de contratos', pt: 'Quadro de contratos' },
+  clients: { en: 'Clients', ru: 'Заказчики', es: 'Clientes', pt: 'Clientes' },
+  dossier: { en: 'Dossier', ru: 'Досье', es: 'Expediente', pt: 'Dossiê' },
+  dialect: { en: 'Puzzle dialect', ru: 'Почерк заказчика', es: 'Estilo del cliente', pt: 'Estilo do cliente' },
+  loadingBoard: { en: 'Pulling the contract board…', ru: 'Тяну доску контрактов…', es: 'Cargando el tablero de contratos…', pt: 'Carregando o quadro de contratos…' },
   boardOffline: {
     en: 'The contract board did not load. The eight campaign cases still work.',
     ru: 'Доска контрактов не загрузилась. Восемь дел кампании работают.',
+    es: 'El tablero de contratos no se cargó. Los ocho casos de la campaña siguen funcionando.',
+    pt: 'O quadro de contratos não carregou. Os oito casos da campanha continuam funcionando.',
   },
-  acts: { en: 'Acts', ru: 'Фазы' },
-  backToClients: { en: 'All clients', ru: 'К заказчикам' },
-  campaign: { en: 'ORACLE archive', ru: 'Архив ORACLE' },
-  taken: { en: 'Taken contracts', ru: 'Взятые контракты' },
+  acts: { en: 'Acts', ru: 'Фазы', es: 'Fases', pt: 'Fases' },
+  backToClients: { en: 'All clients', ru: 'К заказчикам', es: 'A los clientes', pt: 'Aos clientes' },
+  campaign: { en: 'ORACLE archive', ru: 'Архив ORACLE', es: 'Archivo ORACLE', pt: 'Arquivo ORACLE' },
+  taken: { en: 'Taken contracts', ru: 'Взятые контракты', es: 'Contratos tomados', pt: 'Contratos assumidos' },
   takenNone: {
     en: 'No contracts taken yet. Open one on the board and it lands here.',
     ru: 'Контрактов пока нет. Открой любой на доске — он ляжет сюда.',
+    es: 'Aún no hay contratos. Abre uno en el tablero y aparecerá aquí.',
+    pt: 'Ainda não há contratos. Abra um no quadro e ele aparecerá aqui.',
   },
-  tookIt: { en: 'Taken into work', ru: 'Взято в работу' },
-  drop: { en: 'Return to board', ru: 'Вернуть на доску' },
-  openBoard: { en: 'Open the board', ru: 'Открыть доску' },
+  tookIt: { en: 'Taken into work', ru: 'Взято в работу', es: 'Tomado en trabajo', pt: 'Assumido' },
+  drop: { en: 'Return to board', ru: 'Вернуть на доску', es: 'Devolver al tablero', pt: 'Devolver ao quadro' },
+  openBoard: { en: 'Open the board', ru: 'Открыть доску', es: 'Abrir el tablero', pt: 'Abrir o quadro' },
+
+  // ---- strings the panels used to inline as ru/en ternaries ---------------
+  filedWith: {
+    en: 'Filed with {client}.', ru: 'Сдано заказчику: {client}.',
+    es: 'Entregado al cliente: {client}.', pt: 'Entregue ao cliente: {client}.',
+  },
+  journalHelp: {
+    ru: 'Каждый шаг записывается сюда и переживает перезагрузку страницы. Нажми «Вернуться», чтобы повторить запрос в том же инструменте. Незнакомые сид-фразы записываются в замаскированном виде и на диск не попадают.',
+    en: 'Every move lands here and survives a reload. Press Recall to re-run it in the tool that made it. Seed phrases the game does not recognise are recorded masked and never written to disk.',
+    es: 'Cada paso se registra aquí y sobrevive a una recarga. Pulsa Retomar para repetirlo en la herramienta que lo hizo. Las frases semilla que el juego no reconoce se registran enmascaradas y nunca llegan al disco.',
+    pt: 'Cada passo é registrado aqui e sobrevive a um recarregamento. Toque em Retomar para repeti-lo na ferramenta que o fez. Frases semente que o jogo não reconhece são registradas mascaradas e nunca chegam ao disco.',
+  },
+  clientsHelp: {
+    ru: 'У каждого заказчика свой почерк: он определяет не только тон брифа, но и способ, которым в деле спрятаны слова. Научиться читать заказчика — половина работы.',
+    en: 'Every client has a hand of their own: it sets the tone of the brief and, more to the point, the way the words are hidden. Learning to read a client is half the job.',
+    es: 'Cada cliente tiene su propia mano: marca el tono del informe y, sobre todo, la manera en que se ocultan las palabras. Aprender a leer a un cliente es la mitad del trabajo.',
+    pt: 'Cada cliente tem a sua própria mão: define o tom do informe e, sobretudo, a maneira como as palavras ficam escondidas. Aprender a ler um cliente é metade do trabalho.',
+  },
+  takenLog: { en: 'Taken', ru: 'Взято', es: 'Tomado', pt: 'Assumido' },
+  backToCases: { en: 'All cases', ru: 'К списку', es: 'A los casos', pt: 'Aos casos' },
+  seedPlaceholder: {
+    en: 'twelve words separated by spaces', ru: 'двенадцать слов через пробел',
+    es: 'doce palabras separadas por espacios', pt: 'doze palavras separadas por espaços',
+  },
+  caseWord: { en: 'Case', ru: 'Дело', es: 'Caso', pt: 'Caso' },
+  caseClosed: {
+    en: 'Case {id} closed', ru: 'Дело {id} закрыто',
+    es: 'Caso {id} cerrado', pt: 'Caso {id} fechado',
+  },
+  allEightClosed: {
+    en: 'All eight cases closed.', ru: 'Все восемь дел закрыты.',
+    es: 'Los ocho casos están cerrados.', pt: 'Os oito casos estão fechados.',
+  },
+  keyToOtherCase: {
+    en: 'This is the key to case {id}, not this one.',
+    ru: 'Это ключ к делу {id}, а не к этому.',
+    es: 'Esta es la clave del caso {id}, no de este.',
+    pt: 'Esta é a chave do caso {id}, não deste.',
+  },
+  validNotThisCase: {
+    en: 'Valid phrase, but not the key to this case.',
+    ru: 'Фраза валидна, но это не ключ к этому делу.',
+    es: 'Frase válida, pero no es la clave de este caso.',
+    pt: 'Frase válida, mas não é a chave deste caso.',
+  },
+  sigilOfPhrase: { en: 'Sigil of this phrase', ru: 'Знак этой фразы', es: 'Sello de esta frase', pt: 'Selo desta frase' },
+  keysAndSeed: { en: 'Keys and seed', ru: 'Ключи и сид', es: 'Claves y semilla', pt: 'Chaves e semente' },
+  seedOfCase: { en: 'Seed of case {id}', ru: 'Сид дела {id}', es: 'Semilla del caso {id}', pt: 'Semente do caso {id}' },
+  fromEntropy: { en: 'From entropy (hex)', ru: 'Из энтропии (hex)', es: 'Desde entropía (hex)', pt: 'A partir da entropia (hex)' },
+  entropyPrompt: {
+    en: 'Entropy, 32 hex characters:', ru: 'Энтропия, 32 hex-символа:',
+    es: 'Entropía, 32 caracteres hex:', pt: 'Entropia, 32 caracteres hex:',
+  },
+  decryptHelp: {
+    ru: 'Проверка идёт по официальному словарю BIP-39 вместе с контрольной суммой. Всё считается здесь, в браузере, и незнакомые фразы в журнал целиком не попадают.',
+    en: 'Validated against the official BIP-39 wordlist, checksum included. Everything runs in your browser, and unknown phrases are never written to the journal in full.',
+    es: 'Se valida contra la lista oficial BIP-39, suma de comprobación incluida. Todo se calcula en tu navegador, y las frases desconocidas nunca llegan enteras al diario.',
+    pt: 'Validado contra a lista oficial BIP-39, soma de verificação incluída. Tudo roda no seu navegador, e frases desconhecidas nunca chegam inteiras ao diário.',
+  },
+  walletDrained: {
+    en: 'Wallet drained. History intact.', ru: 'Кошелёк пуст, но история на месте.',
+    es: 'Cartera vaciada. El historial sigue intacto.', pt: 'Carteira esvaziada. O histórico continua intacto.',
+  },
+  neverUsed: {
+    en: 'Address never used on mainnet.', ru: 'Адрес никогда не использовался в основной сети.',
+    es: 'La dirección nunca se usó en la red principal.', pt: 'O endereço nunca foi usado na rede principal.',
+  },
+  openExplorer: {
+    en: 'Open in explorer ↗', ru: 'Открыть в эксплорере ↗',
+    es: 'Abrir en el explorador ↗', pt: 'Abrir no explorador ↗',
+  },
+  pathsCarryHistory: {
+    en: 'paths carry history', ru: 'путей с историей',
+    es: 'rutas con historial', pt: 'rotas com histórico',
+  },
+  transactionsCount: { en: 'transactions', ru: 'транзакций', es: 'transacciones', pt: 'transações' },
+  noTransactions: { en: 'No transactions.', ru: 'Транзакций нет.', es: 'Sin transacciones.', pt: 'Sem transações.' },
+  tabWords: { en: 'Wordlist', ru: 'Словарь', es: 'Lista de palabras', pt: 'Lista de palavras' },
+  tabArchive: { en: 'Case archive', ru: 'Архив дел', es: 'Archivo de casos', pt: 'Arquivo de casos' },
+  tabComplete: { en: 'Missing word', ru: 'Недостающее слово', es: 'Palabra faltante', pt: 'Palavra faltante' },
+  wordPlaceholder: {
+    en: 'prefix, substring, or an index 1–2048',
+    ru: 'начало или часть слова, либо номер 1–2048',
+    es: 'prefijo, fragmento o un índice 1–2048',
+    pt: 'prefixo, fragmento ou um índice 1–2048',
+  },
+  typeQuery: { en: 'Type a query.', ru: 'Введи запрос.', es: 'Escribe una consulta.', pt: 'Digite uma consulta.' },
+  matches: { en: 'matches', ru: 'совпадений', es: 'coincidencias', pt: 'correspondências' },
+  nothingFound: { en: 'Nothing found.', ru: 'Ничего не найдено.', es: 'No se encontró nada.', pt: 'Nada encontrado.' },
+  wordlistTitle: { en: 'BIP-39 wordlist', ru: 'Словарь BIP-39', es: 'Lista de palabras BIP-39', pt: 'Lista de palavras BIP-39' },
+  wordlistHelp: {
+    en: 'Matches by prefix and by substring; a number opens that index.',
+    ru: 'Ищет по началу и по вхождению; число открывает слово по индексу.',
+    es: 'Busca por prefijo y por fragmento; un número abre esa posición.',
+    pt: 'Busca por prefixo e por fragmento; um número abre essa posição.',
+  },
+  archivePlaceholder: {
+    en: 'a word from the briefs, evidence or riddles',
+    ru: 'слово из улик, загадок или вводной',
+    es: 'una palabra de los informes, pruebas o acertijos',
+    pt: 'uma palavra dos informes, provas ou enigmas',
+  },
+  nothingInArchive: { en: 'Nothing in the archive.', ru: 'В архиве ничего.', es: 'Nada en el archivo.', pt: 'Nada no arquivo.' },
+  casesCount: { en: 'case(s)', ru: 'дел', es: 'caso(s)', pt: 'caso(s)' },
+  archiveTitle: {
+    en: 'Full-text case search', ru: 'Полнотекстовый поиск по делам',
+    es: 'Búsqueda de texto completo en los casos', pt: 'Busca de texto completo nos casos',
+  },
+  archiveHelp: {
+    en: 'Epilogues join the index only once a case is closed — otherwise it would spoil them.',
+    ru: 'Эпилоги попадают в поиск только после того, как дело закрыто — иначе это спойлер.',
+    es: 'Los epílogos entran en el índice sólo cuando el caso está cerrado: de otro modo serían un spoiler.',
+    pt: 'Os epílogos entram no índice só quando o caso está fechado: de outro modo seriam um spoiler.',
+  },
+  candidates: { en: 'candidates', ru: 'кандидатов', es: 'candidatas', pt: 'candidatas' },
+  positionCandidates: {
+    en: 'Position {position}: {count} words give a valid checksum',
+    ru: 'Позиция {position}: {count} слов дают верную контрольную сумму',
+    es: 'Posición {position}: {count} palabras dan una suma de comprobación válida',
+    pt: 'Posição {position}: {count} palavras dão uma soma de verificação válida',
+  },
+  checksumCuts: {
+    ru: 'Контрольная сумма отсекает примерно пятнадцать шестнадцатых словаря.',
+    en: 'The checksum rules out about fifteen sixteenths of the wordlist.',
+    es: 'La suma de comprobación descarta cerca de quince dieciseisavos de la lista.',
+    pt: 'A soma de verificação descarta cerca de quinze dezesseis avos da lista.',
+  },
+  oneOpensCase: {
+    en: 'One of them opens case {id}', ru: 'Одно из них — ключ к делу {id}',
+    es: 'Una de ellas abre el caso {id}', pt: 'Uma delas abre o caso {id}',
+  },
+  completeTitle: {
+    en: 'Missing-word recovery', ru: 'Восстановление недостающего слова',
+    es: 'Recuperación de la palabra faltante', pt: 'Recuperação da palavra faltante',
+  },
+  completeHelp: {
+    ru: 'Вставь фразу и поставь ? на месте забытого слова. Инструмент решает ровно одну неизвестную позицию: при двух неизвестных валидных вариантов остаются сотни тысяч, и смысла в списке уже нет.',
+    en: 'Paste the phrase and put ? where the word is missing. The tool resolves exactly one unknown position: with two, hundreds of thousands of phrases stay valid and the list stops meaning anything.',
+    es: 'Pega la frase y pon ? donde falte la palabra. La herramienta resuelve exactamente una posición desconocida: con dos, cientos de miles de frases siguen siendo válidas y la lista deja de significar nada.',
+    pt: 'Cole a frase e ponha ? onde falta a palavra. A ferramenta resolve exatamente uma posição desconhecida: com duas, centenas de milhares de frases continuam válidas e a lista deixa de significar nada.',
+  },
+  findCandidates: { en: 'Find candidates', ru: 'Найти кандидатов', es: 'Buscar candidatas', pt: 'Buscar candidatas' },
+  realWalletTitle: {
+    en: 'This is a real wallet', ru: 'Это настоящий кошелёк',
+    es: 'Esta es una cartera real', pt: 'Esta é uma carteira real',
+  },
+  realWalletBody: {
+    ru: 'Фраза собрана из криптостойкой случайности браузера и управляет настоящими адресами Bitcoin. Она записана в журнал этого браузера, чтобы к ней можно было вернуться, — и стирается кнопкой «Очистить» в журнале. Не клади на эти адреса деньги.',
+    en: 'The phrase comes from your browser’s cryptographic randomness and controls real Bitcoin addresses. It is written to this browser’s journal so you can come back to it, and Purge in the journal erases it. Do not fund these addresses.',
+    es: 'La frase proviene de la aleatoriedad criptográfica de tu navegador y controla direcciones Bitcoin reales. Queda escrita en el diario de este navegador para que puedas volver a ella, y Purgar en el diario la borra. No pongas fondos en estas direcciones.',
+    pt: 'A frase vem da aleatoriedade criptográfica do seu navegador e controla endereços Bitcoin reais. Fica escrita no diário deste navegador para que você possa voltar a ela, e Purgar no diário a apaga. Não coloque fundos nestes endereços.',
+  },
+  randomTitle: {
+    en: 'Seed phrase generator', ru: 'Генератор сид-фраз',
+    es: 'Generador de frases semilla', pt: 'Gerador de frases semente',
+  },
+  randomHelp: {
+    ru: 'Энтропия берётся из crypto.getRandomValues — той же функции, которой пользуются настоящие кошельки. Ничего не отправляется наружу.',
+    en: 'Entropy comes from crypto.getRandomValues — the same source real wallets use. Nothing leaves the page.',
+    es: 'La entropía viene de crypto.getRandomValues, la misma fuente que usan las carteras reales. Nada sale de la página.',
+    pt: 'A entropia vem de crypto.getRandomValues, a mesma fonte que as carteiras reais usam. Nada sai da página.',
+  },
+};
+
+const ABOUT = {
+  ru: [
+    'Детективный квест, играющий против настоящей сети Bitcoin.',
+    'Мнемоники проверяются по официальному словарю BIP-39 вместе с контрольной суммой, сид получается через PBKDF2-HMAC-SHA512 (2048 раундов), ключи выводятся на кривой secp256k1 по BIP-32, а балансы приходят живыми запросами к публичным эксплорерам.',
+    'Вся криптография работает в браузере. Наружу уходит только запрос адреса — в нём нет ничего, кроме самого адреса.',
+    'Журнал расследования хранится в этом браузере. Сид-фразы, которых игра не знает, записываются в него замаскированными и на диск не попадают.',
+    'Ответы восьми дел — опубликованные тестовые векторы BIP-39. Их ключи известны всему миру, красть там нечего, зато история в блокчейне настоящая.',
+    'Программа не умеет подбирать чужие кошельки. Никогда не вводи в программы — включая эту — сид-фразу от кошелька с реальными деньгами.',
+  ],
+  en: [
+    'A detective quest played against the real Bitcoin network.',
+    'Mnemonics are checked against the official BIP-39 wordlist including the checksum, seeds come from PBKDF2-HMAC-SHA512 over 2048 rounds, keys are derived over secp256k1 through BIP-32, and balances arrive from live calls to public explorers.',
+    'All the cryptography runs in your browser. The only thing that leaves the page is an address lookup, which carries nothing but the address.',
+    'The investigation journal lives in this browser. Seed phrases the game does not recognise are recorded masked and never written to disk.',
+    'The eight case answers are published BIP-39 test vectors. Their keys are known worldwide, so there is nothing to steal — but the on-chain history is genuine.',
+    'This program cannot crack anyone’s wallet. Never type a seed phrase that controls real funds into any program, including this one.',
+  ],
+  es: [
+    'Una aventura detectivesca jugada contra la red Bitcoin real.',
+    'Las mnemónicas se verifican contra la lista oficial BIP-39, suma de comprobación incluida; la semilla sale de PBKDF2-HMAC-SHA512 con 2048 rondas, las claves se derivan sobre secp256k1 mediante BIP-32, y los saldos llegan por consultas en vivo a exploradores públicos.',
+    'Toda la criptografía corre en tu navegador. Lo único que sale de la página es una consulta de dirección, que no lleva nada más que la dirección.',
+    'El diario de investigación vive en este navegador. Las frases semilla que el juego no reconoce se registran enmascaradas y nunca llegan al disco.',
+    'Las respuestas de los ocho casos son vectores de prueba BIP-39 publicados. Sus claves son conocidas en todo el mundo, así que no hay nada que robar, pero el historial en la cadena es auténtico.',
+    'Este programa no puede forzar la cartera de nadie. Nunca escribas en un programa —tampoco en este— una frase semilla que controle fondos reales.',
+  ],
+  pt: [
+    'Uma aventura de detetive jogada contra a rede Bitcoin real.',
+    'As mnemônicas são verificadas contra a lista oficial BIP-39, soma de verificação incluída; a semente sai de PBKDF2-HMAC-SHA512 com 2048 rodadas, as chaves são derivadas sobre secp256k1 por BIP-32, e os saldos chegam por consultas ao vivo a exploradores públicos.',
+    'Toda a criptografia roda no seu navegador. A única coisa que sai da página é uma consulta de endereço, que não carrega nada além do endereço.',
+    'O diário de investigação vive neste navegador. Frases semente que o jogo não reconhece são registradas mascaradas e nunca chegam ao disco.',
+    'As respostas dos oito casos são vetores de teste BIP-39 publicados. Suas chaves são conhecidas no mundo todo, então não há nada a roubar, mas o histórico na cadeia é autêntico.',
+    'Este programa não consegue quebrar a carteira de ninguém. Nunca digite em um programa — nem neste — uma frase semente que controle fundos reais.',
+  ],
 };
 
 const t = (key, lang) => T[key][lang] || T[key].en;
+
+/** Same as `t`, with {placeholders} filled in. */
+const tf = (key, lang, fields = {}) => Object.entries(fields)
+  .reduce((line, [name, value]) => line.split(`{${name}}`).join(value), t(key, lang));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const clock = (at) => new Date(at).toTimeString().slice(0, 8);
 
@@ -124,7 +340,22 @@ export class GuiApp {
   setLang(lang) {
     this.lang = lang;
     this.panels.clear();          // every label changes, so rebuild on demand
+    this.paintChrome();
     if (this.mounted) this.render();
+  }
+
+  /** Window titles live outside the panels, so `render` alone cannot reach them. */
+  paintChrome() {
+    if (!this.navWindow) return;
+    const titles = [
+      [this.navWindow, t('navTitle', this.lang)],
+      [this.railWindow, t('recent', this.lang)],
+    ];
+    for (const [frame, title] of titles) {
+      const node = frame && frame.querySelector('.win__title');
+      if (node) node.textContent = title;
+    }
+    if (this.railTab) this.railTab.title = t('recent', this.lang);
   }
 
   /** The other mode may have written progress or journal entries. */
@@ -143,7 +374,7 @@ export class GuiApp {
     this.content = el('div', { class: 'win__body' });
     this.railBody = el('div', { class: 'win__body rail__body' });
 
-    this.navWindow = win('Archive', this.nav);
+    this.navWindow = win(t('navTitle', this.lang), this.nav);
     this.contentWindow = win('—', this.content);
     this.railWindow = win(t('recent', this.lang), this.railBody,
       el('button', {
@@ -274,16 +505,16 @@ export class GuiApp {
         el('div', { text: `NODE ${this.chain.nodeName}` }),
         el('div', { text: `LOG ${this.journal.all().length}` })),
       el('div', { class: 'row row--tight', style: 'margin-top:10px;padding:0 9px' },
-        ...['ru', 'en'].map((code) =>
+        ...LANGS.map((code) =>
           el('button', {
-            class: 'btn',
+            class: 'btn btn--lang',
             type: 'button',
             'aria-pressed': this.lang === code ? 'true' : 'false',
             onClick: () => {
               this.setLang(code);
               if (this.onLangChange) this.onLangChange(code);
             },
-            text: code.toUpperCase(),
+            text: LANG_NAMES[code],
           }))));
   }
 
@@ -438,9 +669,7 @@ export class GuiApp {
     paint();
     replace(node,
       section(t('journal', lang), `${this.journal.all().length}`),
-      el('p', { class: 'hint-text', text: lang === 'ru'
-        ? 'Каждый шаг записывается сюда и переживает перезагрузку страницы. Нажми «Вернуться», чтобы повторить запрос в том же инструменте. Незнакомые сид-фразы записываются в замаскированном виде и на диск не попадают.'
-        : 'Every move lands here and survives a reload. Press Recall to re-run it in the tool that made it. Seed phrases the game does not recognise are recorded masked and never written to disk.' }),
+      el('p', { class: 'hint-text', text: t('journalHelp', lang) }),
       filterRow,
       el('div', { class: 'row' },
         el('button', {
@@ -571,9 +800,7 @@ export class GuiApp {
 
     replace(node,
       section(t('board', lang), `${CLIENTS.length} × 32 = 256`),
-      el('p', { class: 'hint-text', text: lang === 'ru'
-        ? 'У каждого заказчика свой почерк: он определяет не только тон брифа, но и способ, которым в деле спрятаны слова. Научиться читать заказчика — половина работы.'
-        : 'Every client has a hand of their own: it sets the tone of the brief and, more to the point, the way the words are hidden. Learning to read a client is half the job.' }),
+      el('p', { class: 'hint-text', text: t('clientsHelp', lang) }),
       body);
 
     if (!contractsLoaded()) {
@@ -642,7 +869,7 @@ export class GuiApp {
     // Case files tab is the desk it lands on.
     if (caseFile.client && state !== 'locked' && this.progress.take(caseFile.id)) {
       this.panels.delete('cases');
-      this.log('case', `${lang === 'ru' ? 'Взято' : 'Taken'}: ${pick(caseFile.codename, lang)}`, {
+      this.log('case', `${t('takenLog', lang)}: ${pick(caseFile.codename, lang)}`, {
         detail: pick(clientBySlug(caseFile.client).name, lang),
         payload: { caseId: caseFile.id },
       });
@@ -655,7 +882,7 @@ export class GuiApp {
       el('div', { class: 'row', style: 'margin-bottom:12px' },
         el('button', {
           class: 'btn', type: 'button',
-          text: '← ' + (lang === 'ru' ? 'К списку' : 'All cases'),
+          text: `← ${t('backToCases', lang)}`,
           onClick: () => { this.activeCaseId = null; this.go('cases'); },
         }),
         caseSigil(caseFile, { size: 30 }),
@@ -695,7 +922,7 @@ export class GuiApp {
 
     const input = el('textarea', {
       class: 'field', rows: '3', spellcheck: 'false',
-      placeholder: lang === 'ru' ? 'двенадцать слов через пробел' : 'twelve words separated by spaces',
+      placeholder: t('seedPlaceholder', lang),
     });
     const result = el('div', {});
     const submit = el('button', {
@@ -714,31 +941,26 @@ export class GuiApp {
             this.panels.delete('cases');
             this.paintNav();
             if (first) {
-              this.log('case', `${lang === 'ru' ? 'Дело' : 'Case'} ${caseFile.id} — ${pick(caseFile.codename, lang)}`,
+              this.log('case', `${t('caseWord', lang)} ${caseFile.id} — ${pick(caseFile.codename, lang)}`,
                 { detail: wallet.primary.address, status: 'ok',
                   payload: { caseId: caseFile.id, mnemonic: wallet.mnemonic } });
             }
             const employer = caseFile.client ? clientBySlug(caseFile.client) : null;
             out.push(notice('ok',
-              lang === 'ru' ? `Дело ${caseFile.id} закрыто` : `Case ${caseFile.id} closed`,
+              tf('caseClosed', lang, { id: caseFile.id }),
               ...(employer
-                ? [this.t('filedWith', { client: pick(employer.name, lang) })]
+                ? [tf('filedWith', lang, { client: pick(employer.name, lang) })]
                 : []),
               ...pick(caseFile.epilogue, lang)));
             const campaignDone = CAMPAIGN_CASES
               .every((entry) => this.progress.isSolved(entry.id));
             if (first && campaignDone) {
-              out.push(notice('ok', lang === 'ru'
-                ? 'Все восемь дел закрыты.' : 'All eight cases closed.'));
+              out.push(notice('ok', t('allEightClosed', lang)));
             }
           } else if (owner) {
-            out.push(notice('warn', lang === 'ru'
-              ? `Это ключ к делу ${owner.id}, а не к этому.`
-              : `This is the key to case ${owner.id}, not this one.`));
+            out.push(notice('warn', tf('keyToOtherCase', lang, { id: owner.id })));
           } else {
-            out.push(notice('warn', lang === 'ru'
-              ? 'Фраза валидна, но это не ключ к этому делу.'
-              : 'Valid phrase, but not the key to this case.'));
+            out.push(notice('warn', t('validNotThisCase', lang)));
           }
           this.recordDecrypt(wallet, owner);
           out.push(this.derivationTable(wallet));
@@ -789,8 +1011,7 @@ export class GuiApp {
     return el('div', { class: 'stack' },
       el('div', { class: 'row' },
         mnemonicSigil(wallet.mnemonic, { size: 34 }),
-        el('span', { class: 'section__meta', text: this.lang === 'ru'
-          ? 'Знак этой фразы' : 'Sigil of this phrase' })),
+        el('span', { class: 'section__meta', text: t('sigilOfPhrase', this.lang) })),
       section(t('derivation', this.lang)),
       table(['', 'PATH', 'TYPE', 'ADDRESS'],
         wallet.addresses.map((entry) => [
@@ -811,7 +1032,7 @@ export class GuiApp {
         ])),
       el('details', {},
         el('summary', { class: 'hint-text', style: 'cursor:pointer;margin:8px 0',
-          text: this.lang === 'ru' ? 'Ключи и сид' : 'Keys and seed' }),
+          text: t('keysAndSeed', this.lang) }),
         kv([
           ['BIP39 SEED', wallet.seed],
           ['MASTER XPRV', wallet.masterXprv],
@@ -842,7 +1063,7 @@ export class GuiApp {
     const lang = this.lang;
     const input = el('textarea', {
       class: 'field', rows: '3', spellcheck: 'false',
-      placeholder: lang === 'ru' ? 'двенадцать слов через пробел' : 'twelve words separated by spaces',
+      placeholder: t('seedPlaceholder', lang),
     });
     const output = el('div', {});
 
@@ -858,7 +1079,7 @@ export class GuiApp {
         replace(output,
           notice('ok', t('checksumOk', lang)),
           owner
-            ? notice('info', lang === 'ru' ? `Сид дела ${owner.id}` : `Seed of case ${owner.id}`,
+            ? notice('info', tf('seedOfCase', lang, { id: owner.id }),
               pick(owner.codename, lang))
             : null,
           kv([['ENTROPY', toHex(mnemonicToEntropy(wallet.mnemonic))]]),
@@ -878,10 +1099,9 @@ export class GuiApp {
             onClick: () => run() }),
           el('button', {
             class: 'btn', type: 'button',
-            text: lang === 'ru' ? 'Из энтропии (hex)' : 'From entropy (hex)',
+            text: t('fromEntropy', lang),
             onClick: () => {
-              const hex = prompt(lang === 'ru'
-                ? 'Энтропия, 32 hex-символа:' : 'Entropy, 32 hex characters:');
+              const hex = prompt(t('entropyPrompt', lang));
               if (!hex) return;
               try {
                 run(entropyToMnemonic(fromHex(hex.trim())));
@@ -890,9 +1110,7 @@ export class GuiApp {
               }
             },
           })),
-        el('p', { class: 'hint-text', text: lang === 'ru'
-          ? 'Проверка идёт по официальному словарю BIP-39 вместе с контрольной суммой. Всё считается здесь, в браузере, и незнакомые фразы в журнал целиком не попадают.'
-          : 'Validated against the official BIP-39 wordlist, checksum included. Everything runs in your browser, and unknown phrases are never written to the journal in full.' }),
+        el('p', { class: 'hint-text', text: t('decryptHelp', lang) }),
         output));
 
     return {
@@ -940,15 +1158,12 @@ export class GuiApp {
           stats.confirmedSats > 0n
             ? notice('warn', 'ACCESS KEY REQUIRED FOR WITHDRAWAL.')
             : used
-              ? notice('info', lang === 'ru'
-                ? 'Кошелёк пуст, но история на месте.' : 'Wallet drained. History intact.')
-              : notice('info', lang === 'ru'
-                ? 'Адрес никогда не использовался в основной сети.'
-                : 'Address never used on mainnet.'),
+              ? notice('info', t('walletDrained', lang))
+              : notice('info', t('neverUsed', lang)),
           el('a', {
             class: 'hint-text', target: '_blank', rel: 'noopener',
             href: this.chain.explorerUrl(target),
-            text: lang === 'ru' ? 'Открыть в эксплорере ↗' : 'Open in explorer ↗',
+            text: t('openExplorer', lang),
           }));
       } catch (error) {
         this.log('ledger', target, { status: 'danger', detail: error.message,
@@ -985,7 +1200,7 @@ export class GuiApp {
       }
       this.log('sweep', this.wallet.primary.address, {
         status: touched ? 'ok' : 'info',
-        detail: `${touched}/3 ${lang === 'ru' ? 'путей с историей' : 'paths carry history'}`,
+        detail: `${touched}/3 ${t('pathsCarryHistory', lang)}`,
         payload: { address: this.wallet.primary.address },
       });
       replace(output, table(['PATH', 'ADDRESS', 'TX', 'RECEIVED', ''], rows));
@@ -998,7 +1213,7 @@ export class GuiApp {
       try {
         const txs = await this.chain.transactions(target, 10);
         this.log('txlog', target, {
-          detail: `${txs.length} ${lang === 'ru' ? 'транзакций' : 'transactions'}`,
+          detail: `${txs.length} ${t('transactionsCount', lang)}`,
           payload: { address: target },
         });
         replace(output, txs.length
@@ -1007,7 +1222,7 @@ export class GuiApp {
             { class: 'num', text: tx.blockHeight ? String(tx.blockHeight) : 'mempool' },
             { class: 'addr', text: tx.txid },
           ]))
-          : empty(lang === 'ru' ? 'Транзакций нет.' : 'No transactions.'));
+          : empty(t('noTransactions', lang)));
       } catch (error) {
         replace(output, notice('danger', 'TX HISTORY UNAVAILABLE', error.message));
       }
@@ -1056,9 +1271,9 @@ export class GuiApp {
   buildSearch() {
     const lang = this.lang;
     const tabs = [
-      ['words', lang === 'ru' ? 'Словарь' : 'Wordlist'],
-      ['archive', lang === 'ru' ? 'Архив дел' : 'Case archive'],
-      ['complete', lang === 'ru' ? 'Недостающее слово' : 'Missing word'],
+      ['words', t('tabWords', lang)],
+      ['archive', t('tabArchive', lang)],
+      ['complete', t('tabComplete', lang)],
     ];
     // Each tab keeps its own node, so switching tabs does not lose results.
     const panes = {
@@ -1103,7 +1318,7 @@ export class GuiApp {
     const lang = this.lang;
     const input = el('input', {
       class: 'field', type: 'search', spellcheck: 'false',
-      placeholder: lang === 'ru' ? 'начало или часть слова, либо номер 1–2048' : 'prefix, substring, or an index 1–2048',
+      placeholder: t('wordPlaceholder', lang),
     });
     const output = el('div', {});
     let logged = '';
@@ -1111,7 +1326,7 @@ export class GuiApp {
     const run = (value = null) => {
       if (value !== null) input.value = value;
       const query = input.value.trim();
-      if (!query) return replace(output, empty(lang === 'ru' ? 'Введи запрос.' : 'Type a query.'));
+      if (!query) return replace(output, empty(t('typeQuery', lang)));
       const asNumber = Number(query);
       if (Number.isInteger(asNumber) && asNumber >= 1 && asNumber <= 2048) {
         replace(output, el('div', { class: 'word-grid' },
@@ -1122,12 +1337,12 @@ export class GuiApp {
         const hits = searchWordlist(query);
         replace(output, hits.length
           ? el('div', { class: 'stack' },
-            el('p', { class: 'hint-text', text: `${hits.length} ${lang === 'ru' ? 'совпадений' : 'matches'}` }),
+            el('p', { class: 'hint-text', text: `${hits.length} ${t('matches', lang)}` }),
             el('div', { class: 'word-grid' },
               ...hits.map((hit) => el('div', { class: 'word' },
                 el('span', { class: 'word__n', text: String(hit.index) }),
                 el('span', { text: hit.word })))))
-          : empty(lang === 'ru' ? 'Ничего не найдено.' : 'Nothing found.'));
+          : empty(t('nothingFound', lang)));
       }
       // Log once the player stops typing, not on every keystroke.
       clearTimeout(this._wordTimer);
@@ -1136,7 +1351,7 @@ export class GuiApp {
         logged = query;
         const hits = searchWordlist(query);
         this.log('search', query, {
-          detail: `${hits.length} ${lang === 'ru' ? 'совпадений' : 'matches'}`,
+          detail: `${hits.length} ${t('matches', lang)}`,
           payload: { query },
         });
       }, 900);
@@ -1144,11 +1359,9 @@ export class GuiApp {
 
     input.addEventListener('input', () => run());
     const node = el('div', {},
-      section(lang === 'ru' ? 'Словарь BIP-39' : 'BIP-39 wordlist', '2048'),
+      section(t('wordlistTitle', lang), '2048'),
       el('div', { class: 'stack' }, input,
-        el('p', { class: 'hint-text', text: lang === 'ru'
-          ? 'Ищет по началу и по вхождению; число открывает слово по индексу.'
-          : 'Matches by prefix and by substring; a number opens that index.' },),
+        el('p', { class: 'hint-text', text: t('wordlistHelp', lang) }),
         output));
     return { node, run };
   }
@@ -1157,7 +1370,7 @@ export class GuiApp {
     const lang = this.lang;
     const input = el('input', {
       class: 'field', type: 'search', spellcheck: 'false',
-      placeholder: lang === 'ru' ? 'слово из улик, загадок или вводной' : 'a word from the briefs, evidence or riddles',
+      placeholder: t('archivePlaceholder', lang),
     });
     const output = el('div', {});
     let logged = '';
@@ -1165,7 +1378,7 @@ export class GuiApp {
     const run = (value = null) => {
       if (value !== null) input.value = value;
       const query = input.value.trim();
-      if (!query) return replace(output, empty(lang === 'ru' ? 'Введи запрос.' : 'Type a query.'));
+      if (!query) return replace(output, empty(t('typeQuery', lang)));
       const results = searchCases(query, lang, this.progress);
       replace(output, results.length
         ? el('div', { class: 'stack' },
@@ -1181,14 +1394,14 @@ export class GuiApp {
             el('div', { style: 'padding:0 11px 10px' },
               ...result.hits.slice(0, 4).map((hit) =>
                 el('div', { class: 'evidence', style: 'margin-top:6px', text: hit.line }))))))
-        : empty(lang === 'ru' ? 'В архиве ничего.' : 'Nothing in the archive.'));
+        : empty(t('nothingInArchive', lang)));
 
       clearTimeout(this._archiveTimer);
       this._archiveTimer = setTimeout(() => {
         if (query === logged) return;
         logged = query;
         this.log('archive', query, {
-          detail: `${results.length} ${lang === 'ru' ? 'дел' : 'case(s)'}`,
+          detail: `${results.length} ${t('casesCount', lang)}`,
           payload: { query },
         });
       }, 900);
@@ -1196,11 +1409,9 @@ export class GuiApp {
 
     input.addEventListener('input', () => run());
     const node = el('div', {},
-      section(lang === 'ru' ? 'Полнотекстовый поиск по делам' : 'Full-text case search'),
+      section(t('archiveTitle', lang)),
       el('div', { class: 'stack' }, input,
-        el('p', { class: 'hint-text', text: lang === 'ru'
-          ? 'Эпилоги попадают в поиск только после того, как дело закрыто — иначе это спойлер.'
-          : 'Epilogues join the index only once a case is closed — otherwise it would spoil them.' }),
+        el('p', { class: 'hint-text', text: t('archiveHelp', lang) }),
         output));
     return { node, run };
   }
@@ -1225,21 +1436,17 @@ export class GuiApp {
         this.log('complete', `? @ ${position + 1}`, {
           status: hit ? 'ok' : 'info',
           detail: hit
-            ? `${candidates.length} ${lang === 'ru' ? 'кандидатов' : 'candidates'} · ${hit.word} → case ${hit.case.id}`
-            : `${candidates.length} ${lang === 'ru' ? 'кандидатов' : 'candidates'}`,
+            ? `${candidates.length} ${t('candidates', lang)} · ${hit.word} → case ${hit.case.id}`
+            : `${candidates.length} ${t('candidates', lang)}`,
           payload: { pattern },
         });
         replace(output,
           notice('info',
-            lang === 'ru'
-              ? `Позиция ${position + 1}: ${candidates.length} слов дают верную контрольную сумму`
-              : `Position ${position + 1}: ${candidates.length} words give a valid checksum`,
-            lang === 'ru'
-              ? 'Контрольная сумма отсекает примерно пятнадцать шестнадцатых словаря.'
-              : 'The checksum rules out about fifteen sixteenths of the wordlist.'),
+            tf('positionCandidates', lang, { position: position + 1, count: candidates.length }),
+            t('checksumCuts', lang)),
           hit
             ? notice('ok',
-              lang === 'ru' ? `Одно из них — ключ к делу ${hit.case.id}` : `One of them opens case ${hit.case.id}`,
+              tf('oneOpensCase', lang, { id: hit.case.id }),
               hit.word)
             : null,
           el('div', { class: 'chip-grid' },
@@ -1259,15 +1466,13 @@ export class GuiApp {
     };
 
     const node = el('div', {},
-      section(lang === 'ru' ? 'Восстановление недостающего слова' : 'Missing-word recovery'),
+      section(t('completeTitle', lang)),
       el('div', { class: 'stack' },
-        el('p', { class: 'hint-text', text: lang === 'ru'
-          ? 'Вставь фразу и поставь ? на месте забытого слова. Инструмент решает ровно одну неизвестную позицию: при двух неизвестных валидных вариантов остаются сотни тысяч, и смысла в списке уже нет.'
-          : 'Paste the phrase and put ? where the word is missing. The tool resolves exactly one unknown position: with two, hundreds of thousands of phrases stay valid and the list stops meaning anything.' }),
+        el('p', { class: 'hint-text', text: t('completeHelp', lang) }),
         input,
         el('div', { class: 'row' },
           el('button', { class: 'btn btn--primary', type: 'button',
-            text: lang === 'ru' ? 'Найти кандидатов' : 'Find candidates',
+            text: t('findCandidates', lang),
             onClick: () => run() })),
         output));
     return { node, run };
@@ -1311,22 +1516,17 @@ export class GuiApp {
             el('span', { text: word })))),
         kv([['ENTROPY', toHex(entropy)]]),
         this.derivationTable(wallet),
-        notice('warn', lang === 'ru' ? 'Это настоящий кошелёк' : 'This is a real wallet',
-          lang === 'ru'
-            ? 'Фраза собрана из криптостойкой случайности браузера и управляет настоящими адресами Bitcoin. Она записана в журнал этого браузера, чтобы к ней можно было вернуться, — и стирается кнопкой «Очистить» в журнале. Не клади на эти адреса деньги.'
-            : 'The phrase comes from your browser’s cryptographic randomness and controls real Bitcoin addresses. It is written to this browser’s journal so you can come back to it, and Purge in the journal erases it. Do not fund these addresses.'));
+        notice('warn', t('realWalletTitle', lang), t('realWalletBody', lang)));
     };
 
     const node = el('div', {},
-      section(lang === 'ru' ? 'Генератор сид-фраз' : 'Seed phrase generator'),
+      section(t('randomTitle', lang)),
       el('div', { class: 'stack' },
         el('div', { class: 'row' },
           el('span', { class: 'section__meta', text: t('words', lang) }), countRow),
         el('div', { class: 'row' },
           el('button', { class: 'btn btn--primary', type: 'button', text: t('generate', lang), onClick: generate })),
-        el('p', { class: 'hint-text', text: lang === 'ru'
-          ? 'Энтропия берётся из crypto.getRandomValues — той же функции, которой пользуются настоящие кошельки. Ничего не отправляется наружу.'
-          : 'Entropy comes from crypto.getRandomValues — the same source real wallets use. Nothing leaves the page.' }),
+        el('p', { class: 'hint-text', text: t('randomHelp', lang) }),
         output));
     return { node, api: { run: generate } };
   }
@@ -1335,26 +1535,12 @@ export class GuiApp {
 
   buildAbout() {
     const lang = this.lang;
-    const lines = lang === 'ru' ? [
-      'Детективный квест, играющий против настоящей сети Bitcoin.',
-      'Мнемоники проверяются по официальному словарю BIP-39 вместе с контрольной суммой, сид получается через PBKDF2-HMAC-SHA512 (2048 раундов), ключи выводятся на кривой secp256k1 по BIP-32, а балансы приходят живыми запросами к публичным эксплорерам.',
-      'Вся криптография работает в браузере. Наружу уходит только запрос адреса — в нём нет ничего, кроме самого адреса.',
-      'Журнал расследования хранится в этом браузере. Сид-фразы, которых игра не знает, записываются в него замаскированными и на диск не попадают.',
-      'Ответы восьми дел — опубликованные тестовые векторы BIP-39. Их ключи известны всему миру, красть там нечего, зато история в блокчейне настоящая.',
-      'Программа не умеет подбирать чужие кошельки. Никогда не вводи в программы — включая эту — сид-фразу от кошелька с реальными деньгами.',
-    ] : [
-      'A detective quest played against the real Bitcoin network.',
-      'Mnemonics are checked against the official BIP-39 wordlist including the checksum, seeds come from PBKDF2-HMAC-SHA512 over 2048 rounds, keys are derived over secp256k1 through BIP-32, and balances arrive from live calls to public explorers.',
-      'All the cryptography runs in your browser. The only thing that leaves the page is an address lookup, which carries nothing but the address.',
-      'The investigation journal lives in this browser. Seed phrases the game does not recognise are recorded masked and never written to disk.',
-      'The eight case answers are published BIP-39 test vectors. Their keys are known worldwide, so there is nothing to steal — but the on-chain history is genuine.',
-      'This program cannot crack anyone’s wallet. Never type a seed phrase that controls real funds into any program, including this one.',
-    ];
+    const lines = ABOUT[lang] || ABOUT.en;
     const node = el('div', {},
       section('BIP-39: ENIGMA TERMINAL', META.version),
       el('div', { class: 'prose' }, ...lines.map((line) => el('p', { text: line }))),
       el('div', { class: 'row' },
-        el('a', { class: 'btn', href: 'https://github.com/legenki/enigma-terminal',
+        el('a', { class: 'btn', href: 'https://github.com/legenki/neon-terminal',
           target: '_blank', rel: 'noopener', text: 'Source on GitHub ↗' })));
     return { node, api: {} };
   }

@@ -3,7 +3,7 @@
 
 import { CAMPAIGN } from './campaign.js';
 import {
-  CLIENTS, ProgressStore, caseForMnemonic, caseload, casesForClient, clientBySlug,
+  CLIENTS, LANGS, ProgressStore, caseForMnemonic, caseload, casesForClient, clientBySlug,
   completeMnemonic, contractsLoaded, loadContracts, pick, randomMnemonic, searchCases,
 } from './core.js';
 import { WORDLIST_SHA256 } from './wordlist.js';
@@ -19,6 +19,15 @@ import {
   wordAt,
 } from './crypto/bip39.js';
 import { fromHex, toHex } from './crypto/hash.js';
+
+//: The one warning in the game that must never fall back to a language the
+//: player does not read: it is what stands between them and a funded address.
+const REAL_WALLET = {
+  en: 'THIS IS A REAL WALLET. DO NOT FUND IT — THE PHRASE IS STORED NOWHERE.',
+  ru: 'ЭТО НАСТОЯЩИЙ КОШЕЛЁК. НЕ КЛАДИ НА НЕГО ДЕНЬГИ — ФРАЗА НИГДЕ НЕ СОХРАНЯЕТСЯ.',
+  es: 'ESTA ES UNA CARTERA REAL. NO LE PONGAS FONDOS — LA FRASE NO SE GUARDA EN NINGÚN LADO.',
+  pt: 'ESTA É UMA CARTEIRA REAL. NÃO COLOQUE FUNDOS — A FRASE NÃO É GUARDADA EM LUGAR NENHUM.',
+};
 import { Journal, TOOLS, maskMnemonic } from './journal.js';
 
 const OFFICIAL_WORDLIST_SHA256 =
@@ -329,8 +338,9 @@ export class Engine {
 
   cmdLang(argument) {
     const choice = argument.trim().toLowerCase();
-    if (choice !== 'ru' && choice !== 'en') {
-      this.term.print('[WARN] USAGE: LANG RU | LANG EN', 'amber');
+    if (!LANGS.includes(choice)) {
+      const usage = LANGS.map((code) => `LANG ${code.toUpperCase()}`).join(' | ');
+      this.term.print(`[WARN] USAGE: ${usage}`, 'amber');
       return;
     }
     this.lang = choice;
@@ -621,12 +631,7 @@ export class Engine {
     this.term.keyValue('BITS', String(entropy.length * 8), 'grey', 'cyan');
     this.term.type(`${'MNEMONIC'.padEnd(18)}: ${mnemonic}`, 'green', 90);
     this.term.blank();
-    this.term.print(
-      this.lang === 'ru'
-        ? '[WARN] ЭТО НАСТОЯЩИЙ КОШЕЛЁК. НЕ КЛАДИ НА НЕГО ДЕНЬГИ — ФРАЗА НИГДЕ НЕ СОХРАНЯЕТСЯ.'
-        : '[WARN] THIS IS A REAL WALLET. DO NOT FUND IT — THE PHRASE IS STORED NOWHERE.',
-      'amber',
-    );
+    this.term.print(`[WARN] ${REAL_WALLET[this.lang] || REAL_WALLET.en}`, 'amber');
     this.log('random', `${entropy.length * 8}-bit phrase`, {
       detail: mnemonic,
       payload: { mnemonic },

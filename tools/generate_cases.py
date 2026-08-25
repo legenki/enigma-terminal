@@ -40,7 +40,7 @@ CASES_PER_ACT = CASES_PER_CLIENT // ACTS
 GRID_COLUMNS = 16                # 2048 words as 128 rows x 16 columns
 
 #: Deterministic: the same board every build, on every machine.
-MASTER_SEED = "bip39-enigma-terminal/contract-board/v1"
+MASTER_SEED = "bip39-neon-terminal/contract-board/v1"
 
 
 def rng_for(*parts: object) -> random.Random:
@@ -304,6 +304,22 @@ def entropy_clue_lines(spec: dict, entropy: bytes) -> list[dict]:
     }
     return [{"ru": template["ru"].format(**fields), "en": template["en"].format(**fields), "es": template["es"].format(**fields), "pt": template["pt"].format(**fields)}]
 
+#: Every language the generated board is written in. English is the fallback
+#: elsewhere, but a contract must carry all four or the board is half-built.
+LANGS = ("ru", "en", "es", "pt")
+
+EXHIBIT = {"ru": "ВЕЩДОК: ", "en": "EXHIBIT: ", "es": "PRUEBA: ", "pt": "PROVA: "}
+
+WORDS = {"ru": "Слова", "en": "Words", "es": "Palabras", "pt": "Palavras"}
+
+ENTROPY_OPENER = {
+    "ru": "Энтропия начинается с ",
+    "en": "The entropy begins with ",
+    "es": "La entropía comienza con ",
+    "pt": "A entropia começa com ",
+}
+
+
 BRIEF = {
     "ru": [
         "Заказчик: {client}. Район: {district}.",
@@ -462,11 +478,9 @@ def make_case(client: dict, slot: int, case_id: int, deck: list) -> dict:
     ru_gender = nouns["ru_gender"][n_i]
     russian_adjective = adjectives["ru_forms"][a_i][ru_gender]
 
-    es_gender = nouns.get("es_gender", ["m"] * len(nouns["en"]))[n_i] or "m"
-    es_adjective = adjectives.get("es_forms", [{"m": "", "f": ""}] * len(adjectives["en"]))[a_i].get(es_gender, "")
-
-    pt_gender = nouns.get("pt_gender", ["m"] * len(nouns["en"]))[n_i] or "m"
-    pt_adjective = adjectives.get("pt_forms", [{"m": "", "f": ""}] * len(adjectives["en"]))[a_i].get(pt_gender, "")
+    # Spanish and Portuguese agree too, and the noun leads: RESTO SECO.
+    es_adjective = adjectives["es_forms"][a_i][nouns["es_gender"][n_i]]
+    pt_adjective = adjectives["pt_forms"][a_i][nouns["pt_gender"][n_i]]
 
     low, high = client["difficulty"]
     difficulty = min(high, low + act * (high - low) // max(ACTS - 1, 1))
@@ -486,14 +500,14 @@ def make_case(client: dict, slot: int, case_id: int, deck: list) -> dict:
         "codename": {
             "ru": f"{russian_adjective} {nouns['ru'][n_i]}",
             "en": f"{adjectives['en'][a_i]} {nouns['en'][n_i]}",
-            "es": f"{nouns.get('es', nouns['en'])[n_i]} {es_adjective}".strip(),
-            "pt": f"{nouns.get('pt', nouns['en'])[n_i]} {pt_adjective}".strip(),
+            "es": f"{nouns['es'][n_i]} {es_adjective}",
+            "pt": f"{nouns['pt'][n_i]} {pt_adjective}",
         },
         "requires": [case_id - 1] if act_index > 1 or act > 0 else [],
         "solution": {"archetype": archetype, "steps": steps},
     }
 
-    for lang in ("ru", "en"):
+    for lang in LANGS:
         case.setdefault("brief", {})[lang] = [
             line.format(
                 client=client["name"][lang],
@@ -505,7 +519,7 @@ def make_case(client: dict, slot: int, case_id: int, deck: list) -> dict:
             for line in BRIEF[lang]
         ]
         case.setdefault("evidence", {})[lang] = [
-            ("ВЕЩДОК: " if lang == "ru" else "EXHIBIT: ") + client["evidence_sources"][lang][source_i],
+            EXHIBIT[lang] + client["evidence_sources"][lang][source_i],
             client["dialect"][lang],
         ]
         case.setdefault("clues", {})[lang] = (
@@ -516,13 +530,12 @@ def make_case(client: dict, slot: int, case_id: int, deck: list) -> dict:
         ]
 
     words = mnemonic.split()
-    for lang in ("ru", "en"):
-        joiner = "Слова" if lang == "ru" else "Words"
+    for lang in LANGS:
+        joiner = WORDS[lang]
         case.setdefault("hints", {})[lang] = [
             DIALECT_PRIMER[archetype][lang],
             (f"{joiner} 1-6: " + ", ".join(words[:6])) if kind == "words"
-            else ("Энтропия начинается с " if lang == "ru" else "The entropy begins with ")
-                 + steps[0]["hex"][:8],
+            else ENTROPY_OPENER[lang] + steps[0]["hex"][:8],
             (f"{joiner} 7-12: " + ", ".join(words[6:])) if kind == "words"
             else ("ENTROPY " + steps[0]["hex"]),
         ]

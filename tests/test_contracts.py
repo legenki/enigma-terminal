@@ -20,6 +20,9 @@ from enigma_terminal import crypto_engine as ce
 ROOT = Path(__file__).resolve().parent.parent
 GRID_COLUMNS = 16
 
+#: Every language a generated contract must be written in.
+LANGS = ("ru", "en", "es", "pt")
+
 
 @pytest.fixture(scope="module")
 def board():
@@ -264,10 +267,15 @@ def test_progression_only_ever_points_backwards(cases):
             assert required in ids
 
 
-def test_every_case_is_bilingual_and_complete(cases):
+def test_every_case_carries_every_language(cases):
+    """A field translated in the templates but not emitted is dead code: the
+    board once shipped Spanish codenames over English clues because the
+    assembly loop still read ("ru", "en")."""
     for case in cases:
         for field in ("codename", "brief", "evidence", "clues", "hints", "epilogue"):
-            for lang in ("ru", "en"):
+            assert set(case[field]) == set(LANGS), \
+                f"case {case['id']} field {field} has {sorted(case[field])}"
+            for lang in LANGS:
                 value = case[field][lang]
                 assert value, f"case {case['id']} has empty {field}/{lang}"
                 if isinstance(value, list):
@@ -290,9 +298,15 @@ NEUTER = {"ОКНО", "СОГЛАСИЕ", "ЗЕРКАЛО", "ИМЯ"}
 
 
 def test_codenames_are_all_distinct(cases):
-    for lang in ("ru", "en"):
+    """Dropping the adjective collapses 256 names onto the 8 nouns per client,
+    which is how the board once shipped ten contracts all called FIRMA."""
+    for lang in LANGS:
         names = [case["codename"][lang] for case in cases]
-        assert len(set(names)) == len(names), f"duplicate {lang} codenames"
+        duplicates = {n for n in names if names.count(n) > 1}
+        assert not duplicates, f"duplicate {lang} codenames: {sorted(duplicates)[:5]}"
+    for case in cases:
+        for lang in LANGS:
+            assert case["codename"][lang].strip(), f"case {case['id']} has no {lang} codename"
 
 
 def test_russian_codenames_agree_in_gender(cases):
@@ -360,3 +374,56 @@ def test_the_board_is_reproducible():
                    capture_output=True, check=True, timeout=300)
     after = (ROOT / "data" / "contracts.json").read_text(encoding="utf-8")
     assert before == after, "the generator is not deterministic"
+
+
+# --- the board must never move under a saved game --------------------------
+
+#: SHA-256 over the 256 fingerprints, in order. This is the identity of the
+#: board: a player's saved progress refers to these answers and nothing else.
+#: If a change makes this differ, it has silently invalidated every save —
+#: pin a new value only when that is the deliberate, announced intent.
+BOARD_CHECKSUM = "4e78e8e3c46bc072671ed4a0"
+
+
+def test_the_board_is_the_same_board_players_already_have(cases):
+    """MASTER_SEED once moved with a rename and reshuffled all 256 answers."""
+    import hashlib
+
+    digest = hashlib.sha256(
+        "".join(case["fingerprint"] for case in cases).encode()
+    ).hexdigest()[:24]
+    assert digest == BOARD_CHECKSUM, (
+        "the contract board changed: every saved game now points at answers "
+        "that no longer exist. Check MASTER_SEED in tools/generate_cases.py."
+    )
+
+
+def test_no_gendered_form_is_left_blank(clients):
+    """An empty form silently drops the adjective from every codename."""
+    for client in clients:
+        motifs = client["motifs"]
+        for key in ("es_forms", "pt_forms"):
+            forms = motifs["adjective"][key]
+            assert len(forms) == len(motifs["adjective"]["en"]), f"{client['slug']}/{key}"
+            for i, form in enumerate(forms):
+                assert form.get("m") and form.get("f"), \
+                    f"{client['slug']} {key}[{i}] is blank: {form}"
+        for key in ("es_gender", "pt_gender"):
+            genders = motifs["noun"][key]
+            assert len(genders) == len(motifs["noun"]["en"]), f"{client['slug']}/{key}"
+            assert all(g in ("m", "f") for g in genders), \
+                f"{client['slug']} {key} holds {genders}"
+
+
+def test_client_motifs_are_actually_translated(clients):
+    """Gemini handed back a few noun lists unchanged; nobody noticed."""
+    for client in clients:
+        motifs = client["motifs"]
+        for lang in ("es", "pt"):
+            for part in ("adjective", "noun"):
+                same = sum(1 for a, b in zip(motifs[part][lang], motifs[part]["en"])
+                           if a == b)
+                assert same <= 2, (
+                    f"{client['slug']} {part}/{lang}: {same}/8 words are still "
+                    "identical to the English — the list came back untranslated"
+                )

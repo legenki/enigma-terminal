@@ -159,70 +159,70 @@ export const CLIENTS = [
         ],
         "es_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "FRÍO",
+            "f": "FRÍA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "LIMPIO",
+            "f": "LIMPIA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CERTIFICADO",
+            "f": "CERTIFICADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CERO",
+            "f": "CERO"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SILENCIOSO",
+            "f": "SILENCIOSA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DIRECTO",
+            "f": "DIRECTA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SECO",
+            "f": "SECA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SELLADO",
+            "f": "SELLADA"
           }
         ],
         "pt_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "FRIO",
+            "f": "FRIA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "LIMPO",
+            "f": "LIMPA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CERTIFICADO",
+            "f": "CERTIFICADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ZERO",
+            "f": "ZERO"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SILENCIOSO",
+            "f": "SILENCIOSA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DIRETO",
+            "f": "DIRETA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SECO",
+            "f": "SECA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SELADO",
+            "f": "SELADA"
           }
         ],
         "es": [
@@ -298,24 +298,24 @@ export const CLIENTS = [
           "ÍNDICE"
         ],
         "es_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "m",
+          "m",
+          "m",
+          "f",
+          "m",
+          "f",
+          "m",
+          "m"
         ],
         "pt_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "m",
+          "m",
+          "m",
+          "f",
+          "m",
+          "m",
+          "m",
+          "m"
         ]
       }
     },
@@ -510,88 +510,88 @@ export const CLIENTS = [
         ],
         "es_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "TARDÍO",
+            "f": "TARDÍA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DE TERCIOPELO",
+            "f": "DE TERCIOPELO"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ANÓNIMO",
+            "f": "ANÓNIMA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CERRADO",
+            "f": "CERRADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "VESPERTINO",
+            "f": "VESPERTINA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "FALSIFICADO",
+            "f": "FALSIFICADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DORADO",
+            "f": "DORADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "RETIRADO",
+            "f": "RETIRADA"
           }
         ],
         "pt_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "TARDIO",
+            "f": "TARDIA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DE VELUDO",
+            "f": "DE VELUDO"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ANÔNIMO",
+            "f": "ANÔNIMA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "FECHADO",
+            "f": "FECHADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "VESPERTINO",
+            "f": "VESPERTINA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "FORJADO",
+            "f": "FORJADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DOURADO",
+            "f": "DOURADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "RETIRADO",
+            "f": "RETIRADA"
           }
         ],
         "es": [
-          "TARDE",
-          "TERCIOPELO",
+          "TARDÍO",
+          "DE TERCIOPELO",
           "ANÓNIMO",
           "CERRADO",
-          "ATARDECER",
+          "VESPERTINO",
           "FALSIFICADO",
           "DORADO",
           "RETIRADO"
         ],
         "pt": [
-          "TARDE",
-          "VELUDO",
+          "TARDIO",
+          "DE VELUDO",
           "ANÔNIMO",
           "FECHADO",
-          "NOITE",
+          "VESPERTINO",
           "FORJADO",
           "DOURADO",
           "RETIRADO"
@@ -649,24 +649,24 @@ export const CLIENTS = [
           "COMISSÃO"
         ],
         "es_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "m",
+          "m",
+          "m",
+          "f",
+          "f",
+          "m",
+          "f",
+          "f"
         ],
         "pt_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "m",
+          "m",
+          "m",
+          "f",
+          "f",
+          "f",
+          "f",
+          "f"
         ]
       }
     },
@@ -861,88 +861,88 @@ export const CLIENTS = [
         ],
         "es_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "DE SAL",
+            "f": "DE SAL"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "INUNDADO",
+            "f": "INUNDADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "AHOGADO",
+            "f": "AHOGADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "BENTÓNICO",
+            "f": "BENTÓNICA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DE TORMENTA",
+            "f": "DE TORMENTA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "OXIDADO",
+            "f": "OXIDADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "FRÍO",
+            "f": "FRÍA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CIEGO",
+            "f": "CIEGA"
           }
         ],
         "pt_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "DE SAL",
+            "f": "DE SAL"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ALAGADO",
+            "f": "ALAGADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ABAFADO",
+            "f": "ABAFADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "BÊNTICO",
+            "f": "BÊNTICA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DE TEMPESTADE",
+            "f": "DE TEMPESTADE"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ENFERRUJADO",
+            "f": "ENFERRUJADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "FRIO",
+            "f": "FRIA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CEGO",
+            "f": "CEGA"
           }
         ],
         "es": [
-          "SAL",
+          "DE SAL",
           "INUNDADO",
           "AHOGADO",
           "BENTÓNICO",
-          "TORMENTA",
+          "DE TORMENTA",
           "OXIDADO",
           "FRÍO",
           "CIEGO"
         ],
         "pt": [
-          "SAL",
+          "DE SAL",
           "ALAGADO",
           "ABAFADO",
           "BÊNTICO",
-          "TEMPESTADE",
+          "DE TEMPESTADE",
           "ENFERRUJADO",
           "FRIO",
           "CEGO"
@@ -980,44 +980,44 @@ export const CLIENTS = [
           "m"
         ],
         "es": [
-          "HORIZON",
-          "CAISSON",
-          "ANCHOR",
-          "HOLD",
-          "BEACON",
-          "KEEL",
-          "CHANNEL",
-          "BALLAST"
+          "HORIZONTE",
+          "CÁMARA",
+          "ANCLA",
+          "BODEGA",
+          "BALIZA",
+          "QUILLA",
+          "CANAL",
+          "LASTRE"
         ],
         "pt": [
-          "HORIZON",
-          "CAISSON",
-          "ANCHOR",
-          "HOLD",
-          "BEACON",
-          "KEEL",
-          "CHANNEL",
-          "BALLAST"
+          "HORIZONTE",
+          "CÂMARA",
+          "ÂNCORA",
+          "PORÃO",
+          "FAROL",
+          "QUILHA",
+          "CANAL",
+          "LASTRO"
         ],
         "es_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "m",
+          "f",
+          "f",
+          "f",
+          "f",
+          "f",
+          "m",
+          "m"
         ],
         "pt_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "m",
+          "f",
+          "f",
+          "m",
+          "m",
+          "f",
+          "m",
+          "m"
         ]
       }
     },
@@ -1212,70 +1212,70 @@ export const CLIENTS = [
         ],
         "es_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "ALTO",
+            "f": "ALTA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "RETRASADO",
+            "f": "RETRASADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SIN AIRE",
+            "f": "SIN AIRE"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SOLAR",
+            "f": "SOLAR"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SOMBRÍO",
+            "f": "SOMBRÍA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "GEOESTACIONARIO",
+            "f": "GEOESTACIONARIA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DERRIBADO",
+            "f": "DERRIBADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DESPEJADO",
+            "f": "DESPEJADA"
           }
         ],
         "pt_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "ALTO",
+            "f": "ALTA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ATRASADO",
+            "f": "ATRASADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SEM AR",
+            "f": "SEM AR"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SOLAR",
+            "f": "SOLAR"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SOMBRIO",
+            "f": "SOMBRIA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "GEOESTACIONÁRIO",
+            "f": "GEOESTACIONÁRIA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DERRUBADO",
+            "f": "DERRUBADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "LIMPO",
+            "f": "LIMPA"
           }
         ],
         "es": [
@@ -1331,44 +1331,44 @@ export const CLIENTS = [
           "m"
         ],
         "es": [
-          "APOGEE",
-          "ORBIT",
-          "TRANSIT",
-          "BEACON",
-          "WINDOW",
+          "APOGEO",
+          "ÓRBITA",
+          "TRÁNSITO",
+          "BALIZA",
+          "VENTANA",
           "VECTOR",
-          "PERIGEE",
-          "DOWNLINK"
+          "PERIGEO",
+          "ENLACE DESCENDENTE"
         ],
         "pt": [
-          "APOGEE",
-          "ORBIT",
-          "TRANSIT",
-          "BEACON",
-          "WINDOW",
-          "VECTOR",
-          "PERIGEE",
-          "DOWNLINK"
+          "APOGEU",
+          "ÓRBITA",
+          "TRÂNSITO",
+          "FAROL",
+          "JANELA",
+          "VETOR",
+          "PERIGEU",
+          "ENLACE DESCENDENTE"
         ],
         "es_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "m",
+          "f",
+          "m",
+          "f",
+          "f",
+          "m",
+          "m",
+          "m"
         ],
         "pt_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "m",
+          "f",
+          "m",
+          "m",
+          "f",
+          "m",
+          "m",
+          "m"
         ]
       }
     },
@@ -1563,70 +1563,70 @@ export const CLIENTS = [
         ],
         "es_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "ESTÉRIL",
+            "f": "ESTÉRIL"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CRÓNICO",
+            "f": "CRÓNICA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DONANTE",
+            "f": "DONANTE"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DIFERIDO",
+            "f": "DIFERIDA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "BLANCO",
+            "f": "BLANCA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "PÓSTUMO",
+            "f": "PÓSTUMA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SUAVE",
+            "f": "SUAVE"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "PREPAGO",
+            "f": "PREPAGA"
           }
         ],
         "pt_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "ESTÉRIL",
+            "f": "ESTÉRIL"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CRÔNICO",
+            "f": "CRÔNICA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DOADOR",
+            "f": "DOADORA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ADIADO",
+            "f": "ADIADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "BRANCO",
+            "f": "BRANCA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "PÓSTUMO",
+            "f": "PÓSTUMA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SUAVE",
+            "f": "SUAVE"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "PRÉ-PAGO",
+            "f": "PRÉ-PAGA"
           }
         ],
         "es": [
@@ -1682,44 +1682,44 @@ export const CLIENTS = [
           "m"
         ],
         "es": [
-          "CHART",
-          "SUTURE",
-          "WARD",
-          "DIAGNOSIS",
-          "CONSENT",
-          "PULSE",
-          "SCRIPT",
-          "SPECIMEN"
+          "HISTORIA",
+          "SUTURA",
+          "SALA",
+          "DIAGNÓSTICO",
+          "CONSENTIMIENTO",
+          "PULSO",
+          "RECETA",
+          "ESPÉCIMEN"
         ],
         "pt": [
-          "GRÁFICO",
+          "PRONTUÁRIO",
           "SUTURA",
           "ALA",
           "DIAGNÓSTICO",
           "CONSENTIMENTO",
           "PULSO",
-          "SCRIPT",
+          "RECEITA",
           "ESPÉCIME"
         ],
         "es_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "f",
+          "f",
+          "f",
+          "m",
+          "m",
+          "m",
+          "f",
+          "m"
         ],
         "pt_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "m",
+          "f",
+          "f",
+          "m",
+          "m",
+          "m",
+          "f",
+          "m"
         ]
       }
     },
@@ -1914,74 +1914,74 @@ export const CLIENTS = [
         ],
         "es_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "CENSURADO",
+            "f": "CENSURADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ARCHIVADO",
+            "f": "ARCHIVADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CLASIFICADO",
+            "f": "CLASIFICADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CADUCADO",
+            "f": "CADUCADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "SELLADO",
+            "f": "SELLADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "EXTRAVIADO",
+            "f": "EXTRAVIADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "NOTARIADO",
+            "f": "NOTARIADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "EXCEDENTE",
+            "f": "EXCEDENTE"
           }
         ],
         "pt_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "CENSURADO",
+            "f": "CENSURADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ARQUIVADO",
+            "f": "ARQUIVADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CLASSIFICADO",
+            "f": "CLASSIFICADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "EXPIRADO",
+            "f": "EXPIRADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CARIMBADO",
+            "f": "CARIMBADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "PERDIDO",
+            "f": "PERDIDA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "AUTENTICADO",
+            "f": "AUTENTICADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "EXCEDENTE",
+            "f": "EXCEDENTE"
           }
         ],
         "es": [
-          "REDACTADO",
+          "CENSURADO",
           "ARCHIVADO",
           "CLASIFICADO",
           "CADUCADO",
@@ -1991,7 +1991,7 @@ export const CLIENTS = [
           "EXCEDENTE"
         ],
         "pt": [
-          "REDIGIDO",
+          "CENSURADO",
           "ARQUIVADO",
           "CLASSIFICADO",
           "EXPIRADO",
@@ -2053,24 +2053,24 @@ export const CLIENTS = [
           "ASSINATURA"
         ],
         "es_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "f",
+          "m",
+          "m",
+          "f",
+          "m",
+          "f",
+          "f",
+          "f"
         ],
         "pt_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "f",
+          "m",
+          "m",
+          "f",
+          "m",
+          "f",
+          "f",
+          "f"
         ]
       }
     },
@@ -2269,70 +2269,70 @@ export const CLIENTS = [
         ],
         "es_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "ESPEJADO",
+            "f": "ESPEJADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ESTRATIFICADO",
+            "f": "ESTRATIFICADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "PROFUNDO",
+            "f": "PROFUNDA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "INVERTIDO",
+            "f": "INVERTIDA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CRISTALINO",
+            "f": "CRISTALINA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "AGOTADO",
+            "f": "AGOTADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DURO",
+            "f": "DURA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "EXTINGUIDO",
+            "f": "EXTINGUIDA"
           }
         ],
         "pt_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "ESPELHADO",
+            "f": "ESPELHADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "EM CAMADAS",
+            "f": "EM CAMADAS"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "PROFUNDO",
+            "f": "PROFUNDA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "INVERTIDO",
+            "f": "INVERTIDA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "CRISTALINO",
+            "f": "CRISTALINA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "EXAURIDO",
+            "f": "EXAURIDA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "RÍGIDO",
+            "f": "RÍGIDA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "EXTINTO",
+            "f": "EXTINTA"
           }
         ],
         "es": [
@@ -2351,7 +2351,7 @@ export const CLIENTS = [
           "PROFUNDO",
           "INVERTIDO",
           "CRISTALINO",
-          "EXAUSTO",
+          "EXAURIDO",
           "RÍGIDO",
           "EXTINTO"
         ]
@@ -2388,44 +2388,44 @@ export const CLIENTS = [
           "m"
         ],
         "es": [
-          "SEAM",
-          "STRATUM",
-          "CUT",
-          "CORE",
-          "ADIT",
-          "SPOIL",
-          "FACET",
-          "FACE"
+          "VETA",
+          "ESTRATO",
+          "CORTE",
+          "TESTIGO",
+          "GALERÍA",
+          "ESCOMBRERA",
+          "FACETA",
+          "FRENTE"
         ],
         "pt": [
-          "SEAM",
-          "STRATUM",
-          "CUT",
-          "CORE",
-          "ADIT",
-          "SPOIL",
-          "FACET",
-          "FACE"
+          "VEIO",
+          "ESTRATO",
+          "CORTE",
+          "TESTEMUNHO",
+          "GALERIA",
+          "ENTULHO",
+          "FACETA",
+          "FRENTE"
         ],
         "es_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "f",
+          "m",
+          "m",
+          "m",
+          "f",
+          "f",
+          "f",
+          "m"
         ],
         "pt_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "m",
+          "m",
+          "m",
+          "m",
+          "f",
+          "m",
+          "f",
+          "f"
         ]
       }
     },
@@ -2620,70 +2620,70 @@ export const CLIENTS = [
         ],
         "es_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "OLVIDADO",
+            "f": "OLVIDADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "TERCO",
+            "f": "TERCA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ABIERTO",
+            "f": "ABIERTA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "PRESTADO",
+            "f": "PRESTADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ENCONTRADO",
+            "f": "ENCONTRADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ÚLTIMO",
+            "f": "ÚLTIMA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "VIVO",
+            "f": "VIVA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DEVUELTO",
+            "f": "DEVUELTA"
           }
         ],
         "pt_forms": [
           {
-            "m": "",
-            "f": ""
+            "m": "ESQUECIDO",
+            "f": "ESQUECIDA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "TEIMOSO",
+            "f": "TEIMOSA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ABERTO",
+            "f": "ABERTA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "EMPRESTADO",
+            "f": "EMPRESTADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ENCONTRADO",
+            "f": "ENCONTRADA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "ÚLTIMO",
+            "f": "ÚLTIMA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "VIVO",
+            "f": "VIVA"
           },
           {
-            "m": "",
-            "f": ""
+            "m": "DEVOLVIDO",
+            "f": "DEVOLVIDA"
           }
         ],
         "es": [
@@ -2759,24 +2759,24 @@ export const CLIENTS = [
           "DÍVIDA"
         ],
         "es_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "m",
+          "m",
+          "m",
+          "m",
+          "f",
+          "m",
+          "f",
+          "f"
         ],
         "pt_gender": [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          ""
+          "m",
+          "m",
+          "m",
+          "f",
+          "f",
+          "m",
+          "f",
+          "f"
         ]
       }
     },

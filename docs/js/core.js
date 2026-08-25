@@ -7,6 +7,7 @@
 import { CAMPAIGN } from './campaign.js';
 import { CLIENTS } from './clients.js';
 import { WORDLIST } from './wordlist.js';
+import { migrated } from './storage.js';
 import {
   MnemonicError,
   entropyToMnemonic,
@@ -18,7 +19,13 @@ import {
 
 const STORAGE_KEY = 'enigma-terminal/progress/v1';
 
-/** Resolve a `{ru, en}` bundle down to one language. */
+//: Every language the game speaks. English is the fallback: a bundle that has
+//: not been translated yet still renders rather than showing `undefined`.
+export const LANGS = ['ru', 'en', 'es', 'pt'];
+
+export const LANG_NAMES = { ru: 'РУС', en: 'ENG', es: 'ESP', pt: 'POR' };
+
+/** Resolve a per-language bundle down to one language. */
 export const pick = (bundle, lang) => (bundle && (bundle[lang] || bundle.en)) || bundle;
 
 // --------------------------------------------------------------------------
@@ -32,7 +39,7 @@ export class ProgressStore {
 
   static read() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = migrated(STORAGE_KEY);
       if (!raw) return { solved: [], hints: {}, taken: [] };
       const parsed = JSON.parse(raw);
       return {

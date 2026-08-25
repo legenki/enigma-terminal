@@ -2,9 +2,9 @@
 
 import pytest
 
-from enigma_terminal.cases import Campaign, Progress
+from enigma_terminal.cases import LANGUAGES, Campaign, Progress
 from enigma_terminal.chain import ChainClient
-from enigma_terminal.game import Session, dispatch
+from enigma_terminal.game import REAL_WALLET, TEXT, Session, dispatch
 from enigma_terminal.journal import Journal
 from enigma_terminal.ui import Screen
 
@@ -619,3 +619,28 @@ def test_the_campaign_ending_needs_the_campaign(session, capsys):
     out = capsys.readouterr().out
     assert "ALL EIGHT CASES CLOSED" not in out
     assert len(session.progress.solved) >= 8
+
+
+# --- languages -------------------------------------------------------------
+
+def test_lang_command_accepts_every_language_the_data_carries(session):
+    """--lang es worked while LANG ES was rejected, so a player who started in
+    Spanish could never get back to it from inside the game."""
+    for code in LANGUAGES:
+        run(session, f"LANG {code.upper()}")
+        assert session.lang == code, f"LANG {code.upper()} was refused"
+
+    run(session, "LANG ZZ")
+    assert session.lang == LANGUAGES[-1], "an unknown code changed the language"
+
+
+def test_every_ui_string_is_translated():
+    """A key missing es or pt renders English mid-sentence."""
+    for key, bundle in TEXT.items():
+        missing = [lang for lang in LANGUAGES if not bundle.get(lang)]
+        assert not missing, f"TEXT[{key!r}] has no {missing}"
+
+
+def test_the_real_wallet_warning_is_never_left_in_english():
+    for lang in LANGUAGES:
+        assert REAL_WALLET.get(lang), f"no {lang} real-wallet warning"

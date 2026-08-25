@@ -180,7 +180,7 @@ def test_footer_no_longer_carries_the_source_link():
     footer = html[html.index('<footer id="switch-bar">'):html.index("</footer>")]
     assert "github.com" not in footer
     assert 'id="crt-switch"' in footer
-    assert "github.com/legenki/enigma-terminal" in (DOCS / "js" / "gui" / "app.js").read_text()
+    assert "github.com/legenki/neon-terminal" in (DOCS / "js" / "gui" / "app.js").read_text()
 
 
 def test_sidebar_clicks_open_the_section_not_the_last_item():
@@ -203,3 +203,69 @@ def test_taking_a_contract_is_persisted_in_the_shared_store():
     for module in ("js/engine.js", "js/gui/app.js"):
         text = strip_js_comments((DOCS / module).read_text())
         assert "progress.take(" in text, f"{module} never takes a contract"
+
+
+# --- the web build must speak every language it offers ----------------------
+
+LANGS = ("ru", "en", "es", "pt")
+
+
+def test_no_front_end_decides_language_with_a_binary_ternary():
+    """`lang === 'ru' ? … : …` silently renders English for es and pt. The GUI
+    once carried 52 of them, so every Spanish player got an English interface
+    wrapped around a Spanish case file."""
+    offenders = {}
+    for module in ("js/engine.js", "js/journal.js", "js/gui/app.js", "js/main.js"):
+        source = (DOCS / module).read_text(encoding="utf-8")
+        hits = re.findall(r"lang\s*===\s*'ru'", source)
+        if hits:
+            offenders[module] = len(hits)
+    assert not offenders, (
+        f"binary ru/en ternaries left: {offenders}. Add the string to the "
+        "language dictionary instead, so es and pt get it too."
+    )
+
+
+def test_the_language_switcher_offers_every_shipped_language():
+    core = (DOCS / "js" / "core.js").read_text(encoding="utf-8")
+    listed = re.search(r"export const LANGS = \[([^\]]+)\]", core)
+    assert listed, "core.js no longer exports LANGS"
+    codes = re.findall(r"'(\w+)'", listed.group(1))
+    assert tuple(codes) == LANGS, codes
+
+    gui = (DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8")
+    assert "LANGS.map" in gui, "the GUI switcher hardcodes its languages again"
+    engine = (DOCS / "js" / "engine.js").read_text(encoding="utf-8")
+    assert "LANGS.includes(choice)" in engine, "LANG rejects languages the game ships"
+
+
+def test_gui_text_dictionary_is_complete():
+    """A key missing es or pt falls back to English without a word of warning."""
+    source = (DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8")
+    block = source[source.index("const T = {"):source.index("const t = (key, lang)")]
+    entries = re.findall(r"^  (\w+): \{(.*?)\},$", block, re.S | re.M)
+    assert len(entries) > 50, f"only found {len(entries)} keys — parser drifted"
+    for key, body in entries:
+        for lang in LANGS:
+            assert re.search(rf"\b{lang}:\s*'", body), f"T.{key} has no {lang}"
+
+
+def test_saves_made_before_the_rename_are_adopted_not_orphaned():
+    """Renaming the storage keys would wipe every game already in a browser."""
+    storage = (DOCS / "js" / "storage.js").read_text(encoding="utf-8")
+    assert "neon-terminal/" in storage, "the legacy key prefix is gone"
+    assert "enigma-terminal/" in storage
+    for module in ("js/core.js", "js/journal.js", "js/main.js"):
+        source = (DOCS / module).read_text(encoding="utf-8")
+        assert "from './storage.js'" in source, f"{module} reads localStorage raw"
+        assert "localStorage.getItem" not in source, \
+            f"{module} bypasses the migration and would orphan old saves"
+
+
+def test_the_real_wallet_warning_is_never_left_in_english():
+    """The one line standing between a player and a funded address."""
+    engine = (DOCS / "js" / "engine.js").read_text(encoding="utf-8")
+    block = engine[engine.index("const REAL_WALLET = {"):]
+    block = block[:block.index("};")]
+    for lang in LANGS:
+        assert re.search(rf"^  {lang}: '", block, re.M), f"no {lang} wallet warning"

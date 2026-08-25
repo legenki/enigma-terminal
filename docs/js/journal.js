@@ -9,20 +9,29 @@
 // recorded masked, so pasting a live wallet into the terminal cannot leave the
 // phrase sitting in localStorage.
 
+import { migrated } from './storage.js';
+
 const STORAGE_KEY = 'enigma-terminal/journal/v1';
 const MAX_ENTRIES = 400;
 
 export const TOOLS = {
-  decrypt: { label: { en: 'Decrypt', ru: 'Дешифровка' }, glyph: '⌘' },
-  ledger: { label: { en: 'Ledger', ru: 'Реестр' }, glyph: '₿' },
-  sweep: { label: { en: 'Sweep', ru: 'Обход' }, glyph: '≡' },
-  txlog: { label: { en: 'Tx log', ru: 'Транзакции' }, glyph: '⇄' },
-  search: { label: { en: 'Wordlist', ru: 'Словарь' }, glyph: '⌕' },
-  archive: { label: { en: 'Archive', ru: 'Архив' }, glyph: '▤' },
-  complete: { label: { en: 'Recovery', ru: 'Восстановление' }, glyph: '?' },
-  random: { label: { en: 'Randomizer', ru: 'Рандомайзер' }, glyph: '⚄' },
-  case: { label: { en: 'Case', ru: 'Дело' }, glyph: '★' },
-  hint: { label: { en: 'Hint', ru: 'Подсказка' }, glyph: '!' },
+  decrypt: { label: { en: 'Decrypt', ru: 'Дешифровка', es: 'Descifrado', pt: 'Decifração' }, glyph: '⌘' },
+  ledger: { label: { en: 'Ledger', ru: 'Реестр', es: 'Registro', pt: 'Registro' }, glyph: '₿' },
+  sweep: { label: { en: 'Sweep', ru: 'Обход', es: 'Recorrido', pt: 'Percurso' }, glyph: '≡' },
+  txlog: { label: { en: 'Tx log', ru: 'Транзакции', es: 'Transacciones', pt: 'Transações' }, glyph: '⇄' },
+  search: { label: { en: 'Wordlist', ru: 'Словарь', es: 'Lista', pt: 'Lista' }, glyph: '⌕' },
+  archive: { label: { en: 'Archive', ru: 'Архив', es: 'Archivo', pt: 'Arquivo' }, glyph: '▤' },
+  complete: { label: { en: 'Recovery', ru: 'Восстановление', es: 'Recuperación', pt: 'Recuperação' }, glyph: '?' },
+  random: { label: { en: 'Randomizer', ru: 'Рандомайзер', es: 'Aleatorio', pt: 'Aleatório' }, glyph: '⚄' },
+  case: { label: { en: 'Case', ru: 'Дело', es: 'Caso', pt: 'Caso' }, glyph: '★' },
+  hint: { label: { en: 'Hint', ru: 'Подсказка', es: 'Pista', pt: 'Dica' }, glyph: '!' },
+};
+
+const EXPORT_CAPTIONS = {
+  en: { title: 'INVESTIGATION JOURNAL', exported: 'Exported', entries: 'Entries' },
+  ru: { title: 'ЖУРНАЛ РАССЛЕДОВАНИЯ', exported: 'Выгружено', entries: 'Записей' },
+  es: { title: 'DIARIO DE INVESTIGACIÓN', exported: 'Exportado', entries: 'Registros' },
+  pt: { title: 'DIÁRIO DE INVESTIGAÇÃO', exported: 'Exportado', entries: 'Registros' },
 };
 
 /** Redact a phrase the game has no business remembering. */
@@ -40,7 +49,7 @@ export class Journal {
 
   static read() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = migrated(STORAGE_KEY);
       if (!raw) return [];
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed) ? parsed : [];
@@ -172,13 +181,13 @@ export class Journal {
 
   /** Plain-text case file, for the clipboard or a download. */
   toText(lang = 'en') {
-    const header = lang === 'ru'
-      ? ['ЖУРНАЛ РАССЛЕДОВАНИЯ // BIP-39: ENIGMA TERMINAL',
-         `Выгружено: ${new Date().toISOString()}`,
-         `Записей: ${this.entries.length}`, '']
-      : ['INVESTIGATION JOURNAL // BIP-39: ENIGMA TERMINAL',
-         `Exported: ${new Date().toISOString()}`,
-         `Entries: ${this.entries.length}`, ''];
+    const caption = EXPORT_CAPTIONS[lang] || EXPORT_CAPTIONS.en;
+    const header = [
+      `${caption.title} // BIP-39: ENIGMA TERMINAL`,
+      `${caption.exported}: ${new Date().toISOString()}`,
+      `${caption.entries}: ${this.entries.length}`,
+      '',
+    ];
     const body = this.entries.map((entry, index) => {
       const stamp = new Date(entry.at).toISOString().replace('T', ' ').slice(0, 19);
       const tool = (TOOLS[entry.tool] && TOOLS[entry.tool].label.en) || entry.tool;

@@ -12,6 +12,7 @@ export GEMINI_API_KEY="your-key-here"
 
 import json
 import os
+import sys
 import time
 from pathlib import Path
 
@@ -19,7 +20,7 @@ try:
     import google.generativeai as genai
 except ImportError:
     print("Please install the Gemini client: pip install google-generativeai")
-    exit(1)
+    sys.exit(1)
 
 # Configure API key
 api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
@@ -27,7 +28,7 @@ if not api_key:
     print("\n[!] ОШИБКА: Ключ API не найден!")
     print("Пожалуйста, выполните команду перед запуском скрипта:")
     print("export GEMINI_API_KEY='ваш_ключ_от_gemini'")
-    exit(1)
+    sys.exit(1)
 
 genai.configure(api_key=api_key)
 # The model name from your dashboard
@@ -77,17 +78,23 @@ def translate(content, target_language):
             result = response.text.strip()
             
             # Strip markdown formatting just in case Gemini ignored rule #7
-            if result.startswith("```json"):
-                result = result[7:-3].strip()
-            elif result.startswith("```"):
-                result = result[3:-3].strip()
+            if result.startswith("```"):
+                result = result.split("\n", 1)[-1] if "\n" in result else result[3:]
+                if result.rstrip().endswith("```"):
+                    result = result.rstrip()[:-3]
+                result = result.strip()
 
             if is_list:
                 try:
-                    return json.loads(result)
+                    parsed = json.loads(result)
                 except Exception:
                     import ast
-                    return ast.literal_eval(result)
+                    parsed = ast.literal_eval(result)
+                if not isinstance(parsed, list) or len(parsed) != len(content):
+                    raise ValueError(
+                        f"expected a list of {len(content)}, got {parsed!r}"
+                    )
+                return parsed
             return result
 
         except Exception as e:
@@ -107,7 +114,17 @@ def process_dict(d, path=""):
         
     modified = False
     
-    if 'm' in d and 'f' in d and isinstance(d['m'], str) and d['m'] == "":
+    # Gendered adjective forms ({"m": ..., "f": ...}) and the *_gender lists
+    # beside them are not free translation: a wrong gender reads as broken
+    # grammar in every codename built from it. They are maintained by hand in
+    # data/clients.json, so this script leaves them alone — but it refuses to
+    # pretend they are done when they are empty.
+    if 'm' in d and 'f' in d and isinstance(d.get('m'), str):
+        if not d['m'] or not d['f']:
+            raise SystemExit(
+                "data/clients.json still has empty gendered forms; fill "
+                "es_forms/pt_forms and es_gender/pt_gender by hand first."
+            )
         return False
 
     if 'en' in d and isinstance(d['en'], (str, list)) and 'ru' in d:

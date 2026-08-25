@@ -12,7 +12,7 @@ checksum included — stretched into a seed with PBKDF2-HMAC-SHA512, derived ove
 through BIP-32 into three address types, and its balance is fetched with a real HTTP request
 to public block explorers.
 
-▶ **Play in the browser: <https://legenki.github.io/enigma-terminal/>**
+▶ **Play in the browser: <https://legenki.github.io/neon-terminal/>**
 
 The web build has two modes, switched by the rocker at the bottom of the screen (or **F2**):
 **GUI**, a windowed interface in cyberpunk dress — black glass, neon rules, HUD corner ticks —
@@ -43,7 +43,7 @@ field against the Python engine.
 
 ### Web
 
-Open <https://legenki.github.io/enigma-terminal/>, or serve it locally:
+Open <https://legenki.github.io/neon-terminal/>, or serve it locally:
 
 ```bash
 python3 -m http.server 8000 --directory docs
@@ -52,7 +52,7 @@ python3 -m http.server 8000 --directory docs
 ### Terminal
 
 ```bash
-git clone https://github.com/legenki/enigma-terminal
+git clone https://github.com/legenki/neon-terminal
 cd enigma-terminal
 python -m enigma_terminal            # no dependencies required
 ```

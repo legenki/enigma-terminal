@@ -21,7 +21,7 @@ CASES_FILE = _ROOT / "data" / "cases.json"
 CONTRACTS_FILE = _ROOT / "data" / "contracts.json"
 CLIENTS_FILE = _ROOT / "data" / "clients.json"
 
-LANGUAGES = ("ru", "en")
+LANGUAGES = ("ru", "en", "es", "pt")
 
 
 def _pick(value: Any, lang: str) -> Any:

@@ -6,26 +6,25 @@ import { CrtRenderer } from './crt.js';
 import { Engine } from './engine.js';
 import { GlitchBanner } from './glitch.js';
 import { GuiApp } from './gui/app.js';
-import { loadContracts } from './core.js';
+import { LANGS, loadContracts } from './core.js';
+import { migrated } from './storage.js';
 
 const MODE_KEY = 'enigma-terminal/mode/v1';
 const LANG_KEY = 'enigma-terminal/lang/v1';
 const CRT_KEY = 'enigma-terminal/crt/v1';
 
-const stored = (key, fallback) => {
-  try {
-    return localStorage.getItem(key) || fallback;
-  } catch {
-    return fallback;
-  }
-};
+const stored = (key, fallback) => migrated(key) || fallback;
 const store = (key, value) => {
   try {
     localStorage.setItem(key, value);
   } catch { /* private mode: the choice just will not persist */ }
 };
 
-const lang = stored(LANG_KEY, navigator.language.startsWith('ru') ? 'ru' : 'en');
+// Match the browser against every language we ship, not just Russian.
+const preferred = (navigator.languages || [navigator.language || 'en'])
+  .map((tag) => String(tag).slice(0, 2).toLowerCase())
+  .find((code) => LANGS.includes(code)) || 'en';
+const lang = stored(LANG_KEY, preferred);
 
 const glitch = new GlitchBanner(document.getElementById('glitch-canvas'));
 

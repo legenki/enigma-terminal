@@ -3,12 +3,11 @@
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 from dataclasses import dataclass, field
 
 from . import __version__
-from .cases import Campaign, Case, Progress
+from .cases import LANGUAGES, Campaign, Case, Progress
 from .chain import ChainClient, ChainError, PROVIDERS
 from .journal import STATUS_STYLES, TOOLS, Journal, mask_mnemonic
 from .crypto_engine import (
@@ -343,10 +342,20 @@ def cmd_about(s: Session, _arg: str) -> None:
     s.screen.write()
 
 
+#: The one warning in the game that must never fall back to a language the
+#: player does not read: it is what stands between them and a funded address.
+REAL_WALLET = {
+    "en": "THIS IS A REAL WALLET. DO NOT FUND IT — THE PHRASE IS STORED NOWHERE.",
+    "ru": "ЭТО НАСТОЯЩИЙ КОШЕЛЁК. НЕ КЛАДИ НА НЕГО ДЕНЬГИ — ФРАЗА НИГДЕ НЕ СОХРАНЯЕТСЯ.",
+    "es": "ESTA ES UNA CARTERA REAL. NO LE PONGAS FONDOS — LA FRASE NO SE GUARDA EN NINGÚN LADO.",
+    "pt": "ESTA É UMA CARTEIRA REAL. NÃO COLOQUE FUNDOS — A FRASE NÃO É GUARDADA EM LUGAR NENHUM.",
+}
+
+
 def cmd_lang(s: Session, arg: str) -> None:
     choice = arg.strip().lower()
-    if choice not in ("ru", "en"):
-        s.screen.warn("USAGE: LANG RU | LANG EN")
+    if choice not in LANGUAGES:
+        s.screen.warn("USAGE: " + " | ".join(f"LANG {c.upper()}" for c in LANGUAGES))
         return
     s.lang = choice
     s.screen.ok(f"NARRATIVE LANGUAGE: {choice.upper()}")
@@ -603,11 +612,7 @@ def cmd_random(s: Session, arg: str) -> None:
     s.screen.kv("BITS", str(len(entropy) * 8), value_styles=("cyan",))
     s.screen.stream(f"{'MNEMONIC':<18}: {mnemonic}", "green", "bold", cps=120)
     s.screen.write()
-    s.screen.warn(
-        "ЭТО НАСТОЯЩИЙ КОШЕЛЁК. НЕ КЛАДИ НА НЕГО ДЕНЬГИ — ФРАЗА НИГДЕ НЕ СОХРАНЯЕТСЯ."
-        if s.lang == "ru" else
-        "THIS IS A REAL WALLET. DO NOT FUND IT — THE PHRASE IS STORED NOWHERE."
-    )
+    s.screen.warn(REAL_WALLET.get(s.lang, REAL_WALLET["en"]))
     _log(s, "random", f"{len(entropy) * 8}-bit phrase", detail=mnemonic,
          payload={"mnemonic": mnemonic})
     s.screen.info(f"RUN: DECRYPT {mnemonic}")
@@ -1171,7 +1176,7 @@ def main(argv: list[str] | None = None) -> int:
         prog="enigma-terminal",
         description="BIP-39: ENIGMA TERMINAL — a detective quest over the live Bitcoin network.",
     )
-    parser.add_argument("--lang", choices=("ru", "en", "es", "pt"), default="ru",
+    parser.add_argument("--lang", choices=LANGUAGES, default="ru",
                         help="narrative language (default: ru)")
     parser.add_argument("--provider", choices=tuple(PROVIDERS), default=None,
                         help="preferred block explorer")
