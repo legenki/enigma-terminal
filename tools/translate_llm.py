@@ -39,7 +39,7 @@ Translate the text into {target_language}.
 
 STRICT RULES:
 1. Tone: Noir, gritty, cyberpunk, professional investigator.
-2. DO NOT translate any text inside {curly_braces}. They are code placeholders.
+2. DO NOT translate any text inside {{curly_braces}}. They are code placeholders.
 3. DO NOT translate English BIP-39 words or prefixes if they are part of a puzzle. 
    Examples: "word begins with 'aban'" -> "la palabra comienza con 'aban'".
 4. Maintain exact capitalization and line breaks.
