@@ -118,14 +118,14 @@ def clue_for(word: str, position: int, archetype: str, rng: random.Random,
     if archetype == "index_math":
         expression, value = arithmetic_for(index, rng)
         return (
-            {"ru": f"{n} слово № {expression}", "en": f"{n} word no. {expression}"},
+            {"ru": f"{n} слово № {expression}", "en": f"{n} word no. {expression}", "es": f"{n} palabra n.º {expression}", "pt": f"{n} palavra n.º {expression}"},
             {"kind": "index", "index": value, "word": word},
         )
 
     if archetype == "mirror_index":
         mirrored = 2049 - index
         return (
-            {"ru": f"{n} зеркало номера {mirrored}", "en": f"{n} the mirror of number {mirrored}"},
+            {"ru": f"{n} зеркало номера {mirrored}", "en": f"{n} the mirror of number {mirrored}", "es": f"{n} el espejo del número {mirrored}", "pt": f"{n} o espelho do número {mirrored}"},
             {"kind": "mirror", "mirror": mirrored, "word": word},
         )
 
@@ -133,14 +133,18 @@ def clue_for(word: str, position: int, archetype: str, rng: random.Random,
         row, column = divmod(index - 1, GRID_COLUMNS)
         return (
             {"ru": f"{n} ряд {row + 1}, колонка {column + 1}",
-             "en": f"{n} row {row + 1}, column {column + 1}"},
+             "en": f"{n} row {row + 1}, column {column + 1}",
+             "es": f"{n} fila {row + 1}, columna {column + 1}",
+             "pt": f"{n} linha {row + 1}, coluna {column + 1}"},
             {"kind": "grid", "row": row + 1, "column": column + 1, "word": word},
         )
 
     if archetype == "ledger_amounts":
         return (
             {"ru": f"{n} лот ушёл за 0.{index:08d} BTC",
-             "en": f"{n} the lot closed at 0.{index:08d} BTC"},
+             "en": f"{n} the lot closed at 0.{index:08d} BTC",
+             "es": f"{n} el lote cerró en 0.{index:08d} BTC",
+             "pt": f"{n} o lote fechou em 0.{index:08d} BTC"},
             {"kind": "sats", "sats": index, "word": word},
         )
 
@@ -149,12 +153,16 @@ def clue_for(word: str, position: int, archetype: str, rng: random.Random,
         if exclusive:
             return (
                 {"ru": f"{n} единственная ветка на «{prefix}»",
-                 "en": f"{n} the only branch under '{prefix}'"},
+                 "en": f"{n} the only branch under '{prefix}'",
+                 "es": f"{n} la única rama bajo '{prefix}'",
+                 "pt": f"{n} o único ramo sob '{prefix}'"},
                 {"kind": "prefix", "prefix": prefix, "word": word},
             )
         return (
             {"ru": f"{n} самая короткая ветка на «{prefix}»",
-             "en": f"{n} the shortest branch under '{prefix}'"},
+             "en": f"{n} the shortest branch under '{prefix}'",
+             "es": f"{n} la rama más corta bajo '{prefix}'",
+             "pt": f"{n} o ramo mais curto sob '{prefix}'"},
             {"kind": "prefix_shortest", "prefix": prefix, "word": word},
         )
 
@@ -162,10 +170,10 @@ def clue_for(word: str, position: int, archetype: str, rng: random.Random,
         # Point at a word by its neighbour in the list, never at itself.
         if index > 1 and (index == 2048 or rng.random() < 0.5):
             anchor, direction = word_at(index - 1), "after"
-            line = {"ru": f"{n} следующее за «{anchor}»", "en": f"{n} the one after '{anchor}'"}
+            line = {"ru": f"{n} следующее за «{anchor}»", "en": f"{n} the one after '{anchor}'", "es": f"{n} el siguiente después de '{anchor}'", "pt": f"{n} o próximo depois de '{anchor}'"}
         else:
             anchor, direction = word_at(index + 1), "before"
-            line = {"ru": f"{n} стоящее перед «{anchor}»", "en": f"{n} the one before '{anchor}'"}
+            line = {"ru": f"{n} стоящее перед «{anchor}»", "en": f"{n} the one before '{anchor}'", "es": f"{n} el anterior a '{anchor}'", "pt": f"{n} o anterior a '{anchor}'"}
         return line, {"kind": "neighbour", "anchor": anchor, "direction": direction, "word": word}
 
     raise ValueError(f"unknown archetype {archetype}")
@@ -181,12 +189,14 @@ def build_puzzle(mnemonic: str, archetype: str, rng: random.Random) -> tuple[lis
         shown = ["▓▓▓▓▓" if i == hidden else w for i, w in enumerate(words)]
         pattern = " ".join("?" if i == hidden else w for i, w in enumerate(words))
         lines = [
-            {"ru": "    " + " ".join(shown[:6]), "en": "    " + " ".join(shown[:6])},
-            {"ru": "    " + " ".join(shown[6:]), "en": "    " + " ".join(shown[6:])},
-            {"ru": "", "en": ""},
+            {"ru": "    " + " ".join(shown[:6]), "en": "    " + " ".join(shown[:6]), "es": "    " + " ".join(shown[:6]), "pt": "    " + " ".join(shown[:6])},
+            {"ru": "    " + " ".join(shown[6:]), "en": "    " + " ".join(shown[6:]), "es": "    " + " ".join(shown[6:]), "pt": "    " + " ".join(shown[6:])},
+            {"ru": "", "en": "", "es": "", "pt": ""},
             {"ru": f"Позиция {hidden + 1} вымарана. Восстанови её контрольной суммой:",
-             "en": f"Position {hidden + 1} is redacted. Recover it by checksum:"},
-            {"ru": f"COMPLETE {pattern}", "en": f"COMPLETE {pattern}"},
+             "en": f"Position {hidden + 1} is redacted. Recover it by checksum:",
+             "es": f"La posición {hidden + 1} está censurada. Recupérala con la suma de comprobación:",
+             "pt": f"A posição {hidden + 1} está censurada. Recupere-a com a soma de verificação:"},
+            {"ru": f"COMPLETE {pattern}", "en": f"COMPLETE {pattern}", "es": f"COMPLETE {pattern}", "pt": f"COMPLETE {pattern}"},
         ]
         return lines, [{"kind": "redacted", "pattern": pattern, "word": words[hidden],
                         "position": hidden}]
@@ -203,38 +213,55 @@ def build_puzzle(mnemonic: str, archetype: str, rng: random.Random) -> tuple[lis
 # Narrative assembly
 # --------------------------------------------------------------------------- #
 
+
 DIALECT_PRIMER = {
     "index_math": {
         "ru": "Каждая строка даёт номер слова в словаре BIP-39. Посчитай и загляни: WORD <n>.",
         "en": "Each line gives a word's number in the BIP-39 list. Do the sum, then look: WORD <n>.",
+        "es": "Cada línea da el número de una palabra en la lista BIP-39. Haz la suma y busca: WORD <n>.",
+        "pt": "Cada linha dá o número de uma palavra na lista BIP-39. Faça a soma e busque: WORD <n>.",
     },
     "mirror_index": {
         "ru": "Числа зеркальны: настоящий номер — это 2049 минус названный.",
         "en": "The numbers are mirrored: the real index is 2049 minus the one given.",
+        "es": "Los números están en espejo: el índice real es 2049 menos el indicado.",
+        "pt": "Os números estão espelhados: o índice real é 2049 menos o indicado.",
     },
     "grid_coords": {
         "ru": "Словарь разложен по сетке 128 × 16. Номер слова = (ряд − 1) × 16 + колонка.",
         "en": "The list is laid out 128 × 16. A word's index is (row − 1) × 16 + column.",
+        "es": "La lista está dispuesta en 128 × 16. El índice es (fila − 1) × 16 + columna.",
+        "pt": "A lista está disposta em 128 × 16. O índice é (linha − 1) × 16 + coluna.",
     },
     "ledger_amounts": {
         "ru": "Цена лота — это сатоши, а сатоши — это номер слова. Ноль целых, восемь знаков.",
         "en": "A lot's price is satoshi, and the satoshi are the word's index. Zero point, eight digits.",
+        "es": "El precio de un lote son satoshis, y los satoshis son el índice. Cero punto, ocho dígitos.",
+        "pt": "O preço de um lote são satoshis, e os satoshis são o índice. Zero ponto, oito dígitos.",
     },
     "unique_prefix": {
         "ru": "В словаре ровно одно слово начинается так. Проверь командой SEARCH <начало>.",
         "en": "Exactly one word in the list begins that way. Check it with SEARCH <prefix>.",
+        "es": "Exactamente una palabra en la lista comienza así. Compruébalo con SEARCH <prefix>.",
+        "pt": "Exatamente uma palavra na lista começa assim. Verifique com SEARCH <prefix>.",
     },
     "neighbour": {
         "ru": "Каждое слово стоит вплотную к названному. INDEX <слово> даст номер соседа.",
         "en": "Each word sits right beside the one named. INDEX <word> gives the neighbour's number.",
+        "es": "Cada palabra se ubica justo al lado de la nombrada. INDEX <word> da el número del vecino.",
+        "pt": "Cada palavra fica bem ao lado da nomeada. INDEX <word> dá o número do vizinho.",
     },
     "entropy_pattern": {
         "ru": "Здесь нет слов — есть шестнадцать байт. Собери их и скорми команде ENTROPY <hex>.",
         "en": "There are no words here, only sixteen bytes. Assemble them and feed ENTROPY <hex>.",
+        "es": "Aquí no hay palabras, solo dieciséis bytes. Ensámblalos y usa ENTROPY <hex>.",
+        "pt": "Não há palavras aqui, apenas dezesseis bytes. Monte-os e use ENTROPY <hex>.",
     },
     "redacted": {
         "ru": "Фраза выдана целиком, кроме одного слова. Его вернёт контрольная сумма.",
         "en": "The phrase is released in full but for one word. The checksum will give it back.",
+        "es": "La frase se entrega completa excepto por una palabra. La suma de comprobación la recuperará.",
+        "pt": "A frase é entregue completa, exceto por uma palavra. A soma de verificação a recuperará.",
     },
 }
 
@@ -242,21 +269,28 @@ ENTROPY_CLUES = {
     "repeat": {
         "ru": "Один байт, повторённый шестнадцать раз: {hex2} — и так до конца строки.",
         "en": "One byte repeated sixteen times: {hex2}, all the way along.",
+        "es": "Un byte repetido dieciséis veces: {hex2}, hasta el final.",
+        "pt": "Um byte repetido dezesseis vezes: {hex2}, até o fim.",
     },
     "alternate": {
         "ru": "Два байта, чередующиеся восемь раз: {a} и {b}.",
         "en": "Two bytes alternating eight times: {a} then {b}.",
+        "es": "Dos bytes alternando ocho veces: {a} luego {b}.",
+        "pt": "Dois bytes alternando oito vezes: {a} depois {b}.",
     },
     "ascend": {
         "ru": "Шестнадцать байт с шагом {step}, начиная с {start} (по модулю 256).",
         "en": "Sixteen bytes stepping by {step} from {start} (modulo 256).",
+        "es": "Dieciséis bytes avanzando de a {step} desde {start} (módulo 256).",
+        "pt": "Dezesseis bytes avançando de {step} em {step} desde {start} (módulo 256).",
     },
     "ascii": {
         "ru": "Восемь букв «{token}», записанные в ASCII и повторённые дважды.",
         "en": "The eight letters '{token}' in ASCII, written out twice.",
+        "es": "Las ocho letras '{token}' en ASCII, escritas dos veces.",
+        "pt": "As oito letras '{token}' em ASCII, escritas duas vezes.",
     },
 }
-
 
 def entropy_clue_lines(spec: dict, entropy: bytes) -> list[dict]:
     template = ENTROPY_CLUES[spec["style"]]
@@ -268,8 +302,7 @@ def entropy_clue_lines(spec: dict, entropy: bytes) -> list[dict]:
         "start": spec.get("start"),
         "token": spec.get("token"),
     }
-    return [{"ru": template["ru"].format(**fields), "en": template["en"].format(**fields)}]
-
+    return [{"ru": template["ru"].format(**fields), "en": template["en"].format(**fields), "es": template["es"].format(**fields), "pt": template["pt"].format(**fields)}]
 
 BRIEF = {
     "ru": [
@@ -280,6 +313,16 @@ BRIEF = {
     "en": [
         "Client: {client}. District: {district}.",
         "Case {act_index} of eight in the '{act}' phase.",
+        "{hook}",
+    ],
+    "es": [
+        "Cliente: {client}. Distrito: {district}.",
+        "Caso {act_index} de ocho en la fase '{act}'.",
+        "{hook}",
+    ],
+    "pt": [
+        "Cliente: {client}. Distrito: {district}.",
+        "Caso {act_index} de oito na fase '{act}'.",
         "{hook}",
     ],
 }
@@ -317,6 +360,38 @@ HOOKS = {
         "An arbolito on Florida took the wallet as collateral and has not been seen since.",
         "The key travelled to Mar del Plata with a shipment and came back without its owner.",
     ],
+    "es": [
+        "La cartera está registrada a nombre de alguien a quien nadie ha encontrado en {years} años.",
+        "Un contratista tenía la clave. Quebró, los papeles se hicieron pulpa, la cartera se quedó.",
+        "El dueño murió, los herederos están en juicio y la frase reposa en una caja fuerte que nadie puede abrir.",
+        "La cuenta está formalmente congelada. En la práctica no queda nadie para descongelarla.",
+        "La frase se dividió entre tres personas. Dos están dispuestas a cooperar.",
+        "La cartera apareció en un inventario. El registro la cataloga como 'miscelánea'.",
+        "La clave salió de la oficina el día del cierre. Junto con la máquina de café.",
+        "Esta cartera fue olvidada tan a fondo que una consulta fiscal tuvo que recordarla.",
+        "La liquidación pasó por una cueva en Florida. Cerró la misma semana, clave incluida.",
+        "La frase fue escrita en el reverso de un boleto de Subte. El boleto apareció; el reverso no.",
+        "El dueño guardaba la clave en una caja en Reconquista. El banco se mudó hace {years} años.",
+        "La sudestada inundó el sótano, y la única persona que conocía la frase se fue con el archivo.",
+        "Un arbolito en Florida tomó la cartera como garantía y no se le ha visto desde entonces.",
+        "La clave viajó a Mar del Plata con un cargamento y regresó sin su dueño."
+    ],
+    "pt": [
+        "A carteira está registrada no nome de alguém que não é encontrado há {years} anos.",
+        "Um empreiteiro tinha a chave. Ele faliu, os papéis viraram celulose, a carteira ficou.",
+        "O dono morreu, os herdeiros estão no tribunal, e a frase repousa num cofre que ninguém consegue abrir.",
+        "A conta está formalmente congelada. Na prática, não sobrou ninguém para descongelá-la.",
+        "A frase foi dividida entre três pessoas. Duas estão dispostas a cooperar.",
+        "A carteira apareceu em um inventário. O registro a cataloga como 'diversos'.",
+        "A chave saiu do escritório no dia do fechamento. Junto com a máquina de café.",
+        "Esta carteira foi esquecida tão profundamente que uma consulta fiscal teve que lembrá-la.",
+        "O pagamento passou por uma cueva na Florida. A cueva fechou na mesma semana, com a chave e tudo.",
+        "A frase foi escrita no verso de um bilhete do Subte. O bilhete apareceu; o verso não.",
+        "O dono guardava a chave numa caixa na Reconquista. O banco mudou-se há {years} anos.",
+        "A sudestada inundou o porão, e a única pessoa que conhecia a frase se foi com o arquivo.",
+        "Um arbolito na Florida pegou a carteira como garantia e não é visto desde então.",
+        "A chave viajou para Mar del Plata com um carregamento e voltou sem seu dono."
+    ],
 }
 
 EPILOGUE = {
@@ -328,6 +403,16 @@ EPILOGUE = {
     "en": [
         "Key recovered. The address is clean: not one transaction has ever touched it —",
         "nothing in, nothing out. See for yourself; SWEEP walks all three paths.",
+        "{payoff}",
+    ],
+    "es": [
+        "Clave recuperada. La dirección está limpia: ni una sola transacción la ha tocado —",
+        "nada entra, nada sale. Compruébalo tú mismo; SWEEP recorre las tres rutas.",
+        "{payoff}",
+    ],
+    "pt": [
+        "Chave recuperada. O endereço está limpo: nem uma única transação a tocou —",
+        "nada entra, nada sai. Verifique você mesmo; SWEEP percorre as três rotas.",
         "{payoff}",
     ],
 }
