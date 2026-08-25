@@ -14,9 +14,8 @@ pasting a live wallet into the terminal cannot leave it sitting on disk.
 from __future__ import annotations
 
 import json
-import os
+from dataclasses import dataclass, field, replace
 import time
-from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -164,7 +163,9 @@ class Journal:
         entry = self.at(position)
         if entry is None:
             return None
-        entry.pinned = not entry.pinned
+        new_entry = replace(entry, pinned=not entry.pinned)
+        self.entries = [new_entry if e is entry else e for e in self.entries]
+        entry = new_entry
         self.save()
         return entry
 

@@ -4,6 +4,7 @@ Two independent implementations of BIP-39/32 are easy to let drift apart; this
 runs the JavaScript one under Node and diffs every field.
 """
 
+import sys
 import json
 import shutil
 import subprocess
@@ -104,7 +105,7 @@ def test_sigils_are_stable_and_distinct(js_results):
 def test_web_data_is_in_sync_with_the_sources():
     """docs/js/*.js are generated; a stale build would ship the wrong quest."""
     completed = subprocess.run(
-        ["python3", "tools/build_web_data.py"],
+        [sys.executable, "tools/build_web_data.py"],
         cwd=ROOT, capture_output=True, text=True, timeout=120,
     )
     assert completed.returncode == 0, completed.stderr

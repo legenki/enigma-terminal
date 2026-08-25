@@ -443,6 +443,7 @@ _WORD_COUNT_TO_ENTROPY_BYTES = {12: 16, 15: 20, 18: 24, 21: 28, 24: 32}
 
 #: Tokens a player may type in place of a word they cannot remember.
 UNKNOWN_TOKENS = frozenset({"?", "*", "_", "...", "??", "???"})
+assert not (UNKNOWN_TOKENS & set(_WORD_INDEX)), "token/word collision"
 
 
 def random_mnemonic(word_count: int = 12) -> tuple[str, bytes]:

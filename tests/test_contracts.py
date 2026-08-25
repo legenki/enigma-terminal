@@ -9,6 +9,7 @@ that wastes a player's evening.
 
 from __future__ import annotations
 
+import sys
 import json
 from pathlib import Path
 
@@ -187,6 +188,19 @@ def test_clue_text_carries_the_numbers_the_solver_uses(cases):
                 assert "COMPLETE" in text
 
 
+def _eval_math(expr: str) -> int:
+    tokens = expr.replace("×", "*").replace("−", "-").split()
+    if len(tokens) == 3:
+        a, op, b = int(tokens[0]), tokens[1], int(tokens[2])
+        if op == '+': return a + b
+        if op == '-': return a - b
+        if op == '*': return a * b
+    elif len(tokens) == 5:
+        a, op, b, op2, c = int(tokens[0]), tokens[1], int(tokens[2]), tokens[3], int(tokens[4])
+        if op == '*' and op2 == '+': return a * b + c
+        if op == '*' and op2 == '-': return a * b - c
+    raise ValueError(f"Unknown math expression: {expr}")
+
 def test_arithmetic_clues_actually_evaluate_to_their_index(cases):
     """The sums MERIDIAN and VEGA print must be true sums."""
     checked = 0
@@ -195,7 +209,7 @@ def test_arithmetic_clues_actually_evaluate_to_their_index(cases):
             continue
         for line, step in zip(case["clues"]["en"][2:], case["solution"]["steps"]):
             expression = line.split("word no.")[1].strip()
-            value = eval(expression.replace("×", "*").replace("−", "-"))  # noqa: S307
+            value = _eval_math(expression)
             assert value == step["index"], f"case {case['id']}: {expression} != {step['index']}"
             checked += 1
     assert checked > 300, "arithmetic dialect barely covered"
@@ -342,7 +356,7 @@ def test_the_board_is_reproducible():
     import subprocess
 
     before = (ROOT / "data" / "contracts.json").read_text(encoding="utf-8")
-    subprocess.run(["python3", "tools/generate_cases.py"], cwd=ROOT,
+    subprocess.run([sys.executable, "tools/generate_cases.py"], cwd=ROOT,
                    capture_output=True, check=True, timeout=300)
     after = (ROOT / "data" / "contracts.json").read_text(encoding="utf-8")
     assert before == after, "the generator is not deterministic"

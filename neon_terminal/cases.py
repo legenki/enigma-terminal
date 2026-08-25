@@ -175,12 +175,20 @@ class Campaign:
             try:
                 board = json.loads(CONTRACTS_FILE.read_text(encoding="utf-8"))
                 self.contracts = [_to_case(item) for item in board["cases"]]
-            except (FileNotFoundError, ValueError, KeyError):
+            except FileNotFoundError:
                 self.contracts = []   # the campaign stands on its own
+            except (ValueError, KeyError) as e:
+                import warnings
+                warnings.warn(f"Failed to load contracts: {e}")
+                self.contracts = []
             try:
                 roster = json.loads(CLIENTS_FILE.read_text(encoding="utf-8"))
                 self.clients = roster["clients"]
-            except (FileNotFoundError, ValueError, KeyError):
+            except FileNotFoundError:
+                self.clients = []
+            except (ValueError, KeyError) as e:
+                import warnings
+                warnings.warn(f"Failed to load clients: {e}")
                 self.clients = []
 
     @property
@@ -233,9 +241,9 @@ class Campaign:
             hits: list[str] = []
             if needle in case.codename(lang).lower():
                 hits.append(case.codename(lang))
-            for field in ("brief", "evidence"):
+            for attr in ("brief", "evidence"):
                 hits += [
-                    line for line in getattr(case, field)(lang)
+                    line for line in getattr(case, attr)(lang)
                     if needle in line.lower()
                 ]
             if progress is None or case.id in progress.solved:

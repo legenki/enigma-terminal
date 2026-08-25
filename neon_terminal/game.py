@@ -196,7 +196,6 @@ class Session:
     active: Case | None = None
     wallet: Wallet | None = None
     running: bool = True
-    history: list[str] = field(default_factory=list)
 
     def t(self, key: str, **fmt) -> str:
         return TEXT[key][self.lang].format(**fmt)
@@ -253,7 +252,7 @@ def cmd_cases(s: Session, _arg: str) -> None:
         )
     solved = sum(1 for case in desk if case.id in s.progress.solved)
     s.screen.rule()
-    s.screen.write(f"  {solved}/{len(desk)} CLOSED · BOARD HAS 256 MORE", "amber")
+    s.screen.write(f"  {solved}/{len(desk)} CLOSED · BOARD HAS {len(s.campaign.contracts)} MORE", "amber")
     s.screen.write()
 
 
@@ -598,11 +597,11 @@ def cmd_decrypt(s: Session, arg: str) -> None:
         return
 
     s.wallet = wallet
-    _record_decrypt(s, wallet, s.campaign.find_by_mnemonic(wallet.mnemonic))
+    owner = s.campaign.find_by_mnemonic(wallet.mnemonic)
+    _record_decrypt(s, wallet, owner)
     s.screen.ok("MNEMONIC CHECKSUM VALID.")
     _print_derivation(s, wallet)
 
-    owner = s.campaign.find_by_mnemonic(wallet.mnemonic)
     if s.active and owner is not None and owner.id == s.active.id:
         _close_case(s, s.active)
     elif owner is not None and owner.id not in s.progress.solved:
@@ -726,7 +725,7 @@ def cmd_sweep(s: Session, _arg: str) -> None:
     header = f"{'PATH':<16}{'ADDRESS':<46}{'TX':>5}  {'RECEIVED':>16}"
     s.screen.write(header, "grey")
     touched = 0
-    for derived, (label, result) in zip(s.wallet.addresses, rows):
+    for derived, (label, result) in zip(s.wallet.addresses, rows, strict=True):
         if isinstance(result, ChainError):
             s.screen.write(f"m/{derived.purpose}'".ljust(16)
                            + derived.address.ljust(46) + "  UNREACHABLE", "red")
@@ -938,7 +937,7 @@ def cmd_status(s: Session, _arg: str) -> None:
 
 
 def cmd_clear(s: Session, _arg: str) -> None:
-    os.system("cls" if os.name == "nt" else "clear")
+    print("\033[2J\033[H", end="", flush=True)
 
 
 def cmd_reset(s: Session, _arg: str) -> None:
@@ -996,7 +995,6 @@ def dispatch(session: Session, line: str) -> None:
     line = line.strip()
     if not line:
         return
-    session.history.append(line)
     head, _, tail = line.partition(" ")
     handler = COMMANDS.get(head.upper())
     if handler is None:

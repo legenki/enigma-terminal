@@ -91,7 +91,7 @@ class Provider:
     name: str
     base: str
     address_path: Callable[[str], str]
-    parse_address: Callable[[str, Any], AddressStats]
+    parse_address: Callable[[Any], AddressStats]
     txs_path: Callable[[str], str] | None = None
     parse_txs: Callable[[Any], list[Transaction]] | None = None
     explorer_url: Callable[[str], str] = field(
