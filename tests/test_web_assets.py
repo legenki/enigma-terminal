@@ -181,3 +181,25 @@ def test_footer_no_longer_carries_the_source_link():
     assert "github.com" not in footer
     assert 'id="crt-switch"' in footer
     assert "github.com/legenki/neon-terminal" in (DOCS / "js" / "gui" / "app.js").read_text()
+
+
+def test_sidebar_clicks_open_the_section_not_the_last_item():
+    """Clicking Case files after reading a contract used to re-open that
+    contract, because the drill-down was never cleared."""
+    source = strip_js_comments((DOCS / "js" / "gui" / "app.js").read_text())
+    assert "openSection(panel" in source
+    assert "onClick: () => this.openSection(panel.id)" in source
+    section = source[source.index("openSection(panel"):]
+    section = section[:section.index("\n  }")]
+    assert "this.activeCaseId = null" in section
+    assert "this.activeClient = null" in section
+
+
+def test_taking_a_contract_is_persisted_in_the_shared_store():
+    core = strip_js_comments((DOCS / "js" / "core.js").read_text())
+    for member in ("take(id)", "drop(id)", "isTaken(id)", "caseload(progress)"):
+        assert member in core, f"core.js lost {member}"
+    # Both front-ends must go through the store, never keep their own list.
+    for module in ("js/engine.js", "js/gui/app.js"):
+        text = strip_js_comments((DOCS / module).read_text())
+        assert "progress.take(" in text, f"{module} never takes a contract"

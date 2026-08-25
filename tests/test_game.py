@@ -48,7 +48,7 @@ def test_help_lists_the_core_commands(session, capsys):
 def test_cases_marks_the_finale_locked(session, capsys):
     run(session, "CASES")
     out = capsys.readouterr().out
-    assert "[LOCKED] 08" in out
+    assert "[LOCKED] 008" in out
     assert "0/8 CLOSED" in out
 
 
@@ -497,3 +497,125 @@ def test_pin_reports_a_bad_position(session, capsys):
 def test_status_reports_the_journal_size(session, capsys):
     run(session, "SEARCH ozo", "STATUS")
     assert "JOURNAL" in capsys.readouterr().out
+
+
+# --- the desk: contracts taken off the board ------------------------------
+
+CONTRACT_ID = 201        # MICA, act 1, first of its client's thirty-two
+
+
+def test_the_desk_starts_as_the_campaign_alone(session, capsys):
+    run(session, "CASES")
+    out = capsys.readouterr().out
+    assert "0/8 CLOSED" in out
+    assert session.progress.taken == set()
+
+
+def test_opening_a_contract_takes_it_onto_the_desk(session, capsys):
+    run(session, f"OPEN {CONTRACT_ID}")
+    out = capsys.readouterr().out
+    assert "TAKEN INTO WORK" in out
+    assert CONTRACT_ID in session.progress.taken
+
+    run(session, "CASES")
+    listing = capsys.readouterr().out
+    assert str(CONTRACT_ID) in listing
+    assert "0/9 CLOSED" in listing
+
+
+def test_taking_the_same_contract_twice_is_quiet(session, capsys):
+    run(session, f"OPEN {CONTRACT_ID}")
+    capsys.readouterr()
+    run(session, f"OPEN {CONTRACT_ID}")
+    assert "TAKEN INTO WORK" not in capsys.readouterr().out
+    assert session.progress.taken == {CONTRACT_ID}
+
+
+def test_taking_a_contract_is_journalled(session, capsys):
+    run(session, f"OPEN {CONTRACT_ID}")
+    capsys.readouterr()
+    entry = session.journal.at(1)
+    assert entry.tool == "case"
+    assert "Taken" in entry.title
+    assert entry.payload["caseId"] == CONTRACT_ID
+
+
+def test_campaign_cases_are_never_taken(session, capsys):
+    run(session, "OPEN 1")
+    assert "TAKEN INTO WORK" not in capsys.readouterr().out
+    assert session.progress.taken == set()
+
+
+def test_a_taken_contract_can_go_back(session, capsys):
+    run(session, f"OPEN {CONTRACT_ID}", f"DROP {CONTRACT_ID}")
+    out = capsys.readouterr().out
+    assert "RETURNED TO THE BOARD" in out
+    assert session.progress.taken == set()
+    assert session.active is None
+
+
+def test_dropping_something_not_on_the_desk_is_refused(session, capsys):
+    run(session, f"DROP {CONTRACT_ID}", "DROP nope")
+    out = capsys.readouterr().out
+    assert "IS NOT ON THE DESK" in out
+    assert "USAGE: DROP" in out
+
+
+def test_a_closed_contract_stays_on_the_desk(session, capsys):
+    from tests.test_contracts import solve
+
+    contract = next(c for c in session.campaign.contracts if c.id == CONTRACT_ID)
+    answer = solve(contract.raw)
+    run(session, f"DECRYPT {answer}")
+    capsys.readouterr()
+    assert CONTRACT_ID in session.progress.solved
+
+    run(session, f"DROP {CONTRACT_ID}", "CASES")
+    out = capsys.readouterr().out
+    assert "CLOSED CASES STAY ON THE DESK" in out
+    assert str(CONTRACT_ID) in out
+
+
+def test_solving_without_opening_still_puts_it_on_the_desk(session, capsys):
+    """A phrase pasted straight into DECRYPT closes a case just the same."""
+    from tests.test_contracts import solve
+
+    contract = next(c for c in session.campaign.contracts if c.id == CONTRACT_ID)
+    run(session, f"DECRYPT {solve(contract.raw)}", "CASES")
+    out = capsys.readouterr().out
+    assert str(CONTRACT_ID) in out
+    assert "1/9 CLOSED" in out
+
+
+def test_clients_lists_the_roster(session, capsys):
+    run(session, "CLIENTS")
+    out = capsys.readouterr().out
+    assert "EIGHT EMPLOYERS" in out
+    assert "СЛЮДА" in out or "MICA" in out
+    assert "0/32" in out
+
+
+def test_board_shows_one_employer(session, capsys):
+    run(session, "BOARD mica")
+    out = capsys.readouterr().out
+    assert "201" in out
+    assert out.count("[  OPEN]") + out.count("[LOCKED]") == 32
+
+
+def test_board_rejects_an_unknown_client(session, capsys):
+    run(session, "BOARD arasaka", "BOARD")
+    out = capsys.readouterr().out
+    assert "NO CLIENT 'ARASAKA'" in out
+    assert "USAGE: BOARD" in out
+
+
+def test_the_campaign_ending_needs_the_campaign(session, capsys):
+    """Closing eight contracts must not trigger ORACLE's finale."""
+    from tests.test_contracts import solve
+
+    eight = [c for c in session.campaign.contracts if c.act == 1][:8]
+    for contract in eight:
+        run(session, f"DECRYPT {solve(contract.raw)}")
+    out = capsys.readouterr().out
+    assert "ALL EIGHT CASES CLOSED" not in out
+    assert len(session.progress.solved) >= 8

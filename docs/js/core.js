@@ -33,11 +33,17 @@ export class ProgressStore {
   static read() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return { solved: [], hints: {} };
+      if (!raw) return { solved: [], hints: {}, taken: [] };
       const parsed = JSON.parse(raw);
-      return { solved: parsed.solved || [], hints: parsed.hints || {} };
+      return {
+        solved: parsed.solved || [],
+        hints: parsed.hints || {},
+        // Contracts the player has picked up off the board. Saves from before
+        // the board existed simply have none.
+        taken: parsed.taken || [],
+      };
     } catch {
-      return { solved: [], hints: {} };
+      return { solved: [], hints: {}, taken: [] };
     }
   }
 
@@ -63,6 +69,34 @@ export class ProgressStore {
     return this.data.hints;
   }
 
+  get taken() {
+    return this.data.taken;
+  }
+
+  isTaken(id) {
+    return this.data.taken.includes(Number(id));
+  }
+
+  /** Pick a contract up off the board. Returns true the first time. */
+  take(id) {
+    const key = Number(id);
+    if (this.data.taken.includes(key)) return false;
+    this.data.taken.push(key);
+    this.save();
+    return true;
+  }
+
+  /** Put an unsolved contract back. Solved work stays on the desk. */
+  drop(id) {
+    const key = Number(id);
+    if (this.isSolved(key)) return false;
+    const before = this.data.taken.length;
+    this.data.taken = this.data.taken.filter((entry) => entry !== key);
+    if (this.data.taken.length === before) return false;
+    this.save();
+    return true;
+  }
+
   isSolved(id) {
     return this.data.solved.includes(id);
   }
@@ -85,7 +119,7 @@ export class ProgressStore {
   }
 
   reset() {
-    this.data = { solved: [], hints: {} };
+    this.data = { solved: [], hints: {}, taken: [] };
     this.save();
   }
 }
@@ -129,6 +163,19 @@ export function loadContracts() {
       return [];
     });
   return contractsPromise;
+}
+
+/**
+ * The detective's desk: the campaign, plus every contract taken off the board
+ * or already solved. Solved work counts even if it was never formally taken —
+ * a phrase pasted straight into DECRYPT closes a case just the same.
+ */
+export function caseload(progress) {
+  const wanted = new Set([...progress.taken, ...progress.solved]);
+  return [
+    ...CAMPAIGN_CASES,
+    ...contracts.filter((entry) => wanted.has(entry.id)),
+  ];
 }
 
 export const clientBySlug = (slug) => CLIENTS.find((client) => client.slug === slug) || null;

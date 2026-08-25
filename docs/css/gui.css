@@ -704,3 +704,19 @@ a { color: var(--cyan); }
 }
 
 .card.client + .card.client { margin-top: 6px; }
+
+/* ---------- the desk: a taken contract can be handed back ---------------- */
+
+.case-row { display: flex; align-items: stretch; }
+.case-row .card__row { flex: 1; min-width: 0; }
+
+.case-row__drop {
+  flex: none;
+  padding: 0 11px;
+  border: 0;
+  border-left: 1px solid var(--neon-deep);
+  color: var(--ink-soft);
+  background: transparent;
+}
+
+.case-row__drop:hover { color: var(--danger); background: var(--panel-hi); box-shadow: none; }

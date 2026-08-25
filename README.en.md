@@ -74,6 +74,7 @@ python -m neon_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # one-shot commands
 | `OPEN <id>` | open a case: brief, evidence, decoding table |
 | `CLIENTS` | the eight employers and their counts |
 | `BOARD <client>` | one employer's thirty-two contracts |
+| `DROP <id>` | return an unsolved contract to the board |
 | `BRIEF` / `EVIDENCE` / `CLUES` | re-read the active case |
 | `HINT` | spend one of three hints |
 | `WORD <n>` / `INDEX <word>` / `SEARCH <prefix>` | BIP-39 wordlist tools |
@@ -117,6 +118,11 @@ A client is not a skin. It sets the **hand**: the way words are hidden in their 
 | GOST-9 | agency of a state that ended | one word redacted, recovered with `COMPLETE` |
 | MICA | mineral conglomerate | mirrored: index = 2049 − the number given |
 | LAST ARCHIVE | archivists, paid in information | a chain of wordlist neighbours |
+
+**The board and the desk are different things.** Contracts is work on offer; Case files is your
+desk. Opening a contract puts it on the desk and keeps it there between sessions; an unsolved one
+can go back (`DROP <id>`, or the cross in the list), a closed one stays for good. The sidebar
+meter tracks the desk — 8 of 264 would tell a player nothing.
 
 Hand-writing 256 cases means three thousand riddles, and they would be bad ones. So the creative
 work sits in two places that scale: `data/clients.json` holds the voices and

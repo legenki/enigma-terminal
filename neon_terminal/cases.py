@@ -68,10 +68,11 @@ class Case:
 
 @dataclass
 class Progress:
-    """Solved cases and used hints, persisted between sessions."""
+    """Solved cases, used hints and the contracts on the desk."""
 
     solved: set[int] = field(default_factory=set)
     hints_used: dict[int, int] = field(default_factory=dict)
+    taken: set[int] = field(default_factory=set)
     path: Path | None = None
 
     @classmethod
@@ -91,6 +92,8 @@ class Progress:
         return cls(
             solved={int(i) for i in data.get("solved", [])},
             hints_used={int(k): int(v) for k, v in data.get("hints_used", {}).items()},
+            # Saves made before the contract board existed simply have none.
+            taken={int(i) for i in data.get("taken", [])},
             path=path,
         )
 
@@ -102,7 +105,8 @@ class Progress:
             self.path.write_text(
                 json.dumps(
                     {"solved": sorted(self.solved),
-                     "hints_used": {str(k): v for k, v in self.hints_used.items()}},
+                     "hints_used": {str(k): v for k, v in self.hints_used.items()},
+                     "taken": sorted(self.taken)},
                     indent=2,
                 ),
                 encoding="utf-8",
@@ -119,9 +123,26 @@ class Progress:
         self.save()
         return self.hints_used[case_id]
 
+    def take(self, case_id: int) -> bool:
+        """Pick a contract up off the board. True the first time."""
+        if case_id in self.taken:
+            return False
+        self.taken.add(case_id)
+        self.save()
+        return True
+
+    def drop(self, case_id: int) -> bool:
+        """Put an unsolved contract back. Closed work stays on the desk."""
+        if case_id in self.solved or case_id not in self.taken:
+            return False
+        self.taken.discard(case_id)
+        self.save()
+        return True
+
     def reset(self) -> None:
         self.solved.clear()
         self.hints_used.clear()
+        self.taken.clear()
         self.save()
 
 
@@ -171,6 +192,15 @@ class Campaign:
 
     def cases_for_client(self, slug: str) -> list[Case]:
         return [case for case in self.contracts if case.client == slug]
+
+    def caseload(self, progress: Progress) -> list[Case]:
+        """The desk: the campaign plus contracts taken or already closed.
+
+        Solved work counts even if it was never formally taken — a phrase pasted
+        straight into DECRYPT closes a case just the same.
+        """
+        wanted = progress.taken | progress.solved
+        return self.cases + [case for case in self.contracts if case.id in wanted]
 
     def prologue(self, lang: str) -> list[str]:
         return list(_pick(self._prologue, lang))

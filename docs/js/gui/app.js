@@ -8,7 +8,7 @@
 import { el, replace, win, section, notice, badge, kv, table, empty } from './dom.js';
 import {
   CAMPAIGN_CASES, CLIENTS, META, ProgressStore, allCases, caseById, caseForMnemonic,
-  caseState, casesForClient, clientBySlug, completeMnemonic, contractsLoaded,
+  caseState, caseload, casesForClient, clientBySlug, completeMnemonic, contractsLoaded,
   isUnlocked, loadContracts, missingRequirements, pick, randomMnemonic,
   searchCases, searchWordlist, MnemonicError,
 } from '../core.js';
@@ -89,6 +89,15 @@ const T = {
   },
   acts: { en: 'Acts', ru: 'Фазы' },
   backToClients: { en: 'All clients', ru: 'К заказчикам' },
+  campaign: { en: 'ORACLE archive', ru: 'Архив ORACLE' },
+  taken: { en: 'Taken contracts', ru: 'Взятые контракты' },
+  takenNone: {
+    en: 'No contracts taken yet. Open one on the board and it lands here.',
+    ru: 'Контрактов пока нет. Открой любой на доске — он ляжет сюда.',
+  },
+  tookIt: { en: 'Taken into work', ru: 'Взято в работу' },
+  drop: { en: 'Return to board', ru: 'Вернуть на доску' },
+  openBoard: { en: 'Open the board', ru: 'Открыть доску' },
 };
 
 const t = (key, lang) => T[key][lang] || T[key].en;
@@ -180,6 +189,17 @@ export class GuiApp {
     this.content.scrollTop = 0;
   }
 
+  /**
+   * What a sidebar click means: show me that section, from the top.
+   * Without clearing the drill-down, clicking Case files after reading a
+   * contract re-opened that contract instead of listing the desk.
+   */
+  openSection(panel) {
+    if (panel === 'cases') this.activeCaseId = null;
+    if (panel === 'board') this.activeClient = null;
+    this.go(panel);
+  }
+
   panelKey() {
     if (this.panel === 'cases' && this.activeCaseId !== null) {
       return `cases:${this.activeCaseId}`;
@@ -227,8 +247,11 @@ export class GuiApp {
   // ---- sidebar ----------------------------------------------------------
 
   paintNav() {
-    const solved = this.progress.solved.length;
-    const percent = Math.round((solved / CAMPAIGN_CASES.length) * 100);
+    // The meter tracks the desk — campaign plus taken contracts — not the
+    // whole board, which would sit at 8/264 forever and tell the player nothing.
+    const desk = caseload(this.progress);
+    const solved = desk.filter((entry) => this.progress.isSolved(entry.id)).length;
+    const percent = desk.length ? Math.round((solved / desk.length) * 100) : 0;
     replace(this.nav,
       el('ul', { class: 'nav__list' },
         ...PANELS.map((panel) =>
@@ -237,13 +260,13 @@ export class GuiApp {
               class: 'nav__item',
               type: 'button',
               'aria-current': this.panel === panel.id ? 'true' : 'false',
-              onClick: () => this.go(panel.id),
+              onClick: () => this.openSection(panel.id),
             },
             el('span', { text: pick(panel.label, this.lang) }),
             el('span', { class: 'nav__key', text: panel.key }))))),
       el('div', { class: 'nav__sep' }),
       el('div', { class: 'nav__meter' },
-        el('div', { text: `${solved}/${CAMPAIGN_CASES.length} ${t('closedCount', this.lang)}` }),
+        el('div', { text: `${solved}/${desk.length} ${t('closedCount', this.lang)}` }),
         el('div', { class: 'nav__bar' }, el('span', { style: `width:${percent}%` }))),
       el('div', { class: 'nav__sep' }),
       el('div', { class: 'nav__meter' },
@@ -450,28 +473,68 @@ export class GuiApp {
 
   // ---- cases ------------------------------------------------------------
 
-  buildCaseList() {
-    const rows = CAMPAIGN_CASES.map((caseFile) => {
-      const state = caseState(caseFile, this.progress);
-      return el('div', { class: 'card' },
-        el('button', {
-          class: 'card__row',
-          type: 'button',
-          disabled: state === 'locked',
-          onClick: () => state !== 'locked' && this.go('cases', caseFile.id),
+  caseRow(caseFile, { droppable = false, onDropped = null } = {}) {
+    const lang = this.lang;
+    const state = caseState(caseFile, this.progress);
+    const client = caseFile.client ? clientBySlug(caseFile.client) : null;
+    const row = el('button', {
+      class: 'card__row',
+      type: 'button',
+      disabled: state === 'locked',
+      onClick: () => state !== 'locked' && this.go('cases', caseFile.id),
+    },
+    caseSigil(caseFile, { size: 26 }),
+    el('span', { class: 'card__id', text: String(caseFile.id).padStart(2, '0') }),
+    el('div', { class: 'client__head' },
+      el('div', { class: 'card__name', text: pick(caseFile.codename, lang) }),
+      client ? el('div', { class: 'client__kind', text: pick(client.name, lang) }) : null),
+    el('span', { class: 'card__spacer' }),
+    el('span', { class: 'stars', text: '★'.repeat(caseFile.difficulty) }),
+    badge(state === 'solved' ? 'solved' : state === 'locked' ? 'locked' : 'open',
+      t(state, lang)));
+
+    if (!droppable || state === 'solved') return el('div', { class: 'card' }, row);
+    return el('div', { class: 'card case-row' }, row,
+      el('button', {
+        class: 'btn case-row__drop', type: 'button', title: t('drop', lang), text: '✕',
+        onClick: () => {
+          this.progress.drop(caseFile.id);
+          this.panels.delete('cases');
+          this.paintNav();
+          if (onDropped) onDropped();
         },
-        caseSigil(caseFile, { size: 26 }),
-        el('span', { class: 'card__id', text: String(caseFile.id).padStart(2, '0') }),
-        el('span', { class: 'card__name', text: pick(caseFile.codename, this.lang) }),
-        el('span', { class: 'card__spacer' }),
-        el('span', { class: 'stars', text: '★'.repeat(caseFile.difficulty) }),
-        badge(state === 'solved' ? 'solved' : state === 'locked' ? 'locked' : 'open',
-          t(state, this.lang))));
-    });
-    const node = el('div', {},
-      section('ORACLE ARCHIVE', `${this.progress.solved.length}/${CAMPAIGN_CASES.length}`),
-      ...rows);
-    return { node, api: {} };
+      }));
+  }
+
+  buildCaseList() {
+    const lang = this.lang;
+    const node = el('div', {});
+
+    const paint = () => {
+      const desk = caseload(this.progress).filter((entry) => entry.client);
+      const campaignSolved = CAMPAIGN_CASES
+        .filter((entry) => this.progress.isSolved(entry.id)).length;
+      const deskSolved = desk.filter((entry) => this.progress.isSolved(entry.id)).length;
+
+      replace(node,
+        section(t('campaign', lang), `${campaignSolved}/${CAMPAIGN_CASES.length}`),
+        ...CAMPAIGN_CASES.map((caseFile) => this.caseRow(caseFile)),
+        el('div', { style: 'height:16px' }),
+        section(t('taken', lang), desk.length ? `${deskSolved}/${desk.length}` : ''),
+        ...(desk.length
+          ? desk.map((caseFile) => this.caseRow(caseFile, { droppable: true, onDropped: paint }))
+          : [
+            empty(t('takenNone', lang)),
+            el('div', { class: 'row', style: 'justify-content:center' },
+              el('button', {
+                class: 'btn', type: 'button', text: t('openBoard', lang),
+                onClick: () => this.go('board'),
+              })),
+          ]));
+    };
+
+    paint();
+    return { node, api: { paint } };
   }
 
   /** The roster: eight employers, thirty-two contracts each. */
@@ -574,6 +637,17 @@ export class GuiApp {
   buildCaseDetail(caseFile) {
     const lang = this.lang;
     const state = caseState(caseFile, this.progress);
+
+    // Reading a contract is taking it: the board is where work is offered, the
+    // Case files tab is the desk it lands on.
+    if (caseFile.client && state !== 'locked' && this.progress.take(caseFile.id)) {
+      this.panels.delete('cases');
+      this.log('case', `${lang === 'ru' ? 'Взято' : 'Taken'}: ${pick(caseFile.codename, lang)}`, {
+        detail: pick(clientBySlug(caseFile.client).name, lang),
+        payload: { caseId: caseFile.id },
+      });
+      this.paintNav();
+    }
     const hints = pick(caseFile.hints, lang);
     const node = el('div', {});
 
@@ -651,7 +725,9 @@ export class GuiApp {
                 ? [this.t('filedWith', { client: pick(employer.name, lang) })]
                 : []),
               ...pick(caseFile.epilogue, lang)));
-            if (first && this.progress.solved.length === CAMPAIGN_CASES.length) {
+            const campaignDone = CAMPAIGN_CASES
+              .every((entry) => this.progress.isSolved(entry.id));
+            if (first && campaignDone) {
               out.push(notice('ok', lang === 'ru'
                 ? 'Все восемь дел закрыты.' : 'All eight cases closed.'));
             }

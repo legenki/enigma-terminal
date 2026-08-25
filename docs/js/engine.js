@@ -3,7 +3,7 @@
 
 import { CAMPAIGN } from './campaign.js';
 import {
-  CLIENTS, ProgressStore, caseForMnemonic, casesForClient, clientBySlug,
+  CLIENTS, ProgressStore, caseForMnemonic, caseload, casesForClient, clientBySlug,
   completeMnemonic, contractsLoaded, loadContracts, pick, randomMnemonic, searchCases,
 } from './core.js';
 import { WORDLIST_SHA256 } from './wordlist.js';
@@ -49,6 +49,7 @@ const HELP = {
     ['CASES', 'list every case file and its state'],
     ['CLIENTS', 'the eight employers and their contract counts'],
     ['BOARD <client>', "list one employer's thirty-two contracts"],
+    ['DROP <id>', 'return an unsolved contract to the board'],
     ['OPEN <id>', 'open a case file and make it active'],
     ['BRIEF / EVIDENCE / CLUES', 're-read the active case'],
     ['HINT', 'spend a hint on the active case'],
@@ -81,6 +82,7 @@ const HELP = {
     ['CASES', 'список дел и их состояние'],
     ['CLIENTS', 'восемь заказчиков и их счётчики'],
     ['BOARD <заказчик>', 'список из 32 контрактов одного заказчика'],
+    ['DROP <id>', 'вернуть нерешённый контракт на доску'],
     ['OPEN <id>', 'открыть дело и сделать его активным'],
     ['BRIEF / EVIDENCE / CLUES', 'перечитать активное дело'],
     ['HINT', 'потратить подсказку по активному делу'],
@@ -172,6 +174,7 @@ const TEXT = {
     ru: 'ДЕЛО {id} ЗАКРЫТО — СИД СОВПАЛ С СОХРАНЁННЫМ ОТПЕЧАТКОМ',
   },
   filedWith: { en: 'FILED WITH {client}.', ru: 'СДАНО ЗАКАЗЧИКУ: {client}.' },
+  tookIt: { en: 'TAKEN INTO WORK', ru: 'ВЗЯТО В РАБОТУ' },
   notThisCase: {
     en: 'VALID MNEMONIC, BUT IT IS NOT THE KEY TO CASE {id}.',
     ru: 'МНЕМОНИКА ВАЛИДНА, НО ЭТО НЕ КЛЮЧ К ДЕЛУ {id}.',
@@ -276,6 +279,7 @@ export class Engine {
       CASES: this.cmdCases, LS: this.cmdCases,
       CLIENTS: this.cmdClients,
       BOARD: this.cmdBoard,
+      DROP: this.cmdDrop,
       OPEN: this.cmdOpen,
       BRIEF: this.cmdBrief,
       EVIDENCE: this.cmdEvidence,
@@ -335,23 +339,28 @@ export class Engine {
 
   cmdCases() {
     const term = this.term;
+    const desk = caseload(this.progress);
     term.blank();
-    term.print('  CASE FILES // ORACLE ARCHIVE', 'cyan');
+    term.print('  CASE FILES // THE DESK', 'cyan');
     term.rule();
-    for (const caseFile of this.campaign.cases) {
+    for (const caseFile of desk) {
       let mark = '[  OPEN]';
       let style = 'green';
       if (this.isSolved(caseFile.id)) { mark = '[CLOSED]'; style = 'dark'; }
       else if (!this.isUnlocked(caseFile)) { mark = '[LOCKED]'; style = 'grey'; }
       const pointer = this.active && this.active.id === caseFile.id ? '>' : ' ';
       const name = pick(caseFile.codename, this.lang).padEnd(22);
+      const client = caseFile.client ? clientBySlug(caseFile.client) : null;
       term.print(
-        ` ${pointer} ${mark} ${String(caseFile.id).padStart(2, '0')}  ${name} ${'*'.repeat(caseFile.difficulty)}`,
+        ` ${pointer} ${mark} ${String(caseFile.id).padStart(3, '0')}  ${name} `
+        + `${'*'.repeat(caseFile.difficulty).padEnd(5)} `
+        + (client ? pick(client.name, this.lang) : ''),
         style,
       );
     }
+    const solved = desk.filter((entry) => this.progress.isSolved(entry.id)).length;
     term.rule();
-    term.print(`  ${this.progress.solved.length}/${this.campaign.cases.length} CLOSED`, 'amber');
+    term.print(`  ${solved}/${desk.length} CLOSED · BOARD HAS 256 MORE`, 'amber');
     term.blank();
   }
 
@@ -443,7 +452,34 @@ export class Engine {
       return;
     }
     this.active = caseFile;
+    if (caseFile.client && this.progress.take(caseFile.id)) {
+      const client = clientBySlug(caseFile.client);
+      this.log('case', `Taken: ${pick(caseFile.codename, this.lang)}`, {
+        detail: pick(client.name, this.lang),
+        payload: { caseId: caseFile.id },
+      });
+      this.term.print(
+        `[ OK ] ${this.t('tookIt')} — ${pick(client.name, this.lang)}`, 'green');
+    }
     this.showCase(caseFile);
+  }
+
+  cmdDrop(argument) {
+    const id = parseInt(argument.trim(), 10);
+    if (!Number.isInteger(id)) {
+      this.term.print('[WARN] USAGE: DROP <case id>', 'amber');
+      return;
+    }
+    if (this.progress.isSolved(id)) {
+      this.term.print('[WARN] CLOSED CASES STAY ON THE DESK.', 'amber');
+      return;
+    }
+    if (!this.progress.drop(id)) {
+      this.term.print(`[FATAL] CASE ${id} IS NOT ON THE DESK.`, 'red');
+      return;
+    }
+    if (this.active && this.active.id === id) this.active = null;
+    this.term.print(`[ OK ] CASE ${id} RETURNED TO THE BOARD.`, 'green');
   }
 
   requireCase() {
@@ -788,7 +824,9 @@ export class Engine {
     if (firstTime) term.typeLines(epilogue, 'white', 320);
     else term.printLines(epilogue, 'white');
     term.rule('=');
-    if (this.progress.solved.length === this.campaign.cases.length) {
+    // Eight *campaign* cases, not eight solved cases of any kind: a player who
+    // closes eight contracts has not finished ORACLE's archive.
+    if (this.campaign.cases.every((entry) => this.progress.isSolved(entry.id))) {
       term.blank();
       term.print(`  ${this.t('allDone')}`, 'amber');
     }

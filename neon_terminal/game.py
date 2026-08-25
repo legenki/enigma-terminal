@@ -33,7 +33,8 @@ HELP_TEXT = {
     "en": [
         ("HELP", "this list"),
         ("LANG RU|EN", "switch narrative language"),
-        ("CASES", "list every case file and its state"),
+        ("CASES", "the desk: campaign plus taken contracts"),
+        ("CLIENTS", "the eight employers and their contract counts"),
         ("OPEN <id>", "open a case file and make it active"),
         ("BRIEF / EVIDENCE / CLUES", "re-read the active case"),
         ("HINT", "spend a hint on the active case"),
@@ -64,7 +65,8 @@ HELP_TEXT = {
     "ru": [
         ("HELP", "этот список"),
         ("LANG RU|EN", "язык повествования"),
-        ("CASES", "список дел и их состояние"),
+        ("CASES", "рабочий стол: кампания плюс взятые контракты"),
+        ("CLIENTS", "восемь заказчиков и их счётчики"),
         ("OPEN <id>", "открыть дело и сделать его активным"),
         ("BRIEF / EVIDENCE / CLUES", "перечитать активное дело"),
         ("HINT", "потратить подсказку по активному делу"),
@@ -114,6 +116,14 @@ TEXT = {
     "filed_with": {
         "en": "FILED WITH {client}.",
         "ru": "СДАНО ЗАКАЗЧИКУ: {client}.",
+    },
+    "took_it": {
+        "en": "TAKEN INTO WORK — {client}",
+        "ru": "ВЗЯТО В РАБОТУ — {client}",
+    },
+    "not_on_desk": {
+        "en": "CASE {id} IS NOT ON THE DESK.",
+        "ru": "ДЕЛА {id} НЕТ НА СТОЛЕ.",
     },
     "not_this_case": {
         "en": "VALID MNEMONIC, BUT IT IS NOT THE KEY TO CASE {id}.",
@@ -220,10 +230,11 @@ def cmd_lang(s: Session, arg: str) -> None:
 
 
 def cmd_cases(s: Session, _arg: str) -> None:
+    desk = s.campaign.caseload(s.progress)
     s.screen.write()
-    s.screen.write("  CASE FILES // ORACLE ARCHIVE", "cyan", "bold")
+    s.screen.write("  CASE FILES // THE DESK", "cyan", "bold")
     s.screen.rule()
-    for case in s.campaign.cases:
+    for case in desk:
         unlocked = s.campaign.is_unlocked(case, s.progress)
         if case.id in s.progress.solved:
             mark, styles = "[CLOSED]", ("dark",)
@@ -233,13 +244,16 @@ def cmd_cases(s: Session, _arg: str) -> None:
             mark, styles = "[  OPEN]", ("green",)
         stars = "*" * case.difficulty
         pointer = ">" if s.active and s.active.id == case.id else " "
+        client = s.campaign.client(case.client) if case.client else None
+        employer = client["name"][s.lang] if client else ""
         s.screen.write(
-            f" {pointer} {mark} {case.id:02d}  {case.codename(s.lang):<22} {stars}", *styles
+            f" {pointer} {mark} {case.id:03d}  {case.codename(s.lang):<22} "
+            f"{stars:<5} {employer}",
+            *styles,
         )
+    solved = sum(1 for case in desk if case.id in s.progress.solved)
     s.screen.rule()
-    s.screen.write(
-        f"  {len(s.progress.solved)}/{len(s.campaign.cases)} CLOSED", "amber"
-    )
+    s.screen.write(f"  {solved}/{len(desk)} CLOSED · BOARD HAS 256 MORE", "amber")
     s.screen.write()
 
 
@@ -272,7 +286,87 @@ def cmd_open(s: Session, arg: str) -> None:
         s.screen.error(s.t("locked", req=missing))
         return
     s.active = case
+    if case.client and s.progress.take(case.id):
+        client = s.campaign.client(case.client)
+        name = client["name"][s.lang] if client else case.client
+        _log(s, "case", f"Taken: {case.codename(s.lang)}", detail=name,
+             payload={"caseId": case.id})
+        s.screen.ok(s.t("took_it", client=name))
     _show_case(s, case)
+
+
+def cmd_clients(s: Session, _arg: str) -> None:
+    """The eight employers and how far the player has got with each."""
+    if not s.campaign.clients:
+        s.screen.error("CONTRACT BOARD UNAVAILABLE.")
+        return
+    s.screen.write()
+    s.screen.write("  CONTRACT BOARD // EIGHT EMPLOYERS", "cyan", "bold")
+    s.screen.rule()
+    for client in s.campaign.clients:
+        cases = s.campaign.cases_for_client(client["slug"])
+        solved = sum(1 for case in cases if case.id in s.progress.solved)
+        print(
+            s.screen.paint(f"  {client['order']:02d} ", "dark")
+            + s.screen.paint(f"{client['name'][s.lang]:<20}", "magenta")
+            + s.screen.paint(f"{solved:>2}/{len(cases)} ", "green" if solved else "grey")
+            + s.screen.paint(client["kind"][s.lang], "grey")
+        )
+        s.screen.write(f"     {client['slug']} · {client['district'][s.lang]}", "dark")
+    s.screen.rule()
+    s.screen.write("  BOARD <client> TO OPEN ONE", "grey")
+    s.screen.write()
+
+
+def cmd_board(s: Session, arg: str) -> None:
+    """One employer's thirty-two contracts."""
+    slug = arg.strip().lower()
+    if not slug:
+        s.screen.warn("USAGE: BOARD <client>  (see CLIENTS)")
+        return
+    client = s.campaign.client(slug)
+    if client is None:
+        s.screen.error(f"NO CLIENT '{slug.upper()}'. RUN CLIENTS.")
+        return
+    s.screen.write()
+    s.screen.write(f"  {client['name'][s.lang]} // {client['district'][s.lang]}",
+                   "magenta", "bold")
+    s.screen.lines(client["creed"][s.lang], "white")
+    s.screen.write()
+    s.screen.write(f"  {client['dialect'][s.lang]}", "cyan")
+    s.screen.rule()
+    for case in s.campaign.cases_for_client(slug):
+        solved = case.id in s.progress.solved
+        locked = any(req not in s.progress.solved for req in case.requires)
+        mark = "[CLOSED]" if solved else "[LOCKED]" if locked else "[  OPEN]"
+        style = "dark" if solved else "grey" if locked else "green"
+        on_desk = "*" if case.id in s.progress.taken else " "
+        s.screen.write(
+            f"  {mark}{on_desk}{case.id:03d}  {case.codename(s.lang):<24} "
+            f"{'*' * case.difficulty:<5} {case.archetype}",
+            style,
+        )
+    s.screen.rule()
+    s.screen.write("  OPEN <id> TAKES A CONTRACT ONTO THE DESK", "grey")
+    s.screen.write()
+
+
+def cmd_drop(s: Session, arg: str) -> None:
+    """Return an unsolved contract to the board."""
+    try:
+        case_id = int(arg.strip())
+    except ValueError:
+        s.screen.warn("USAGE: DROP <case id>")
+        return
+    if case_id in s.progress.solved:
+        s.screen.warn("CLOSED CASES STAY ON THE DESK.")
+        return
+    if not s.progress.drop(case_id):
+        s.screen.error(s.t("not_on_desk", id=case_id))
+        return
+    if s.active and s.active.id == case_id:
+        s.active = None
+    s.screen.ok(f"CASE {case_id} RETURNED TO THE BOARD.")
 
 
 def cmd_brief(s: Session, _arg: str) -> None:
@@ -538,7 +632,8 @@ def _close_case(s: Session, case: Case) -> None:
     else:
         s.screen.lines(case.epilogue(s.lang), "white")
     s.screen.rule("=")
-    if len(s.progress.solved) == len(s.campaign.cases):
+    # The campaign, not any eight cases: closing eight contracts is not the end.
+    if all(entry.id in s.progress.solved for entry in s.campaign.cases):
         s.screen.write()
         s.screen.write("  " + s.t("all_done"), "amber", "bold")
     s.screen.write()
@@ -872,6 +967,9 @@ COMMANDS = {
     "WORD": cmd_word,
     "INDEX": cmd_index,
     "SEARCH": cmd_search,
+    "CLIENTS": cmd_clients,
+    "BOARD": cmd_board,
+    "DROP": cmd_drop,
     "ARCHIVE": cmd_archive,
     "RANDOM": cmd_random, "ROLL": cmd_random,
     "COMPLETE": cmd_complete, "FIND": cmd_complete,
