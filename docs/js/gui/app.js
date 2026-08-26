@@ -485,7 +485,7 @@ export class GuiApp {
       board: () => this.buildBoard(),
       decrypt: () => this.buildDecrypt(),
       ledger: () => this.buildLedger(),
-      search: () => this.buildSearch(),
+      archive: () => this.buildArchive(),
       random: () => this.buildRandom(),
       journal: () => this.buildJournal(),
       about: () => this.buildAbout(),
