@@ -2506,7 +2506,7 @@ export class GuiApp {
         { class: 'row' },
         el('a', {
           class: 'btn',
-          href: 'https://github.com/legenki/neon-terminal',
+          href: 'https://github.com/legenki/enigma-terminal',
           target: '_blank',
           rel: 'noopener',
           text: 'Source on GitHub ↗',

@@ -218,7 +218,7 @@ def test_the_banner_carries_the_switch_and_not_a_source_link():
     assert 'id="light-switch"' in banner
     assert 'id="power-led"' in banner
     assert "github.com" not in banner
-    assert "github.com/legenki/neon-terminal" in (DOCS / "js" / "gui" / "app.js").read_text()
+    assert "github.com/legenki/enigma-terminal" in (DOCS / "js" / "gui" / "app.js").read_text()
 
 
 def test_sidebar_clicks_open_the_section_not_the_last_item():

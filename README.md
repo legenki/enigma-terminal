@@ -14,7 +14,7 @@ into a seed with PBKDF2-HMAC-SHA512, and walked through BIP-32 over secp256k1 to
 produce addresses of all three kinds — whose balances are then fetched with live
 HTTP calls to public block explorers.
 
-▶ **Play in the browser: <https://legenki.github.io/neon-terminal/>**
+▶ **Play in the browser: <https://legenki.github.io/enigma-terminal/>**
 
 ---
 
@@ -40,7 +40,7 @@ languages — after a stretch where the web build listed three commands that ans
 
 ### Web
 
-Open <https://legenki.github.io/neon-terminal/>, or serve it locally:
+Open <https://legenki.github.io/enigma-terminal/>, or serve it locally:
 
 ```bash
 python3 -m http.server 8000 --directory docs
@@ -50,8 +50,8 @@ python3 -m http.server 8000 --directory docs
 ### Terminal
 
 ```bash
-git clone https://github.com/legenki/neon-terminal
-cd neon-terminal
+git clone https://github.com/legenki/enigma-terminal
+cd enigma-terminal
 python -m enigma_terminal          # no dependencies required
 ```
 
@@ -335,14 +335,14 @@ tools/generate_cases.py    builds the 256-contract board
 tools/build_web_data.py    generates the web build's data from data/
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
-tests/                     341 tests, including the Python ↔ JavaScript diff
+tests/                     342 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests -v          # 341 tests
+python -m pytest tests -v          # 342 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 

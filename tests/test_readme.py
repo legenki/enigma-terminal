@@ -109,3 +109,23 @@ def test_no_removed_feature_is_still_documented(readme):
     for gone in (r"crt\.js", r"\bF2\b", r"\bCRT\b", r"LANG RU\|EN`", r"README\.en\.md",
                  r"\bGUI\b(?!-)\s*(?:режим|mode)", r"two modes"):
         assert not re.search(gone, readme), f"the README still describes {gone}"
+
+
+def test_the_published_address_is_the_one_that_answers(readme):
+    """The repository was renamed. GitHub redirects the repo URL; Pages does
+    not, so the old address is a flat 404 — and it was the address the README
+    handed every reader, in three places."""
+    stale = "neon-terminal"
+    assert stale not in readme, "the README still points at the pre-rename name"
+
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    assert stale not in pyproject, "pyproject still points at the pre-rename name"
+
+    about = (ROOT / "docs" / "js" / "gui" / "app.js").read_text(encoding="utf-8")
+    assert stale not in about, "the About panel still links to the pre-rename name"
+
+    # storage.js is the exception, and has to stay: it is the localStorage
+    # prefix a pre-rename save is read from.
+    storage = (ROOT / "docs" / "js" / "storage.js").read_text(encoding="utf-8")
+    assert f"LEGACY_PREFIX = '{stale}/'" in storage, \
+        "the migration away from the old save keys is gone"
