@@ -19,7 +19,7 @@ try:  # `requests` is preferred when present; urllib keeps the game dependency-f
 except ImportError:  # pragma: no cover - exercised only where requests is absent
     requests = None  # type: ignore
 
-USER_AGENT = "enigma-terminal/1.0 (+https://github.com/legenki/neon-terminal)"
+USER_AGENT = "enigma-terminal/1.0 (+https://github.com/legenki/enigma-terminal)"
 SATS_PER_BTC = 100_000_000
 
 

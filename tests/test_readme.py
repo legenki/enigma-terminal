@@ -111,21 +111,47 @@ def test_no_removed_feature_is_still_documented(readme):
         assert not re.search(gone, readme), f"the README still describes {gone}"
 
 
-def test_the_published_address_is_the_one_that_answers(readme):
+def test_nothing_still_points_at_the_pre_rename_address(readme):
     """The repository was renamed. GitHub redirects the repo URL; Pages does
-    not, so the old address is a flat 404 — and it was the address the README
-    handed every reader, in three places."""
+    not, so the old address is a flat 404 — and it was what the README handed
+    every reader, in three places.
+
+    Checked over the whole tree rather than the files that were known to carry
+    it: the first sweep fixed the README, pyproject and the About panel, and
+    missed the User-Agent the explorers actually receive.
+    """
     stale = "neon-terminal"
-    assert stale not in readme, "the README still points at the pre-rename name"
 
-    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
-    assert stale not in pyproject, "pyproject still points at the pre-rename name"
+    # Two places keep the old name on purpose, and would cost real damage to
+    # "fix": one is the localStorage prefix a pre-rename save is read from, the
+    # other seeds the RNG that wrote all 256 published contract answers.
+    exempt = {
+        Path("docs/js/storage.js"),
+        Path("tools/generate_cases.py"),
+        Path("data/contracts.json"),
+        Path("tests/test_readme.py"),
+        Path("tests/test_web_assets.py"),
+    }
+    skip_dirs = {".git", ".venv", "node_modules", "__pycache__", ".pytest_cache"}
+    suffixes = {".py", ".js", ".mjs", ".css", ".html", ".md", ".toml", ".yml", ".yaml"}
 
-    about = (ROOT / "docs" / "js" / "gui" / "app.js").read_text(encoding="utf-8")
-    assert stale not in about, "the About panel still links to the pre-rename name"
+    offenders = []
+    for path in ROOT.rglob("*"):
+        if not path.is_file() or path.suffix not in suffixes:
+            continue
+        if set(path.relative_to(ROOT).parts) & skip_dirs:
+            continue
+        if path.relative_to(ROOT) in exempt:
+            continue
+        if stale in path.read_text(encoding="utf-8", errors="ignore"):
+            offenders.append(str(path.relative_to(ROOT)))
 
-    # storage.js is the exception, and has to stay: it is the localStorage
-    # prefix a pre-rename save is read from.
+    assert not offenders, f"these still point at the pre-rename name: {offenders}"
+
+    # And the two exemptions have to still be the thing they are exempt for.
     storage = (ROOT / "docs" / "js" / "storage.js").read_text(encoding="utf-8")
     assert f"LEGACY_PREFIX = '{stale}/'" in storage, \
         "the migration away from the old save keys is gone"
+    generator = (ROOT / "tools" / "generate_cases.py").read_text(encoding="utf-8")
+    assert f'MASTER_SEED = "bip39-{stale}/contract-board/v1"' in generator, \
+        "the board seed moved — every contract answer just changed"

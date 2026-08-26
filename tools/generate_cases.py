@@ -45,6 +45,11 @@ CASES_PER_ACT = CASES_PER_CLIENT // ACTS
 GRID_COLUMNS = 16                # 2048 words as 128 rows x 16 columns
 
 #: Deterministic: the same board every build, on every machine.
+#:
+#: It keeps the pre-rename name and always will. This string seeds the RNG that
+#: writes all 256 answers, so editing it — to tidy it after the rename, say —
+#: regenerates every contract, invalidates every saved game, and changes
+#: mnemonics that are already published. It is an identifier, not a label.
 MASTER_SEED = "bip39-neon-terminal/contract-board/v1"
 
 
