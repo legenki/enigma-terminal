@@ -185,3 +185,31 @@ def test_the_browser_counts_closed_cases_against_the_desk():
     status = status[:status.index("\n  }")]
     assert "caseload(this.progress)" in status, \
         "STATUS is counting against something other than the desk"
+
+
+# --- the sidebar is wired to builders that exist ----------------------------
+
+def test_every_sidebar_panel_has_a_builder(web):
+    """A panel renamed in the list but not in the build map called undefined()
+    and took the whole interface down (7be6869). The row list and the build map
+    are the same list written twice; this compares them."""
+    assert not web["panelsWithoutBuilder"], (
+        "sidebar rows with no builder: " + ", ".join(web["panelsWithoutBuilder"])
+    )
+    assert not web["buildersWithoutPanel"], (
+        "builders no row reaches: " + ", ".join(web["buildersWithoutPanel"])
+    )
+
+
+def test_every_builder_the_map_names_is_defined(web):
+    """The other half of the same bug: a map entry pointing at a method that
+    was never written. `this.buildX()` throws only when someone opens it."""
+    assert not web["missingBuilders"], (
+        "the panel map calls methods GuiApp does not define: "
+        + ", ".join(web["missingBuilders"])
+    )
+
+
+def test_the_digit_shortcuts_cover_the_sidebar(web):
+    assert web["panelKeys"] == [str(n) for n in range(1, len(web["panelKeys"]) + 1)], \
+        f"the sidebar digits are not 1..n: {web['panelKeys']}"

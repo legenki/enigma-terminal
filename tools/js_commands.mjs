@@ -84,9 +84,56 @@ for (const entry of desk) {
     unreachable.push(entry.id);
 }
 
+// The sidebar: its rows, the map that builds them, and the methods that map
+// names. Three lists that have to agree, and once did not.
+const app = await import(join(root, 'docs/js/gui/app.js'));
+const gui = Object.create(app.GuiApp.prototype);
+const built = [];
+const guiProbe = new Proxy(gui, {
+  get(target, prop) {
+    if (
+      typeof prop === 'string' &&
+      prop.startsWith('build') &&
+      prop !== 'buildPanel'
+    ) {
+      built.push(prop);
+      return () => ({ node: null, api: {} });
+    }
+    return target[prop];
+  },
+});
+const panelIds = app.PANELS.map((panel) => panel.id);
+const mapped = {};
+const missingBuilders = [];
+for (const id of panelIds) {
+  built.length = 0;
+  try {
+    app.GuiApp.prototype.buildPanel.call(guiProbe, id);
+    mapped[id] = built[0] || null;
+  } catch (error) {
+    mapped[id] = null;
+    if (!/no builder for panel/.test(error.message))
+      missingBuilders.push(`${id}: ${error.message}`);
+  }
+}
+const defined = Object.getOwnPropertyNames(app.GuiApp.prototype);
+for (const [id, method] of Object.entries(mapped)) {
+  if (method && !defined.includes(method))
+    missingBuilders.push(`${id} -> ${method}`);
+}
+const buildersWithoutPanel = defined
+  .filter((name) => /^build[A-Z]/.test(name) && name !== 'buildPanel')
+  .filter((name) => !Object.values(mapped).includes(name))
+  // These build fragments inside a panel, not panels of their own.
+  .filter((name) => !['buildCaseDetail', 'buildClientBoard'].includes(name));
+
 process.stdout.write(
   JSON.stringify(
     {
+      panelsWithoutBuilder: panelIds.filter((id) => !mapped[id]),
+      buildersWithoutPanel,
+      missingBuilders,
+      panelKeys: app.PANELS.map((panel) => panel.key),
       commands: Object.keys(table),
       broken: Object.entries(table)
         .filter(([, fn]) => typeof fn !== 'function')

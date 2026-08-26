@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>BIP-39: ENIGMA TERMINAL</title>
 <meta name="description" content="A cyberpunk detective quest that derives real Bitcoin addresses from BIP-39 seed phrases and queries the live blockchain.">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="light dark">
 <meta property="og:title" content="BIP-39: ENIGMA TERMINAL">
 <meta property="og:description" content="Recover seed phrases from detective riddles. Real BIP-39 derivation, real block explorer queries, all in the browser.">
 <meta property="og:type" content="website">
@@ -19,16 +19,16 @@
 <body>
 <div id="shell">
 
-  <!-- The glitch banner stays above both modes. -->
+  <!-- The glitch banner stays above the whole interface. -->
   <header id="glitch-bar">
     <canvas id="glitch-canvas" role="img" aria-label="BIP-39: Enigma Terminal"></canvas>
     <div id="light-switch" role="group" aria-label="Daylight">
       <span id="power-led" aria-hidden="true"></span>
-      <span class="switch-label">СВЕТ</span>
+      <span class="switch-label" id="light-caption">Light</span>
       <div class="rocker">
         <button id="light-live" class="rocker__btn" type="button" aria-pressed="false">LIVE</button>
-        <button id="light-day" class="rocker__btn" type="button" aria-pressed="false">ДЕНЬ</button>
-        <button id="light-night" class="rocker__btn" type="button" aria-pressed="false">НОЧЬ</button>
+        <button id="light-day" class="rocker__btn" type="button" aria-pressed="false">DAY</button>
+        <button id="light-night" class="rocker__btn" type="button" aria-pressed="false">NIGHT</button>
       </div>
     </div>
   </header>

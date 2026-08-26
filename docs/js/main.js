@@ -1,4 +1,5 @@
-// Shell: glitch banner on top, the GUI below, the daylight switch at the foot.
+// Shell: the glitch banner on top, the interface below, the daylight switch
+// in the banner.
 //
 // The terminal is no longer a separate mode. It is the first panel in the
 // sidebar, and this file hands its canvas to the GUI to adopt — the Terminal
@@ -40,7 +41,6 @@ const termCanvas = document.getElementById('term-layer');
 const keyboardInput = document.getElementById('keyboard-input');
 const screenFrame = document.getElementById('screen-frame');
 const guiRoot = document.getElementById('gui-root');
-// The lamp lived in the footer, which went with the mode rocker.
 const powerLed = document.getElementById('power-led');
 
 const terminal = new Terminal(termCanvas, {
@@ -70,6 +70,7 @@ const gui = new GuiApp(guiRoot, {
   onLangChange: (code) => {
     store(LANG_KEY, code);
     engine.lang = code;
+    paintLightLabels(code);
   },
   // Called every time the Terminal panel comes on screen. The canvas had no
   // box while it was hidden, so it has nothing to measure until now.
@@ -95,8 +96,28 @@ const lightButtons = {
   dark: document.getElementById('light-night'),
 };
 
-// Written on the document root, not the GUI: the shell around it — footer,
-// ground, switch labels — belongs to the same daylight.
+// The switch sits in the banner, outside the GUI, so it carries its own four
+// languages. It was the last thing on the page still pinned to one.
+const LIGHT_WORDS = {
+  en: { caption: 'Light', live: 'LIVE', light: 'DAY', dark: 'NIGHT' },
+  ru: { caption: 'Свет', live: 'LIVE', light: 'ДЕНЬ', dark: 'НОЧЬ' },
+  es: { caption: 'Luz', live: 'LIVE', light: 'DÍA', dark: 'NOCHE' },
+  pt: { caption: 'Luz', live: 'LIVE', light: 'DIA', dark: 'NOITE' },
+};
+const lightCaption = document.getElementById('light-caption');
+
+function paintLightLabels(code) {
+  const words = LIGHT_WORDS[code] || LIGHT_WORDS.en;
+  // Screen readers announce the page in whatever the player is reading.
+  document.documentElement.lang = code;
+  if (lightCaption) lightCaption.textContent = words.caption;
+  for (const [key, button] of Object.entries(lightButtons)) {
+    button.textContent = words[key];
+  }
+}
+
+// Written on the document root, not the GUI: the shell around it — the ground
+// and the type behind every panel — belongs to the same daylight.
 const daylight = new Daylight(document.documentElement, {
   mode: stored(LIGHT_KEY, 'live'),
 });
@@ -224,6 +245,6 @@ gui.mount();
 loadContracts().then((cases) => {
   if (cases.length) gui.syncFromStorage();
 });
-document.body.classList.add('is-gui');
+paintLightLabels(lang);
 setLight(daylight.mode);
 requestAnimationFrame(frame);

@@ -172,3 +172,26 @@ def test_the_choice_of_light_survives_a_reload():
     main = (DOCS / "js" / "main.js").read_text(encoding="utf-8")
     assert "enigma-terminal/light/v1" in main
     assert "store(LIGHT_KEY, daylight.mode)" in main
+
+
+def test_the_terminal_screen_stays_readable_on_its_fixed_ground():
+    """The screen is the one surface that does not follow the hour, so its
+    contrast is fixed — and three files quote the number. Measure it instead."""
+    script = """
+    import { GROUND, PALETTE } from './docs/js/term.js';
+    import { contrast } from './docs/js/daylight.js';
+    const out = {};
+    for (const [name, colour] of Object.entries(PALETTE)) out[name] = contrast(colour, GROUND);
+    process.stdout.write(JSON.stringify({ ground: GROUND, ratios: out }));
+    """
+    done = subprocess.run(
+        ["node", "--input-type=module", "-e", script],
+        cwd=ROOT, capture_output=True, text=True, timeout=60,
+    )
+    assert done.returncode == 0, done.stderr
+    result = json.loads(done.stdout)
+    assert result["ground"] == "#363248", "the screen changed colour"
+    worst = min(result["ratios"].items(), key=lambda pair: pair[1])
+    assert result["ratios"]["text"] >= 7.0, \
+        f"terminal body text is {result['ratios']['text']:.2f}:1"
+    assert worst[1] >= SOFT_FLOOR, f"{worst[0]} is {worst[1]:.2f}:1 on the screen"

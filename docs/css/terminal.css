@@ -1,40 +1,29 @@
-/* Terminal styling: the page is a CRT sitting in a dark room. */
-
-:root {
-  --phosphor: #39ff8b;
-  --phosphor-dim: #1f8c4d;
-  --tube: #03120b;
-  --bezel: #14181a;
-  --bezel-edge: #05070a;
-  --room: #05070a;
-}
+/* The shell: the page around the interface, and the terminal's own screen.
+ *
+ * Everything that made this a simulated CRT — the phosphor palette, the room
+ * glow, the bezel, the scanline overlay — went with the tube. What is left is
+ * the frame the terminal canvas sits in and the banner above it. The ground
+ * and the type follow the daylight palette like the rest of the interface;
+ * the screen itself does not, because a terminal that drifted with the hour
+ * would stop reading as a terminal.
+ */
 
 * { box-sizing: border-box; }
 
 html, body {
   height: 100%;
   margin: 0;
-  background: var(--room);
-  color: var(--phosphor);
+  background: var(--bg, #faf9f5);
+  color: var(--ink, #141413);
   font-family: "IBM Plex Mono", "Courier New", monospace;
   overflow: hidden;
   overscroll-behavior: none;
 }
 
-/* The room: a faint magenta/cyan glow bleeding in from off-screen. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(60% 50% at 20% 0%, rgba(255, 77, 210, 0.10), transparent 70%),
-    radial-gradient(50% 50% at 90% 100%, rgba(77, 243, 255, 0.08), transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
+/* ---------- the screen --------------------------------------------------- */
 
-/* The screen keeps its own colour whatever the hour: a terminal that drifted
-   with the daylight would stop reading as a terminal. */
+/* One flat colour whatever the hour. The terminal's own palette is measured
+   against this ground: body text 9.8:1, the lowest tone 4.9:1. */
 #screen-frame {
   position: relative;
   flex: 1;
@@ -45,6 +34,8 @@ body::before {
   overflow: hidden;
 }
 
+#screen-frame.is-hidden { display: none; }
+
 #term-layer {
   position: absolute;
   inset: 0;
@@ -53,9 +44,8 @@ body::before {
   display: block;
 }
 
-/* When the shader runs, the 2D canvas is only a texture source. It must stay
-   laid out (its size drives the grid) but must not be seen. */
-
+/* Off-screen rather than hidden: a display:none input cannot take focus, and
+   this one is what feeds every keystroke to the canvas. */
 #keyboard-input {
   position: absolute;
   left: -9999px;
@@ -64,7 +54,7 @@ body::before {
   opacity: 0;
 }
 
-/* ---------- shell: glitch banner, mode switcher ------------------------- */
+/* ---------- shell: the banner and the stage under it --------------------- */
 
 #shell {
   position: relative;
@@ -84,89 +74,11 @@ body::before {
 }
 
 #glitch-bar canvas { display: block; width: 100%; height: 100%; }
+#glitch-canvas { border-radius: var(--radius, 12px); }
 
 #stage { position: relative; min-height: 0; }
 
-/* The terminal frame becomes one of two stacked modes. */
-#screen-frame.is-hidden { display: none; }
-
-/* ---------- retro rocker switch ----------------------------------------- */
-
-/* The lamp and the daylight switch moved into the banner when the footer
-   went with the GUI/CL rocker it existed to hold. */
-#glitch-bar { position: relative; }
-
-/* ---------- the shell follows the hour, in GUI mode ----------------------- */
-/* The command line is a phosphor tube and keeps its own room; the GUI is a
-   daylit desktop, so the ground and the footer around it move with the
-   palette rather than staying a black slab under a pale window. */
-
-html, body.is-gui { background: var(--bg); }
-body.is-gui { color: var(--ink); }
-body.is-gui::before { opacity: 0; }
-body.is-gui .switch-label { color: var(--soft); }
-body.is-gui #glitch-canvas { border-radius: var(--radius, 12px); }
-
-.rocker {
-  display: flex;
-  border: 1px solid #0c1a12;
-  background: #1b2620;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 2px 0 rgba(0, 0, 0, 0.5);
-}
-
-.rocker__btn {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  padding: 7px 20px;
-  color: #5f7a6c;
-  background: linear-gradient(180deg, #2a3830 0%, #1d2721 100%);
-  border: 0;
-  border-right: 1px solid #0c1a12;
-  cursor: pointer;
-  transition: color 120ms linear, background 120ms linear;
-}
-
-.rocker__btn:last-child { border-right: 0; }
-
-.rocker__btn:hover { color: #9dbfae; }
-
-.rocker__btn[aria-pressed="true"] {
-  color: #06120b;
-  background: linear-gradient(180deg, #57ffa0 0%, #23c46e 100%);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
-}
-
-.rocker__btn:focus-visible { outline: 2px solid #4df3ff; outline-offset: 2px; }
-
-@media (max-width: 640px) {
-  .rocker__btn { padding: 7px 14px; }
-}
-
-#power-led {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  flex: none;
-  background: var(--phosphor);
-  box-shadow: 0 0 10px var(--phosphor);
-  transition: background 120ms linear, box-shadow 120ms linear;
-}
-
-#power-led.is-busy {
-  background: #ffc23d;
-  box-shadow: 0 0 12px #ffc23d;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #power-led { transition: none; }
-}
-
-/* ---------- CRT overlay (covers the GUI, where WebGL cannot reach) -------- */
-
-/* ---------- footer switch ------------------------------------------------ */
+/* ---------- the daylight switch, in the banner --------------------------- */
 
 #light-switch {
   position: absolute;
@@ -186,5 +98,63 @@ body.is-gui #glitch-canvas { border-radius: var(--radius, 12px); }
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--phosphor-dim);
+  color: #8b9a92;
+}
+
+.rocker {
+  display: flex;
+  border: 1px solid #0c1a12;
+  background: #1b2620;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.rocker__btn {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  padding: 7px 20px;
+  color: #8b9a92;
+  background: linear-gradient(180deg, #2a3830 0%, #1d2721 100%);
+  border: 0;
+  border-right: 1px solid #0c1a12;
+  cursor: pointer;
+  transition: color 120ms linear, background 120ms linear;
+}
+
+.rocker__btn:last-child { border-right: 0; }
+.rocker__btn:hover { color: #c3d6cb; }
+
+.rocker__btn[aria-pressed="true"] {
+  color: #06120b;
+  background: linear-gradient(180deg, #57ffa0 0%, #23c46e 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.rocker__btn:focus-visible { outline: 2px solid #4df3ff; outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  .rocker__btn { padding: 7px 14px; }
+}
+
+/* Green while the terminal is idle, amber while a command or a network call
+   is in flight. It sits on the banner, which keeps its own dark ground. */
+#power-led {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+  background: #39ff8b;
+  box-shadow: 0 0 10px #39ff8b;
+  transition: background 120ms linear, box-shadow 120ms linear;
+}
+
+#power-led.is-busy {
+  background: #ffc23d;
+  box-shadow: 0 0 12px #ffc23d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #power-led { transition: none; }
 }

@@ -1,11 +1,11 @@
 // A canvas-rendered terminal: fixed character grid, scrollback, typewriter
-// output and a hidden input that keeps mobile keyboards working. Drawing to a
-// 2D canvas rather than DOM text is what lets crt.js push the whole screen
-// through a WebGL post-processing chain.
+// output and a hidden input that keeps mobile keyboards working. The screen is
+// one buffer of rows drawn as glyphs, not DOM text, which is what makes the
+// scrollback cheap and the character grid exact.
 
 //: The screen is one fixed colour whatever the hour outside: a terminal that
 //: changed with the daylight would stop reading as a terminal. Every tone is
-//: measured against the ground — the lowest is 5.1:1, the body text 9.8:1.
+//: measured against the ground — the lowest is 4.9:1, the body text 9.8:1.
 export const GROUND = '#363248';
 
 export const PALETTE = {

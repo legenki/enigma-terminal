@@ -1,7 +1,6 @@
-// The glitch banner that stays pinned above both modes: RGB-split wordmark,
-// scanlines, and occasional horizontal tear slices. Plain 2D canvas — the heavy
-// WebGL CRT pass belongs to the terminal, this only has to survive being on
-// screen all the time.
+// The glitch banner pinned above the interface: RGB-split wordmark, scanlines,
+// and occasional horizontal tear slices. Plain 2D canvas, deliberately cheap —
+// it is on screen the whole time the game is open.
 
 const TITLE = 'BIP-39: ENIGMA TERMINAL';
 const SUBTITLE = 'REAL NET BUILD';

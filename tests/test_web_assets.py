@@ -351,7 +351,7 @@ def test_the_rail_holds_the_two_lookups_permanently():
     assert "journal.all()" not in block, "the rail is mirroring the journal again"
 
     # And the Archive panel is left with the one thing it is named for.
-    archive = source[source.index("  buildSearch() {"):]
+    archive = source[source.index("  buildArchive() {"):]
     archive = archive[:archive.index("\n  }\n")]
     assert "searchArchivePane()" in archive
     for gone in ("searchWordsPane()", "searchCompletePane()", "class: 'tabs'"):

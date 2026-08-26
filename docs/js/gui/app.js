@@ -54,7 +54,7 @@ import {
 
 //: `key` still works as a shortcut — it moved off the row and into the row's
 //: title, so the sidebar reads as a list of places rather than a numbered menu.
-const PANELS = [
+export const PANELS = [
   {
     id: 'terminal',
     glyph: 'terminal',
@@ -96,7 +96,7 @@ const PANELS = [
     key: '5',
   },
   {
-    id: 'search',
+    id: 'archive',
     glyph: 'search',
     label: { en: 'Archive', ru: 'Архив дел', es: 'Archivo', pt: 'Arquivo' },
     key: '6',
@@ -159,7 +159,6 @@ const T = {
     pt: 'Enviar frase semente',
   },
   derive: { en: 'Derive', ru: 'Вывести адреса', es: 'Derivar', pt: 'Derivar' },
-  epilogue: { en: 'Epilogue', ru: 'Эпилог', es: 'Epílogo', pt: 'Epílogo' },
   lockedMsg: {
     en: 'Close these cases first:',
     ru: 'Сначала закрой дела:',
@@ -226,7 +225,6 @@ const T = {
   copy: { en: 'Copy', ru: 'Копировать', es: 'Copiar', pt: 'Copiar' },
   copied: { en: 'Copied', ru: 'Скопировано', es: 'Copiado', pt: 'Copiado' },
   journal: { en: 'Journal', ru: 'Журнал', es: 'Diario', pt: 'Diário' },
-  recent: { en: 'Recent', ru: 'Последнее', es: 'Reciente', pt: 'Recente' },
   railTitle: {
     en: 'Tools',
     ru: 'Инструменты',
@@ -234,12 +232,6 @@ const T = {
     pt: 'Ferramentas',
   },
   navTitle: { en: 'Desk', ru: 'Стол', es: 'Escritorio', pt: 'Mesa' },
-  openJournal: {
-    en: 'Open journal',
-    ru: 'Открыть журнал',
-    es: 'Abrir el diario',
-    pt: 'Abrir o diário',
-  },
   recall: { en: 'Recall', ru: 'Вернуться', es: 'Retomar', pt: 'Retomar' },
   pin: { en: 'Pin', ru: 'Закрепить', es: 'Fijar', pt: 'Fixar' },
   emptyJournal: {
@@ -269,8 +261,6 @@ const T = {
     es: 'Tablero de contratos',
     pt: 'Quadro de contratos',
   },
-  clients: { en: 'Clients', ru: 'Заказчики', es: 'Clientes', pt: 'Clientes' },
-  dossier: { en: 'Dossier', ru: 'Досье', es: 'Expediente', pt: 'Dossiê' },
   dialect: {
     en: 'Puzzle dialect',
     ru: 'Почерк заказчика',
@@ -283,13 +273,6 @@ const T = {
     es: 'Cargando el tablero de contratos…',
     pt: 'Carregando o quadro de contratos…',
   },
-  boardOffline: {
-    en: 'The contract board did not load. The eight campaign cases still work.',
-    ru: 'Доска контрактов не загрузилась. Восемь дел кампании работают.',
-    es: 'El tablero de contratos no se cargó. Los ocho casos de la campaña siguen funcionando.',
-    pt: 'O quadro de contratos não carregou. Os oito casos da campanha continuam funcionando.',
-  },
-  acts: { en: 'Acts', ru: 'Фазы', es: 'Fases', pt: 'Fases' },
   backToClients: {
     en: 'All clients',
     ru: 'К заказчикам',
@@ -313,12 +296,6 @@ const T = {
     ru: 'Контрактов пока нет. Открой любой на доске — он ляжет сюда.',
     es: 'Aún no hay contratos. Abre uno en el tablero y aparecerá aquí.',
     pt: 'Ainda não há contratos. Abra um no quadro e ele aparecerá aqui.',
-  },
-  tookIt: {
-    en: 'Taken into work',
-    ru: 'Взято в работу',
-    es: 'Tomado en trabajo',
-    pt: 'Assumido',
   },
   drop: {
     en: 'Return to board',
@@ -467,12 +444,6 @@ const T = {
     ru: 'Словарь',
     es: 'Lista de palabras',
     pt: 'Lista de palavras',
-  },
-  tabArchive: {
-    en: 'Case archive',
-    ru: 'Архив дел',
-    es: 'Archivo de casos',
-    pt: 'Arquivo de casos',
   },
   tabComplete: {
     en: 'Missing word',
@@ -826,17 +797,21 @@ export class GuiApp {
     if (key.startsWith('client:')) {
       return this.buildClientBoard(key.slice(7));
     }
-    return {
+    const build = {
       cases: () => this.buildCaseList(),
       board: () => this.buildBoard(),
       decrypt: () => this.buildDecrypt(),
       ledger: () => this.buildLedger(),
       terminal: () => this.buildTerminal(),
-      search: () => this.buildSearch(),
+      archive: () => this.buildArchive(),
       random: () => this.buildRandom(),
       journal: () => this.buildJournal(),
       about: () => this.buildAbout(),
-    }[key]();
+    }[key];
+    // A panel id with no builder used to call undefined() and take the whole
+    // interface down. Say what is missing instead of dying.
+    if (!build) throw new Error(`no builder for panel "${key}"`);
+    return build();
   }
 
   render() {
@@ -985,34 +960,6 @@ export class GuiApp {
     return sigil(`enigma-${entry.tool}-${entry.title}`, { size });
   }
 
-  railEntry(entry) {
-    const tool = TOOLS[entry.tool] || { glyph: '·', label: { en: entry.tool } };
-    return el(
-      'li',
-      { class: `rail__item rail__item--${entry.status}` },
-      el(
-        'button',
-        {
-          class: 'rail__btn',
-          type: 'button',
-          title: `${entry.title}${entry.detail ? '\n' + entry.detail : ''}`,
-          onClick: () => this.recall(entry),
-        },
-        this.entrySigil(entry, 16),
-        el(
-          'span',
-          { class: 'rail__text' },
-          el('span', { class: 'rail__title', text: entry.title }),
-          el('span', {
-            class: 'rail__meta',
-            text: `${clock(entry.at)} · ${pick(tool.label, this.lang)}`,
-          }),
-        ),
-        entry.pinned ? el('span', { class: 'rail__pin', text: '★' }) : null,
-      ),
-    );
-  }
-
   /** Take the player back to the tool that produced an entry, re-armed. */
   recall(entry) {
     const { tool, payload = {} } = entry;
@@ -1036,8 +983,8 @@ export class GuiApp {
       return;
     }
     if (tool === 'archive') {
-      this.go('search');
-      this.ensurePanel('search').api.run(payload.query || '');
+      this.go('archive');
+      this.ensurePanel('archive').api.run(payload.query || '');
       return;
     }
     if (tool === 'search' || tool === 'complete') {
@@ -2153,13 +2100,13 @@ export class GuiApp {
    */
   buildTerminal() {
     const node =
-      this.terminalHost || el('div', { class: 'hint-text', text: 'â€”' });
+      this.terminalHost || el('div', { class: 'hint-text', text: '—' });
     return { node, api: {} };
   }
 
   // ---- archive: full-text search across the case files -------------------
 
-  buildSearch() {
+  buildArchive() {
     // One tool, no tabs. The wordlist and the missing-word recovery moved to
     // the rail, where they stay reachable from whatever panel is open.
     const pane = this.searchArchivePane();

@@ -1,202 +1,230 @@
 # BIP-39: ENIGMA TERMINAL
 
-**Текстовый детективный квест, играющий против настоящей сети Bitcoin.**
+**A detective quest played against the live Bitcoin network.**
 
-Буэнос-Айрес, 2077. Судестада не уходит восемнадцатый день, Микросентро стоит по щиколотку,
-а на Флориде арболитос называют три курса доллара сразу. География настоящая: La City,
-Реколета, Дарсена-Сур, Пасео Колон, Баррио-Норте, Бальванера, Каталинас-Норте, Сан-Тельмо.
+Buenos Aires, 2077. The sudestada has not let up in eighteen days, Microcentro is
+ankle-deep, and on Florida the *arbolitos* are quoting three dollar rates at once.
+The geography is real: La City, Recoleta, Dársena Sur, Paseo Colón, Barrio Norte,
+Balvanera, Catalinas Norte, San Telmo.
 
-Игрок восстанавливает сид-фразы из детективных загадок и вводит их в консоль. Под сюжетом
-работает не симуляция, а реальная криптография: фраза проверяется по официальному словарю
-BIP-39 вместе с контрольной суммой, разворачивается в сид через PBKDF2-HMAC-SHA512, затем
-по BIP-32 на кривой secp256k1 выводятся адреса трёх типов — и их баланс запрашивается живым
-HTTP-запросом к публичным блокчейн-эксплорерам.
+You recover seed phrases from detective riddles and type them into the terminal.
+Nothing underneath the story is simulated: a phrase is checked against the official
+BIP-39 English wordlist including the checksum carried by its final word, stretched
+into a seed with PBKDF2-HMAC-SHA512, and walked through BIP-32 over secp256k1 to
+produce addresses of all three kinds — whose balances are then fetched with live
+HTTP calls to public block explorers.
 
-▶ **Играть в браузере: <https://legenki.github.io/neon-terminal/>**
-
-Веб-версия работает в двух режимах, переключаемых тумблером внизу экрана (или клавишей **F2**):
-**GUI** — оконный интерфейс в киберпанк-эстетике (чёрное стекло, неоновые контуры, HUD-уголки)
-и **CL** — та же игра командной строкой. Прогресс и журнал у режимов общие.
-
-Симуляция ЭЛТ теперь накрывает **оба** режима и переключается тумблером `CRT` справа внизу:
-**SOFT** — скан-линии, апертурная решётка, виньетка и мерцание (в CL поверх этого работает
-полноценный WebGL-шейдер с bloom и кривизной трубки), **OFF** — чистая картинка.
-
-*(English version of this README: [README.en.md](README.en.md))*
+▶ **Play in the browser: <https://legenki.github.io/neon-terminal/>**
 
 ---
 
-## Две сборки
+## Two builds, one game
 
-| | Терминал (Python) | Веб (GitHub Pages) |
+| | Terminal (Python) | Web (GitHub Pages) |
 |---|---|---|
-| Запуск | `python -m enigma_terminal` | браузер, без установки |
-| Криптография | чистый Python, стандартная библиотека | чистый JavaScript, без зависимостей |
-| Сеть | `requests` (или `urllib`) | `fetch` прямо из браузера |
-| Картинка | ANSI-цвета, посимвольный вывод | Canvas + WebGL-шейдер ЭЛТ-монитора |
+| Run it | `python -m enigma_terminal` | open the page, nothing to install |
+| Cryptography | pure Python, standard library only | pure JavaScript, no dependencies |
+| Network | `requests`, or `urllib` as a fallback | `fetch`, straight from the browser |
+| Screen | ANSI colour, character-by-character output | canvas terminal inside a windowed interface |
 
-Обе сборки читают одни и те же данные из `data/` и считают **побитово одинаковые** адреса —
-это проверяется тестом `tests/test_web_parity.py`, который прогоняет JS под Node и сверяет
-результат с Python.
+Both read the same data out of `data/` and derive **bit-for-bit identical** addresses.
+That is not a claim, it is a test: `tests/test_web_parity.py` runs the JavaScript under
+Node and diffs every field against Python.
 
-## Быстрый старт
+The command set is held to the same standard. `tests/test_command_parity.py` compares
+what each build advertises in `HELP` against what it can actually dispatch, in all four
+languages — after a stretch where the web build listed three commands that answered
+`UNKNOWN COMMAND`.
 
-### Веб-версия
+## Quick start
 
-Просто откройте <https://legenki.github.io/neon-terminal/>. Локально:
+### Web
+
+Open <https://legenki.github.io/neon-terminal/>, or serve it locally:
 
 ```bash
 python3 -m http.server 8000 --directory docs
-# откройте http://localhost:8000
+# http://localhost:8000
 ```
 
-### Терминальная версия
+### Terminal
 
 ```bash
 git clone https://github.com/legenki/neon-terminal
-cd enigma-terminal
-python -m enigma_terminal            # зависимости не обязательны
+cd neon-terminal
+python -m enigma_terminal          # no dependencies required
 ```
 
-Опционально: `pip install -r requirements.txt` — `requests` даёт более аккуратную работу
-с таймаутами, а `mnemonic` и `bip-utils` нужны только тестам как эталонные реализации.
-
-Полезные флаги:
+Optional: `pip install -r requirements.txt` — `requests` handles timeouts more
+gracefully. `mnemonic` and `bip-utils` are needed only by the tests, as reference
+implementations to check ours against.
 
 ```bash
-python -m enigma_terminal --lang en          # английский текст
-python -m enigma_terminal --offline          # без сети (криптография работает по-настоящему)
-python -m enigma_terminal --speed 0          # отключить анимацию
-python -m enigma_terminal --provider mempool # выбрать эксплорер
-python -m enigma_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # разовый запуск команд
+python -m enigma_terminal --lang en           # ru | en | es | pt
+python -m enigma_terminal --offline           # no network; the crypto still runs for real
+python -m enigma_terminal --speed 0           # no animation
+python -m enigma_terminal --provider mempool  # blockstream | mempool | blockchain
+python -m enigma_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # run and exit
 ```
 
-## Команды
+## The interface
 
-| Команда | Что делает |
-|---|---|
-| `HELP` / `ABOUT` | список команд / что программа делает на самом деле |
-| `LANG RU\|EN` | язык повествования |
-| `CASES` | список из восьми дел и их состояние |
-| `OPEN <id>` | открыть дело: вводная, улики, таблица дешифровки |
-| `CLIENTS` | восемь заказчиков и их счётчики |
-| `BOARD <заказчик>` | 32 контракта одного заказчика |
-| `DROP <id>` | вернуть нерешённый контракт на доску |
-| `BRIEF` / `EVIDENCE` / `CLUES` | перечитать активное дело |
-| `HINT` | потратить подсказку (их три на дело) |
-| `WORD <n>` / `INDEX <слово>` / `SEARCH <префикс>` | инструменты по словарю BIP-39 |
-| `ENTROPY <hex>` | собрать мнемонику из 128 бит энтропии |
-| `DECRYPT <12 слов>` | проверить фразу и вывести сетку деривации |
-| `DERIVE` | повторить вывод адресов |
-| `SYNC_LEDGER [адрес]` | живой запрос баланса в сети Bitcoin |
-| `SWEEP` | проверить сразу все три выведенных адреса |
-| `JOURNAL [инструмент]` | журнал расследования, свежее сверху |
-| `RECALL <n>` | повторить запись n в том же инструменте |
-| `PIN <n>` | закрепить запись, чтобы `PURGE` её не тронул |
-| `PURGE [all]` | очистить журнал |
-| `ARCHIVE <текст>` | полнотекстовый поиск по делам |
-| `RANDOM [12..24]` | сгенерировать новую сид-фразу |
-| `COMPLETE <фраза ?>` | найти недостающее слово фразы |
-| `TXLOG [адрес]` | последние транзакции адреса |
-| `PROVIDER [имя]` | `blockstream` \| `mempool` \| `blockchain` |
-| `EXPLORER` | ссылка на адрес в эксплорере |
-| `STATUS` | статус оператора и прогресс |
-| `COPY` | адреса в буфер обмена (только веб) |
-| `CLEAR` / `RESET` / `EXIT` | очистить экран / стереть прогресс / выйти |
+The web build is one interface with nine panels, reachable by clicking or by pressing
+its digit:
 
-Прогресс сохраняется: в терминале — в `~/.enigma_terminal/progress.json`
-(переопределяется переменной `ENIGMA_TERMINAL_HOME`), в вебе — в `localStorage`.
-
-## Доска контрактов: 8 заказчиков × 32 дела
-
-Кроме восьми написанных вручную дел кампании в игре есть доска из **256 контрактов**,
-разложенных по восьми заказчикам — от частного бюро криминалистики до коллектива архивистов,
-который не платит деньгами. У каждого по 32 дела, разбитых на четыре фазы.
-
-Заказчик — это не скин. Он задаёт **почерк**: способ, которым в его делах спрятаны слова.
-
-| Заказчик | Кто это | Почерк |
+| | Panel | |
 |---|---|---|
-| ESCRIBANÍA CERO · Микросентро | частное бюро криминалистики | энтропия, прямые номера, уникальные ветки |
-| СЕДЬМОЙ ЗНАК · Реколета | серый фонд, аукционный дом | номер слова зашит в цену лота |
-| ГЛУБИНА · Дарсена-Сур | подводные дата-убежища | словарь как сетка 128 × 16 |
-| ВЕГА-ОРБИТАЛ · Пасео Колон | орбитальное хранение ключей | индекс надо вычислить |
-| БЕЛАЯ КОСТЬ · Баррио-Норте | биотех и клиники аренды тела | единственная ветка словаря |
-| MESA DE ENTRADAS · Бальванера | ведомство несуществующего государства | одно слово вымарано, вернуть через `COMPLETE` |
-| SALAR · Каталинас-Норте | минеральный конгломерат | зеркало: номер = 2049 − названный |
-| ПОСЛЕДНИЙ АРХИВ · Сан-Тельмо | архивисты, платят информацией | цепочка соседей по словарю |
+| **1** | Terminal | the full command line, the same one the Python build runs |
+| **2** | Case files | the desk: the campaign plus every contract you have taken |
+| **3** | Contracts | the board, by employer |
+| **4** | Decrypt | a phrase in, a derivation grid out |
+| **5** | Ledger | live balance and transaction lookups |
+| **6** | Archive | full-text search across the case files |
+| **7** | Randomizer | a fresh phrase from real entropy |
+| **8** | Journal | every move you have made, filterable and replayable |
+| **9** | About | what the program actually does |
 
-**Доска и стол — разные вещи.** «Контракты» — это предложенная работа, «Дела» — твой рабочий
-стол. Открыл контракт на доске — он лёг на стол и остался там между сессиями; нерешённый можно
-вернуть обратно (`DROP <id>` или крестик в списке), закрытый остаётся навсегда. Счётчик в
-сайдбаре считает именно стол: показывать 8 из 264 было бы бессмысленно.
+Two lookups sit permanently in the right-hand rail rather than in a panel of their own:
+the **BIP-39 wordlist** and **missing-word recovery**. They are the things you reach for
+mid-thought, and putting them behind a tab meant leaving whatever you were reading to
+use one, and losing the other to see the first.
 
-Написать 256 дел руками — это три тысячи загадок, и они были бы плохими. Поэтому творческая
-работа лежит в двух местах, которые масштабируются: `data/clients.json` хранит голоса, а
-`tools/generate_cases.py` — восемь почерков. Дела собирает генератор, детерминированно: один и
-тот же сид даёт одну и ту же доску, так что пересборка не перетасует чужую игру.
+### The palette follows the hour
 
-Жёсткое ограничение — контрольная сумма: двенадцать произвольных слов почти никогда не образуют
-валидную фразу BIP-39. Поэтому дело строится наоборот — сначала берётся валидная мнемоника, а
-потом каждое её слово описывается почерком заказчика. Ответ существует раньше загадки.
+There is no theme toggle in the usual sense. The interface takes its whole palette from
+the time of day — ivory at noon, near-black at night, warm through the afternoon —
+interpolated across nine keyframes. `DAY` and `NIGHT` pin the clock for players who want
+one look and no drift; `LIVE` lets it move.
 
-**Все 256 дел проверены на решаемость машиной.** В тестах есть решатель, который идёт только по
-подсказкам, собирает двенадцать слов и сверяет их с отпечатком. Если какой-нибудь почерк выдаст
-подсказку, ведущую в никуда, доска не соберётся — вместо того чтобы отнять у игрока вечер.
+Two stretches of the real day are deliberately skipped. Between 05:20–07:20 and
+17:20–20:00 the sky passes through tones where ink and ground come close enough together
+that text stops being comfortable, so the palette holds at the far end and the interface
+crosses in ten seconds instead of easing through. `tests/test_daylight.py` walks all 1440
+minutes and measures: body text never falls below 16:1, secondary text never below 4.8:1.
 
-## Генеративные знаки
+The terminal screen is the one thing that does not move. It stays `#363248` whatever the
+hour, because a terminal that drifted with the daylight would stop reading as a terminal.
+Its own palette is measured against that ground: body text 9.8:1, the lowest tone 4.9:1.
 
-У каждого дела, каждой сид-фразы и каждого адреса есть свой знак —
-[minidenticons](https://github.com/laurentpayot/minidenticons) (MIT, лежит в `docs/js/vendor/`
-вместе с лицензией, чтобы страница не тянула ничего со сторонних CDN). Знаки видны в списке дел,
-в сетке деривации, в журнале и в рейле, так что кошелёк и дело узнаются по картинке, а не только
-по строке из тридцати четырёх символов.
+## Commands
 
-Знак фразы считается по её SHA-256 отпечатку, а не по самим словам — то же правило, что и в
-журнале: незнакомая фраза получает стабильную иконку, но нигде не хранится.
+| Command | What it does |
+|---|---|
+| `HELP` / `ABOUT` | this list / what the program actually does |
+| `LANG RU\|EN\|ES\|PT` | narrative language |
+| `CASES` | the desk: the campaign plus taken contracts |
+| `CLIENTS` | the eight employers and their contract counts |
+| `BOARD <client>` | one employer's thirty-two contracts |
+| `OPEN <id>` | open a case file and make it active |
+| `DROP <id>` | return an unsolved contract to the board |
+| `BRIEF` / `EVIDENCE` / `CLUES` | re-read the active case |
+| `HINT` | spend a hint (three per case) |
+| `WORD <n>` / `INDEX <word>` / `SEARCH <prefix>` | BIP-39 wordlist tools |
+| `ARCHIVE <text>` | full-text search across the case files |
+| `ENTROPY <hex>` | rebuild a mnemonic from 128 bits of entropy |
+| `DECRYPT <12 words>` | validate a phrase and derive its addresses |
+| `DERIVE` | re-print the derivation grid |
+| `COMPLETE <phrase ?>` | recover the one missing word by checksum |
+| `RANDOM [12..24]` | generate a fresh phrase from secure randomness |
+| `SYNC_LEDGER [addr]` | live balance from the Bitcoin network |
+| `SWEEP` | check all three derived addresses at once |
+| `TXLOG [addr]` | the most recent on-chain transactions |
+| `PROVIDER [name]` | `blockstream` \| `mempool` \| `blockchain` |
+| `NETINFO` | probe every explorer node and report its latency |
+| `EXPLORER` | the loaded address in a block explorer |
+| `JOURNAL [tool]` | the investigation journal, newest first |
+| `RECALL <n>` | replay entry *n* in the tool that produced it |
+| `PIN <n>` | pin an entry so `PURGE` keeps it |
+| `PURGE [all]` | clear the journal |
+| `STATUS` | operator status and progress |
+| `COPY` | addresses to the clipboard (web only) |
+| `CLEAR` / `RESET` / `EXIT` | wipe the screen / erase progress / close |
 
-## Журнал расследования
+Short forms exist where they help: `?` for `HELP`, `LS` for `CASES`, `ROLL` for `RANDOM`,
+`FIND` for `COMPLETE`, `SYNC` for `SYNC_LEDGER`, `LOG` for `JOURNAL`, `QUIT` for `EXIT`.
 
-Каждый шаг — деривация, запрос баланса, обход путей, поиск по словарю и по архиву,
-восстановление слова, генерация фразы, взятая подсказка, закрытое дело — попадает в журнал.
-Он общий для GUI и командной строки, переживает перезагрузку страницы и лежит в `localStorage`
-(в терминальной версии — в `~/.enigma_terminal/journal.json`).
+Progress persists: `~/.enigma_terminal/progress.json` in the terminal build (override the
+directory with `ENIGMA_TERMINAL_HOME`), `localStorage` in the browser.
 
-В GUI журнал всегда под рукой: справа рейл с последними записями на любой вкладке, плюс полная
-панель с фильтрами по инструментам, закреплением и выгрузкой в текстовый файл. Кнопка
-**«Вернуться»** повторяет запись в том инструменте, который её породил, — с тем же адресом,
-запросом или фразой. В командной строке то же самое делают `JOURNAL` и `RECALL <n>`.
+## The board: 8 employers × 32 contracts
 
-Панели больше не сбрасываются при переключении: набранная фраза, запрос и найденные кандидаты
-остаются на месте, когда уходишь в другой инструмент и возвращаешься.
+Beyond the eight hand-written campaign cases there is a board of **256 contracts** spread
+across eight employers, thirty-two each, in four phases.
 
-**Что журнал не запоминает.** Сид-фраза, которой игра не знает, в журнал целиком не пишется —
-остаётся только замаскированный след вида `absurd … camera (12 words) — NOT STORED`, а `RECALL`
-по такой записи честно отвечает, что повторять нечего. Полностью сохраняются лишь ответы восьми
-дел (это опубликованные тестовые векторы) и фразы, сгенерированные самой страницей. Так вставка
-рабочего сида в терминал не оставляет его лежать на диске.
+An employer is not a skin. It decides the **handwriting**: the way words are hidden in its
+cases. Each one draws on three of the seven schemes.
 
-## Поиск и рандомизация
+| Employer | District | Who they are |
+|---|---|---|
+| ESCRIBANÍA CERO | Microcentro, La City | private forensic bureau |
+| MARTILLERO | Recoleta | grey fund, auction house |
+| BAJOFONDO | Dársena Sur | subsea data havens |
+| CRUZ DEL SUR | Paseo Colón | orbital key custody |
+| SANATORIO NORTE | Barrio Norte | biotech and body-lease clinics |
+| MESA DE ENTRADAS | Balvanera | residual agency of a state that no longer exists |
+| SALAR | Catalinas Norte | mineral and energy conglomerate |
+| ALEPH | San Telmo, if the rumours are true | archivist collective, does not pay in money |
 
-**`RANDOM`** собирает новую сид-фразу из криптостойкой случайности (`secrets` в Python,
-`crypto.getRandomValues` в браузере) — тем же способом, каким это делает настоящий кошелёк.
-Отсюда и предупреждение в выводе: адреса получаются настоящие, и класть на них деньги нельзя,
-потому что фраза нигде не сохраняется.
+The seven schemes:
 
-**`COMPLETE`** восстанавливает одно забытое слово: ставишь `?` на его место, и инструмент
-перебирает словарь, оставляя те слова, что дают верную контрольную сумму. У 12-словной фразы
-контрольных битов четыре, поэтому подходит примерно каждое шестнадцатое слово — около 128 из 2048.
+| Scheme | The trick |
+|---|---|
+| `index_math` | each line is a sum; the total is the word's index |
+| `mirror_index` | the numbers are mirrored — the real index is 2049 minus the one given |
+| `grid_coords` | the wordlist laid out 128 × 16; index = (row − 1) × 16 + column |
+| `ledger_amounts` | a lot's price in satoshi *is* the index |
+| `unique_prefix` | exactly one word in the list begins that way |
+| `neighbour` | each word sits directly beside the one named |
+| `entropy_pattern` | no words at all, sixteen bytes — feed them to `ENTROPY` |
+| `redacted` | the phrase in full but for one word; the checksum gives it back |
 
-Ровно одна неизвестная позиция — это осознанное ограничение, а не недоделка: при двух пропусках
-валидными остаются сотни тысяч фраз, и список перестаёт что-либо значить. Инструмент помогает
-восстановить фразу, которая у тебя почти есть, и не превращается в перебор чужих кошельков.
+**The board and the desk are different things.** Contracts are work on offer; case files
+are your desk. Take a contract and it lands on the desk and stays there between sessions;
+an unsolved one can go back (`DROP <id>`), a closed one stays forever. The counter tracks
+the desk — 8 of 264 would mean nothing.
 
-**`ARCHIVE`** ищет по текстам дел. Эпилоги попадают в индекс только после того, как дело закрыто, —
-иначе поиск выдавал бы концовку.
+Writing 256 cases by hand would be three thousand riddles and they would be bad ones. So
+the creative work lives in the two places that scale: `data/clients.json` holds the voices,
+`tools/generate_cases.py` holds the eight handwritings. The generator is deterministic —
+the same seed gives the same board, so a rebuild never reshuffles someone's game.
 
-В GUI всё это живёт на вкладках «Поиск» и «Рандомайзер», в командной строке — под теми же именами.
+The hard constraint is the checksum: twelve arbitrary words almost never form a valid
+BIP-39 phrase. So a case is built backwards — take a valid mnemonic first, then describe
+each of its words in the employer's handwriting. The answer exists before the riddle.
 
-## Как выглядит игра
+**All 256 are machine-verified solvable.** The test suite contains a solver that follows
+nothing but the clues, assembles twelve words and checks them against the fingerprint. A
+handwriting that produced a clue leading nowhere would fail the build rather than cost a
+player their evening.
+
+## The investigation journal
+
+Every move — a derivation, a balance lookup, a sweep, a wordlist or archive search, a
+recovered word, a generated phrase, a spent hint, a closed case — lands in the journal.
+It is shared between the terminal and the rest of the interface, survives a reload, and
+lives in `localStorage` (or `~/.enigma_terminal/journal.json` in the terminal build).
+
+**Recall** replays an entry in the tool that produced it, with the same address, query or
+phrase. `RECALL <n>` does the same from the command line.
+
+**What the journal will not remember.** A seed phrase the game does not recognise is never
+written to disk in full — only a masked trace like `absurd … camera (12 words) — NOT STORED`,
+and `RECALL` on such an entry says plainly that there is nothing to replay. Only the eight
+case answers (published test vectors) and phrases this page generated itself are kept
+whole. Pasting a working seed into the terminal does not leave it sitting on disk.
+
+## Generative sigils
+
+Every case, every seed phrase and every address carries its own mark, drawn with
+[minidenticons](https://github.com/laurentpayot/minidenticons) (MIT, vendored into
+`docs/js/vendor/` with its licence so the page pulls nothing from a CDN). Sidebar icons are
+[Feather](https://feathericons.com) (MIT), vendored the same way — as element descriptors
+rather than markup, because nothing in this project builds DOM out of strings.
+
+A phrase's sigil is keyed to its SHA-256 fingerprint, not to the words themselves — the same
+rule the journal follows. An unknown phrase gets a stable icon and is stored nowhere.
+
+## What it looks like
 
 ```
 nullsec@enigma:~$ DECRYPT abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about
@@ -224,7 +252,7 @@ TX COUNT          : 48
 [STATUS] WALLET DRAINED. HISTORY INTACT — RUN TXLOG.
 ```
 
-Ошибка контрольной суммы выглядит ровно так, как задумано ТЗ:
+A broken checksum looks like this, and is meant to:
 
 ```
 nullsec@enigma:~$ DECRYPT abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon
@@ -232,86 +260,95 @@ nullsec@enigma:~$ DECRYPT abandon abandon abandon abandon abandon abandon abando
         THE LAST WORD CARRIES THE CHECKSUM. ONE WRONG WORD BREAKS IT.
 ```
 
-## Про кошельки в игре — важное
+## About the wallets in the game
 
-ТЗ предполагало, что разработчик создаст свои кошельки, положит туда «пыль» и зашифрует их
-слова в загадках. Восемь дел вместо этого построены на **опубликованных тестовых векторах
-BIP-39** (тех самых, из спецификации Trezor). Причины:
+The eight campaign cases are built on **published BIP-39 test vectors** — the ones from the
+Trezor specification — rather than on wallets made for the game. Three reasons:
 
-* это настоящие адреса основной сети с настоящей историей — у первого 48 транзакций начиная
-  с 2013 года, так что `SYNC_LEDGER` показывает подлинные данные, а не выдумку;
-* их приватные ключи известны всему миру, поэтому в них заведомо нет ничего ценного —
-  игра не может случайно превратиться в утечку денег;
-* они воспроизводимы: любой может проверить каждый адрес в любом эксплорере.
+* they are real mainnet addresses with real history. The first has carried
+  transactions since 2013, so `SYNC_LEDGER` shows genuine data rather than an invention;
+* their private keys are known to the entire world, so there is provably nothing in them
+  worth taking. The game cannot accidentally become a leak;
+* they are reproducible: anyone can check every address in any explorer.
 
-**Хотите свои кошельки?** Это ровно три шага:
+**Want your own wallets instead?** Three steps:
 
-1. создайте кошелёк, запишите 12 слов, отправьте на него немного сатоши;
-2. посчитайте отпечаток: `python -c "from enigma_terminal.crypto_engine import fingerprint; print(fingerprint('ваши 12 слов'))"`;
-3. подставьте его в поле `fingerprint` нужного дела в `data/cases.json`, перепишите загадки
-   и выполните `python tools/build_web_data.py`.
+1. create a wallet, write down the twelve words, send it a few satoshi;
+2. compute the fingerprint:
+   `python -c "from enigma_terminal.crypto_engine import fingerprint; print(fingerprint('your twelve words'))"`;
+3. put it in the `fingerprint` field of the case in `data/cases.json`, rewrite the riddles,
+   and run `python tools/build_web_data.py`.
 
-Сами слова в репозиторий класть не нужно — игра хранит только SHA-256 отпечаток и сверяет
-с ним то, что ввёл игрок.
+The words themselves never go into the repository — the game stores only the SHA-256
+fingerprint and checks what the player typed against it.
 
-## Безопасность
+## Security
 
-* Программа **не умеет и не будет уметь** подбирать чужие сид-фразы. Она считает адреса по
-  фразе, которую вы уже знаете, и читает публичные данные блокчейна.
-* Веб-версия считает всё в браузере. Наружу уходит только запрос баланса, и в нём нет
-  ничего, кроме самого адреса.
-* И всё же: **никогда не вводите в любую программу — включая эту — сид-фразу от кошелька
-  с реальными деньгами.**
+* This program **cannot and will not** crack anyone's seed phrase. It derives addresses
+  from a phrase you already know and reads public blockchain data.
+* The web build computes everything in your browser. The only thing that leaves the page
+  is an address lookup, and it contains nothing but the address.
+* `COMPLETE` recovers exactly one unknown word, and that limit is deliberate rather than
+  unfinished: with two gaps, hundreds of thousands of phrases remain valid and the list
+  stops meaning anything. The tool helps you recover a phrase you almost have; it does not
+  become a search over other people's wallets.
+* All the same: **never type a seed phrase that controls real funds into any program,
+  this one included.**
 
-## Устройство репозитория
+## Repository layout
 
 ```
-data/                 общий источник правды для обеих сборок
-  cases.json          восемь дел кампании, написанных вручную
-  clients.json        восемь заказчиков: голос, район, почерк, словари имён
-  contracts.json      256 сгенерированных контрактов (+ спецификация решения)
-  english.txt         официальный словарь BIP-39 (sha256 2f5eed53…)
-  test_vectors.json   эталонные векторы, сгенерированные mnemonic + bip-utils
-enigma_terminal/        терминальная версия
-  crypto_engine.py    BIP-39/32/44/49/84, secp256k1, base58check, bech32
-  _ripemd160.py       запасной RIPEMD-160 для сборок OpenSSL 3 без legacy-провайдера
-  chain.py            три эксплорера с автоматическим переключением
-  journal.py          журнал расследования на диске
-  ui.py               ANSI-вывод, псевдо-логи поверх реального запроса
-  cases.py            загрузка дел и прогресса
-  game.py             разбор команд и игровой цикл
-docs/                 веб-версия, отсюда публикуется GitHub Pages
-  js/core.js          общее ядро: прогресс, правила дел, поиск, рандомизация
-  js/crypto/          hash.js, secp256k1.js, encoding.js, bip39.js, wallet.js
-  js/term.js          терминал на canvas
-  js/crt.js           WebGL: bloom, кривизна, аберрация, маска, шум
-  js/glitch.js        глитч-шапка над обоими режимами
-  js/journal.js       журнал расследования, общий для обоих режимов
-  js/identicon.js     генеративные знаки дел, фраз и адресов
-  js/vendor/          minidenticons (MIT) + лицензия
-  js/engine.js        режим CL: те же команды, что и в Python-версии
-  js/gui/             режим GUI: оконный интерфейс поверх того же ядра
-tools/generate_cases.py   собирает доску из 256 контрактов
-tools/build_web_data.py   генерирует данные веб-сборки из data/
-tests/                253 теста, включая сверку Python и JavaScript
+data/                      one source of truth for both builds
+  cases.json               the eight hand-written campaign cases
+  clients.json             eight employers: voice, district, handwriting, name pools
+  contracts.json           256 generated contracts (+ their solution specs)
+  english.txt              the official BIP-39 wordlist (sha256 2f5eed53…)
+  test_vectors.json        reference vectors from mnemonic + bip-utils
+enigma_terminal/           the terminal build
+  crypto_engine.py         BIP-39/32/44/49/84, secp256k1, base58check, bech32
+  _ripemd160.py            fallback RIPEMD-160 for OpenSSL 3 without the legacy provider
+  chain.py                 three explorers with automatic failover
+  journal.py               the investigation journal, on disk
+  cases.py                 case and progress loading
+  ui.py                    ANSI output, pseudo-logs over a real request
+  game.py                  command dispatch and the game loop
+docs/                      the web build; GitHub Pages publishes from here
+  index.html               the shell
+  css/                     terminal.css (shell and screen), gui.css (the interface)
+  js/core.js               shared core: progress, case rules, search, randomisation
+  js/crypto/               hash.js, secp256k1.js, encoding.js, bip39.js, wallet.js
+  js/daylight.js           the palette that follows the hour
+  js/term.js               the canvas terminal
+  js/engine.js             the command line: the same commands as the Python build
+  js/gui/                  the windowed interface over the same core
+  js/journal.js            the journal, shared by both halves of the page
+  js/identicon.js          generative sigils for cases, phrases and addresses
+  js/glitch.js             the banner
+  js/storage.js            localStorage, with migration from the old key names
+  js/vendor/               minidenticons and Feather (MIT), with their licences
+tools/generate_cases.py    builds the 256-contract board
+tools/build_web_data.py    generates the web build's data from data/
+tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
+tools/js_commands.mjs      reports the web build's command and panel surface
+tests/                     334 tests, including the Python ↔ JavaScript diff
 ```
 
-## Разработка
+## Development
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests -v          # 253 теста
-python tools/build_web_data.py     # после правки data/ — обязательно
+python -m pytest tests -v          # 334 tests
+python tools/build_web_data.py     # required after editing data/
 ```
 
-`data/` — единственный источник правды. Файлы `docs/js/wordlist.js` и `docs/js/campaign.js`
-генерируются; CI падает, если они разошлись с исходниками.
+`data/` is the single source of truth. `docs/js/wordlist.js` and `docs/js/campaign.js` are
+generated from it, and CI fails if they have drifted.
 
-## Публикация на GitHub Pages
+## Publishing to GitHub Pages
 
-Настройки репозитория → **Pages** → **Source: GitHub Actions**. После этого каждый push
-в `main` публикует содержимое `docs/` воркфлоу `.github/workflows/pages.yml`.
+Repository settings → **Pages** → **Source: GitHub Actions**. From then on every push to
+`main` publishes `docs/` through `.github/workflows/pages.yml`.
 
-## Лицензия
+## Licence
 
-MIT — см. [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).
