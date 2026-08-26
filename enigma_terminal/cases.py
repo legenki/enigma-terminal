@@ -97,9 +97,9 @@ class Progress:
             path=path,
         )
 
-    def save(self) -> None:
+    def save(self) -> bool:
         if self.path is None:
-            return
+            return True
         try:
             self.path.parent.mkdir(parents=True, exist_ok=True)
             self.path.write_text(
@@ -111,8 +111,9 @@ class Progress:
                 ),
                 encoding="utf-8",
             )
+            return True
         except OSError:
-            pass  # a read-only home must not break the game
+            return False  # a read-only home must not break the game
 
     def mark_solved(self, case_id: int) -> None:
         self.solved.add(case_id)

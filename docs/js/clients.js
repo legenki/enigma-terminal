@@ -2,2391 +2,2823 @@
 
 export const CLIENTS = [
   {
-    slug: 'escribania',
-    order: 1,
-    name: {
-      ru: 'ESCRIBANÍA CERO',
-      en: 'ESCRIBANÍA CERO',
-      es: 'ESCRIBANÍA CERO',
-      pt: 'ESCRIBANÍA CERO',
+    "slug": "escribania",
+    "order": 1,
+    "name": {
+      "ru": "ESCRIBANÍA CERO",
+      "en": "ESCRIBANÍA CERO",
+      "es": "ESCRIBANÍA CERO",
+      "pt": "ESCRIBANÍA CERO"
     },
-    kind: {
-      ru: 'частное бюро криминалистики',
-      en: 'private forensic bureau',
-      es: 'oficina forense privada',
-      pt: 'agência de perícia privada',
+    "kind": {
+      "ru": "частное бюро криминалистики",
+      "en": "private forensic bureau",
+      "es": "oficina forense privada",
+      "pt": "agência de perícia privada"
     },
-    district: {
-      ru: 'Микросентро, La City',
-      en: 'Microcentro, La City',
-      es: 'Microcentro, La City',
-      pt: 'Microcentro, La City',
+    "district": {
+      "ru": "Микросентро, La City",
+      "en": "Microcentro, La City",
+      "es": "Microcentro, La City",
+      "pt": "Microcentro, La City"
     },
-    difficulty: [1, 3],
-    creed: {
-      ru: [
-        'ESCRIBANÍA CERO не владеет ничем и не хочет владеть. Он находит.',
-        'Восемь этажей серверов в переулке за Реконкистой, ни одного окна, и договор,',
-        'в котором нет слова «изъятие» — только «восстановление законного доступа».',
-        'Платят аккуратно, в срок и по официальному курсу. Это единственный заказчик,',
-        'который скажет тебе правду о том, что ты нашёл.',
+    "difficulty": [
+      1,
+      3
+    ],
+    "creed": {
+      "ru": [
+        "ESCRIBANÍA CERO не владеет ничем и не хочет владеть. Он находит.",
+        "Восемь этажей серверов в переулке за Реконкистой, ни одного окна, и договор,",
+        "в котором нет слова «изъятие» — только «восстановление законного доступа».",
+        "Платят аккуратно, в срок и по официальному курсу. Это единственный заказчик,",
+        "который скажет тебе правду о том, что ты нашёл."
       ],
-      en: [
-        'ESCRIBANÍA CERO owns nothing and wants to own nothing. It finds.',
-        'Eight floors of servers in a lane off Reconquista, not one window, and a contract',
+      "en": [
+        "ESCRIBANÍA CERO owns nothing and wants to own nothing. It finds.",
+        "Eight floors of servers in a lane off Reconquista, not one window, and a contract",
         "that never says 'seizure' — only 'restoration of lawful access'.",
-        'They pay carefully, on time, and at the official rate. This is the one client',
-        'who will tell you the truth about what you found.',
+        "They pay carefully, on time, and at the official rate. This is the one client",
+        "who will tell you the truth about what you found."
       ],
-      es: [
-        'ESCRIBANÍA CERO no posee nada y no quiere poseer nada. Solo encuentra.',
-        'Ocho pisos de servidores en un callejón cerca de Reconquista, ni una sola ventana, y un contrato',
+      "es": [
+        "ESCRIBANÍA CERO no posee nada y no quiere poseer nada. Solo encuentra.",
+        "Ocho pisos de servidores en un callejón cerca de Reconquista, ni una sola ventana, y un contrato",
         "que nunca dice 'incautación', solo 'restauración de acceso legal'.",
-        'Pagan con cuidado, a tiempo y a la tarifa oficial. Este es el único cliente',
-        'que te dirá la verdad sobre lo que encontraste.',
+        "Pagan con cuidado, a tiempo y a la tarifa oficial. Este es el único cliente",
+        "que te dirá la verdad sobre lo que encontraste."
       ],
-      pt: [
-        'A ESCRIBANÍA CERO não possui nada e não quer possuir nada. Ela encontra.',
-        'Oito andares de servidores em um beco perto da Reconquista, nem uma janela sequer, e um contrato',
+      "pt": [
+        "A ESCRIBANÍA CERO não possui nada e não quer possuir nada. Ela encontra.",
+        "Oito andares de servidores em um beco perto da Reconquista, nem uma janela sequer, e um contrato",
         "que nunca diz 'apreensão' — apenas 'restauração de acesso legal'.",
-        'Eles pagam com cuidado, em dia e na taxa oficial. Este é o único cliente',
-        'que lhe dirá a verdade sobre o que você encontrou.',
+        "Eles pagam com cuidado, em dia e na taxa oficial. Este é o único cliente",
+        "que lhe dirá a verdade sobre o que você encontrou."
+      ]
+    },
+    "dialect": {
+      "ru": "ESCRIBANÍA CERO думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли.",
+      "en": "ESCRIBANÍA CERO thinks in entropy. Their analysts recover not words but the bytes the words grew from.",
+      "es": "ESCRIBANÍA CERO piensa en entropía. Sus analistas no recuperan palabras, sino los bytes de los que nacieron esas palabras.",
+      "pt": "A ESCRIBANÍA CERO pensa em entropia. Seus analistas não recuperam palavras, mas os bytes dos quais as palavras brotaram."
+    },
+    "archetypes": [
+      "entropy_pattern",
+      "index_math",
+      "unique_prefix"
+    ],
+    "acts": {
+      "ru": [
+        "ПРОВЕРКА",
+        "ПОДРЯД",
+        "АУДИТ",
+        "ЗАКРЫТЫЙ КОНТУР"
       ],
+      "en": [
+        "VETTING",
+        "CONTRACT",
+        "AUDIT",
+        "CLOSED LOOP"
+      ],
+      "es": [
+        "VERIFICACIÓN",
+        "CONTRATO",
+        "AUDITORÍA",
+        "BUCLE CERRADO"
+      ],
+      "pt": [
+        "TRIAGEM",
+        "CONTRATO",
+        "AUDITORIA",
+        "CICLO FECHADO"
+      ]
     },
-    dialect: {
-      ru: 'ESCRIBANÍA CERO думает энтропией. Их аналитики восстанавливают не слова, а байты, из которых слова выросли.',
-      en: 'ESCRIBANÍA CERO thinks in entropy. Their analysts recover not words but the bytes the words grew from.',
-      es: 'ESCRIBANÍA CERO piensa en entropía. Sus analistas no recuperan palabras, sino los bytes de los que nacieron esas palabras.',
-      pt: 'A ESCRIBANÍA CERO pensa em entropia. Seus analistas não recuperam palavras, mas os bytes dos quais as palavras brotaram.',
-    },
-    archetypes: ['entropy_pattern', 'index_math', 'unique_prefix'],
-    acts: {
-      ru: ['ПРОВЕРКА', 'ПОДРЯД', 'АУДИТ', 'ЗАКРЫТЫЙ КОНТУР'],
-      en: ['VETTING', 'CONTRACT', 'AUDIT', 'CLOSED LOOP'],
-      es: ['VERIFICACIÓN', 'CONTRATO', 'AUDITORÍA', 'BUCLE CERRADO'],
-      pt: ['TRIAGEM', 'CONTRATO', 'AUDITORIA', 'CICLO FECHADO'],
-    },
-    motifs: {
-      adjective: {
-        ru: [
-          'ХОЛОДНЫЙ',
-          'ЧИСТЫЙ',
-          'ЗАВЕРЕННЫЙ',
-          'НУЛЕВОЙ',
-          'ТИХИЙ',
-          'ПРЯМОЙ',
-          'СУХОЙ',
-          'ЗАКРЫТЫЙ',
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "ХОЛОДНЫЙ",
+          "ЧИСТЫЙ",
+          "ЗАВЕРЕННЫЙ",
+          "НУЛЕВОЙ",
+          "ТИХИЙ",
+          "ПРЯМОЙ",
+          "СУХОЙ",
+          "ЗАКРЫТЫЙ"
         ],
-        en: [
-          'COLD',
-          'CLEAN',
-          'CERTIFIED',
-          'ZERO',
-          'QUIET',
-          'DIRECT',
-          'DRY',
-          'SEALED',
+        "en": [
+          "COLD",
+          "CLEAN",
+          "CERTIFIED",
+          "ZERO",
+          "QUIET",
+          "DIRECT",
+          "DRY",
+          "SEALED"
         ],
-        ru_forms: [
+        "ru_forms": [
           {
-            m: 'ХОЛОДНЫЙ',
-            f: 'ХОЛОДНАЯ',
-            n: 'ХОЛОДНОЕ',
+            "m": "ХОЛОДНЫЙ",
+            "f": "ХОЛОДНАЯ",
+            "n": "ХОЛОДНОЕ"
           },
           {
-            m: 'ЧИСТЫЙ',
-            f: 'ЧИСТАЯ',
-            n: 'ЧИСТОЕ',
+            "m": "ЧИСТЫЙ",
+            "f": "ЧИСТАЯ",
+            "n": "ЧИСТОЕ"
           },
           {
-            m: 'ЗАВЕРЕННЫЙ',
-            f: 'ЗАВЕРЕННАЯ',
-            n: 'ЗАВЕРЕННОЕ',
+            "m": "ЗАВЕРЕННЫЙ",
+            "f": "ЗАВЕРЕННАЯ",
+            "n": "ЗАВЕРЕННОЕ"
           },
           {
-            m: 'НУЛЕВОЙ',
-            f: 'НУЛЕВАЯ',
-            n: 'НУЛЕВОЕ',
+            "m": "НУЛЕВОЙ",
+            "f": "НУЛЕВАЯ",
+            "n": "НУЛЕВОЕ"
           },
           {
-            m: 'ТИХИЙ',
-            f: 'ТИХАЯ',
-            n: 'ТИХОЕ',
+            "m": "ТИХИЙ",
+            "f": "ТИХАЯ",
+            "n": "ТИХОЕ"
           },
           {
-            m: 'ПРЯМОЙ',
-            f: 'ПРЯМАЯ',
-            n: 'ПРЯМОЕ',
+            "m": "ПРЯМОЙ",
+            "f": "ПРЯМАЯ",
+            "n": "ПРЯМОЕ"
           },
           {
-            m: 'СУХОЙ',
-            f: 'СУХАЯ',
-            n: 'СУХОЕ',
+            "m": "СУХОЙ",
+            "f": "СУХАЯ",
+            "n": "СУХОЕ"
           },
           {
-            m: 'ЗАКРЫТЫЙ',
-            f: 'ЗАКРЫТАЯ',
-            n: 'ЗАКРЫТОЕ',
-          },
+            "m": "ЗАКРЫТЫЙ",
+            "f": "ЗАКРЫТАЯ",
+            "n": "ЗАКРЫТОЕ"
+          }
         ],
-        es_forms: [
+        "es_forms": [
           {
-            m: 'FRÍO',
-            f: 'FRÍA',
+            "m": "FRÍO",
+            "f": "FRÍA"
           },
           {
-            m: 'LIMPIO',
-            f: 'LIMPIA',
+            "m": "LIMPIO",
+            "f": "LIMPIA"
           },
           {
-            m: 'CERTIFICADO',
-            f: 'CERTIFICADA',
+            "m": "CERTIFICADO",
+            "f": "CERTIFICADA"
           },
           {
-            m: 'CERO',
-            f: 'CERO',
+            "m": "CERO",
+            "f": "CERO"
           },
           {
-            m: 'SILENCIOSO',
-            f: 'SILENCIOSA',
+            "m": "SILENCIOSO",
+            "f": "SILENCIOSA"
           },
           {
-            m: 'DIRECTO',
-            f: 'DIRECTA',
+            "m": "DIRECTO",
+            "f": "DIRECTA"
           },
           {
-            m: 'SECO',
-            f: 'SECA',
+            "m": "SECO",
+            "f": "SECA"
           },
           {
-            m: 'SELLADO',
-            f: 'SELLADA',
-          },
+            "m": "SELLADO",
+            "f": "SELLADA"
+          }
         ],
-        pt_forms: [
+        "pt_forms": [
           {
-            m: 'FRIO',
-            f: 'FRIA',
+            "m": "FRIO",
+            "f": "FRIA"
           },
           {
-            m: 'LIMPO',
-            f: 'LIMPA',
+            "m": "LIMPO",
+            "f": "LIMPA"
           },
           {
-            m: 'CERTIFICADO',
-            f: 'CERTIFICADA',
+            "m": "CERTIFICADO",
+            "f": "CERTIFICADA"
           },
           {
-            m: 'ZERO',
-            f: 'ZERO',
+            "m": "ZERO",
+            "f": "ZERO"
           },
           {
-            m: 'SILENCIOSO',
-            f: 'SILENCIOSA',
+            "m": "SILENCIOSO",
+            "f": "SILENCIOSA"
           },
           {
-            m: 'DIRETO',
-            f: 'DIRETA',
+            "m": "DIRETO",
+            "f": "DIRETA"
           },
           {
-            m: 'SECO',
-            f: 'SECA',
+            "m": "SECO",
+            "f": "SECA"
           },
           {
-            m: 'SELADO',
-            f: 'SELADA',
-          },
+            "m": "SELADO",
+            "f": "SELADA"
+          }
         ],
-        es: [
-          'FRÍO',
-          'LIMPIO',
-          'CERTIFICADO',
-          'CERO',
-          'SILENCIOSO',
-          'DIRECTO',
-          'SECO',
-          'SELLADO',
+        "es": [
+          "FRÍO",
+          "LIMPIO",
+          "CERTIFICADO",
+          "CERO",
+          "SILENCIOSO",
+          "DIRECTO",
+          "SECO",
+          "SELLADO"
         ],
-        pt: [
-          'FRIO',
-          'LIMPO',
-          'CERTIFICADO',
-          'ZERO',
-          'SILENCIOSO',
-          'DIRETO',
-          'SECO',
-          'SELADO',
-        ],
+        "pt": [
+          "FRIO",
+          "LIMPO",
+          "CERTIFICADO",
+          "ZERO",
+          "SILENCIOSO",
+          "DIRETO",
+          "SECO",
+          "SELADO"
+        ]
       },
-      noun: {
-        ru: [
-          'ПРОТОКОЛ',
-          'РЕЕСТР',
-          'ОСТАТОК',
-          'ПЕРЕВОД',
-          'ДЕПОЗИТ',
-          'ОРДЕР',
-          'БАЛАНС',
-          'ИНДЕКС',
+      "noun": {
+        "ru": [
+          "ПРОТОКОЛ",
+          "РЕЕСТР",
+          "ОСТАТОК",
+          "ПЕРЕВОД",
+          "ДЕПОЗИТ",
+          "ОРДЕР",
+          "БАЛАНС",
+          "ИНДЕКС"
         ],
-        en: [
-          'PROTOCOL',
-          'LEDGER',
-          'REMAINDER',
-          'TRANSFER',
-          'DEPOSIT',
-          'WARRANT',
-          'BALANCE',
-          'INDEX',
+        "en": [
+          "PROTOCOL",
+          "LEDGER",
+          "REMAINDER",
+          "TRANSFER",
+          "DEPOSIT",
+          "WARRANT",
+          "BALANCE",
+          "INDEX"
         ],
-        ru_gender: ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm'],
-        es: [
-          'PROTOCOLO',
-          'LIBRO MAYOR',
-          'RESTO',
-          'TRANSFERENCIA',
-          'DEPÓSITO',
-          'ORDEN',
-          'SALDO',
-          'ÍNDICE',
+        "ru_gender": [
+          "m",
+          "m",
+          "m",
+          "m",
+          "m",
+          "m",
+          "m",
+          "m"
         ],
-        pt: [
-          'PROTOCOLO',
-          'REGISTRO',
-          'RESTO',
-          'TRANSFERÊNCIA',
-          'DEPÓSITO',
-          'MANDADO',
-          'SALDO',
-          'ÍNDICE',
+        "es": [
+          "PROTOCOLO",
+          "LIBRO MAYOR",
+          "RESTO",
+          "TRANSFERENCIA",
+          "DEPÓSITO",
+          "ORDEN",
+          "SALDO",
+          "ÍNDICE"
         ],
-        es_gender: ['m', 'm', 'm', 'f', 'm', 'f', 'm', 'm'],
-        pt_gender: ['m', 'm', 'm', 'f', 'm', 'm', 'm', 'm'],
-      },
+        "pt": [
+          "PROTOCOLO",
+          "REGISTRO",
+          "RESTO",
+          "TRANSFERÊNCIA",
+          "DEPÓSITO",
+          "MANDADO",
+          "SALDO",
+          "ÍNDICE"
+        ],
+        "es_gender": [
+          "m",
+          "m",
+          "m",
+          "f",
+          "m",
+          "f",
+          "m",
+          "m"
+        ],
+        "pt_gender": [
+          "m",
+          "m",
+          "m",
+          "f",
+          "m",
+          "m",
+          "m",
+          "m"
+        ]
+      }
     },
-    evidence_sources: {
-      ru: [
-        'выписка из терминала ESCRIBANÍA CERO',
-        'лента аудита, распечатанная на матричном принтере',
-        'служебная записка без подписи',
-        'дамп памяти рабочей станции',
+    "evidence_sources": {
+      "ru": [
+        "выписка из терминала ESCRIBANÍA CERO",
+        "лента аудита, распечатанная на матричном принтере",
+        "служебная записка без подписи",
+        "дамп памяти рабочей станции"
       ],
-      en: [
-        'a ESCRIBANÍA CERO terminal statement',
-        'an audit tape off a dot-matrix printer',
-        'an unsigned internal memo',
-        'a workstation memory dump',
+      "en": [
+        "a ESCRIBANÍA CERO terminal statement",
+        "an audit tape off a dot-matrix printer",
+        "an unsigned internal memo",
+        "a workstation memory dump"
       ],
-      es: [
-        'un extracto de terminal ESCRIBANÍA CERO',
-        'una cinta de auditoría de una impresora matricial',
-        'un memorando interno sin firma',
-        'un volcado de memoria de estación de trabajo',
+      "es": [
+        "un extracto de terminal ESCRIBANÍA CERO",
+        "una cinta de auditoría de una impresora matricial",
+        "un memorando interno sin firma",
+        "un volcado de memoria de estación de trabajo"
       ],
-      pt: [
-        'um extrato de terminal da ESCRIBANÍA CERO',
-        'uma fita de auditoria de uma impressora matricial',
-        'um memorando interno sem assinatura',
-        'um despejo de memória de estação de trabalho',
-      ],
+      "pt": [
+        "um extrato de terminal da ESCRIBANÍA CERO",
+        "uma fita de auditoria de uma impressora matricial",
+        "um memorando interno sem assinatura",
+        "um despejo de memória de estação de trabalho"
+      ]
     },
-    payoff: {
-      ru: 'ESCRIBANÍA CERO переводит гонорар в течение часа и не задаёт вопросов о том, что ещё ты видел.',
-      en: 'ESCRIBANÍA CERO wires the fee within the hour and asks nothing about what else you saw.',
-      es: 'ESCRIBANÍA CERO transfiere los honorarios en menos de una hora y no pregunta nada sobre qué más viste.',
-      pt: 'A ESCRIBANÍA CERO transfere o pagamento dentro de uma hora e não faz perguntas sobre o que mais você viu.',
+    "payoff": {
+      "ru": "ESCRIBANÍA CERO переводит гонорар в течение часа и не задаёт вопросов о том, что ещё ты видел.",
+      "en": "ESCRIBANÍA CERO wires the fee within the hour and asks nothing about what else you saw.",
+      "es": "ESCRIBANÍA CERO transfiere los honorarios en menos de una hora y no pregunta nada sobre qué más viste.",
+      "pt": "A ESCRIBANÍA CERO transfere o pagamento dentro de uma hora e não faz perguntas sobre o que mais você viu."
     },
-    board_key: 'meridian',
+    "board_key": "meridian"
   },
   {
-    slug: 'martillero',
-    order: 2,
-    name: {
-      ru: 'MARTILLERO',
-      en: 'MARTILLERO',
-      es: 'MARTILLERO',
-      pt: 'MARTILLERO',
+    "slug": "martillero",
+    "order": 2,
+    "name": {
+      "ru": "MARTILLERO",
+      "en": "MARTILLERO",
+      "es": "MARTILLERO",
+      "pt": "MARTILLERO"
     },
-    kind: {
-      ru: 'серый фонд, аукционный дом',
-      en: 'grey fund, auction house',
-      es: 'fondo gris, casa de subastas',
-      pt: 'fundo cinza, casa de leilões',
+    "kind": {
+      "ru": "серый фонд, аукционный дом",
+      "en": "grey fund, auction house",
+      "es": "fondo gris, casa de subastas",
+      "pt": "fundo cinza, casa de leilões"
     },
-    district: {
-      ru: 'Реколета',
-      en: 'Recoleta',
-      es: 'Recoleta',
-      pt: 'Recoleta',
+    "district": {
+      "ru": "Реколета",
+      "en": "Recoleta",
+      "es": "Recoleta",
+      "pt": "Recoleta"
     },
-    difficulty: [2, 4],
-    creed: {
-      ru: [
-        'MARTILLERO продаёт картины, которых никто не видел, людям, которых никто не знает.',
-        'Зал на Кинтана, вход со двора, каталог печатают в двенадцати экземплярах.',
-        'В их бумагах не встречается слово «деньги» — только «предмет», «оценка» и «переход права»,',
-        'а расчёт идёт через cueva на Флориде, где курс называют шёпотом.',
-        'Каждый лот уходит по цене, в которой зашит номер. Числа тут важнее холста.',
+    "difficulty": [
+      2,
+      4
+    ],
+    "creed": {
+      "ru": [
+        "MARTILLERO продаёт картины, которых никто не видел, людям, которых никто не знает.",
+        "Зал на Кинтана, вход со двора, каталог печатают в двенадцати экземплярах.",
+        "В их бумагах не встречается слово «деньги» — только «предмет», «оценка» и «переход права»,",
+        "а расчёт идёт через cueva на Флориде, где курс называют шёпотом.",
+        "Каждый лот уходит по цене, в которой зашит номер. Числа тут важнее холста."
       ],
-      en: [
-        'MARTILLERO sells paintings nobody has seen to people nobody knows.',
-        'A room on Quintana, entrance through the courtyard, catalogue printed in twelve copies.',
+      "en": [
+        "MARTILLERO sells paintings nobody has seen to people nobody knows.",
+        "A room on Quintana, entrance through the courtyard, catalogue printed in twelve copies.",
         "Their paperwork never says 'money' — only 'lot', 'appraisal' and 'transfer of title',",
-        'and settlement runs through a cueva off Florida where the rate is quoted in a whisper.',
-        'Every lot closes at a price with a number sewn into it. The figures matter more than the canvas.',
+        "and settlement runs through a cueva off Florida where the rate is quoted in a whisper.",
+        "Every lot closes at a price with a number sewn into it. The figures matter more than the canvas."
       ],
-      es: [
-        'MARTILLERO vende cuadros que nadie ha visto a gente que nadie conoce.',
-        'Una habitación en Quintana, entrada por el patio, catálogo impreso en doce copias.',
+      "es": [
+        "MARTILLERO vende cuadros que nadie ha visto a gente que nadie conoce.",
+        "Una habitación en Quintana, entrada por el patio, catálogo impreso en doce copias.",
         "Su papeleo nunca dice 'dinero', solo 'lote', 'tasación' y 'transferencia de título',",
-        'y la liquidación se hace en una cueva cerca de Florida donde la tasa se cotiza en un susurro.',
-        'Cada lote se cierra a un precio con un número cosido en él. Las cifras importan más que el lienzo.',
+        "y la liquidación se hace en una cueva cerca de Florida donde la tasa se cotiza en un susurro.",
+        "Cada lote se cierra a un precio con un número cosido en él. Las cifras importan más que el lienzo."
       ],
-      pt: [
-        'A SÉTIMA ASSINATURA vende pinturas que ninguém viu para pessoas que ninguém conhece.',
-        'Uma sala na Quintana, entrada pelo pátio, catálogo impresso em doze cópias.',
+      "pt": [
+        "A SÉTIMA ASSINATURA vende pinturas que ninguém viu para pessoas que ninguém conhece.",
+        "Uma sala na Quintana, entrada pelo pátio, catálogo impresso em doze cópias.",
         "A papelada deles nunca diz 'dinheiro' — apenas 'lote', 'avaliação' e 'transferência de título',",
-        'e o acerto é feito através de uma cueva perto da Florida, onde a taxa é sussurrada.',
-        'Cada lote fecha a um preço com um número costurado nele. Os números importam mais do que a tela.',
+        "e o acerto é feito através de uma cueva perto da Florida, onde a taxa é sussurrada.",
+        "Cada lote fecha a um preço com um número costurado nele. Os números importam mais do que a tela."
+      ]
+    },
+    "dialect": {
+      "ru": "MARTILLERO прячет слова в суммах. Смотри не на лот, а на последние цифры цены.",
+      "en": "MARTILLERO hides words inside amounts. Never mind the lot — read the last digits of the price.",
+      "es": "EL MARTILLERO esconde palabras en los importes. Olvida el resto: lee los últimos dígitos del precio.",
+      "pt": "O MARTILLERO esconde palavras dentro de quantias. Esqueça o lote — leia os últimos dígitos do preço."
+    },
+    "archetypes": [
+      "ledger_amounts",
+      "mirror_index",
+      "index_math"
+    ],
+    "acts": {
+      "ru": [
+        "ПРЕДПРОСМОТР",
+        "ТОРГИ",
+        "МОЛОТОК",
+        "ЧАСТНАЯ ПРОДАЖА"
       ],
+      "en": [
+        "PREVIEW",
+        "BIDDING",
+        "THE HAMMER",
+        "PRIVATE SALE"
+      ],
+      "es": [
+        "VISTA PREVIA",
+        "PUJA",
+        "EL MARTILLO",
+        "VENTA PRIVADA"
+      ],
+      "pt": [
+        "PRÉ-VISUALIZAÇÃO",
+        "LANCE",
+        "O MARTELO",
+        "VENDA PRIVADA"
+      ]
     },
-    dialect: {
-      ru: 'MARTILLERO прячет слова в суммах. Смотри не на лот, а на последние цифры цены.',
-      en: 'MARTILLERO hides words inside amounts. Never mind the lot — read the last digits of the price.',
-      es: 'EL MARTILLERO esconde palabras en los importes. Olvida el resto: lee los últimos dígitos del precio.',
-      pt: 'O MARTILLERO esconde palavras dentro de quantias. Esqueça o lote — leia os últimos dígitos do preço.',
-    },
-    archetypes: ['ledger_amounts', 'mirror_index', 'index_math'],
-    acts: {
-      ru: ['ПРЕДПРОСМОТР', 'ТОРГИ', 'МОЛОТОК', 'ЧАСТНАЯ ПРОДАЖА'],
-      en: ['PREVIEW', 'BIDDING', 'THE HAMMER', 'PRIVATE SALE'],
-      es: ['VISTA PREVIA', 'PUJA', 'EL MARTILLO', 'VENTA PRIVADA'],
-      pt: ['PRÉ-VISUALIZAÇÃO', 'LANCE', 'O MARTELO', 'VENDA PRIVADA'],
-    },
-    motifs: {
-      adjective: {
-        ru: [
-          'ПОЗДНИЙ',
-          'БАРХАТНЫЙ',
-          'АНОНИМНЫЙ',
-          'ЗАКРЫТЫЙ',
-          'ВЕЧЕРНИЙ',
-          'ФАЛЬШИВЫЙ',
-          'ЗОЛОЧЁНЫЙ',
-          'СНЯТЫЙ',
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "ПОЗДНИЙ",
+          "БАРХАТНЫЙ",
+          "АНОНИМНЫЙ",
+          "ЗАКРЫТЫЙ",
+          "ВЕЧЕРНИЙ",
+          "ФАЛЬШИВЫЙ",
+          "ЗОЛОЧЁНЫЙ",
+          "СНЯТЫЙ"
         ],
-        en: [
-          'LATE',
-          'VELVET',
-          'ANONYMOUS',
-          'CLOSED',
-          'EVENING',
-          'FORGED',
-          'GILDED',
-          'WITHDRAWN',
+        "en": [
+          "LATE",
+          "VELVET",
+          "ANONYMOUS",
+          "CLOSED",
+          "EVENING",
+          "FORGED",
+          "GILDED",
+          "WITHDRAWN"
         ],
-        ru_forms: [
+        "ru_forms": [
           {
-            m: 'ПОЗДНИЙ',
-            f: 'ПОЗДНЯЯ',
-            n: 'ПОЗДНЕЕ',
+            "m": "ПОЗДНИЙ",
+            "f": "ПОЗДНЯЯ",
+            "n": "ПОЗДНЕЕ"
           },
           {
-            m: 'БАРХАТНЫЙ',
-            f: 'БАРХАТНАЯ',
-            n: 'БАРХАТНОЕ',
+            "m": "БАРХАТНЫЙ",
+            "f": "БАРХАТНАЯ",
+            "n": "БАРХАТНОЕ"
           },
           {
-            m: 'АНОНИМНЫЙ',
-            f: 'АНОНИМНАЯ',
-            n: 'АНОНИМНОЕ',
+            "m": "АНОНИМНЫЙ",
+            "f": "АНОНИМНАЯ",
+            "n": "АНОНИМНОЕ"
           },
           {
-            m: 'ЗАКРЫТЫЙ',
-            f: 'ЗАКРЫТАЯ',
-            n: 'ЗАКРЫТОЕ',
+            "m": "ЗАКРЫТЫЙ",
+            "f": "ЗАКРЫТАЯ",
+            "n": "ЗАКРЫТОЕ"
           },
           {
-            m: 'ВЕЧЕРНИЙ',
-            f: 'ВЕЧЕРНЯЯ',
-            n: 'ВЕЧЕРНЕЕ',
+            "m": "ВЕЧЕРНИЙ",
+            "f": "ВЕЧЕРНЯЯ",
+            "n": "ВЕЧЕРНЕЕ"
           },
           {
-            m: 'ФАЛЬШИВЫЙ',
-            f: 'ФАЛЬШИВАЯ',
-            n: 'ФАЛЬШИВОЕ',
+            "m": "ФАЛЬШИВЫЙ",
+            "f": "ФАЛЬШИВАЯ",
+            "n": "ФАЛЬШИВОЕ"
           },
           {
-            m: 'ЗОЛОЧЁНЫЙ',
-            f: 'ЗОЛОЧЁНАЯ',
-            n: 'ЗОЛОЧЁНОЕ',
+            "m": "ЗОЛОЧЁНЫЙ",
+            "f": "ЗОЛОЧЁНАЯ",
+            "n": "ЗОЛОЧЁНОЕ"
           },
           {
-            m: 'СНЯТЫЙ',
-            f: 'СНЯТАЯ',
-            n: 'СНЯТОЕ',
-          },
+            "m": "СНЯТЫЙ",
+            "f": "СНЯТАЯ",
+            "n": "СНЯТОЕ"
+          }
         ],
-        es_forms: [
+        "es_forms": [
           {
-            m: 'TARDÍO',
-            f: 'TARDÍA',
+            "m": "TARDÍO",
+            "f": "TARDÍA"
           },
           {
-            m: 'DE TERCIOPELO',
-            f: 'DE TERCIOPELO',
+            "m": "DE TERCIOPELO",
+            "f": "DE TERCIOPELO"
           },
           {
-            m: 'ANÓNIMO',
-            f: 'ANÓNIMA',
+            "m": "ANÓNIMO",
+            "f": "ANÓNIMA"
           },
           {
-            m: 'CERRADO',
-            f: 'CERRADA',
+            "m": "CERRADO",
+            "f": "CERRADA"
           },
           {
-            m: 'VESPERTINO',
-            f: 'VESPERTINA',
+            "m": "VESPERTINO",
+            "f": "VESPERTINA"
           },
           {
-            m: 'FALSIFICADO',
-            f: 'FALSIFICADA',
+            "m": "FALSIFICADO",
+            "f": "FALSIFICADA"
           },
           {
-            m: 'DORADO',
-            f: 'DORADA',
+            "m": "DORADO",
+            "f": "DORADA"
           },
           {
-            m: 'RETIRADO',
-            f: 'RETIRADA',
-          },
+            "m": "RETIRADO",
+            "f": "RETIRADA"
+          }
         ],
-        pt_forms: [
+        "pt_forms": [
           {
-            m: 'TARDIO',
-            f: 'TARDIA',
+            "m": "TARDIO",
+            "f": "TARDIA"
           },
           {
-            m: 'DE VELUDO',
-            f: 'DE VELUDO',
+            "m": "DE VELUDO",
+            "f": "DE VELUDO"
           },
           {
-            m: 'ANÔNIMO',
-            f: 'ANÔNIMA',
+            "m": "ANÔNIMO",
+            "f": "ANÔNIMA"
           },
           {
-            m: 'FECHADO',
-            f: 'FECHADA',
+            "m": "FECHADO",
+            "f": "FECHADA"
           },
           {
-            m: 'VESPERTINO',
-            f: 'VESPERTINA',
+            "m": "VESPERTINO",
+            "f": "VESPERTINA"
           },
           {
-            m: 'FORJADO',
-            f: 'FORJADA',
+            "m": "FORJADO",
+            "f": "FORJADA"
           },
           {
-            m: 'DOURADO',
-            f: 'DOURADA',
+            "m": "DOURADO",
+            "f": "DOURADA"
           },
           {
-            m: 'RETIRADO',
-            f: 'RETIRADA',
-          },
+            "m": "RETIRADO",
+            "f": "RETIRADA"
+          }
         ],
-        es: [
-          'TARDÍO',
-          'DE TERCIOPELO',
-          'ANÓNIMO',
-          'CERRADO',
-          'VESPERTINO',
-          'FALSIFICADO',
-          'DORADO',
-          'RETIRADO',
+        "es": [
+          "TARDÍO",
+          "DE TERCIOPELO",
+          "ANÓNIMO",
+          "CERRADO",
+          "VESPERTINO",
+          "FALSIFICADO",
+          "DORADO",
+          "RETIRADO"
         ],
-        pt: [
-          'TARDIO',
-          'DE VELUDO',
-          'ANÔNIMO',
-          'FECHADO',
-          'VESPERTINO',
-          'FORJADO',
-          'DOURADO',
-          'RETIRADO',
-        ],
+        "pt": [
+          "TARDIO",
+          "DE VELUDO",
+          "ANÔNIMO",
+          "FECHADO",
+          "VESPERTINO",
+          "FORJADO",
+          "DOURADO",
+          "RETIRADO"
+        ]
       },
-      noun: {
-        ru: [
-          'ЛОТ',
-          'МОЛОТОК',
-          'КАТАЛОГ',
-          'ОЦЕНКА',
-          'ПОДПИСЬ',
-          'РАМА',
-          'ЗАЛОГ',
-          'КОМИССИЯ',
+      "noun": {
+        "ru": [
+          "ЛОТ",
+          "МОЛОТОК",
+          "КАТАЛОГ",
+          "ОЦЕНКА",
+          "ПОДПИСЬ",
+          "РАМА",
+          "ЗАЛОГ",
+          "КОМИССИЯ"
         ],
-        en: [
-          'LOT',
-          'HAMMER',
-          'CATALOGUE',
-          'APPRAISAL',
-          'SIGNATURE',
-          'FRAME',
-          'PLEDGE',
-          'COMMISSION',
+        "en": [
+          "LOT",
+          "HAMMER",
+          "CATALOGUE",
+          "APPRAISAL",
+          "SIGNATURE",
+          "FRAME",
+          "PLEDGE",
+          "COMMISSION"
         ],
-        ru_gender: ['m', 'm', 'm', 'f', 'f', 'f', 'm', 'f'],
-        es: [
-          'LOTE',
-          'MARTILLO',
-          'CATÁLOGO',
-          'TASACIÓN',
-          'FIRMA',
-          'MARCO',
-          'PROMESA',
-          'COMISIÓN',
+        "ru_gender": [
+          "m",
+          "m",
+          "m",
+          "f",
+          "f",
+          "f",
+          "m",
+          "f"
         ],
-        pt: [
-          'LOTE',
-          'MARTELO',
-          'CATÁLOGO',
-          'AVALIAÇÃO',
-          'ASSINATURA',
-          'MOLDURA',
-          'PROMESSA',
-          'COMISSÃO',
+        "es": [
+          "LOTE",
+          "MARTILLO",
+          "CATÁLOGO",
+          "TASACIÓN",
+          "FIRMA",
+          "MARCO",
+          "PROMESA",
+          "COMISIÓN"
         ],
-        es_gender: ['m', 'm', 'm', 'f', 'f', 'm', 'f', 'f'],
-        pt_gender: ['m', 'm', 'm', 'f', 'f', 'f', 'f', 'f'],
-      },
+        "pt": [
+          "LOTE",
+          "MARTELO",
+          "CATÁLOGO",
+          "AVALIAÇÃO",
+          "ASSINATURA",
+          "MOLDURA",
+          "PROMESSA",
+          "COMISSÃO"
+        ],
+        "es_gender": [
+          "m",
+          "m",
+          "m",
+          "f",
+          "f",
+          "m",
+          "f",
+          "f"
+        ],
+        "pt_gender": [
+          "m",
+          "m",
+          "m",
+          "f",
+          "f",
+          "f",
+          "f",
+          "f"
+        ]
+      }
     },
-    evidence_sources: {
-      ru: [
-        'страница аукционного каталога',
-        'квитанция о переходе права',
-        'счёт, выписанный от руки',
-        'список отозванных лотов',
+    "evidence_sources": {
+      "ru": [
+        "страница аукционного каталога",
+        "квитанция о переходе права",
+        "счёт, выписанный от руки",
+        "список отозванных лотов"
       ],
-      en: [
-        'a page from the auction catalogue',
-        'a transfer-of-title receipt',
-        'a hand-written invoice',
-        'a list of withdrawn lots',
+      "en": [
+        "a page from the auction catalogue",
+        "a transfer-of-title receipt",
+        "a hand-written invoice",
+        "a list of withdrawn lots"
       ],
-      es: [
-        'una página del catálogo de la subasta',
-        'un recibo de transferencia de titularidad',
-        'una factura escrita a mano',
-        'una lista de lotes retirados',
+      "es": [
+        "una página del catálogo de la subasta",
+        "un recibo de transferencia de titularidad",
+        "una factura escrita a mano",
+        "una lista de lotes retirados"
       ],
-      pt: [
-        'uma página do catálogo de leilão',
-        'um recibo de transferência de propriedade',
-        'uma fatura escrita à mão',
-        'uma lista de lotes retirados',
-      ],
+      "pt": [
+        "uma página do catálogo de leilão",
+        "um recibo de transferência de propriedade",
+        "uma fatura escrita à mão",
+        "uma lista de lotes retirados"
+      ]
     },
-    payoff: {
-      ru: 'MARTILLERO присылает конверт без обратного адреса. Внутри — сумма и ни одного слова.',
-      en: 'MARTILLERO sends an envelope with no return address. Inside: a sum, and not one word.',
-      es: 'MARTILLERO envía un sobre sin remitente. Dentro: una suma, y ni una sola palabra.',
-      pt: 'O MARTILLERO envia um envelope sem remetente. Dentro: uma quantia, e nenhuma palavra.',
+    "payoff": {
+      "ru": "MARTILLERO присылает конверт без обратного адреса. Внутри — сумма и ни одного слова.",
+      "en": "MARTILLERO sends an envelope with no return address. Inside: a sum, and not one word.",
+      "es": "MARTILLERO envía un sobre sin remitente. Dentro: una suma, y ni una sola palabra.",
+      "pt": "O MARTILLERO envia um envelope sem remetente. Dentro: uma quantia, e nenhuma palavra."
     },
-    board_key: 'seventh-sign',
+    "board_key": "seventh-sign"
   },
   {
-    slug: 'bajofondo',
-    order: 3,
-    name: {
-      ru: 'BAJOFONDO',
-      en: 'BAJOFONDO',
-      es: 'BAJOFONDO',
-      pt: 'BAJOFONDO',
+    "slug": "bajofondo",
+    "order": 3,
+    "name": {
+      "ru": "BAJOFONDO",
+      "en": "BAJOFONDO",
+      "es": "BAJOFONDO",
+      "pt": "BAJOFONDO"
     },
-    kind: {
-      ru: 'подводные дата-убежища',
-      en: 'subsea data havens',
-      es: 'refugios de datos submarinos',
-      pt: 'refúgios de dados submarinos',
+    "kind": {
+      "ru": "подводные дата-убежища",
+      "en": "subsea data havens",
+      "es": "refugios de datos submarinos",
+      "pt": "refúgios de dados submarinos"
     },
-    district: {
-      ru: 'Дарсена-Сур',
-      en: 'Dársena Sur',
-      es: 'Dársena Sur',
-      pt: 'Doca Sul',
+    "district": {
+      "ru": "Дарсена-Сур",
+      "en": "Dársena Sur",
+      "es": "Dársena Sur",
+      "pt": "Doca Sul"
     },
-    difficulty: [2, 4],
-    creed: {
-      ru: [
-        'BAJOFONDO выкупила семь списанных буровых и утопила в них по дата-центру.',
-        'Ла-Плата для этого слишком мелкая — платформы стоят дальше, за Мар-дель-Платой,',
-        'где шельф наконец обрывается. В городе у них только контора в Дарсена-Сур и катер.',
-        'Сто девяносто метров воды — лучший фаервол из придуманных: до него не доплывёт ни один ордер.',
-        'Всё, что попадает на платформу, они кладут в сетку координат. Даже слова.',
+    "difficulty": [
+      2,
+      4
+    ],
+    "creed": {
+      "ru": [
+        "BAJOFONDO выкупила семь списанных буровых и утопила в них по дата-центру.",
+        "Ла-Плата для этого слишком мелкая — платформы стоят дальше, за Мар-дель-Платой,",
+        "где шельф наконец обрывается. В городе у них только контора в Дарсена-Сур и катер.",
+        "Сто девяносто метров воды — лучший фаервол из придуманных: до него не доплывёт ни один ордер.",
+        "Всё, что попадает на платформу, они кладут в сетку координат. Даже слова."
       ],
-      en: [
-        'BAJOFONDO bought seven decommissioned rigs and sank a data centre into each.',
-        'The Plata is far too shallow for that — the platforms sit out past Mar del Plata,',
-        'where the shelf finally drops away. In the city they keep an office at Dársena Sur and a launch.',
-        'A hundred and ninety metres of water is the finest firewall ever devised: no warrant swims that far.',
-        'Everything that reaches a platform gets filed into a coordinate grid. Words included.',
+      "en": [
+        "BAJOFONDO bought seven decommissioned rigs and sank a data centre into each.",
+        "The Plata is far too shallow for that — the platforms sit out past Mar del Plata,",
+        "where the shelf finally drops away. In the city they keep an office at Dársena Sur and a launch.",
+        "A hundred and ninety metres of water is the finest firewall ever devised: no warrant swims that far.",
+        "Everything that reaches a platform gets filed into a coordinate grid. Words included."
       ],
-      es: [
-        'BAJOFONDO compró siete plataformas fuera de servicio y hundió un centro de datos en cada una.',
-        'El Plata es demasiado poco profundo para eso; las plataformas se asientan más allá de Mar del Plata,',
-        'donde la plataforma continental finalmente cae. En la ciudad mantienen una oficina en Dársena Sur y una lancha.',
-        'Ciento noventa metros de agua son el mejor firewall jamás diseñado: ninguna orden judicial nada tan profundo.',
-        'Todo lo que llega a una plataforma se archiva en una cuadrícula de coordenadas. Palabras incluidas.',
+      "es": [
+        "BAJOFONDO compró siete plataformas fuera de servicio y hundió un centro de datos en cada una.",
+        "El Plata es demasiado poco profundo para eso; las plataformas se asientan más allá de Mar del Plata,",
+        "donde la plataforma continental finalmente cae. En la ciudad mantienen una oficina en Dársena Sur y una lancha.",
+        "Ciento noventa metros de agua son el mejor firewall jamás diseñado: ninguna orden judicial nada tan profundo.",
+        "Todo lo que llega a una plataforma se archiva en una cuadrícula de coordenadas. Palabras incluidas."
       ],
-      pt: [
-        'O BAJOFONDO comprou sete plataformas descomissionadas e afundou um centro de dados em cada uma.',
-        'O Plata é raso demais para isso — as plataformas ficam além de Mar del Plata,',
-        'onde a plataforma continental finalmente despenca. Na cidade, eles mantêm um escritório em Dársena Sur e uma lancha.',
-        'Cento e noventa metros de água são o melhor firewall já criado: nenhum mandado nada tão fundo.',
-        'Tudo o que chega a uma plataforma é arquivado em uma grade de coordenadas. Palavras incluídas.',
+      "pt": [
+        "O BAJOFONDO comprou sete plataformas descomissionadas e afundou um centro de dados em cada uma.",
+        "O Plata é raso demais para isso — as plataformas ficam além de Mar del Plata,",
+        "onde a plataforma continental finalmente despenca. Na cidade, eles mantêm um escritório em Dársena Sur e uma lancha.",
+        "Cento e noventa metros de água são o melhor firewall já criado: nenhum mandado nada tão fundo.",
+        "Tudo o que chega a uma plataforma é arquivado em uma grade de coordenadas. Palavras incluídas."
+      ]
+    },
+    "dialect": {
+      "ru": "BAJOFONDO раскладывает словарь по сетке: 128 рядов на 16 колонок. Слово — это точка на карте.",
+      "en": "BAJOFONDO lays the wordlist on a grid: 128 rows by 16 columns. A word is a point on a chart.",
+      "es": "BAJOFONDO despliega la lista de palabras en una cuadrícula: 128 filas por 16 columnas. Una palabra es un punto en el mapa.",
+      "pt": "BAJOFONDO dispõe a lista de palavras em uma grade: 128 linhas por 16 colunas. Uma palavra é um ponto em um gráfico."
+    },
+    "archetypes": [
+      "grid_coords",
+      "neighbour",
+      "entropy_pattern"
+    ],
+    "acts": {
+      "ru": [
+        "ПОГРУЖЕНИЕ",
+        "ДАВЛЕНИЕ",
+        "ТЕМНОТА",
+        "ДНО"
       ],
+      "en": [
+        "DESCENT",
+        "PRESSURE",
+        "DARKNESS",
+        "THE FLOOR"
+      ],
+      "es": [
+        "DESCENSO",
+        "PRESIÓN",
+        "OSCURIDAD",
+        "EL SUELO"
+      ],
+      "pt": [
+        "DESCIDA",
+        "PRESSÃO",
+        "ESCURIDÃO",
+        "O CHÃO"
+      ]
     },
-    dialect: {
-      ru: 'BAJOFONDO раскладывает словарь по сетке: 128 рядов на 16 колонок. Слово — это точка на карте.',
-      en: 'BAJOFONDO lays the wordlist on a grid: 128 rows by 16 columns. A word is a point on a chart.',
-      es: 'BAJOFONDO despliega la lista de palabras en una cuadrícula: 128 filas por 16 columnas. Una palabra es un punto en el mapa.',
-      pt: 'BAJOFONDO dispõe a lista de palavras em uma grade: 128 linhas por 16 colunas. Uma palavra é um ponto em um gráfico.',
-    },
-    archetypes: ['grid_coords', 'neighbour', 'entropy_pattern'],
-    acts: {
-      ru: ['ПОГРУЖЕНИЕ', 'ДАВЛЕНИЕ', 'ТЕМНОТА', 'ДНО'],
-      en: ['DESCENT', 'PRESSURE', 'DARKNESS', 'THE FLOOR'],
-      es: ['DESCENSO', 'PRESIÓN', 'OSCURIDAD', 'EL SUELO'],
-      pt: ['DESCIDA', 'PRESSÃO', 'ESCURIDÃO', 'O CHÃO'],
-    },
-    motifs: {
-      adjective: {
-        ru: [
-          'СОЛЁНЫЙ',
-          'ЗАТОПЛЕННЫЙ',
-          'ГЛУХОЙ',
-          'ПРИДОННЫЙ',
-          'ШТОРМОВОЙ',
-          'РЖАВЫЙ',
-          'ХОЛОДНЫЙ',
-          'СЛЕПОЙ',
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "СОЛЁНЫЙ",
+          "ЗАТОПЛЕННЫЙ",
+          "ГЛУХОЙ",
+          "ПРИДОННЫЙ",
+          "ШТОРМОВОЙ",
+          "РЖАВЫЙ",
+          "ХОЛОДНЫЙ",
+          "СЛЕПОЙ"
         ],
-        en: [
-          'SALT',
-          'FLOODED',
-          'MUFFLED',
-          'BENTHIC',
-          'STORM',
-          'RUSTED',
-          'COLD',
-          'BLIND',
+        "en": [
+          "SALT",
+          "FLOODED",
+          "MUFFLED",
+          "BENTHIC",
+          "STORM",
+          "RUSTED",
+          "COLD",
+          "BLIND"
         ],
-        ru_forms: [
+        "ru_forms": [
           {
-            m: 'СОЛЁНЫЙ',
-            f: 'СОЛЁНАЯ',
-            n: 'СОЛЁНОЕ',
+            "m": "СОЛЁНЫЙ",
+            "f": "СОЛЁНАЯ",
+            "n": "СОЛЁНОЕ"
           },
           {
-            m: 'ЗАТОПЛЕННЫЙ',
-            f: 'ЗАТОПЛЕННАЯ',
-            n: 'ЗАТОПЛЕННОЕ',
+            "m": "ЗАТОПЛЕННЫЙ",
+            "f": "ЗАТОПЛЕННАЯ",
+            "n": "ЗАТОПЛЕННОЕ"
           },
           {
-            m: 'ГЛУХОЙ',
-            f: 'ГЛУХАЯ',
-            n: 'ГЛУХОЕ',
+            "m": "ГЛУХОЙ",
+            "f": "ГЛУХАЯ",
+            "n": "ГЛУХОЕ"
           },
           {
-            m: 'ПРИДОННЫЙ',
-            f: 'ПРИДОННАЯ',
-            n: 'ПРИДОННОЕ',
+            "m": "ПРИДОННЫЙ",
+            "f": "ПРИДОННАЯ",
+            "n": "ПРИДОННОЕ"
           },
           {
-            m: 'ШТОРМОВОЙ',
-            f: 'ШТОРМОВАЯ',
-            n: 'ШТОРМОВОЕ',
+            "m": "ШТОРМОВОЙ",
+            "f": "ШТОРМОВАЯ",
+            "n": "ШТОРМОВОЕ"
           },
           {
-            m: 'РЖАВЫЙ',
-            f: 'РЖАВАЯ',
-            n: 'РЖАВОЕ',
+            "m": "РЖАВЫЙ",
+            "f": "РЖАВАЯ",
+            "n": "РЖАВОЕ"
           },
           {
-            m: 'ХОЛОДНЫЙ',
-            f: 'ХОЛОДНАЯ',
-            n: 'ХОЛОДНОЕ',
+            "m": "ХОЛОДНЫЙ",
+            "f": "ХОЛОДНАЯ",
+            "n": "ХОЛОДНОЕ"
           },
           {
-            m: 'СЛЕПОЙ',
-            f: 'СЛЕПАЯ',
-            n: 'СЛЕПОЕ',
-          },
+            "m": "СЛЕПОЙ",
+            "f": "СЛЕПАЯ",
+            "n": "СЛЕПОЕ"
+          }
         ],
-        es_forms: [
+        "es_forms": [
           {
-            m: 'DE SAL',
-            f: 'DE SAL',
+            "m": "DE SAL",
+            "f": "DE SAL"
           },
           {
-            m: 'INUNDADO',
-            f: 'INUNDADA',
+            "m": "INUNDADO",
+            "f": "INUNDADA"
           },
           {
-            m: 'AHOGADO',
-            f: 'AHOGADA',
+            "m": "AHOGADO",
+            "f": "AHOGADA"
           },
           {
-            m: 'BENTÓNICO',
-            f: 'BENTÓNICA',
+            "m": "BENTÓNICO",
+            "f": "BENTÓNICA"
           },
           {
-            m: 'DE TORMENTA',
-            f: 'DE TORMENTA',
+            "m": "DE TORMENTA",
+            "f": "DE TORMENTA"
           },
           {
-            m: 'OXIDADO',
-            f: 'OXIDADA',
+            "m": "OXIDADO",
+            "f": "OXIDADA"
           },
           {
-            m: 'FRÍO',
-            f: 'FRÍA',
+            "m": "FRÍO",
+            "f": "FRÍA"
           },
           {
-            m: 'CIEGO',
-            f: 'CIEGA',
-          },
+            "m": "CIEGO",
+            "f": "CIEGA"
+          }
         ],
-        pt_forms: [
+        "pt_forms": [
           {
-            m: 'DE SAL',
-            f: 'DE SAL',
+            "m": "DE SAL",
+            "f": "DE SAL"
           },
           {
-            m: 'ALAGADO',
-            f: 'ALAGADA',
+            "m": "ALAGADO",
+            "f": "ALAGADA"
           },
           {
-            m: 'ABAFADO',
-            f: 'ABAFADA',
+            "m": "ABAFADO",
+            "f": "ABAFADA"
           },
           {
-            m: 'BÊNTICO',
-            f: 'BÊNTICA',
+            "m": "BÊNTICO",
+            "f": "BÊNTICA"
           },
           {
-            m: 'DE TEMPESTADE',
-            f: 'DE TEMPESTADE',
+            "m": "DE TEMPESTADE",
+            "f": "DE TEMPESTADE"
           },
           {
-            m: 'ENFERRUJADO',
-            f: 'ENFERRUJADA',
+            "m": "ENFERRUJADO",
+            "f": "ENFERRUJADA"
           },
           {
-            m: 'FRIO',
-            f: 'FRIA',
+            "m": "FRIO",
+            "f": "FRIA"
           },
           {
-            m: 'CEGO',
-            f: 'CEGA',
-          },
+            "m": "CEGO",
+            "f": "CEGA"
+          }
         ],
-        es: [
-          'DE SAL',
-          'INUNDADO',
-          'AHOGADO',
-          'BENTÓNICO',
-          'DE TORMENTA',
-          'OXIDADO',
-          'FRÍO',
-          'CIEGO',
+        "es": [
+          "DE SAL",
+          "INUNDADO",
+          "AHOGADO",
+          "BENTÓNICO",
+          "DE TORMENTA",
+          "OXIDADO",
+          "FRÍO",
+          "CIEGO"
         ],
-        pt: [
-          'DE SAL',
-          'ALAGADO',
-          'ABAFADO',
-          'BÊNTICO',
-          'DE TEMPESTADE',
-          'ENFERRUJADO',
-          'FRIO',
-          'CEGO',
-        ],
+        "pt": [
+          "DE SAL",
+          "ALAGADO",
+          "ABAFADO",
+          "BÊNTICO",
+          "DE TEMPESTADE",
+          "ENFERRUJADO",
+          "FRIO",
+          "CEGO"
+        ]
       },
-      noun: {
-        ru: [
-          'ГОРИЗОНТ',
-          'КЕССОН',
-          'ЯКОРЬ',
-          'ТРЮМ',
-          'МАЯК',
-          'КИЛЬ',
-          'ФАРВАТЕР',
-          'БАЛЛАСТ',
+      "noun": {
+        "ru": [
+          "ГОРИЗОНТ",
+          "КЕССОН",
+          "ЯКОРЬ",
+          "ТРЮМ",
+          "МАЯК",
+          "КИЛЬ",
+          "ФАРВАТЕР",
+          "БАЛЛАСТ"
         ],
-        en: [
-          'HORIZON',
-          'CAISSON',
-          'ANCHOR',
-          'HOLD',
-          'BEACON',
-          'KEEL',
-          'CHANNEL',
-          'BALLAST',
+        "en": [
+          "HORIZON",
+          "CAISSON",
+          "ANCHOR",
+          "HOLD",
+          "BEACON",
+          "KEEL",
+          "CHANNEL",
+          "BALLAST"
         ],
-        ru_gender: ['m', 'm', 'm', 'm', 'm', 'm', 'm', 'm'],
-        es: [
-          'HORIZONTE',
-          'CÁMARA',
-          'ANCLA',
-          'BODEGA',
-          'BALIZA',
-          'QUILLA',
-          'CANAL',
-          'LASTRE',
+        "ru_gender": [
+          "m",
+          "m",
+          "m",
+          "m",
+          "m",
+          "m",
+          "m",
+          "m"
         ],
-        pt: [
-          'HORIZONTE',
-          'CÂMARA',
-          'ÂNCORA',
-          'PORÃO',
-          'FAROL',
-          'QUILHA',
-          'CANAL',
-          'LASTRO',
+        "es": [
+          "HORIZONTE",
+          "CÁMARA",
+          "ANCLA",
+          "BODEGA",
+          "BALIZA",
+          "QUILLA",
+          "CANAL",
+          "LASTRE"
         ],
-        es_gender: ['m', 'f', 'f', 'f', 'f', 'f', 'm', 'm'],
-        pt_gender: ['m', 'f', 'f', 'm', 'm', 'f', 'm', 'm'],
-      },
+        "pt": [
+          "HORIZONTE",
+          "CÂMARA",
+          "ÂNCORA",
+          "PORÃO",
+          "FAROL",
+          "QUILHA",
+          "CANAL",
+          "LASTRO"
+        ],
+        "es_gender": [
+          "m",
+          "f",
+          "f",
+          "f",
+          "f",
+          "f",
+          "m",
+          "m"
+        ],
+        "pt_gender": [
+          "m",
+          "f",
+          "f",
+          "m",
+          "m",
+          "f",
+          "m",
+          "m"
+        ]
+      }
     },
-    evidence_sources: {
-      ru: [
-        'вахтенный журнал платформы',
-        'телеметрия с придонного датчика',
-        'радиограмма с борта',
-        'карта сектора с пометками карандашом',
+    "evidence_sources": {
+      "ru": [
+        "вахтенный журнал платформы",
+        "телеметрия с придонного датчика",
+        "радиограмма с борта",
+        "карта сектора с пометками карандашом"
       ],
-      en: [
-        'a platform watch log',
-        'telemetry from a seabed sensor',
-        'a radio message from the deck',
-        'a sector chart marked in pencil',
+      "en": [
+        "a platform watch log",
+        "telemetry from a seabed sensor",
+        "a radio message from the deck",
+        "a sector chart marked in pencil"
       ],
-      es: [
-        'un registro de vigilancia de plataforma',
-        'telemetría de un sensor en el lecho marino',
-        'un mensaje de radio desde la cubierta',
-        'una carta de sector marcada a lápiz',
+      "es": [
+        "un registro de vigilancia de plataforma",
+        "telemetría de un sensor en el lecho marino",
+        "un mensaje de radio desde la cubierta",
+        "una carta de sector marcada a lápiz"
       ],
-      pt: [
-        'um registro de vigilância da plataforma',
-        'telemetria de um sensor no leito oceânico',
-        'uma mensagem de rádio do convés',
-        'um mapa de setor marcado a lápis',
-      ],
+      "pt": [
+        "um registro de vigilância da plataforma",
+        "telemetria de um sensor no leito oceânico",
+        "uma mensagem de rádio do convés",
+        "um mapa de setor marcado a lápis"
+      ]
     },
-    payoff: {
-      ru: 'BAJOFONDO платит с задержкой в один прилив и никогда не объясняет, почему именно так.',
-      en: 'BAJOFONDO pays one tide late and never explains why that particular delay.',
-      es: 'BAJOFONDO paga con una marea de retraso y nunca explica el porqué de esa demora en particular.',
-      pt: 'O BAJOFONDO paga com uma maré de atraso e nunca explica o porquê dessa demora em particular.',
+    "payoff": {
+      "ru": "BAJOFONDO платит с задержкой в один прилив и никогда не объясняет, почему именно так.",
+      "en": "BAJOFONDO pays one tide late and never explains why that particular delay.",
+      "es": "BAJOFONDO paga con una marea de retraso y nunca explica el porqué de esa demora en particular.",
+      "pt": "O BAJOFONDO paga com uma maré de atraso e nunca explica o porquê dessa demora em particular."
     },
-    board_key: 'deephold',
+    "board_key": "deephold"
   },
   {
-    slug: 'cruz-del-sur',
-    order: 4,
-    name: {
-      ru: 'CRUZ DEL SUR',
-      en: 'CRUZ DEL SUR',
-      es: 'CRUZ DEL SUR',
-      pt: 'CRUZ DEL SUR',
+    "slug": "cruz-del-sur",
+    "order": 4,
+    "name": {
+      "ru": "CRUZ DEL SUR",
+      "en": "CRUZ DEL SUR",
+      "es": "CRUZ DEL SUR",
+      "pt": "CRUZ DEL SUR"
     },
-    kind: {
-      ru: 'орбитальное хранение ключей',
-      en: 'orbital key custody',
-      es: 'custodia de llave orbital',
-      pt: 'custódia de chave orbital',
+    "kind": {
+      "ru": "орбитальное хранение ключей",
+      "en": "orbital key custody",
+      "es": "custodia de llave orbital",
+      "pt": "custódia de chave orbital"
     },
-    district: {
-      ru: 'Пасео Колон',
-      en: 'Paseo Colón',
-      es: 'Paseo Colón',
-      pt: 'Paseo Colón',
+    "district": {
+      "ru": "Пасео Колон",
+      "en": "Paseo Colón",
+      "es": "Paseo Colón",
+      "pt": "Paseo Colón"
     },
-    difficulty: [3, 5],
-    creed: {
-      ru: [
-        'CRUZ DEL SUR держит ключи там, куда не дотянется ни один суд: на высоте четырёхсот километров.',
-        'Наземная станция — четыре этажа на Пасео Колон, антенны на крыше, окна заклеены плёнкой.',
-        'Их главный продукт — не хранилище, а задержка. Запрос идёт наверх две с половиной секунды,',
-        'и за эти секунды успевает умереть большинство плохих идей.',
-        'Всё, что они делают, они считают. Даже имена у них — результат арифметики.',
+    "difficulty": [
+      3,
+      5
+    ],
+    "creed": {
+      "ru": [
+        "CRUZ DEL SUR держит ключи там, куда не дотянется ни один суд: на высоте четырёхсот километров.",
+        "Наземная станция — четыре этажа на Пасео Колон, антенны на крыше, окна заклеены плёнкой.",
+        "Их главный продукт — не хранилище, а задержка. Запрос идёт наверх две с половиной секунды,",
+        "и за эти секунды успевает умереть большинство плохих идей.",
+        "Всё, что они делают, они считают. Даже имена у них — результат арифметики."
       ],
-      en: [
-        'CRUZ DEL SUR keeps keys where no court can reach: four hundred kilometres up.',
-        'The ground station is four floors on Paseo Colón, antennas on the roof, windows filmed over.',
-        'Their real product is not storage but latency. A request climbs for two and a half seconds,',
-        'and in those seconds most bad ideas die of natural causes.',
-        'Everything they do, they compute. Even their names come out of arithmetic.',
+      "en": [
+        "CRUZ DEL SUR keeps keys where no court can reach: four hundred kilometres up.",
+        "The ground station is four floors on Paseo Colón, antennas on the roof, windows filmed over.",
+        "Their real product is not storage but latency. A request climbs for two and a half seconds,",
+        "and in those seconds most bad ideas die of natural causes.",
+        "Everything they do, they compute. Even their names come out of arithmetic."
       ],
-      es: [
-        'CRUZ DEL SUR guarda las llaves donde ningún tribunal puede llegar: a cuatrocientos kilómetros de altura.',
-        'La estación terrestre ocupa cuatro pisos en el Paseo Colón, con antenas en la azotea y ventanas polarizadas.',
-        'Su verdadero producto no es el almacenamiento, sino la latencia. Una solicitud asciende durante dos segundos y medio,',
-        'y en esos segundos, la mayoría de las malas ideas mueren por causas naturales.',
-        'Todo lo que hacen, lo calculan. Incluso sus nombres surgen de la aritmética.',
+      "es": [
+        "CRUZ DEL SUR guarda las llaves donde ningún tribunal puede llegar: a cuatrocientos kilómetros de altura.",
+        "La estación terrestre ocupa cuatro pisos en el Paseo Colón, con antenas en la azotea y ventanas polarizadas.",
+        "Su verdadero producto no es el almacenamiento, sino la latencia. Una solicitud asciende durante dos segundos y medio,",
+        "y en esos segundos, la mayoría de las malas ideas mueren por causas naturales.",
+        "Todo lo que hacen, lo calculan. Incluso sus nombres surgen de la aritmética."
       ],
-      pt: [
-        'A CRUZ DEL SUR guarda chaves onde nenhum tribunal alcança: a quatrocentos quilômetros de altitude.',
-        'A estação terrestre fica em quatro andares no Paseo Colón, antenas no teto, janelas com película.',
-        'O produto real deles não é armazenamento, é latência. Uma requisição sobe por dois segundos e meio,',
-        'e nesses segundos a maioria das más ideias morre de causas naturais.',
-        'Tudo o que fazem, eles computam. Até os nomes deles saem da aritmética.',
+      "pt": [
+        "A CRUZ DEL SUR guarda chaves onde nenhum tribunal alcança: a quatrocentos quilômetros de altitude.",
+        "A estação terrestre fica em quatro andares no Paseo Colón, antenas no teto, janelas com película.",
+        "O produto real deles não é armazenamento, é latência. Uma requisição sobe por dois segundos e meio,",
+        "e nesses segundos a maioria das más ideias morre de causas naturais.",
+        "Tudo o que fazem, eles computam. Até os nomes deles saem da aritmética."
+      ]
+    },
+    "dialect": {
+      "ru": "CRUZ DEL SUR диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить.",
+      "en": "CRUZ DEL SUR dictates numbers rather than words, and never plainly. The index has to be computed.",
+      "es": "CRUZ DEL SUR dicta números en lugar de palabras, y nunca de forma directa. El índice debe ser calculado.",
+      "pt": "CRUZ DEL SUR dita números em vez de palavras, e nunca de forma clara. O índice precisa ser calculado."
+    },
+    "archetypes": [
+      "index_math",
+      "mirror_index",
+      "grid_coords"
+    ],
+    "acts": {
+      "ru": [
+        "ВЫВЕДЕНИЕ",
+        "АПОГЕЙ",
+        "ТЕНЬ ЗЕМЛИ",
+        "СХОД С ОРБИТЫ"
       ],
+      "en": [
+        "INSERTION",
+        "APOGEE",
+        "EARTH SHADOW",
+        "DEORBIT"
+      ],
+      "es": [
+        "INSERCIÓN",
+        "APOGEO",
+        "SOMBRA TERRESTRE",
+        "DESÓRBITA"
+      ],
+      "pt": [
+        "INSERÇÃO",
+        "APOGEU",
+        "SOMBRA DA TERRA",
+        "DESORBITA"
+      ]
     },
-    dialect: {
-      ru: 'CRUZ DEL SUR диктует не слова, а номера — и никогда прямо. Индекс придётся вычислить.',
-      en: 'CRUZ DEL SUR dictates numbers rather than words, and never plainly. The index has to be computed.',
-      es: 'CRUZ DEL SUR dicta números en lugar de palabras, y nunca de forma directa. El índice debe ser calculado.',
-      pt: 'CRUZ DEL SUR dita números em vez de palavras, e nunca de forma clara. O índice precisa ser calculado.',
-    },
-    archetypes: ['index_math', 'mirror_index', 'grid_coords'],
-    acts: {
-      ru: ['ВЫВЕДЕНИЕ', 'АПОГЕЙ', 'ТЕНЬ ЗЕМЛИ', 'СХОД С ОРБИТЫ'],
-      en: ['INSERTION', 'APOGEE', 'EARTH SHADOW', 'DEORBIT'],
-      es: ['INSERCIÓN', 'APOGEO', 'SOMBRA TERRESTRE', 'DESÓRBITA'],
-      pt: ['INSERÇÃO', 'APOGEU', 'SOMBRA DA TERRA', 'DESORBITA'],
-    },
-    motifs: {
-      adjective: {
-        ru: [
-          'ВЫСОКИЙ',
-          'ЗАДЕРЖАННЫЙ',
-          'БЕЗВОЗДУШНЫЙ',
-          'СОЛНЕЧНЫЙ',
-          'ТЕНЕВОЙ',
-          'ГЕОСТАЦИОНАРНЫЙ',
-          'СБИТЫЙ',
-          'ЯСНЫЙ',
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "ВЫСОКИЙ",
+          "ЗАДЕРЖАННЫЙ",
+          "БЕЗВОЗДУШНЫЙ",
+          "СОЛНЕЧНЫЙ",
+          "ТЕНЕВОЙ",
+          "ГЕОСТАЦИОНАРНЫЙ",
+          "СБИТЫЙ",
+          "ЯСНЫЙ"
         ],
-        en: [
-          'HIGH',
-          'DELAYED',
-          'AIRLESS',
-          'SOLAR',
-          'SHADOWED',
-          'GEOSTATIONARY',
-          'DOWNED',
-          'CLEAR',
+        "en": [
+          "HIGH",
+          "DELAYED",
+          "AIRLESS",
+          "SOLAR",
+          "SHADOWED",
+          "GEOSTATIONARY",
+          "DOWNED",
+          "CLEAR"
         ],
-        ru_forms: [
+        "ru_forms": [
           {
-            m: 'ВЫСОКИЙ',
-            f: 'ВЫСОКАЯ',
-            n: 'ВЫСОКОЕ',
+            "m": "ВЫСОКИЙ",
+            "f": "ВЫСОКАЯ",
+            "n": "ВЫСОКОЕ"
           },
           {
-            m: 'ЗАДЕРЖАННЫЙ',
-            f: 'ЗАДЕРЖАННАЯ',
-            n: 'ЗАДЕРЖАННОЕ',
+            "m": "ЗАДЕРЖАННЫЙ",
+            "f": "ЗАДЕРЖАННАЯ",
+            "n": "ЗАДЕРЖАННОЕ"
           },
           {
-            m: 'БЕЗВОЗДУШНЫЙ',
-            f: 'БЕЗВОЗДУШНАЯ',
-            n: 'БЕЗВОЗДУШНОЕ',
+            "m": "БЕЗВОЗДУШНЫЙ",
+            "f": "БЕЗВОЗДУШНАЯ",
+            "n": "БЕЗВОЗДУШНОЕ"
           },
           {
-            m: 'СОЛНЕЧНЫЙ',
-            f: 'СОЛНЕЧНАЯ',
-            n: 'СОЛНЕЧНОЕ',
+            "m": "СОЛНЕЧНЫЙ",
+            "f": "СОЛНЕЧНАЯ",
+            "n": "СОЛНЕЧНОЕ"
           },
           {
-            m: 'ТЕНЕВОЙ',
-            f: 'ТЕНЕВАЯ',
-            n: 'ТЕНЕВОЕ',
+            "m": "ТЕНЕВОЙ",
+            "f": "ТЕНЕВАЯ",
+            "n": "ТЕНЕВОЕ"
           },
           {
-            m: 'ГЕОСТАЦИОНАРНЫЙ',
-            f: 'ГЕОСТАЦИОНАРНАЯ',
-            n: 'ГЕОСТАЦИОНАРНОЕ',
+            "m": "ГЕОСТАЦИОНАРНЫЙ",
+            "f": "ГЕОСТАЦИОНАРНАЯ",
+            "n": "ГЕОСТАЦИОНАРНОЕ"
           },
           {
-            m: 'СБИТЫЙ',
-            f: 'СБИТАЯ',
-            n: 'СБИТОЕ',
+            "m": "СБИТЫЙ",
+            "f": "СБИТАЯ",
+            "n": "СБИТОЕ"
           },
           {
-            m: 'ЯСНЫЙ',
-            f: 'ЯСНАЯ',
-            n: 'ЯСНОЕ',
-          },
+            "m": "ЯСНЫЙ",
+            "f": "ЯСНАЯ",
+            "n": "ЯСНОЕ"
+          }
         ],
-        es_forms: [
+        "es_forms": [
           {
-            m: 'ALTO',
-            f: 'ALTA',
+            "m": "ALTO",
+            "f": "ALTA"
           },
           {
-            m: 'RETRASADO',
-            f: 'RETRASADA',
+            "m": "RETRASADO",
+            "f": "RETRASADA"
           },
           {
-            m: 'SIN AIRE',
-            f: 'SIN AIRE',
+            "m": "SIN AIRE",
+            "f": "SIN AIRE"
           },
           {
-            m: 'SOLAR',
-            f: 'SOLAR',
+            "m": "SOLAR",
+            "f": "SOLAR"
           },
           {
-            m: 'SOMBRÍO',
-            f: 'SOMBRÍA',
+            "m": "SOMBRÍO",
+            "f": "SOMBRÍA"
           },
           {
-            m: 'GEOESTACIONARIO',
-            f: 'GEOESTACIONARIA',
+            "m": "GEOESTACIONARIO",
+            "f": "GEOESTACIONARIA"
           },
           {
-            m: 'DERRIBADO',
-            f: 'DERRIBADA',
+            "m": "DERRIBADO",
+            "f": "DERRIBADA"
           },
           {
-            m: 'DESPEJADO',
-            f: 'DESPEJADA',
-          },
+            "m": "DESPEJADO",
+            "f": "DESPEJADA"
+          }
         ],
-        pt_forms: [
+        "pt_forms": [
           {
-            m: 'ALTO',
-            f: 'ALTA',
+            "m": "ALTO",
+            "f": "ALTA"
           },
           {
-            m: 'ATRASADO',
-            f: 'ATRASADA',
+            "m": "ATRASADO",
+            "f": "ATRASADA"
           },
           {
-            m: 'SEM AR',
-            f: 'SEM AR',
+            "m": "SEM AR",
+            "f": "SEM AR"
           },
           {
-            m: 'SOLAR',
-            f: 'SOLAR',
+            "m": "SOLAR",
+            "f": "SOLAR"
           },
           {
-            m: 'SOMBRIO',
-            f: 'SOMBRIA',
+            "m": "SOMBRIO",
+            "f": "SOMBRIA"
           },
           {
-            m: 'GEOESTACIONÁRIO',
-            f: 'GEOESTACIONÁRIA',
+            "m": "GEOESTACIONÁRIO",
+            "f": "GEOESTACIONÁRIA"
           },
           {
-            m: 'DERRUBADO',
-            f: 'DERRUBADA',
+            "m": "DERRUBADO",
+            "f": "DERRUBADA"
           },
           {
-            m: 'LIMPO',
-            f: 'LIMPA',
-          },
+            "m": "LIMPO",
+            "f": "LIMPA"
+          }
         ],
-        es: [
-          'ALTO',
-          'RETRASADO',
-          'SIN AIRE',
-          'SOLAR',
-          'SOMBRÍO',
-          'GEOESTACIONARIO',
-          'DERRIBADO',
-          'DESPEJADO',
+        "es": [
+          "ALTO",
+          "RETRASADO",
+          "SIN AIRE",
+          "SOLAR",
+          "SOMBRÍO",
+          "GEOESTACIONARIO",
+          "DERRIBADO",
+          "DESPEJADO"
         ],
-        pt: [
-          'ALTO',
-          'ATRASADO',
-          'SEM AR',
-          'SOLAR',
-          'SOMBRIO',
-          'GEOESTACIONÁRIO',
-          'DERRUBADO',
-          'LIMPO',
-        ],
+        "pt": [
+          "ALTO",
+          "ATRASADO",
+          "SEM AR",
+          "SOLAR",
+          "SOMBRIO",
+          "GEOESTACIONÁRIO",
+          "DERRUBADO",
+          "LIMPO"
+        ]
       },
-      noun: {
-        ru: [
-          'АПОГЕЙ',
-          'ВИТОК',
-          'ТРАНЗИТ',
-          'МАЯК',
-          'ОКНО',
-          'ВЕКТОР',
-          'ПЕРИГЕЙ',
-          'КАНАЛ',
+      "noun": {
+        "ru": [
+          "АПОГЕЙ",
+          "ВИТОК",
+          "ТРАНЗИТ",
+          "МАЯК",
+          "ОКНО",
+          "ВЕКТОР",
+          "ПЕРИГЕЙ",
+          "КАНАЛ"
         ],
-        en: [
-          'APOGEE',
-          'ORBIT',
-          'TRANSIT',
-          'BEACON',
-          'WINDOW',
-          'VECTOR',
-          'PERIGEE',
-          'DOWNLINK',
+        "en": [
+          "APOGEE",
+          "ORBIT",
+          "TRANSIT",
+          "BEACON",
+          "WINDOW",
+          "VECTOR",
+          "PERIGEE",
+          "DOWNLINK"
         ],
-        ru_gender: ['m', 'm', 'm', 'm', 'n', 'm', 'm', 'm'],
-        es: [
-          'APOGEO',
-          'ÓRBITA',
-          'TRÁNSITO',
-          'BALIZA',
-          'VENTANA',
-          'VECTOR',
-          'PERIGEO',
-          'ENLACE DESCENDENTE',
+        "ru_gender": [
+          "m",
+          "m",
+          "m",
+          "m",
+          "n",
+          "m",
+          "m",
+          "m"
         ],
-        pt: [
-          'APOGEU',
-          'ÓRBITA',
-          'TRÂNSITO',
-          'FAROL',
-          'JANELA',
-          'VETOR',
-          'PERIGEU',
-          'ENLACE DESCENDENTE',
+        "es": [
+          "APOGEO",
+          "ÓRBITA",
+          "TRÁNSITO",
+          "BALIZA",
+          "VENTANA",
+          "VECTOR",
+          "PERIGEO",
+          "ENLACE DESCENDENTE"
         ],
-        es_gender: ['m', 'f', 'm', 'f', 'f', 'm', 'm', 'm'],
-        pt_gender: ['m', 'f', 'm', 'm', 'f', 'm', 'm', 'm'],
-      },
+        "pt": [
+          "APOGEU",
+          "ÓRBITA",
+          "TRÂNSITO",
+          "FAROL",
+          "JANELA",
+          "VETOR",
+          "PERIGEU",
+          "ENLACE DESCENDENTE"
+        ],
+        "es_gender": [
+          "m",
+          "f",
+          "m",
+          "f",
+          "f",
+          "m",
+          "m",
+          "m"
+        ],
+        "pt_gender": [
+          "m",
+          "f",
+          "m",
+          "m",
+          "f",
+          "m",
+          "m",
+          "m"
+        ]
+      }
     },
-    evidence_sources: {
-      ru: [
-        'телеметрический пакет с задержкой 2,5 с',
-        'расчёт баллистика на полях распечатки',
-        'лог наземной станции',
-        'снимок с борта, сжатый до неузнаваемости',
+    "evidence_sources": {
+      "ru": [
+        "телеметрический пакет с задержкой 2,5 с",
+        "расчёт баллистика на полях распечатки",
+        "лог наземной станции",
+        "снимок с борта, сжатый до неузнаваемости"
       ],
-      en: [
-        'a telemetry packet 2.5 s late',
+      "en": [
+        "a telemetry packet 2.5 s late",
         "a ballistician's working in a printout margin",
-        'a ground-station log',
-        'an on-board image compressed past recognition',
+        "a ground-station log",
+        "an on-board image compressed past recognition"
       ],
-      es: [
-        'un paquete de telemetría con 2.5 s de retraso',
-        'el trabajo de un balístico en el margen de una impresión',
-        'un registro de estación terrestre',
-        'una imagen a bordo comprimida hasta ser irreconocible',
+      "es": [
+        "un paquete de telemetría con 2.5 s de retraso",
+        "el trabajo de un balístico en el margen de una impresión",
+        "un registro de estación terrestre",
+        "una imagen a bordo comprimida hasta ser irreconocible"
       ],
-      pt: [
-        'um pacote de telemetria com 2,5 s de atraso',
-        'o trabalho de um balístico na margem de uma impressão',
-        'um registro de estação terrestre',
-        'uma imagem de bordo comprimida além do reconhecimento',
-      ],
+      "pt": [
+        "um pacote de telemetria com 2,5 s de atraso",
+        "o trabalho de um balístico na margem de uma impressão",
+        "um registro de estação terrestre",
+        "uma imagem de bordo comprimida além do reconhecimento"
+      ]
     },
-    payoff: {
-      ru: 'CRUZ DEL SUR подтверждает приём через две с половиной секунды после того, как ты закрыл терминал.',
-      en: 'CRUZ DEL SUR acknowledges two and a half seconds after you have already closed the terminal.',
-      es: 'CRUZ DEL SUR acusa recibo dos segundos y medio después de que ya has cerrado el terminal.',
-      pt: 'CRUZ DEL SUR reconhece dois segundos e meio depois de você já ter fechado o terminal.',
+    "payoff": {
+      "ru": "CRUZ DEL SUR подтверждает приём через две с половиной секунды после того, как ты закрыл терминал.",
+      "en": "CRUZ DEL SUR acknowledges two and a half seconds after you have already closed the terminal.",
+      "es": "CRUZ DEL SUR acusa recibo dos segundos y medio después de que ya has cerrado el terminal.",
+      "pt": "CRUZ DEL SUR reconhece dois segundos e meio depois de você já ter fechado o terminal."
     },
-    board_key: 'vega-orbital',
+    "board_key": "vega-orbital"
   },
   {
-    slug: 'sanatorio',
-    order: 5,
-    name: {
-      ru: 'SANATORIO NORTE',
-      en: 'SANATORIO NORTE',
-      es: 'SANATORIO NORTE',
-      pt: 'SANATORIO NORTE',
+    "slug": "sanatorio",
+    "order": 5,
+    "name": {
+      "ru": "SANATORIO NORTE",
+      "en": "SANATORIO NORTE",
+      "es": "SANATORIO NORTE",
+      "pt": "SANATORIO NORTE"
     },
-    kind: {
-      ru: 'биотех и клиники аренды тела',
-      en: 'biotech and body-lease clinics',
-      es: 'clínicas de biotecnología y alquiler de cuerpos',
-      pt: 'clínicas de biotecnologia e aluguel de corpos',
+    "kind": {
+      "ru": "биотех и клиники аренды тела",
+      "en": "biotech and body-lease clinics",
+      "es": "clínicas de biotecnología y alquiler de cuerpos",
+      "pt": "clínicas de biotecnologia e aluguel de corpos"
     },
-    district: {
-      ru: 'Баррио-Норте',
-      en: 'Barrio Norte',
-      es: 'Barrio Norte',
-      pt: 'Barrio Norte',
+    "district": {
+      "ru": "Баррио-Норте",
+      "en": "Barrio Norte",
+      "es": "Barrio Norte",
+      "pt": "Barrio Norte"
     },
-    difficulty: [3, 5],
-    creed: {
-      ru: [
-        'SANATORIO NORTE разговаривает с тобой голосом медсестры, которая уже всё решила.',
-        'Три санатория между Пуэйрредон и Санта-Фе, мрамор в холле, очередь с семи утра.',
-        'Они сдают в аренду печень, роговицу и двадцать лет жизни — в рассрочку, под залог кошелька.',
-        'Если клиент перестал платить, ключ переходит к ним. Если клиент перестал дышать — тоже.',
-        'Их каталог устроен как определитель видов: каждая вещь занимает единственную ветку.',
+    "difficulty": [
+      3,
+      5
+    ],
+    "creed": {
+      "ru": [
+        "SANATORIO NORTE разговаривает с тобой голосом медсестры, которая уже всё решила.",
+        "Три санатория между Пуэйрредон и Санта-Фе, мрамор в холле, очередь с семи утра.",
+        "Они сдают в аренду печень, роговицу и двадцать лет жизни — в рассрочку, под залог кошелька.",
+        "Если клиент перестал платить, ключ переходит к ним. Если клиент перестал дышать — тоже.",
+        "Их каталог устроен как определитель видов: каждая вещь занимает единственную ветку."
       ],
-      en: [
-        'SANATORIO NORTE speaks to you in the voice of a nurse who has already decided.',
-        'Three sanatorios between Pueyrredón and Santa Fe, marble in the lobby, a queue from seven.',
-        'They lease out livers, corneas and twenty years of life, in instalments, against a wallet.',
-        'If the client stops paying, the key becomes theirs. If the client stops breathing, likewise.',
-        'Their catalogue works like a species key: every item sits on exactly one branch.',
+      "en": [
+        "SANATORIO NORTE speaks to you in the voice of a nurse who has already decided.",
+        "Three sanatorios between Pueyrredón and Santa Fe, marble in the lobby, a queue from seven.",
+        "They lease out livers, corneas and twenty years of life, in instalments, against a wallet.",
+        "If the client stops paying, the key becomes theirs. If the client stops breathing, likewise.",
+        "Their catalogue works like a species key: every item sits on exactly one branch."
       ],
-      es: [
-        'SANATORIO NORTE te habla con la voz de una enfermera que ya ha tomado una decisión.',
-        'Tres sanatorios entre Pueyrredón y Santa Fe, mármol en el vestíbulo, una fila desde las siete.',
-        'Arriendan hígados, córneas y veinte años de vida, en cuotas, contra una billetera.',
-        'Si el cliente deja de pagar, la llave pasa a ser suya. Si el cliente deja de respirar, lo mismo.',
-        'Su catálogo funciona como una clave de especie: cada elemento se asienta exactamente en una rama.',
+      "es": [
+        "SANATORIO NORTE te habla con la voz de una enfermera que ya ha tomado una decisión.",
+        "Tres sanatorios entre Pueyrredón y Santa Fe, mármol en el vestíbulo, una fila desde las siete.",
+        "Arriendan hígados, córneas y veinte años de vida, en cuotas, contra una billetera.",
+        "Si el cliente deja de pagar, la llave pasa a ser suya. Si el cliente deja de respirar, lo mismo.",
+        "Su catálogo funciona como una clave de especie: cada elemento se asienta exactamente en una rama."
       ],
-      pt: [
-        'SANATORIO NORTE fala com você com a voz de uma enfermeira que já tomou sua decisão.',
-        'Três sanatórios entre Pueyrredón e Santa Fe, mármore no saguão, fila desde as sete.',
-        'Eles alugam fígados, córneas e vinte anos de vida, em parcelas, contra uma carteira.',
-        'Se o cliente para de pagar, a chave torna-se deles. Se o cliente para de respirar, da mesma forma.',
-        'O catálogo deles funciona como uma chave de espécie: cada item repousa exatamente em um ramo.',
+      "pt": [
+        "SANATORIO NORTE fala com você com a voz de uma enfermeira que já tomou sua decisão.",
+        "Três sanatórios entre Pueyrredón e Santa Fe, mármore no saguão, fila desde as sete.",
+        "Eles alugam fígados, córneas e vinte anos de vida, em parcelas, contra uma carteira.",
+        "Se o cliente para de pagar, a chave torna-se deles. Se o cliente para de respirar, da mesma forma.",
+        "O catálogo deles funciona como uma chave de espécie: cada item repousa exatamente em um ramo."
+      ]
+    },
+    "dialect": {
+      "ru": "SANATORIO NORTE описывает слово через его единственность: такая ветка в словаре одна.",
+      "en": "SANATORIO NORTE describes a word by its uniqueness: only one branch in the list fits.",
+      "es": "SANATORIO NORTE describe una palabra por su singularidad: solo una rama en la lista encaja.",
+      "pt": "SANATORIO NORTE descreve uma palavra por sua singularidade: apenas um ramo na lista se encaixa."
+    },
+    "archetypes": [
+      "unique_prefix",
+      "neighbour",
+      "redacted"
+    ],
+    "acts": {
+      "ru": [
+        "ПРИЁМ",
+        "АНАМНЕЗ",
+        "ОПЕРАЦИЯ",
+        "ВЫПИСКА"
       ],
+      "en": [
+        "ADMISSION",
+        "HISTORY",
+        "SURGERY",
+        "DISCHARGE"
+      ],
+      "es": [
+        "INGRESO",
+        "HISTORIAL",
+        "CIRUGÍA",
+        "ALTA"
+      ],
+      "pt": [
+        "ADMISSÃO",
+        "HISTÓRICO",
+        "CIRURGIA",
+        "ALTA"
+      ]
     },
-    dialect: {
-      ru: 'SANATORIO NORTE описывает слово через его единственность: такая ветка в словаре одна.',
-      en: 'SANATORIO NORTE describes a word by its uniqueness: only one branch in the list fits.',
-      es: 'SANATORIO NORTE describe una palabra por su singularidad: solo una rama en la lista encaja.',
-      pt: 'SANATORIO NORTE descreve uma palavra por sua singularidade: apenas um ramo na lista se encaixa.',
-    },
-    archetypes: ['unique_prefix', 'neighbour', 'redacted'],
-    acts: {
-      ru: ['ПРИЁМ', 'АНАМНЕЗ', 'ОПЕРАЦИЯ', 'ВЫПИСКА'],
-      en: ['ADMISSION', 'HISTORY', 'SURGERY', 'DISCHARGE'],
-      es: ['INGRESO', 'HISTORIAL', 'CIRUGÍA', 'ALTA'],
-      pt: ['ADMISSÃO', 'HISTÓRICO', 'CIRURGIA', 'ALTA'],
-    },
-    motifs: {
-      adjective: {
-        ru: [
-          'СТЕРИЛЬНЫЙ',
-          'ХРОНИЧЕСКИЙ',
-          'ДОНОРСКИЙ',
-          'ОТСРОЧЕННЫЙ',
-          'БЕЛЫЙ',
-          'ПОСМЕРТНЫЙ',
-          'МЯГКИЙ',
-          'ОПЛАЧЕННЫЙ',
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "СТЕРИЛЬНЫЙ",
+          "ХРОНИЧЕСКИЙ",
+          "ДОНОРСКИЙ",
+          "ОТСРОЧЕННЫЙ",
+          "БЕЛЫЙ",
+          "ПОСМЕРТНЫЙ",
+          "МЯГКИЙ",
+          "ОПЛАЧЕННЫЙ"
         ],
-        en: [
-          'STERILE',
-          'CHRONIC',
-          'DONOR',
-          'DEFERRED',
-          'WHITE',
-          'POSTHUMOUS',
-          'SOFT',
-          'PREPAID',
+        "en": [
+          "STERILE",
+          "CHRONIC",
+          "DONOR",
+          "DEFERRED",
+          "WHITE",
+          "POSTHUMOUS",
+          "SOFT",
+          "PREPAID"
         ],
-        ru_forms: [
+        "ru_forms": [
           {
-            m: 'СТЕРИЛЬНЫЙ',
-            f: 'СТЕРИЛЬНАЯ',
-            n: 'СТЕРИЛЬНОЕ',
+            "m": "СТЕРИЛЬНЫЙ",
+            "f": "СТЕРИЛЬНАЯ",
+            "n": "СТЕРИЛЬНОЕ"
           },
           {
-            m: 'ХРОНИЧЕСКИЙ',
-            f: 'ХРОНИЧЕСКАЯ',
-            n: 'ХРОНИЧЕСКОЕ',
+            "m": "ХРОНИЧЕСКИЙ",
+            "f": "ХРОНИЧЕСКАЯ",
+            "n": "ХРОНИЧЕСКОЕ"
           },
           {
-            m: 'ДОНОРСКИЙ',
-            f: 'ДОНОРСКАЯ',
-            n: 'ДОНОРСКОЕ',
+            "m": "ДОНОРСКИЙ",
+            "f": "ДОНОРСКАЯ",
+            "n": "ДОНОРСКОЕ"
           },
           {
-            m: 'ОТСРОЧЕННЫЙ',
-            f: 'ОТСРОЧЕННАЯ',
-            n: 'ОТСРОЧЕННОЕ',
+            "m": "ОТСРОЧЕННЫЙ",
+            "f": "ОТСРОЧЕННАЯ",
+            "n": "ОТСРОЧЕННОЕ"
           },
           {
-            m: 'БЕЛЫЙ',
-            f: 'БЕЛАЯ',
-            n: 'БЕЛОЕ',
+            "m": "БЕЛЫЙ",
+            "f": "БЕЛАЯ",
+            "n": "БЕЛОЕ"
           },
           {
-            m: 'ПОСМЕРТНЫЙ',
-            f: 'ПОСМЕРТНАЯ',
-            n: 'ПОСМЕРТНОЕ',
+            "m": "ПОСМЕРТНЫЙ",
+            "f": "ПОСМЕРТНАЯ",
+            "n": "ПОСМЕРТНОЕ"
           },
           {
-            m: 'МЯГКИЙ',
-            f: 'МЯГКАЯ',
-            n: 'МЯГКОЕ',
+            "m": "МЯГКИЙ",
+            "f": "МЯГКАЯ",
+            "n": "МЯГКОЕ"
           },
           {
-            m: 'ОПЛАЧЕННЫЙ',
-            f: 'ОПЛАЧЕННАЯ',
-            n: 'ОПЛАЧЕННОЕ',
-          },
+            "m": "ОПЛАЧЕННЫЙ",
+            "f": "ОПЛАЧЕННАЯ",
+            "n": "ОПЛАЧЕННОЕ"
+          }
         ],
-        es_forms: [
+        "es_forms": [
           {
-            m: 'ESTÉRIL',
-            f: 'ESTÉRIL',
+            "m": "ESTÉRIL",
+            "f": "ESTÉRIL"
           },
           {
-            m: 'CRÓNICO',
-            f: 'CRÓNICA',
+            "m": "CRÓNICO",
+            "f": "CRÓNICA"
           },
           {
-            m: 'DONANTE',
-            f: 'DONANTE',
+            "m": "DONANTE",
+            "f": "DONANTE"
           },
           {
-            m: 'DIFERIDO',
-            f: 'DIFERIDA',
+            "m": "DIFERIDO",
+            "f": "DIFERIDA"
           },
           {
-            m: 'BLANCO',
-            f: 'BLANCA',
+            "m": "BLANCO",
+            "f": "BLANCA"
           },
           {
-            m: 'PÓSTUMO',
-            f: 'PÓSTUMA',
+            "m": "PÓSTUMO",
+            "f": "PÓSTUMA"
           },
           {
-            m: 'SUAVE',
-            f: 'SUAVE',
+            "m": "SUAVE",
+            "f": "SUAVE"
           },
           {
-            m: 'PREPAGO',
-            f: 'PREPAGA',
-          },
+            "m": "PREPAGO",
+            "f": "PREPAGA"
+          }
         ],
-        pt_forms: [
+        "pt_forms": [
           {
-            m: 'ESTÉRIL',
-            f: 'ESTÉRIL',
+            "m": "ESTÉRIL",
+            "f": "ESTÉRIL"
           },
           {
-            m: 'CRÔNICO',
-            f: 'CRÔNICA',
+            "m": "CRÔNICO",
+            "f": "CRÔNICA"
           },
           {
-            m: 'DOADOR',
-            f: 'DOADORA',
+            "m": "DOADOR",
+            "f": "DOADORA"
           },
           {
-            m: 'ADIADO',
-            f: 'ADIADA',
+            "m": "ADIADO",
+            "f": "ADIADA"
           },
           {
-            m: 'BRANCO',
-            f: 'BRANCA',
+            "m": "BRANCO",
+            "f": "BRANCA"
           },
           {
-            m: 'PÓSTUMO',
-            f: 'PÓSTUMA',
+            "m": "PÓSTUMO",
+            "f": "PÓSTUMA"
           },
           {
-            m: 'SUAVE',
-            f: 'SUAVE',
+            "m": "SUAVE",
+            "f": "SUAVE"
           },
           {
-            m: 'PRÉ-PAGO',
-            f: 'PRÉ-PAGA',
-          },
+            "m": "PRÉ-PAGO",
+            "f": "PRÉ-PAGA"
+          }
         ],
-        es: [
-          'ESTÉRIL',
-          'CRÓNICO',
-          'DONANTE',
-          'DIFERIDO',
-          'BLANCO',
-          'PÓSTUMO',
-          'SUAVE',
-          'PREPAGO',
+        "es": [
+          "ESTÉRIL",
+          "CRÓNICO",
+          "DONANTE",
+          "DIFERIDO",
+          "BLANCO",
+          "PÓSTUMO",
+          "SUAVE",
+          "PREPAGO"
         ],
-        pt: [
-          'ESTÉRIL',
-          'CRÔNICO',
-          'DOADOR',
-          'ADIADO',
-          'BRANCO',
-          'PÓSTUMO',
-          'SUAVE',
-          'PRÉ-PAGO',
-        ],
+        "pt": [
+          "ESTÉRIL",
+          "CRÔNICO",
+          "DOADOR",
+          "ADIADO",
+          "BRANCO",
+          "PÓSTUMO",
+          "SUAVE",
+          "PRÉ-PAGO"
+        ]
       },
-      noun: {
-        ru: [
-          'КАРТА',
-          'ШОВ',
-          'ПАЛАТА',
-          'ДИАГНОЗ',
-          'СОГЛАСИЕ',
-          'ПУЛЬС',
-          'РЕЦЕПТ',
-          'ОБРАЗЕЦ',
+      "noun": {
+        "ru": [
+          "КАРТА",
+          "ШОВ",
+          "ПАЛАТА",
+          "ДИАГНОЗ",
+          "СОГЛАСИЕ",
+          "ПУЛЬС",
+          "РЕЦЕПТ",
+          "ОБРАЗЕЦ"
         ],
-        en: [
-          'CHART',
-          'SUTURE',
-          'WARD',
-          'DIAGNOSIS',
-          'CONSENT',
-          'PULSE',
-          'SCRIPT',
-          'SPECIMEN',
+        "en": [
+          "CHART",
+          "SUTURE",
+          "WARD",
+          "DIAGNOSIS",
+          "CONSENT",
+          "PULSE",
+          "SCRIPT",
+          "SPECIMEN"
         ],
-        ru_gender: ['f', 'm', 'f', 'm', 'n', 'm', 'm', 'm'],
-        es: [
-          'HISTORIA',
-          'SUTURA',
-          'SALA',
-          'DIAGNÓSTICO',
-          'CONSENTIMIENTO',
-          'PULSO',
-          'RECETA',
-          'ESPÉCIMEN',
+        "ru_gender": [
+          "f",
+          "m",
+          "f",
+          "m",
+          "n",
+          "m",
+          "m",
+          "m"
         ],
-        pt: [
-          'PRONTUÁRIO',
-          'SUTURA',
-          'ALA',
-          'DIAGNÓSTICO',
-          'CONSENTIMENTO',
-          'PULSO',
-          'RECEITA',
-          'ESPÉCIME',
+        "es": [
+          "HISTORIA",
+          "SUTURA",
+          "SALA",
+          "DIAGNÓSTICO",
+          "CONSENTIMIENTO",
+          "PULSO",
+          "RECETA",
+          "ESPÉCIMEN"
         ],
-        es_gender: ['f', 'f', 'f', 'm', 'm', 'm', 'f', 'm'],
-        pt_gender: ['m', 'f', 'f', 'm', 'm', 'm', 'f', 'm'],
-      },
+        "pt": [
+          "PRONTUÁRIO",
+          "SUTURA",
+          "ALA",
+          "DIAGNÓSTICO",
+          "CONSENTIMENTO",
+          "PULSO",
+          "RECEITA",
+          "ESPÉCIME"
+        ],
+        "es_gender": [
+          "f",
+          "f",
+          "f",
+          "m",
+          "m",
+          "m",
+          "f",
+          "m"
+        ],
+        "pt_gender": [
+          "m",
+          "f",
+          "f",
+          "m",
+          "m",
+          "m",
+          "f",
+          "m"
+        ]
+      }
     },
-    evidence_sources: {
-      ru: [
-        'страница из истории болезни',
-        'бланк информированного согласия',
-        'распечатка монитора у койки',
-        'опись личных вещей пациента',
+    "evidence_sources": {
+      "ru": [
+        "страница из истории болезни",
+        "бланк информированного согласия",
+        "распечатка монитора у койки",
+        "опись личных вещей пациента"
       ],
-      en: [
-        'a page from a medical history',
-        'an informed-consent form',
-        'a bedside monitor printout',
-        "an inventory of a patient's effects",
+      "en": [
+        "a page from a medical history",
+        "an informed-consent form",
+        "a bedside monitor printout",
+        "an inventory of a patient's effects"
       ],
-      es: [
-        'una página de un historial médico',
-        'un formulario de consentimiento informado',
-        'un reporte impreso del monitor de cabecera',
-        'un inventario de las pertenencias del paciente',
+      "es": [
+        "una página de un historial médico",
+        "un formulario de consentimiento informado",
+        "un reporte impreso del monitor de cabecera",
+        "un inventario de las pertenencias del paciente"
       ],
-      pt: [
-        'uma página de um histórico médico',
-        'um termo de consentimento livre e esclarecido',
-        'um relatório de monitoramento de leito',
-        'um inventário dos pertences de um paciente',
-      ],
+      "pt": [
+        "uma página de um histórico médico",
+        "um termo de consentimento livre e esclarecido",
+        "um relatório de monitoramento de leito",
+        "um inventário dos pertences de um paciente"
+      ]
     },
-    payoff: {
-      ru: 'SANATORIO NORTE благодарит и предлагает тебе обследование. Бесплатно. В первый раз.',
-      en: 'SANATORIO NORTE thanks you and offers a check-up. Free of charge. The first time.',
-      es: 'SANATORIO NORTE te da las gracias y te ofrece un chequeo. Sin coste alguno. La primera vez.',
-      pt: 'SANATORIO NORTE agradece e oferece um check-up. Por conta da casa. Só desta vez.',
+    "payoff": {
+      "ru": "SANATORIO NORTE благодарит и предлагает тебе обследование. Бесплатно. В первый раз.",
+      "en": "SANATORIO NORTE thanks you and offers a check-up. Free of charge. The first time.",
+      "es": "SANATORIO NORTE te da las gracias y te ofrece un chequeo. Sin coste alguno. La primera vez.",
+      "pt": "SANATORIO NORTE agradece e oferece um check-up. Por conta da casa. Só desta vez."
     },
-    board_key: 'whitebone',
+    "board_key": "whitebone"
   },
   {
-    slug: 'mesa-entradas',
-    order: 6,
-    name: {
-      ru: 'MESA DE ENTRADAS',
-      en: 'MESA DE ENTRADAS',
-      es: 'MESA DE ENTRADAS',
-      pt: 'MESA DE ENTRADAS',
+    "slug": "mesa-entradas",
+    "order": 6,
+    "name": {
+      "ru": "MESA DE ENTRADAS",
+      "en": "MESA DE ENTRADAS",
+      "es": "MESA DE ENTRADAS",
+      "pt": "MESA DE ENTRADAS"
     },
-    kind: {
-      ru: 'остаточное ведомство несуществующего государства',
-      en: 'residual agency of a state that no longer exists',
-      es: 'agencia residual de un estado que ya no existe',
-      pt: 'agência residual de um estado que já não existe',
+    "kind": {
+      "ru": "остаточное ведомство несуществующего государства",
+      "en": "residual agency of a state that no longer exists",
+      "es": "agencia residual de un estado que ya no existe",
+      "pt": "agência residual de um estado que já não existe"
     },
-    district: {
-      ru: 'Бальванера',
-      en: 'Balvanera',
-      es: 'Balvanera',
-      pt: 'Balvanera',
+    "district": {
+      "ru": "Бальванера",
+      "en": "Balvanera",
+      "es": "Balvanera",
+      "pt": "Balvanera"
     },
-    difficulty: [3, 5],
-    creed: {
-      ru: [
-        'Ведомства нет уже девятнадцать лет. Ведомство работает.',
-        'Второй этаж над галантерейной лавкой на Ринкон, вывеска снята, номер кабинета остался.',
-        'MESA DE ENTRADAS продолжает ставить печати, нумеровать входящие и вымарывать то, что не положено знать.',
-        'Зарплату им платит кто-то, кого они называют «правопреемником» и никогда — по имени.',
-        'В их бумагах всегда чего-то не хватает. Ровно одного слова. Это не небрежность, это метод.',
+    "difficulty": [
+      3,
+      5
+    ],
+    "creed": {
+      "ru": [
+        "Ведомства нет уже девятнадцать лет. Ведомство работает.",
+        "Второй этаж над галантерейной лавкой на Ринкон, вывеска снята, номер кабинета остался.",
+        "MESA DE ENTRADAS продолжает ставить печати, нумеровать входящие и вымарывать то, что не положено знать.",
+        "Зарплату им платит кто-то, кого они называют «правопреемником» и никогда — по имени.",
+        "В их бумагах всегда чего-то не хватает. Ровно одного слова. Это не небрежность, это метод."
       ],
-      en: [
-        'The department has been gone nineteen years. The department is still working.',
-        'First floor above a haberdashery on Rincón, the sign taken down, the room number left up.',
-        'MESA DE ENTRADAS goes on stamping, numbering the incoming, and blacking out what must not be known.',
+      "en": [
+        "The department has been gone nineteen years. The department is still working.",
+        "First floor above a haberdashery on Rincón, the sign taken down, the room number left up.",
+        "MESA DE ENTRADAS goes on stamping, numbering the incoming, and blacking out what must not be known.",
         "Someone pays their salaries — someone they call 'the successor' and never by name.",
-        'Their papers are always missing something. Exactly one word. That is not sloppiness, it is method.',
+        "Their papers are always missing something. Exactly one word. That is not sloppiness, it is method."
       ],
-      es: [
-        'El departamento desapareció hace diecinueve años. El departamento sigue trabajando.',
-        'Primer piso sobre una mercería en Rincón, el letrero retirado, el número de habitación aún en la puerta.',
-        'MESA DE ENTRADAS sigue sellando, numerando lo que llega y tachando lo que no debe saberse.',
+      "es": [
+        "El departamento desapareció hace diecinueve años. El departamento sigue trabajando.",
+        "Primer piso sobre una mercería en Rincón, el letrero retirado, el número de habitación aún en la puerta.",
+        "MESA DE ENTRADAS sigue sellando, numerando lo que llega y tachando lo que no debe saberse.",
         "Alguien paga sus salarios; alguien a quien llaman 'el sucesor' y nunca por su nombre.",
-        'A sus documentos siempre les falta algo. Exactamente una palabra. No es descuido, es método.',
+        "A sus documentos siempre les falta algo. Exactamente una palabra. No es descuido, es método."
       ],
-      pt: [
-        'O departamento acabou há dezenove anos. O departamento ainda está trabalhando.',
-        'Primeiro andar acima de uma loja de roupas na Rincón, a placa foi removida, o número da sala continua lá.',
-        'MESA DE ENTRADAS continua carimbando, numerando o que chega e apagando o que não deve ser conhecido.',
+      "pt": [
+        "O departamento acabou há dezenove anos. O departamento ainda está trabalhando.",
+        "Primeiro andar acima de uma loja de roupas na Rincón, a placa foi removida, o número da sala continua lá.",
+        "MESA DE ENTRADAS continua carimbando, numerando o que chega e apagando o que não deve ser conhecido.",
         "Alguém paga os salários deles — alguém a quem chamam de 'o sucessor' e nunca pelo nome.",
-        'Sempre falta algo nos documentos deles. Exatamente uma palavra. Isso não é desleixo, é método.',
+        "Sempre falta algo nos documentos deles. Exatamente uma palavra. Isso não é desleixo, é método."
+      ]
+    },
+    "dialect": {
+      "ru": "MESA DE ENTRADAS выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE.",
+      "en": "MESA DE ENTRADAS releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE.",
+      "es": "MESA DE ENTRADAS lo suelta todo menos una palabra: esa está censurada. Recupérala mediante la suma de comprobación — COMPLETADO.",
+      "pt": "A MESA DE ENTRADAS libera tudo, menos uma palavra: essa foi censurada. Recupere-a via checksum — CONCLUÍDO."
+    },
+    "archetypes": [
+      "redacted",
+      "unique_prefix",
+      "mirror_index"
+    ],
+    "acts": {
+      "ru": [
+        "ВХОДЯЩИЙ",
+        "СОГЛАСОВАНИЕ",
+        "ОСОБАЯ ПАПКА",
+        "СПИСАНИЕ"
       ],
+      "en": [
+        "INCOMING",
+        "APPROVAL",
+        "SPECIAL FOLDER",
+        "WRITE-OFF"
+      ],
+      "es": [
+        "ENTRANTE",
+        "APROBACIÓN",
+        "CARPETA ESPECIAL",
+        "BAJA"
+      ],
+      "pt": [
+        "RECEBIDO",
+        "APROVAÇÃO",
+        "PASTA ESPECIAL",
+        "BAIXA"
+      ]
     },
-    dialect: {
-      ru: 'MESA DE ENTRADAS выдаёт всё, кроме одного слова: оно вымарано. Ищи его контрольной суммой — COMPLETE.',
-      en: 'MESA DE ENTRADAS releases everything but one word: that one is redacted. Recover it by checksum — COMPLETE.',
-      es: 'MESA DE ENTRADAS lo suelta todo menos una palabra: esa está censurada. Recupérala mediante la suma de comprobación — COMPLETADO.',
-      pt: 'A MESA DE ENTRADAS libera tudo, menos uma palavra: essa foi censurada. Recupere-a via checksum — CONCLUÍDO.',
-    },
-    archetypes: ['redacted', 'unique_prefix', 'mirror_index'],
-    acts: {
-      ru: ['ВХОДЯЩИЙ', 'СОГЛАСОВАНИЕ', 'ОСОБАЯ ПАПКА', 'СПИСАНИЕ'],
-      en: ['INCOMING', 'APPROVAL', 'SPECIAL FOLDER', 'WRITE-OFF'],
-      es: ['ENTRANTE', 'APROBACIÓN', 'CARPETA ESPECIAL', 'BAJA'],
-      pt: ['RECEBIDO', 'APROVAÇÃO', 'PASTA ESPECIAL', 'BAIXA'],
-    },
-    motifs: {
-      adjective: {
-        ru: [
-          'ВЫМАРАННЫЙ',
-          'ПОДШИТЫЙ',
-          'СЕКРЕТНЫЙ',
-          'ПРОСРОЧЕННЫЙ',
-          'ГЕРБОВЫЙ',
-          'УТРАЧЕННЫЙ',
-          'ЗАВЕРЕННЫЙ',
-          'ЛИШНИЙ',
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "ВЫМАРАННЫЙ",
+          "ПОДШИТЫЙ",
+          "СЕКРЕТНЫЙ",
+          "ПРОСРОЧЕННЫЙ",
+          "ГЕРБОВЫЙ",
+          "УТРАЧЕННЫЙ",
+          "ЗАВЕРЕННЫЙ",
+          "ЛИШНИЙ"
         ],
-        en: [
-          'REDACTED',
-          'FILED',
-          'CLASSIFIED',
-          'EXPIRED',
-          'STAMPED',
-          'LOST',
-          'NOTARISED',
-          'SURPLUS',
+        "en": [
+          "REDACTED",
+          "FILED",
+          "CLASSIFIED",
+          "EXPIRED",
+          "STAMPED",
+          "LOST",
+          "NOTARISED",
+          "SURPLUS"
         ],
-        ru_forms: [
+        "ru_forms": [
           {
-            m: 'ВЫМАРАННЫЙ',
-            f: 'ВЫМАРАННАЯ',
-            n: 'ВЫМАРАННОЕ',
+            "m": "ВЫМАРАННЫЙ",
+            "f": "ВЫМАРАННАЯ",
+            "n": "ВЫМАРАННОЕ"
           },
           {
-            m: 'ПОДШИТЫЙ',
-            f: 'ПОДШИТАЯ',
-            n: 'ПОДШИТОЕ',
+            "m": "ПОДШИТЫЙ",
+            "f": "ПОДШИТАЯ",
+            "n": "ПОДШИТОЕ"
           },
           {
-            m: 'СЕКРЕТНЫЙ',
-            f: 'СЕКРЕТНАЯ',
-            n: 'СЕКРЕТНОЕ',
+            "m": "СЕКРЕТНЫЙ",
+            "f": "СЕКРЕТНАЯ",
+            "n": "СЕКРЕТНОЕ"
           },
           {
-            m: 'ПРОСРОЧЕННЫЙ',
-            f: 'ПРОСРОЧЕННАЯ',
-            n: 'ПРОСРОЧЕННОЕ',
+            "m": "ПРОСРОЧЕННЫЙ",
+            "f": "ПРОСРОЧЕННАЯ",
+            "n": "ПРОСРОЧЕННОЕ"
           },
           {
-            m: 'ГЕРБОВЫЙ',
-            f: 'ГЕРБОВАЯ',
-            n: 'ГЕРБОВОЕ',
+            "m": "ГЕРБОВЫЙ",
+            "f": "ГЕРБОВАЯ",
+            "n": "ГЕРБОВОЕ"
           },
           {
-            m: 'УТРАЧЕННЫЙ',
-            f: 'УТРАЧЕННАЯ',
-            n: 'УТРАЧЕННОЕ',
+            "m": "УТРАЧЕННЫЙ",
+            "f": "УТРАЧЕННАЯ",
+            "n": "УТРАЧЕННОЕ"
           },
           {
-            m: 'ЗАВЕРЕННЫЙ',
-            f: 'ЗАВЕРЕННАЯ',
-            n: 'ЗАВЕРЕННОЕ',
+            "m": "ЗАВЕРЕННЫЙ",
+            "f": "ЗАВЕРЕННАЯ",
+            "n": "ЗАВЕРЕННОЕ"
           },
           {
-            m: 'ЛИШНИЙ',
-            f: 'ЛИШНЯЯ',
-            n: 'ЛИШНЕЕ',
-          },
+            "m": "ЛИШНИЙ",
+            "f": "ЛИШНЯЯ",
+            "n": "ЛИШНЕЕ"
+          }
         ],
-        es_forms: [
+        "es_forms": [
           {
-            m: 'CENSURADO',
-            f: 'CENSURADA',
+            "m": "CENSURADO",
+            "f": "CENSURADA"
           },
           {
-            m: 'ARCHIVADO',
-            f: 'ARCHIVADA',
+            "m": "ARCHIVADO",
+            "f": "ARCHIVADA"
           },
           {
-            m: 'CLASIFICADO',
-            f: 'CLASIFICADA',
+            "m": "CLASIFICADO",
+            "f": "CLASIFICADA"
           },
           {
-            m: 'CADUCADO',
-            f: 'CADUCADA',
+            "m": "CADUCADO",
+            "f": "CADUCADA"
           },
           {
-            m: 'SELLADO',
-            f: 'SELLADA',
+            "m": "SELLADO",
+            "f": "SELLADA"
           },
           {
-            m: 'EXTRAVIADO',
-            f: 'EXTRAVIADA',
+            "m": "EXTRAVIADO",
+            "f": "EXTRAVIADA"
           },
           {
-            m: 'NOTARIADO',
-            f: 'NOTARIADA',
+            "m": "NOTARIADO",
+            "f": "NOTARIADA"
           },
           {
-            m: 'EXCEDENTE',
-            f: 'EXCEDENTE',
-          },
+            "m": "EXCEDENTE",
+            "f": "EXCEDENTE"
+          }
         ],
-        pt_forms: [
+        "pt_forms": [
           {
-            m: 'CENSURADO',
-            f: 'CENSURADA',
+            "m": "CENSURADO",
+            "f": "CENSURADA"
           },
           {
-            m: 'ARQUIVADO',
-            f: 'ARQUIVADA',
+            "m": "ARQUIVADO",
+            "f": "ARQUIVADA"
           },
           {
-            m: 'CLASSIFICADO',
-            f: 'CLASSIFICADA',
+            "m": "CLASSIFICADO",
+            "f": "CLASSIFICADA"
           },
           {
-            m: 'EXPIRADO',
-            f: 'EXPIRADA',
+            "m": "EXPIRADO",
+            "f": "EXPIRADA"
           },
           {
-            m: 'CARIMBADO',
-            f: 'CARIMBADA',
+            "m": "CARIMBADO",
+            "f": "CARIMBADA"
           },
           {
-            m: 'PERDIDO',
-            f: 'PERDIDA',
+            "m": "PERDIDO",
+            "f": "PERDIDA"
           },
           {
-            m: 'AUTENTICADO',
-            f: 'AUTENTICADA',
+            "m": "AUTENTICADO",
+            "f": "AUTENTICADA"
           },
           {
-            m: 'EXCEDENTE',
-            f: 'EXCEDENTE',
-          },
+            "m": "EXCEDENTE",
+            "f": "EXCEDENTE"
+          }
         ],
-        es: [
-          'CENSURADO',
-          'ARCHIVADO',
-          'CLASIFICADO',
-          'CADUCADO',
-          'SELLADO',
-          'EXTRAVIADO',
-          'NOTARIADO',
-          'EXCEDENTE',
+        "es": [
+          "CENSURADO",
+          "ARCHIVADO",
+          "CLASIFICADO",
+          "CADUCADO",
+          "SELLADO",
+          "EXTRAVIADO",
+          "NOTARIADO",
+          "EXCEDENTE"
         ],
-        pt: [
-          'CENSURADO',
-          'ARQUIVADO',
-          'CLASSIFICADO',
-          'EXPIRADO',
-          'CARIMBADO',
-          'PERDIDO',
-          'AUTENTICADO',
-          'EXCEDENTE',
-        ],
+        "pt": [
+          "CENSURADO",
+          "ARQUIVADO",
+          "CLASSIFICADO",
+          "EXPIRADO",
+          "CARIMBADO",
+          "PERDIDO",
+          "AUTENTICADO",
+          "EXCEDENTE"
+        ]
       },
-      noun: {
-        ru: [
-          'ЛИСТ',
-          'ПЕЧАТЬ',
-          'ОПИСЬ',
-          'ЦИРКУЛЯР',
-          'ФОРМУЛЯР',
-          'ГРИФ',
-          'ПРОТОКОЛ',
-          'ПОДПИСЬ',
+      "noun": {
+        "ru": [
+          "ЛИСТ",
+          "ПЕЧАТЬ",
+          "ОПИСЬ",
+          "ЦИРКУЛЯР",
+          "ФОРМУЛЯР",
+          "ГРИФ",
+          "ПРОТОКОЛ",
+          "ПОДПИСЬ"
         ],
-        en: [
-          'SHEET',
-          'SEAL',
-          'INVENTORY',
-          'CIRCULAR',
-          'RECORD',
-          'CLASSIFICATION',
-          'MINUTES',
-          'SIGNATURE',
+        "en": [
+          "SHEET",
+          "SEAL",
+          "INVENTORY",
+          "CIRCULAR",
+          "RECORD",
+          "CLASSIFICATION",
+          "MINUTES",
+          "SIGNATURE"
         ],
-        ru_gender: ['m', 'f', 'f', 'm', 'm', 'm', 'm', 'f'],
-        es: [
-          'HOJA',
-          'SELLO',
-          'INVENTARIO',
-          'CIRCULAR',
-          'REGISTRO',
-          'CLASIFICACIÓN',
-          'ACTAS',
-          'FIRMA',
+        "ru_gender": [
+          "m",
+          "f",
+          "f",
+          "m",
+          "m",
+          "m",
+          "m",
+          "f"
         ],
-        pt: [
-          'FOLHA',
-          'SELO',
-          'INVENTÁRIO',
-          'CIRCULAR',
-          'REGISTRO',
-          'CLASSIFICAÇÃO',
-          'ATAS',
-          'ASSINATURA',
+        "es": [
+          "HOJA",
+          "SELLO",
+          "INVENTARIO",
+          "CIRCULAR",
+          "REGISTRO",
+          "CLASIFICACIÓN",
+          "ACTAS",
+          "FIRMA"
         ],
-        es_gender: ['f', 'm', 'm', 'f', 'm', 'f', 'f', 'f'],
-        pt_gender: ['f', 'm', 'm', 'f', 'm', 'f', 'f', 'f'],
-      },
+        "pt": [
+          "FOLHA",
+          "SELO",
+          "INVENTÁRIO",
+          "CIRCULAR",
+          "REGISTRO",
+          "CLASSIFICAÇÃO",
+          "ATAS",
+          "ASSINATURA"
+        ],
+        "es_gender": [
+          "f",
+          "m",
+          "m",
+          "f",
+          "m",
+          "f",
+          "f",
+          "f"
+        ],
+        "pt_gender": [
+          "f",
+          "m",
+          "m",
+          "f",
+          "m",
+          "f",
+          "f",
+          "f"
+        ]
+      }
     },
-    evidence_sources: {
-      ru: [
-        'лист из особой папки с вымаранной строкой',
-        'опись дел, сданных в архив',
-        'циркуляр без адресата',
-        'формуляр с оттиском несуществующей печати',
+    "evidence_sources": {
+      "ru": [
+        "лист из особой папки с вымаранной строкой",
+        "опись дел, сданных в архив",
+        "циркуляр без адресата",
+        "формуляр с оттиском несуществующей печати"
       ],
-      en: [
-        'a special-folder sheet with one line blacked out',
-        'an inventory of archived files',
-        'a circular with no addressee',
-        'a form bearing the stamp of a state that ended',
+      "en": [
+        "a special-folder sheet with one line blacked out",
+        "an inventory of archived files",
+        "a circular with no addressee",
+        "a form bearing the stamp of a state that ended"
       ],
-      es: [
-        'una hoja de carpeta especial con una línea tachada',
-        'un inventario de archivos archivados',
-        'una circular sin destinatario',
-        'un formulario con el sello de un estado que dejó de existir',
+      "es": [
+        "una hoja de carpeta especial con una línea tachada",
+        "un inventario de archivos archivados",
+        "una circular sin destinatario",
+        "un formulario con el sello de un estado que dejó de existir"
       ],
-      pt: [
-        'uma folha de pasta especial com uma linha censurada',
-        'um inventário de arquivos arquivados',
-        'um comunicado sem destinatário',
-        'um formulário com o carimbo de um estado que deixou de existir',
-      ],
+      "pt": [
+        "uma folha de pasta especial com uma linha censurada",
+        "um inventário de arquivos arquivados",
+        "um comunicado sem destinatário",
+        "um formulário com o carimbo de um estado que deixou de existir"
+      ]
     },
-    payoff: {
-      ru: 'MESA DE ENTRADAS присылает уведомление о том, что твоё обращение рассмотрено. Гонорар придёт отдельным письмом. Через полгода.',
-      en: 'MESA DE ENTRADAS sends notice that your request has been considered. The fee follows in a separate letter. In six months.',
-      es: 'MESA DE ENTRADAS notifica que su solicitud ha sido considerada. Los honorarios llegarán en una carta aparte. En seis meses.',
-      pt: 'A MESA DE ENTRADAS envia o aviso de que seu pedido foi analisado. A taxa segue em uma carta separada. Em seis meses.',
+    "payoff": {
+      "ru": "MESA DE ENTRADAS присылает уведомление о том, что твоё обращение рассмотрено. Гонорар придёт отдельным письмом. Через полгода.",
+      "en": "MESA DE ENTRADAS sends notice that your request has been considered. The fee follows in a separate letter. In six months.",
+      "es": "MESA DE ENTRADAS notifica que su solicitud ha sido considerada. Los honorarios llegarán en una carta aparte. En seis meses.",
+      "pt": "A MESA DE ENTRADAS envia o aviso de que seu pedido foi analisado. A taxa segue em uma carta separada. Em seis meses."
     },
-    board_key: 'gost-9',
+    "board_key": "gost-9"
   },
   {
-    slug: 'salar',
-    order: 7,
-    name: {
-      ru: 'SALAR',
-      en: 'SALAR',
-      es: 'SALAR',
-      pt: 'SALAR',
+    "slug": "salar",
+    "order": 7,
+    "name": {
+      "ru": "SALAR",
+      "en": "SALAR",
+      "es": "SALAR",
+      "pt": "SALAR"
     },
-    kind: {
-      ru: 'минеральный и энергетический конгломерат',
-      en: 'mineral and energy conglomerate',
-      es: 'conglomerado de minerales y energía',
-      pt: 'conglomerado de mineração e energia',
+    "kind": {
+      "ru": "минеральный и энергетический конгломерат",
+      "en": "mineral and energy conglomerate",
+      "es": "conglomerado de minerales y energía",
+      "pt": "conglomerado de mineração e energia"
     },
-    district: {
-      ru: 'Каталинас-Норте',
-      en: 'Catalinas Norte',
-      es: 'Catalinas Norte',
-      pt: 'Catalinas Norte',
+    "district": {
+      "ru": "Каталинас-Норте",
+      "en": "Catalinas Norte",
+      "es": "Catalinas Norte",
+      "pt": "Catalinas Norte"
     },
-    difficulty: [4, 5],
-    creed: {
-      ru: [
-        'SALAR владеет сетью. Не социальной — электрической. Той, без которой не работает ничего.',
-        'Башня в Каталинас-Норте, тридцать один этаж, лифт до двадцать восьмого для всех остальных.',
-        'Разрезы у них на северо-западе, в Хухуе и Катамарке, за две тысячи километров отсюда.',
-        'Они мыслят десятилетиями и говорят так, будто человек — это короткий геологический эпизод.',
-        'Каждый их документ симметричен: солончак — это зеркало размером с провинцию,',
-        'и то же самое они делают со словами. Смотри с конца.',
+    "difficulty": [
+      4,
+      5
+    ],
+    "creed": {
+      "ru": [
+        "SALAR владеет сетью. Не социальной — электрической. Той, без которой не работает ничего.",
+        "Башня в Каталинас-Норте, тридцать один этаж, лифт до двадцать восьмого для всех остальных.",
+        "Разрезы у них на северо-западе, в Хухуе и Катамарке, за две тысячи километров отсюда.",
+        "Они мыслят десятилетиями и говорят так, будто человек — это короткий геологический эпизод.",
+        "Каждый их документ симметричен: солончак — это зеркало размером с провинцию,",
+        "и то же самое они делают со словами. Смотри с конца."
       ],
-      en: [
-        'SALAR owns the grid. Not the social one — the electrical one, without which nothing runs.',
-        'A tower in Catalinas Norte, thirty-one floors, the lift stopping at twenty-eight for everyone else.',
-        'Their cuts are in the north-west, in Jujuy and Catamarca, two thousand kilometres from here.',
-        'They think in decades and speak as though a person were a brief geological episode.',
-        'Every document of theirs is symmetrical: a salt flat is a mirror the size of a province,',
-        'and they do the same to words. Read from the far end.',
+      "en": [
+        "SALAR owns the grid. Not the social one — the electrical one, without which nothing runs.",
+        "A tower in Catalinas Norte, thirty-one floors, the lift stopping at twenty-eight for everyone else.",
+        "Their cuts are in the north-west, in Jujuy and Catamarca, two thousand kilometres from here.",
+        "They think in decades and speak as though a person were a brief geological episode.",
+        "Every document of theirs is symmetrical: a salt flat is a mirror the size of a province,",
+        "and they do the same to words. Read from the far end."
       ],
-      es: [
-        'SALAR es dueño de la red. No la social, sino la eléctrica; sin ella, nada funciona.',
-        'Una torre en Catalinas Norte, treinta y un pisos, el ascensor se detiene en el veintiocho para el resto de los mortales.',
-        'Sus tajadas están en el noroeste, en Jujuy y Catamarca, a dos mil kilómetros de aquí.',
-        'Piensan en décadas y hablan como si una persona fuera un breve episodio geológico.',
-        'Cada uno de sus documentos es simétrico: un salar es un espejo del tamaño de una provincia,',
-        'y ellos hacen lo mismo con las palabras. Lee desde el extremo opuesto.',
+      "es": [
+        "SALAR es dueño de la red. No la social, sino la eléctrica; sin ella, nada funciona.",
+        "Una torre en Catalinas Norte, treinta y un pisos, el ascensor se detiene en el veintiocho para el resto de los mortales.",
+        "Sus tajadas están en el noroeste, en Jujuy y Catamarca, a dos mil kilómetros de aquí.",
+        "Piensan en décadas y hablan como si una persona fuera un breve episodio geológico.",
+        "Cada uno de sus documentos es simétrico: un salar es un espejo del tamaño de una provincia,",
+        "y ellos hacen lo mismo con las palabras. Lee desde el extremo opuesto."
       ],
-      pt: [
-        'O SALAR é dono da rede. Não a social — a elétrica, sem a qual nada funciona.',
-        'Uma torre em Catalinas Norte, trinta e um andares, o elevador parando no vigésimo oitavo para todos os outros.',
-        'Seus cortes ficam no noroeste, em Jujuy e Catamarca, a dois mil quilômetros daqui.',
-        'Eles pensam em décadas e falam como se uma pessoa fosse um breve episódio geológico.',
-        'Cada documento deles é simétrico: um salar é um espelho do tamanho de uma província,',
-        'e eles fazem o mesmo com as palavras. Leia a partir da extremidade oposta.',
+      "pt": [
+        "O SALAR é dono da rede. Não a social — a elétrica, sem a qual nada funciona.",
+        "Uma torre em Catalinas Norte, trinta e um andares, o elevador parando no vigésimo oitavo para todos os outros.",
+        "Seus cortes ficam no noroeste, em Jujuy e Catamarca, a dois mil quilômetros daqui.",
+        "Eles pensam em décadas e falam como se uma pessoa fosse um breve episódio geológico.",
+        "Cada documento deles é simétrico: um salar é um espelho do tamanho de uma província,",
+        "e eles fazem o mesmo com as palavras. Leia a partir da extremidade oposta."
+      ]
+    },
+    "dialect": {
+      "ru": "SALAR зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N.",
+      "en": "SALAR mirrors the wordlist: the word at N answers to the word at 2049 − N.",
+      "es": "SALAR refleja la lista de palabras: la palabra en la posición N corresponde a la palabra en la posición 2049 − N.",
+      "pt": "SALAR espelha a lista de palavras: a palavra em N corresponde à palavra em 2049 − N."
+    },
+    "archetypes": [
+      "mirror_index",
+      "grid_coords",
+      "ledger_amounts"
+    ],
+    "acts": {
+      "ru": [
+        "РАЗВЕДКА",
+        "ВСКРЫША",
+        "ЖИЛА",
+        "ЗАКЛАДКА"
       ],
+      "en": [
+        "SURVEY",
+        "OVERBURDEN",
+        "THE SEAM",
+        "BACKFILL"
+      ],
+      "es": [
+        "RECONOCIMIENTO",
+        "SOBRECARGA",
+        "LA GRIETA",
+        "RELLENO"
+      ],
+      "pt": [
+        "LEVANTAMENTO",
+        "SOBRECARGA",
+        "A VETA",
+        "ATERRO"
+      ]
     },
-    dialect: {
-      ru: 'SALAR зеркалит словарь: слову с номером N отвечает слово с номером 2049 − N.',
-      en: 'SALAR mirrors the wordlist: the word at N answers to the word at 2049 − N.',
-      es: 'SALAR refleja la lista de palabras: la palabra en la posición N corresponde a la palabra en la posición 2049 − N.',
-      pt: 'SALAR espelha a lista de palavras: a palavra em N corresponde à palavra em 2049 − N.',
-    },
-    archetypes: ['mirror_index', 'grid_coords', 'ledger_amounts'],
-    acts: {
-      ru: ['РАЗВЕДКА', 'ВСКРЫША', 'ЖИЛА', 'ЗАКЛАДКА'],
-      en: ['SURVEY', 'OVERBURDEN', 'THE SEAM', 'BACKFILL'],
-      es: ['RECONOCIMIENTO', 'SOBRECARGA', 'LA GRIETA', 'RELLENO'],
-      pt: ['LEVANTAMENTO', 'SOBRECARGA', 'A VETA', 'ATERRO'],
-    },
-    motifs: {
-      adjective: {
-        ru: [
-          'ЗЕРКАЛЬНЫЙ',
-          'СЛОИСТЫЙ',
-          'ГЛУБИННЫЙ',
-          'ОБРАТНЫЙ',
-          'КРИСТАЛЛИЧЕСКИЙ',
-          'ВЫРАБОТАННЫЙ',
-          'ТВЁРДЫЙ',
-          'ПОГАШЕННЫЙ',
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "ЗЕРКАЛЬНЫЙ",
+          "СЛОИСТЫЙ",
+          "ГЛУБИННЫЙ",
+          "ОБРАТНЫЙ",
+          "КРИСТАЛЛИЧЕСКИЙ",
+          "ВЫРАБОТАННЫЙ",
+          "ТВЁРДЫЙ",
+          "ПОГАШЕННЫЙ"
         ],
-        en: [
-          'MIRRORED',
-          'LAYERED',
-          'DEEP',
-          'REVERSED',
-          'CRYSTALLINE',
-          'EXHAUSTED',
-          'HARD',
-          'EXTINGUISHED',
+        "en": [
+          "MIRRORED",
+          "LAYERED",
+          "DEEP",
+          "REVERSED",
+          "CRYSTALLINE",
+          "EXHAUSTED",
+          "HARD",
+          "EXTINGUISHED"
         ],
-        ru_forms: [
+        "ru_forms": [
           {
-            m: 'ЗЕРКАЛЬНЫЙ',
-            f: 'ЗЕРКАЛЬНАЯ',
-            n: 'ЗЕРКАЛЬНОЕ',
+            "m": "ЗЕРКАЛЬНЫЙ",
+            "f": "ЗЕРКАЛЬНАЯ",
+            "n": "ЗЕРКАЛЬНОЕ"
           },
           {
-            m: 'СЛОИСТЫЙ',
-            f: 'СЛОИСТАЯ',
-            n: 'СЛОИСТОЕ',
+            "m": "СЛОИСТЫЙ",
+            "f": "СЛОИСТАЯ",
+            "n": "СЛОИСТОЕ"
           },
           {
-            m: 'ГЛУБИННЫЙ',
-            f: 'ГЛУБИННАЯ',
-            n: 'ГЛУБИННОЕ',
+            "m": "ГЛУБИННЫЙ",
+            "f": "ГЛУБИННАЯ",
+            "n": "ГЛУБИННОЕ"
           },
           {
-            m: 'ОБРАТНЫЙ',
-            f: 'ОБРАТНАЯ',
-            n: 'ОБРАТНОЕ',
+            "m": "ОБРАТНЫЙ",
+            "f": "ОБРАТНАЯ",
+            "n": "ОБРАТНОЕ"
           },
           {
-            m: 'КРИСТАЛЛИЧЕСКИЙ',
-            f: 'КРИСТАЛЛИЧЕСКАЯ',
-            n: 'КРИСТАЛЛИЧЕСКОЕ',
+            "m": "КРИСТАЛЛИЧЕСКИЙ",
+            "f": "КРИСТАЛЛИЧЕСКАЯ",
+            "n": "КРИСТАЛЛИЧЕСКОЕ"
           },
           {
-            m: 'ВЫРАБОТАННЫЙ',
-            f: 'ВЫРАБОТАННАЯ',
-            n: 'ВЫРАБОТАННОЕ',
+            "m": "ВЫРАБОТАННЫЙ",
+            "f": "ВЫРАБОТАННАЯ",
+            "n": "ВЫРАБОТАННОЕ"
           },
           {
-            m: 'ТВЁРДЫЙ',
-            f: 'ТВЁРДАЯ',
-            n: 'ТВЁРДОЕ',
+            "m": "ТВЁРДЫЙ",
+            "f": "ТВЁРДАЯ",
+            "n": "ТВЁРДОЕ"
           },
           {
-            m: 'ПОГАШЕННЫЙ',
-            f: 'ПОГАШЕННАЯ',
-            n: 'ПОГАШЕННОЕ',
-          },
+            "m": "ПОГАШЕННЫЙ",
+            "f": "ПОГАШЕННАЯ",
+            "n": "ПОГАШЕННОЕ"
+          }
         ],
-        es_forms: [
+        "es_forms": [
           {
-            m: 'ESPEJADO',
-            f: 'ESPEJADA',
+            "m": "ESPEJADO",
+            "f": "ESPEJADA"
           },
           {
-            m: 'ESTRATIFICADO',
-            f: 'ESTRATIFICADA',
+            "m": "ESTRATIFICADO",
+            "f": "ESTRATIFICADA"
           },
           {
-            m: 'PROFUNDO',
-            f: 'PROFUNDA',
+            "m": "PROFUNDO",
+            "f": "PROFUNDA"
           },
           {
-            m: 'INVERTIDO',
-            f: 'INVERTIDA',
+            "m": "INVERTIDO",
+            "f": "INVERTIDA"
           },
           {
-            m: 'CRISTALINO',
-            f: 'CRISTALINA',
+            "m": "CRISTALINO",
+            "f": "CRISTALINA"
           },
           {
-            m: 'AGOTADO',
-            f: 'AGOTADA',
+            "m": "AGOTADO",
+            "f": "AGOTADA"
           },
           {
-            m: 'DURO',
-            f: 'DURA',
+            "m": "DURO",
+            "f": "DURA"
           },
           {
-            m: 'EXTINGUIDO',
-            f: 'EXTINGUIDA',
-          },
+            "m": "EXTINGUIDO",
+            "f": "EXTINGUIDA"
+          }
         ],
-        pt_forms: [
+        "pt_forms": [
           {
-            m: 'ESPELHADO',
-            f: 'ESPELHADA',
+            "m": "ESPELHADO",
+            "f": "ESPELHADA"
           },
           {
-            m: 'EM CAMADAS',
-            f: 'EM CAMADAS',
+            "m": "EM CAMADAS",
+            "f": "EM CAMADAS"
           },
           {
-            m: 'PROFUNDO',
-            f: 'PROFUNDA',
+            "m": "PROFUNDO",
+            "f": "PROFUNDA"
           },
           {
-            m: 'INVERTIDO',
-            f: 'INVERTIDA',
+            "m": "INVERTIDO",
+            "f": "INVERTIDA"
           },
           {
-            m: 'CRISTALINO',
-            f: 'CRISTALINA',
+            "m": "CRISTALINO",
+            "f": "CRISTALINA"
           },
           {
-            m: 'EXAURIDO',
-            f: 'EXAURIDA',
+            "m": "EXAURIDO",
+            "f": "EXAURIDA"
           },
           {
-            m: 'RÍGIDO',
-            f: 'RÍGIDA',
+            "m": "RÍGIDO",
+            "f": "RÍGIDA"
           },
           {
-            m: 'EXTINTO',
-            f: 'EXTINTA',
-          },
+            "m": "EXTINTO",
+            "f": "EXTINTA"
+          }
         ],
-        es: [
-          'ESPEJADO',
-          'ESTRATIFICADO',
-          'PROFUNDO',
-          'INVERTIDO',
-          'CRISTALINO',
-          'AGOTADO',
-          'DURO',
-          'EXTINGUIDO',
+        "es": [
+          "ESPEJADO",
+          "ESTRATIFICADO",
+          "PROFUNDO",
+          "INVERTIDO",
+          "CRISTALINO",
+          "AGOTADO",
+          "DURO",
+          "EXTINGUIDO"
         ],
-        pt: [
-          'ESPELHADO',
-          'EM CAMADAS',
-          'PROFUNDO',
-          'INVERTIDO',
-          'CRISTALINO',
-          'EXAURIDO',
-          'RÍGIDO',
-          'EXTINTO',
-        ],
+        "pt": [
+          "ESPELHADO",
+          "EM CAMADAS",
+          "PROFUNDO",
+          "INVERTIDO",
+          "CRISTALINO",
+          "EXAURIDO",
+          "RÍGIDO",
+          "EXTINTO"
+        ]
       },
-      noun: {
-        ru: [
-          'ЖИЛА',
-          'ПЛАСТ',
-          'РАЗРЕЗ',
-          'КЕРН',
-          'ШТОЛЬНЯ',
-          'ОТВАЛ',
-          'ГРАНЬ',
-          'ЗАБОЙ',
+      "noun": {
+        "ru": [
+          "ЖИЛА",
+          "ПЛАСТ",
+          "РАЗРЕЗ",
+          "КЕРН",
+          "ШТОЛЬНЯ",
+          "ОТВАЛ",
+          "ГРАНЬ",
+          "ЗАБОЙ"
         ],
-        en: [
-          'SEAM',
-          'STRATUM',
-          'CUT',
-          'CORE',
-          'ADIT',
-          'SPOIL',
-          'FACET',
-          'FACE',
+        "en": [
+          "SEAM",
+          "STRATUM",
+          "CUT",
+          "CORE",
+          "ADIT",
+          "SPOIL",
+          "FACET",
+          "FACE"
         ],
-        ru_gender: ['f', 'm', 'm', 'm', 'f', 'm', 'f', 'm'],
-        es: [
-          'VETA',
-          'ESTRATO',
-          'CORTE',
-          'TESTIGO',
-          'GALERÍA',
-          'ESCOMBRERA',
-          'FACETA',
-          'FRENTE',
+        "ru_gender": [
+          "f",
+          "m",
+          "m",
+          "m",
+          "f",
+          "m",
+          "f",
+          "m"
         ],
-        pt: [
-          'VEIO',
-          'ESTRATO',
-          'CORTE',
-          'TESTEMUNHO',
-          'GALERIA',
-          'ENTULHO',
-          'FACETA',
-          'FRENTE',
+        "es": [
+          "VETA",
+          "ESTRATO",
+          "CORTE",
+          "TESTIGO",
+          "GALERÍA",
+          "ESCOMBRERA",
+          "FACETA",
+          "FRENTE"
         ],
-        es_gender: ['f', 'm', 'm', 'm', 'f', 'f', 'f', 'm'],
-        pt_gender: ['m', 'm', 'm', 'm', 'f', 'm', 'f', 'f'],
-      },
+        "pt": [
+          "VEIO",
+          "ESTRATO",
+          "CORTE",
+          "TESTEMUNHO",
+          "GALERIA",
+          "ENTULHO",
+          "FACETA",
+          "FRENTE"
+        ],
+        "es_gender": [
+          "f",
+          "m",
+          "m",
+          "m",
+          "f",
+          "f",
+          "f",
+          "m"
+        ],
+        "pt_gender": [
+          "m",
+          "m",
+          "m",
+          "m",
+          "f",
+          "m",
+          "f",
+          "f"
+        ]
+      }
     },
-    evidence_sources: {
-      ru: [
-        'описание керна из разведочной скважины',
-        'график нагрузки на подстанцию',
-        'маркшейдерский план с зеркальной разметкой',
-        'акт о погашении выработки',
+    "evidence_sources": {
+      "ru": [
+        "описание керна из разведочной скважины",
+        "график нагрузки на подстанцию",
+        "маркшейдерский план с зеркальной разметкой",
+        "акт о погашении выработки"
       ],
-      en: [
-        'a core log from an exploration hole',
-        'a substation load chart',
+      "en": [
+        "a core log from an exploration hole",
+        "a substation load chart",
         "a surveyor's plan with mirrored notation",
-        'a deed extinguishing a working',
+        "a deed extinguishing a working"
       ],
-      es: [
-        'un registro central de un pozo de exploración',
-        'un gráfico de carga de una subestación',
-        'un plano de topógrafo con anotaciones invertidas',
-        'una escritura de extinción de una explotación',
+      "es": [
+        "un registro central de un pozo de exploración",
+        "un gráfico de carga de una subestación",
+        "un plano de topógrafo con anotaciones invertidas",
+        "una escritura de extinción de una explotación"
       ],
-      pt: [
-        'um registro de núcleo de um poço de exploração',
-        'um gráfico de carga de subestação',
-        'um plano de agrimensor com notação espelhada',
-        'uma escritura extinguindo uma operação',
-      ],
+      "pt": [
+        "um registro de núcleo de um poço de exploração",
+        "um gráfico de carga de subestação",
+        "um plano de agrimensor com notação espelhada",
+        "uma escritura extinguindo uma operação"
+      ]
     },
-    payoff: {
-      ru: 'SALAR не благодарит. В следующем месяце счёт за электричество в твоём квартале оказывается чуть меньше.',
-      en: 'SALAR does not thank you. Next month the power bill for your block comes in slightly lower.',
-      es: 'SALAR no te da las gracias. El mes que viene, la factura de la luz de tu bloque llega un poco más baja.',
-      pt: 'SALAR não te agradece. No mês que vem, a conta de luz do seu quarteirão vem um pouco mais baixa.',
+    "payoff": {
+      "ru": "SALAR не благодарит. В следующем месяце счёт за электричество в твоём квартале оказывается чуть меньше.",
+      "en": "SALAR does not thank you. Next month the power bill for your block comes in slightly lower.",
+      "es": "SALAR no te da las gracias. El mes que viene, la factura de la luz de tu bloque llega un poco más baja.",
+      "pt": "SALAR não te agradece. No mês que vem, a conta de luz do seu quarteirão vem um pouco mais baixa."
     },
-    board_key: 'mica',
+    "board_key": "mica"
   },
   {
-    slug: 'aleph',
-    order: 8,
-    name: {
-      ru: 'ALEPH',
-      en: 'ALEPH',
-      es: 'ALEPH',
-      pt: 'ALEPH',
+    "slug": "aleph",
+    "order": 8,
+    "name": {
+      "ru": "ALEPH",
+      "en": "ALEPH",
+      "es": "ALEPH",
+      "pt": "ALEPH"
     },
-    kind: {
-      ru: 'коллектив архивистов, платит не деньгами',
-      en: 'archivist collective, does not pay in money',
-      es: 'colectivo de archiveros, no paga con dinero',
-      pt: 'coletivo de arquivistas, não paga em dinheiro',
+    "kind": {
+      "ru": "коллектив архивистов, платит не деньгами",
+      "en": "archivist collective, does not pay in money",
+      "es": "colectivo de archiveros, no paga con dinero",
+      "pt": "coletivo de arquivistas, não paga em dinheiro"
     },
-    district: {
-      ru: 'Сан-Тельмо, если верить слухам',
-      en: 'San Telmo, if the rumours are true',
-      es: 'San Telmo, si los rumores son ciertos',
-      pt: 'San Telmo, se os rumores forem verdadeiros',
+    "district": {
+      "ru": "Сан-Тельмо, если верить слухам",
+      "en": "San Telmo, if the rumours are true",
+      "es": "San Telmo, si los rumores son ciertos",
+      "pt": "San Telmo, se os rumores forem verdadeiros"
     },
-    difficulty: [4, 5],
-    creed: {
-      ru: [
-        'ALEPH считает, что забытый кошелёк — это забытый человек, и не согласен с этим.',
-        'Говорят, они собираются по воскресеньям на Дефенса, среди развалов с открытками и ложками.',
-        'У них нет офиса, счёта и юридического лица. Есть двенадцать тысяч зеркал и упрямство.',
-        'Они не платят гонораров. Они отдают то, что нашли сами: имя, адрес, дату, чужую ошибку.',
-        'Их подсказки идут цепочкой: каждое слово держится за соседа по словарю.',
+    "difficulty": [
+      4,
+      5
+    ],
+    "creed": {
+      "ru": [
+        "ALEPH считает, что забытый кошелёк — это забытый человек, и не согласен с этим.",
+        "Говорят, они собираются по воскресеньям на Дефенса, среди развалов с открытками и ложками.",
+        "У них нет офиса, счёта и юридического лица. Есть двенадцать тысяч зеркал и упрямство.",
+        "Они не платят гонораров. Они отдают то, что нашли сами: имя, адрес, дату, чужую ошибку.",
+        "Их подсказки идут цепочкой: каждое слово держится за соседа по словарю."
       ],
-      en: [
-        'ALEPH holds that a forgotten wallet is a forgotten person, and refuses to accept that.',
-        'They are said to meet on Sundays on Defensa, among the stalls of postcards and old spoons.',
-        'They have no office, no account and no legal existence. They have twelve thousand mirrors and stubbornness.',
+      "en": [
+        "ALEPH holds that a forgotten wallet is a forgotten person, and refuses to accept that.",
+        "They are said to meet on Sundays on Defensa, among the stalls of postcards and old spoons.",
+        "They have no office, no account and no legal existence. They have twelve thousand mirrors and stubbornness.",
         "They pay no fees. They hand over what they found themselves: a name, an address, a date, someone else's mistake.",
-        'Their clues run in a chain: every word holds on to its neighbour in the list.',
+        "Their clues run in a chain: every word holds on to its neighbour in the list."
       ],
-      es: [
-        'ALEPH sostiene que una billetera olvidada es una persona olvidada, y se niega a aceptarlo.',
-        'Se dice que se reúnen los domingos en Defensa, entre puestos de postales y cucharas viejas.',
-        'No tienen oficina, ni cuenta, ni existencia legal. Tienen doce mil espejos y terquedad.',
-        'No pagan cuotas. Entregan lo que ellos mismos encontraron: un nombre, una dirección, una fecha, el error de alguien más.',
-        'Sus pistas corren en cadena: cada palabra se aferra a su vecina en la lista.',
+      "es": [
+        "ALEPH sostiene que una billetera olvidada es una persona olvidada, y se niega a aceptarlo.",
+        "Se dice que se reúnen los domingos en Defensa, entre puestos de postales y cucharas viejas.",
+        "No tienen oficina, ni cuenta, ni existencia legal. Tienen doce mil espejos y terquedad.",
+        "No pagan cuotas. Entregan lo que ellos mismos encontraron: un nombre, una dirección, una fecha, el error de alguien más.",
+        "Sus pistas corren en cadena: cada palabra se aferra a su vecina en la lista."
       ],
-      pt: [
-        'O ALEPH sustenta que uma carteira esquecida é uma pessoa esquecida, e recusa-se a aceitar isso.',
-        'Dizem que se encontram aos domingos na Defensa, entre as bancas de postais e colheres velhas.',
-        'Não têm escritório, nem conta, nem existência legal. Têm doze mil espelhos e teimosia.',
-        'Não pagam taxas. Entregam o que eles próprios encontraram: um nome, uma morada, uma data, o erro de outra pessoa.',
-        'As suas pistas correm numa corrente: cada palavra agarra-se à sua vizinha na lista.',
+      "pt": [
+        "O ALEPH sustenta que uma carteira esquecida é uma pessoa esquecida, e recusa-se a aceitar isso.",
+        "Dizem que se encontram aos domingos na Defensa, entre as bancas de postais e colheres velhas.",
+        "Não têm escritório, nem conta, nem existência legal. Têm doze mil espelhos e teimosia.",
+        "Não pagam taxas. Entregam o que eles próprios encontraram: um nome, uma morada, uma data, o erro de outra pessoa.",
+        "As suas pistas correm numa corrente: cada palavra agarra-se à sua vizinha na lista."
+      ]
+    },
+    "dialect": {
+      "ru": "ALEPH ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39.",
+      "en": "ALEPH leads word to word: each one stands beside a known word in the BIP-39 list.",
+      "es": "EL ALEPH guía palabra por palabra: cada una se sitúa junto a una palabra conocida en la lista BIP-39.",
+      "pt": "ALEPH leva palavra por palavra: cada uma se posiciona ao lado de uma palavra conhecida na lista BIP-39."
+    },
+    "archetypes": [
+      "neighbour",
+      "redacted",
+      "unique_prefix"
+    ],
+    "acts": {
+      "ru": [
+        "СЛУХ",
+        "СЛЕД",
+        "ЗЕРКАЛО",
+        "ВОЗВРАТ"
       ],
+      "en": [
+        "RUMOUR",
+        "TRAIL",
+        "MIRROR",
+        "RESTITUTION"
+      ],
+      "es": [
+        "RUMOR",
+        "RASTRO",
+        "ESPEJO",
+        "RESTITUCIÓN"
+      ],
+      "pt": [
+        "RUMOR",
+        "RASTRO",
+        "ESPELHO",
+        "RESTITUIÇÃO"
+      ]
     },
-    dialect: {
-      ru: 'ALEPH ведёт от слова к слову: каждое стоит рядом с известным в словаре BIP-39.',
-      en: 'ALEPH leads word to word: each one stands beside a known word in the BIP-39 list.',
-      es: 'EL ALEPH guía palabra por palabra: cada una se sitúa junto a una palabra conocida en la lista BIP-39.',
-      pt: 'ALEPH leva palavra por palavra: cada uma se posiciona ao lado de uma palavra conhecida na lista BIP-39.',
-    },
-    archetypes: ['neighbour', 'redacted', 'unique_prefix'],
-    acts: {
-      ru: ['СЛУХ', 'СЛЕД', 'ЗЕРКАЛО', 'ВОЗВРАТ'],
-      en: ['RUMOUR', 'TRAIL', 'MIRROR', 'RESTITUTION'],
-      es: ['RUMOR', 'RASTRO', 'ESPEJO', 'RESTITUCIÓN'],
-      pt: ['RUMOR', 'RASTRO', 'ESPELHO', 'RESTITUIÇÃO'],
-    },
-    motifs: {
-      adjective: {
-        ru: [
-          'ЗАБЫТЫЙ',
-          'УПРЯМЫЙ',
-          'ОТКРЫТЫЙ',
-          'ЧУЖОЙ',
-          'НАЙДЕННЫЙ',
-          'ПОСЛЕДНИЙ',
-          'ЖИВОЙ',
-          'ВОЗВРАЩЁННЫЙ',
+    "motifs": {
+      "adjective": {
+        "ru": [
+          "ЗАБЫТЫЙ",
+          "УПРЯМЫЙ",
+          "ОТКРЫТЫЙ",
+          "ЧУЖОЙ",
+          "НАЙДЕННЫЙ",
+          "ПОСЛЕДНИЙ",
+          "ЖИВОЙ",
+          "ВОЗВРАЩЁННЫЙ"
         ],
-        en: [
-          'FORGOTTEN',
-          'STUBBORN',
-          'OPEN',
-          'BORROWED',
-          'FOUND',
-          'LAST',
-          'LIVING',
-          'RETURNED',
+        "en": [
+          "FORGOTTEN",
+          "STUBBORN",
+          "OPEN",
+          "BORROWED",
+          "FOUND",
+          "LAST",
+          "LIVING",
+          "RETURNED"
         ],
-        ru_forms: [
+        "ru_forms": [
           {
-            m: 'ЗАБЫТЫЙ',
-            f: 'ЗАБЫТАЯ',
-            n: 'ЗАБЫТОЕ',
+            "m": "ЗАБЫТЫЙ",
+            "f": "ЗАБЫТАЯ",
+            "n": "ЗАБЫТОЕ"
           },
           {
-            m: 'УПРЯМЫЙ',
-            f: 'УПРЯМАЯ',
-            n: 'УПРЯМОЕ',
+            "m": "УПРЯМЫЙ",
+            "f": "УПРЯМАЯ",
+            "n": "УПРЯМОЕ"
           },
           {
-            m: 'ОТКРЫТЫЙ',
-            f: 'ОТКРЫТАЯ',
-            n: 'ОТКРЫТОЕ',
+            "m": "ОТКРЫТЫЙ",
+            "f": "ОТКРЫТАЯ",
+            "n": "ОТКРЫТОЕ"
           },
           {
-            m: 'ЧУЖОЙ',
-            f: 'ЧУЖАЯ',
-            n: 'ЧУЖОЕ',
+            "m": "ЧУЖОЙ",
+            "f": "ЧУЖАЯ",
+            "n": "ЧУЖОЕ"
           },
           {
-            m: 'НАЙДЕННЫЙ',
-            f: 'НАЙДЕННАЯ',
-            n: 'НАЙДЕННОЕ',
+            "m": "НАЙДЕННЫЙ",
+            "f": "НАЙДЕННАЯ",
+            "n": "НАЙДЕННОЕ"
           },
           {
-            m: 'ПОСЛЕДНИЙ',
-            f: 'ПОСЛЕДНЯЯ',
-            n: 'ПОСЛЕДНЕЕ',
+            "m": "ПОСЛЕДНИЙ",
+            "f": "ПОСЛЕДНЯЯ",
+            "n": "ПОСЛЕДНЕЕ"
           },
           {
-            m: 'ЖИВОЙ',
-            f: 'ЖИВАЯ',
-            n: 'ЖИВОЕ',
+            "m": "ЖИВОЙ",
+            "f": "ЖИВАЯ",
+            "n": "ЖИВОЕ"
           },
           {
-            m: 'ВОЗВРАЩЁННЫЙ',
-            f: 'ВОЗВРАЩЁННАЯ',
-            n: 'ВОЗВРАЩЁННОЕ',
-          },
+            "m": "ВОЗВРАЩЁННЫЙ",
+            "f": "ВОЗВРАЩЁННАЯ",
+            "n": "ВОЗВРАЩЁННОЕ"
+          }
         ],
-        es_forms: [
+        "es_forms": [
           {
-            m: 'OLVIDADO',
-            f: 'OLVIDADA',
+            "m": "OLVIDADO",
+            "f": "OLVIDADA"
           },
           {
-            m: 'TERCO',
-            f: 'TERCA',
+            "m": "TERCO",
+            "f": "TERCA"
           },
           {
-            m: 'ABIERTO',
-            f: 'ABIERTA',
+            "m": "ABIERTO",
+            "f": "ABIERTA"
           },
           {
-            m: 'PRESTADO',
-            f: 'PRESTADA',
+            "m": "PRESTADO",
+            "f": "PRESTADA"
           },
           {
-            m: 'ENCONTRADO',
-            f: 'ENCONTRADA',
+            "m": "ENCONTRADO",
+            "f": "ENCONTRADA"
           },
           {
-            m: 'ÚLTIMO',
-            f: 'ÚLTIMA',
+            "m": "ÚLTIMO",
+            "f": "ÚLTIMA"
           },
           {
-            m: 'VIVO',
-            f: 'VIVA',
+            "m": "VIVO",
+            "f": "VIVA"
           },
           {
-            m: 'DEVUELTO',
-            f: 'DEVUELTA',
-          },
+            "m": "DEVUELTO",
+            "f": "DEVUELTA"
+          }
         ],
-        pt_forms: [
+        "pt_forms": [
           {
-            m: 'ESQUECIDO',
-            f: 'ESQUECIDA',
+            "m": "ESQUECIDO",
+            "f": "ESQUECIDA"
           },
           {
-            m: 'TEIMOSO',
-            f: 'TEIMOSA',
+            "m": "TEIMOSO",
+            "f": "TEIMOSA"
           },
           {
-            m: 'ABERTO',
-            f: 'ABERTA',
+            "m": "ABERTO",
+            "f": "ABERTA"
           },
           {
-            m: 'EMPRESTADO',
-            f: 'EMPRESTADA',
+            "m": "EMPRESTADO",
+            "f": "EMPRESTADA"
           },
           {
-            m: 'ENCONTRADO',
-            f: 'ENCONTRADA',
+            "m": "ENCONTRADO",
+            "f": "ENCONTRADA"
           },
           {
-            m: 'ÚLTIMO',
-            f: 'ÚLTIMA',
+            "m": "ÚLTIMO",
+            "f": "ÚLTIMA"
           },
           {
-            m: 'VIVO',
-            f: 'VIVA',
+            "m": "VIVO",
+            "f": "VIVA"
           },
           {
-            m: 'DEVOLVIDO',
-            f: 'DEVOLVIDA',
-          },
+            "m": "DEVOLVIDO",
+            "f": "DEVOLVIDA"
+          }
         ],
-        es: [
-          'OLVIDADO',
-          'TERCO',
-          'ABIERTO',
-          'PRESTADO',
-          'ENCONTRADO',
-          'ÚLTIMO',
-          'VIVO',
-          'DEVUELTO',
+        "es": [
+          "OLVIDADO",
+          "TERCO",
+          "ABIERTO",
+          "PRESTADO",
+          "ENCONTRADO",
+          "ÚLTIMO",
+          "VIVO",
+          "DEVUELTO"
         ],
-        pt: [
-          'ESQUECIDO',
-          'TEIMOSO',
-          'ABERTO',
-          'EMPRESTADO',
-          'ENCONTRADO',
-          'ÚLTIMO',
-          'VIVO',
-          'DEVOLVIDO',
-        ],
+        "pt": [
+          "ESQUECIDO",
+          "TEIMOSO",
+          "ABERTO",
+          "EMPRESTADO",
+          "ENCONTRADO",
+          "ÚLTIMO",
+          "VIVO",
+          "DEVOLVIDO"
+        ]
       },
-      noun: {
-        ru: [
-          'СЛЕД',
-          'ЗЕРКАЛО',
-          'ИМЯ',
-          'СВИДЕТЕЛЬ',
-          'ПАМЯТЬ',
-          'УЗЕЛ',
-          'КОПИЯ',
-          'ДОЛГ',
+      "noun": {
+        "ru": [
+          "СЛЕД",
+          "ЗЕРКАЛО",
+          "ИМЯ",
+          "СВИДЕТЕЛЬ",
+          "ПАМЯТЬ",
+          "УЗЕЛ",
+          "КОПИЯ",
+          "ДОЛГ"
         ],
-        en: [
-          'TRAIL',
-          'MIRROR',
-          'NAME',
-          'WITNESS',
-          'MEMORY',
-          'NODE',
-          'COPY',
-          'DEBT',
+        "en": [
+          "TRAIL",
+          "MIRROR",
+          "NAME",
+          "WITNESS",
+          "MEMORY",
+          "NODE",
+          "COPY",
+          "DEBT"
         ],
-        ru_gender: ['m', 'n', 'n', 'm', 'f', 'm', 'f', 'm'],
-        es: [
-          'RASTRO',
-          'ESPEJO',
-          'NOMBRE',
-          'TESTIGO',
-          'MEMORIA',
-          'NODO',
-          'COPIA',
-          'DEUDA',
+        "ru_gender": [
+          "m",
+          "n",
+          "n",
+          "m",
+          "f",
+          "m",
+          "f",
+          "m"
         ],
-        pt: [
-          'RASTRO',
-          'ESPELHO',
-          'NOME',
-          'TESTEMUNHA',
-          'MEMÓRIA',
-          'NÓ',
-          'CÓPIA',
-          'DÍVIDA',
+        "es": [
+          "RASTRO",
+          "ESPEJO",
+          "NOMBRE",
+          "TESTIGO",
+          "MEMORIA",
+          "NODO",
+          "COPIA",
+          "DEUDA"
         ],
-        es_gender: ['m', 'm', 'm', 'm', 'f', 'm', 'f', 'f'],
-        pt_gender: ['m', 'm', 'm', 'f', 'f', 'm', 'f', 'f'],
-      },
+        "pt": [
+          "RASTRO",
+          "ESPELHO",
+          "NOME",
+          "TESTEMUNHA",
+          "MEMÓRIA",
+          "NÓ",
+          "CÓPIA",
+          "DÍVIDA"
+        ],
+        "es_gender": [
+          "m",
+          "m",
+          "m",
+          "m",
+          "f",
+          "m",
+          "f",
+          "f"
+        ],
+        "pt_gender": [
+          "m",
+          "m",
+          "m",
+          "f",
+          "f",
+          "m",
+          "f",
+          "f"
+        ]
+      }
     },
-    evidence_sources: {
-      ru: [
-        'распечатка из зеркала архива',
-        'письмо от человека, который уже умер',
-        'фрагмент чата без начала и конца',
-        'список имён, вычеркнутых по одному',
+    "evidence_sources": {
+      "ru": [
+        "распечатка из зеркала архива",
+        "письмо от человека, который уже умер",
+        "фрагмент чата без начала и конца",
+        "список имён, вычеркнутых по одному"
       ],
-      en: [
-        'a printout from an archive mirror',
-        'a letter from someone already dead',
-        'a chat fragment with no beginning and no end',
-        'a list of names crossed off one at a time',
+      "en": [
+        "a printout from an archive mirror",
+        "a letter from someone already dead",
+        "a chat fragment with no beginning and no end",
+        "a list of names crossed off one at a time"
       ],
-      es: [
-        'una impresión de un espejo de archivo',
-        'una carta de alguien que ya está muerto',
-        'un fragmento de chat sin principio ni fin',
-        'una lista de nombres tachados uno a uno',
+      "es": [
+        "una impresión de un espejo de archivo",
+        "una carta de alguien que ya está muerto",
+        "un fragmento de chat sin principio ni fin",
+        "una lista de nombres tachados uno a uno"
       ],
-      pt: [
-        'uma impressão de um espelho de arquivo',
-        'uma carta de alguém que já morreu',
-        'um fragmento de chat sem começo nem fim',
-        'uma lista de nomes riscados um a um',
-      ],
+      "pt": [
+        "uma impressão de um espelho de arquivo",
+        "uma carta de alguém que já morreu",
+        "um fragmento de chat sem começo nem fim",
+        "uma lista de nomes riscados um a um"
+      ]
     },
-    payoff: {
-      ru: 'ALEPH не переводит ничего. Через неделю кто-то незнакомый оплачивает твой счёт в баре.',
-      en: 'ALEPH transfers nothing. A week later a stranger settles your bar tab.',
-      es: 'EL ALEPH no transfiere nada. Una semana después, un desconocido paga tu cuenta en el bar.',
-      pt: 'O ALEPH não transfere nada. Uma semana depois, um estranho paga a sua conta no bar.',
+    "payoff": {
+      "ru": "ALEPH не переводит ничего. Через неделю кто-то незнакомый оплачивает твой счёт в баре.",
+      "en": "ALEPH transfers nothing. A week later a stranger settles your bar tab.",
+      "es": "EL ALEPH no transfiere nada. Una semana después, un desconocido paga tu cuenta en el bar.",
+      "pt": "O ALEPH não transfere nada. Uma semana depois, um estranho paga a sua conta no bar."
     },
-    board_key: 'last-archive',
-  },
+    "board_key": "last-archive"
+  }
 ];

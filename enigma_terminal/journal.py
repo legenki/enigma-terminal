@@ -107,7 +107,7 @@ class Journal:
             return []
         return [Entry.from_dict(item) for item in raw if isinstance(item, dict)]
 
-    def save(self) -> None:
+    def save(self) -> bool:
         try:
             self.path.parent.mkdir(parents=True, exist_ok=True)
             self.path.write_text(
@@ -115,8 +115,9 @@ class Journal:
                            ensure_ascii=False),
                 encoding="utf-8",
             )
+            return True
         except OSError:
-            pass  # a read-only home must not break the game
+            return False  # a read-only home must not break the game
 
     def refresh(self) -> list[Entry]:
         self.entries = self._read()
@@ -160,8 +161,8 @@ class Journal:
         if 1 <= position <= len(self.entries):
             return self.entries[position - 1]
         return None
-
     def toggle_pin(self, position: int) -> Entry | None:
+        self.entries = self._read()
         entry = self.at(position)
         if entry is None:
             return None
@@ -170,8 +171,8 @@ class Journal:
         entry = new_entry
         self.save()
         return entry
-
     def clear(self, *, keep_pinned: bool = False) -> None:
+        self.entries = self._read()
         self.entries = [e for e in self.entries if e.pinned] if keep_pinned else []
         self.save()
 

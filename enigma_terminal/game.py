@@ -238,6 +238,12 @@ TEXT = {
         "es": "LOS OCHO CASOS ESTÁN CERRADOS. EL ARCHIVO DE ORACLE FUE RECUPERADO TOTALMENTE.",
         "pt": "TODOS OS OITO CASOS ESTÃO FECHADOS. O ARQUIVO DE ORACLE ESTÁ TOTALMENTE RECUPERADO.",
     },
+    "already_solved": {
+        "en": "CASE {id} WAS ALREADY CLOSED. ACTIVE CASE: {active}.",
+        "ru": "ДЕЛО {id} УЖЕ ЗАКРЫТО РАНЕЕ. АКТИВНОЕ ДЕЛО: {active}.",
+        "es": "EL CASO {id} YA ESTABA CERRADO. CASO ACTIVO: {active}.",
+        "pt": "O CASO {id} JÁ ESTAVA FECHADO. CASO ATIVO: {active}.",
+    },
 }
 
 ABOUT_TEXT = {
@@ -331,10 +337,12 @@ class Session:
     active: Case | None = None
     wallet: Wallet | None = None
     running: bool = True
+    #: The filtered slice shown by the last JOURNAL call; RECALL/PIN index into it
+    #: so their positions always agree with what was printed.
+    _journal_view: list = field(default_factory=list)
 
     def t(self, key: str, **fmt) -> str:
         return TEXT[key][self.lang].format(**fmt)
-
 
 # --------------------------------------------------------------------------- #
 # Command implementations
@@ -357,10 +365,10 @@ def cmd_about(s: Session, _arg: str) -> None:
 #: The one warning in the game that must never fall back to a language the
 #: player does not read: it is what stands between them and a funded address.
 REAL_WALLET = {
-    "en": "THIS IS A REAL WALLET. DO NOT FUND IT — THE PHRASE IS STORED NOWHERE.",
-    "ru": "ЭТО НАСТОЯЩИЙ КОШЕЛЁК. НЕ КЛАДИ НА НЕГО ДЕНЬГИ — ФРАЗА НИГДЕ НЕ СОХРАНЯЕТСЯ.",
-    "es": "ESTA ES UNA CARTERA REAL. NO LE PONGAS FONDOS — LA FRASE NO SE GUARDA EN NINGÚN LADO.",
-    "pt": "ESTA É UMA CARTEIRA REAL. NÃO COLOQUE FUNDOS — A FRASE NÃO É GUARDADA EM LUGAR NENHUM.",
+    "en": "THIS IS A REAL WALLET. DO NOT FUND IT — THE PHRASE IS SAVED IN YOUR JOURNAL (PURGE TO ERASE).",
+    "ru": "ЭТО НАСТОЯЩИЙ КОШЕЛЁК. НЕ КЛАДИ НА НЕГО ДЕНЬГИ — ФРАЗА СОХРАНЕНА В ЖУРНАЛЕ (PURGE — СТЕРЕТЬ).",
+    "es": "ESTA ES UNA CARTERA REAL. NO LE PONGAS FONDOS — LA FRASE ESTÁ GUARDADA EN TU DIARIO (PURGE PARA BORRAR).",
+    "pt": "ESTA É UMA CARTEIRA REAL. NÃO COLOQUE FUNDOS — A FRASE ESTÁ SALVA NO DIÁRIO (PURGE PARA APAGAR).",
 }
 
 
@@ -739,7 +747,12 @@ def cmd_decrypt(s: Session, arg: str) -> None:
 
     s.wallet = wallet
     owner = s.campaign.find_by_mnemonic(wallet.mnemonic)
-    _record_decrypt(s, wallet, owner)
+    s.journal.refresh()
+    generated = any(
+        e.tool == "random" and e.payload.get("mnemonic") == wallet.mnemonic 
+        for e in s.journal.entries
+    )
+    _record_decrypt(s, wallet, owner, generated=generated)
     s.screen.ok("MNEMONIC CHECKSUM VALID.")
     _print_derivation(s, wallet)
 
@@ -751,6 +764,10 @@ def cmd_decrypt(s: Session, arg: str) -> None:
             _close_case(s, owner)
         else:
             s.screen.warn(s.t("wrong_case", id=owner.id, name=owner.codename(s.lang)))
+    elif owner is not None and owner.id in s.progress.solved:
+        # Re-entering a known answer: let the player know it's already closed.
+        active_id = s.active.id if s.active else "—"
+        s.screen.info(s.t("already_solved", id=owner.id, active=active_id))
     elif s.active is not None:
         s.screen.warn(s.t("not_this_case", id=s.active.id))
 
@@ -1003,10 +1020,13 @@ def cmd_journal(s: Session, arg: str) -> None:
     if not entries:
         s.screen.warn("JOURNAL EMPTY.")
         return
+    page = entries[:30]
+    # Save this view so RECALL/PIN positions always agree with what was printed.
+    s._journal_view = page
     s.screen.write()
     s.screen.write("  INVESTIGATION JOURNAL", "cyan", "bold")
     s.screen.rule()
-    for index, entry in enumerate(entries[:30], 1):
+    for index, entry in enumerate(page, 1):
         style = STATUS_STYLES.get(entry.status, "grey")
         label = TOOLS.get(entry.tool, entry.tool).upper()
         pin = "*" if entry.pinned else " "
@@ -1019,8 +1039,23 @@ def cmd_journal(s: Session, arg: str) -> None:
         if entry.detail:
             s.screen.write(f"      {entry.detail}", "dark")
     s.screen.rule()
-    s.screen.write(f"  {len(entries)} ENTRY(S) — RECALL <n> TO REPLAY", "grey")
+    shown = len(page)
+    total = len(entries)
+    suffix = f" (showing {shown} of {total})" if total > shown else ""
+    s.screen.write(f"  {total} ENTRY(S){suffix} — RECALL <n> TO REPLAY", "grey")
     s.screen.write()
+
+
+def _view_entry(s: Session, position: int):
+    """Return the Entry at 1-based ``position`` in the last JOURNAL view.
+
+    Falls back to the full unfiltered list when no JOURNAL has been run yet
+    (e.g. direct RECALL 1 on session start) so the command still works.
+    """
+    view = s._journal_view or s.journal.entries
+    if 1 <= position <= len(view):
+        return view[position - 1]
+    return None
 
 
 def cmd_recall(s: Session, arg: str) -> None:
@@ -1031,7 +1066,7 @@ def cmd_recall(s: Session, arg: str) -> None:
         s.screen.warn("USAGE: RECALL <n>  (see JOURNAL)")
         return
     s.journal.refresh()
-    entry = s.journal.at(position)
+    entry = _view_entry(s, position)
     if entry is None:
         s.screen.error(f"NO JOURNAL ENTRY {position}.")
         return
@@ -1070,7 +1105,19 @@ def cmd_pin(s: Session, arg: str) -> None:
     except ValueError:
         s.screen.warn("USAGE: PIN <n>  (see JOURNAL)")
         return
-    entry = s.journal.toggle_pin(position)
+    s.journal.refresh()
+    target = _view_entry(s, position)
+    if target is None:
+        s.screen.error(f"NO JOURNAL ENTRY {position}.")
+        return
+    # toggle_pin works by full-list position; look the entry up by its stable id.
+    full_pos = next(
+        (i + 1 for i, e in enumerate(s.journal.entries) if e.id == target.id), None
+    )
+    if full_pos is None:
+        s.screen.error(f"NO JOURNAL ENTRY {position}.")
+        return
+    entry = s.journal.toggle_pin(full_pos)
     if entry is None:
         s.screen.error(f"NO JOURNAL ENTRY {position}.")
         return
@@ -1118,10 +1165,14 @@ def cmd_clear(s: Session, _arg: str) -> None:
 
 
 def cmd_reset(s: Session, _arg: str) -> None:
+    if not s.progress.save():
+        s.screen.error("PROGRESS DISK WRITE FAILED — RESET NOT SAVED.")
+        return
     s.progress.reset()
     s.active = None
     s.wallet = None
     s.screen.ok("PROGRESS ERASED. ARCHIVE SEALED AGAIN.")
+    s.screen.warn("NOTE: JOURNAL STILL HOLDS ANSWERS. RUN PURGE ALL TO CLEAR IT.")
 
 
 def cmd_exit(s: Session, _arg: str) -> None:

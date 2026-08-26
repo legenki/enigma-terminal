@@ -34,6 +34,8 @@ NETWORK_ERRORS: tuple[type[BaseException], ...] = (
 if requests is not None:  # pragma: no branch - trivial
     NETWORK_ERRORS += (requests.RequestException,)
 
+_PARSER_ERRORS = tuple(list(NETWORK_ERRORS) + [KeyError, TypeError, ValueError])
+
 
 @dataclass
 class AddressStats:
@@ -266,7 +268,7 @@ class ChainClient:
             url = provider.base + provider.txs_path(address)
             try:
                 return provider.parse_txs(_get_json(url, self.timeout), address)[:limit]
-            except tuple(list(NETWORK_ERRORS) + [KeyError, TypeError, ValueError]) as exc:
+            except _PARSER_ERRORS as exc:
                 code = getattr(getattr(exc, "response", None), "status_code", getattr(exc, "code", None))
                 if code == 429:
                     errors.append(f"{provider.name}: HTTP 429 TOO MANY REQUESTS")
@@ -277,6 +279,8 @@ class ChainClient:
 
     def netinfo(self) -> dict[str, str]:
         """Probe each provider and return a status dict for NETINFO display."""
+        if self.offline:
+            return {key: "OFFLINE" for key in DEFAULT_ORDER}
         import time
         _PROBE = "1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf"
         results: dict[str, str] = {}

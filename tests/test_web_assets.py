@@ -323,7 +323,7 @@ def test_the_sidebar_names_panels_with_glyphs_not_numbers():
     feather = (DOCS / "js" / "vendor" / "feather.js").read_text(encoding="utf-8")
     for glyph in ("folder", "grid", "key", "database", "search", "shuffle",
                   "bookOpen", "info"):
-        assert f"  {glyph}: [" in feather, f"no {glyph} icon"
+        assert re.search(rf"^\s+{glyph}:\s*\[", feather, re.MULTILINE), f"no {glyph} icon"
     assert (DOCS / "js" / "vendor" / "LICENSE-feather").exists(), "Feather is MIT; ship the licence"
 
 
