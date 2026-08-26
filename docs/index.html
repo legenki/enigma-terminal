@@ -23,6 +23,7 @@
   <header id="glitch-bar">
     <canvas id="glitch-canvas" role="img" aria-label="BIP-39: Enigma Terminal"></canvas>
     <div id="light-switch" role="group" aria-label="Daylight">
+      <span id="power-led" aria-hidden="true"></span>
       <span class="switch-label">СВЕТ</span>
       <div class="rocker">
         <button id="light-live" class="rocker__btn" type="button" aria-pressed="false">LIVE</button>
@@ -33,22 +34,18 @@
   </header>
 
   <main id="stage">
-    <!-- GUI mode -->
+    <!-- The interface. There is only one now: the terminal is a panel in it. -->
     <div id="gui-root"></div>
 
-    <!-- Command-line mode -->
+    <!-- The terminal is a panel now: the GUI adopts this frame when the
+         Terminal tab is open, so the canvas and its input survive the move. -->
     <div id="screen-frame" class="is-hidden">
       <canvas id="term-layer"></canvas>
-      <canvas id="crt-layer"></canvas>
       <input id="keyboard-input" type="text" autocomplete="off" autocorrect="off"
              autocapitalize="none" spellcheck="false" aria-label="Terminal input">
     </div>
   </main>
 
-  <!-- Scanlines and vignette for the GUI; the command line has its own shader. -->
-  <div id="crt-overlay" aria-hidden="true"></div>
-
-  
 </div>
 
 <noscript>

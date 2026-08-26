@@ -744,16 +744,36 @@ a { color: var(--info); }
   text-align: center;
 }
 
-.search-container {
+/* ---------- the terminal, as a panel ------------------------------------- */
+/* The content pane is a scrolling column everywhere else; for the terminal it
+   becomes a frame the canvas can fill, because the canvas does its own
+   scrolling and has to know its box to lay out a character grid. */
+
+.win__body:has(> #screen-frame) {
   display: flex;
-  flex-direction: column;
-  height: 100%;
+  padding: 0;
+  overflow: hidden;
 }
 
-.tab-content {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
+#screen-frame.is-hidden { display: none; }
+
+/* ---------- the rail: two lookups, both always open ---------------------- */
+
+.rail__tool + .rail__tool {
+  margin-top: 13px;
+  padding-top: 13px;
+  border-top: 1px solid var(--line);
 }
 
+.rail__tool-title {
+  margin: 0 0 7px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+
+.rail__tool .field { width: 100%; }
+.rail__tool .word-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+.rail__tool .chip-grid { max-height: 220px; overflow-y: auto; }

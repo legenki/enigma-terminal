@@ -205,9 +205,8 @@ const TEXT = {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export class Engine {
-  constructor(term, { crt = null, lang = 'ru' } = {}) {
+  constructor(term, { lang = 'ru' } = {}) {
     this.term = term;
-    this.crt = crt;
     this.lang = lang;
     this.chain = new ChainClient();
     this.campaign = CAMPAIGN;

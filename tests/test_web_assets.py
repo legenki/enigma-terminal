@@ -48,11 +48,16 @@ def test_index_references_only_files_that_exist():
         assert (DOCS / reference).is_file(), f"index.html references missing {reference}"
 
 
-def test_index_wires_up_both_modes():
+def test_there_is_one_surface_and_the_terminal_lives_in_it():
+    """The terminal used to be a second mode reached by a rocker at the foot.
+    It is a panel now, so the page has one surface and the frame it adopts."""
     html = (DOCS / "index.html").read_text()
-    for required in ('id="gui-root"', 'id="screen-frame"', 'id="glitch-canvas"',
-                     'id="mode-gui"', 'id="mode-cl"'):
+    for required in ('id="gui-root"', 'id="screen-frame"', 'id="glitch-canvas"'):
         assert required in html, f"index.html lost {required}"
+    for gone in ('id="mode-gui"', 'id="mode-cl"', 'id="crt-layer"', 'id="crt-overlay"'):
+        assert gone not in html, f"{gone} belongs to the two-mode shell"
+    assert 'id="gui-root" class="is-hidden"' not in html, \
+        "nothing unhides the GUI any more, so it must not start hidden"
 
 
 @pytest.mark.parametrize("path", JS_FILES, ids=lambda p: str(p.relative_to(DOCS)))
@@ -150,36 +155,69 @@ def test_sigils_are_keyed_by_fingerprint_not_by_words():
     assert "sigil(`enigma-seed-${mnemonic}" not in source
 
 
-# --- CRT switch ------------------------------------------------------------
+# --- the terminal ----------------------------------------------------------
 
-def test_crt_is_a_switch_not_a_command():
-    """The CRT command was replaced by the footer switch; both modes obey it."""
-    html = (DOCS / "index.html").read_text()
-    assert 'id="crt-soft"' in html and 'id="crt-off"' in html
-    assert 'id="crt-overlay"' in html
+def test_the_crt_simulation_is_gone_entirely():
+    """A scanline wash and a phosphor bloom belonged to the tube. The screen
+    is a flat panel in a daylit interface now, and half a CRT left behind is
+    worse than none."""
+    assert not (DOCS / "js" / "crt.js").exists()
+    for path in [DOCS / "index.html", DOCS / "css" / "terminal.css",
+                 DOCS / "css" / "gui.css", DOCS / "js" / "main.js"]:
+        source = strip_js_comments(path.read_text())
+        assert "crt" not in source.lower(), f"{path.name} still mentions the CRT"
 
-    engine = (DOCS / "js" / "engine.js").read_text()
-    assert "cmdCrt" not in engine
-    assert "CRT:" not in engine
+
+def test_the_terminal_is_a_panel_that_adopts_its_canvas():
+    """Rebuilding the canvas on every visit would drop the scrollback, so the
+    panel takes the frame main.js already made."""
+    app = strip_js_comments((DOCS / "js" / "gui" / "app.js").read_text())
+    assert "id: 'terminal'" in app
+    assert app.index("id: 'terminal'") < app.index("id: 'cases'"), \
+        "the terminal is meant to be the first row"
+    assert "buildTerminal()" in app
+    assert "this.terminalHost" in app
+    assert "this.onTerminalShown()" in app, "the canvas never gets told to measure"
 
     main = strip_js_comments((DOCS / "js" / "main.js").read_text())
-    assert "setCrt" in main
-    assert "crt-soft" in main
+    assert "terminalHost: screenFrame" in main
+    assert "onTerminalShown:" in main
+    # `daylight.setMode` is a different thing; the shell-level one is gone.
+    assert "function setMode" not in main, "the two-mode switch is back"
+    assert "id('mode-cl')" not in main and "mode-gui" not in main
 
 
-def test_crt_overlay_is_styled_and_inert():
+def test_the_screen_keeps_one_colour_whatever_the_hour():
+    """A terminal that drifted with the daylight would stop reading as one."""
     css = (DOCS / "css" / "terminal.css").read_text()
-    block = css[css.index("#crt-overlay {"):]
-    assert "pointer-events: none" in block
-    assert "body.crt-soft #crt-overlay" in css
+    block = css[css.index("#screen-frame {"):]
+    block = block[:block.index("}")]
+    assert "#363248" in block, "the screen lost its fixed ground"
+    assert "var(--bg)" not in block
+
+    term = (DOCS / "js" / "term.js").read_text()
+    assert "export const GROUND = '#363248';" in term
+    assert "'#39ff8b'" not in term, "the phosphor palette is still in the terminal"
 
 
-def test_footer_no_longer_carries_the_source_link():
-    """The switch took its place; the link lives in the About panel instead."""
+def test_the_typed_command_is_lit_apart_from_the_output():
+    term = (DOCS / "js" / "term.js").read_text()
+    assert "style: 'command'" in term, "the echoed command is not highlighted"
+    assert "style: 'prompt'" in term
+    for role in ("text", "command", "prompt"):
+        assert re.search(rf"^  {role}: '#", term, re.M), f"no {role} colour"
+
+
+def test_the_banner_carries_the_switch_and_not_a_source_link():
+    """The footer went with the GUI/CL rocker it existed to hold, so the
+    daylight switch and the busy lamp moved up into the banner. The source
+    link lives in the About panel, where it always belonged."""
     html = (DOCS / "index.html").read_text()
-    footer = html[html.index('<footer id="switch-bar">'):html.index("</footer>")]
-    assert "github.com" not in footer
-    assert 'id="crt-switch"' in footer
+    assert "<footer" not in html
+    banner = html[html.index('<header id="glitch-bar">'):html.index("</header>")]
+    assert 'id="light-switch"' in banner
+    assert 'id="power-led"' in banner
+    assert "github.com" not in banner
     assert "github.com/legenki/neon-terminal" in (DOCS / "js" / "gui" / "app.js").read_text()
 
 
@@ -301,17 +339,27 @@ def test_the_panel_digits_actually_do_something():
     assert "'INPUT', 'TEXTAREA'" in main, "digits would fire while typing a seed"
 
 
-def test_the_rail_searches_rather_than_mirroring_the_journal():
+def test_the_rail_holds_the_two_lookups_permanently():
+    """The wordlist and the missing-word recovery were tabs inside a panel:
+    looking a word up meant leaving whatever you were reading, and seeing one
+    tool meant losing the other. They live in the rail now, both at once."""
     source = strip_js_comments((DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8"))
-    assert "paintRailResults()" in source
-    assert "searchCases(query, lang, this.progress)" in source
-    # Slice from the method definition, not the first call site.
-    block = source[source.index("  paintRail() {"):source.index("  logRailSearch() {")]
+    block = source[source.index("  paintRail() {"):]
+    block = block[:block.index("\n  }\n")]
+    for pane in ("searchWordsPane()", "searchCompletePane()"):
+        assert pane in block, f"the rail no longer builds {pane}"
     assert "journal.all()" not in block, "the rail is mirroring the journal again"
+
+    # And the Archive panel is left with the one thing it is named for.
+    archive = source[source.index("  buildSearch() {"):]
+    archive = archive[:archive.index("\n  }\n")]
+    assert "searchArchivePane()" in archive
+    for gone in ("searchWordsPane()", "searchCompletePane()", "class: 'tabs'"):
+        assert gone not in archive, f"the archive panel still carries {gone}"
 
     css = (DOCS / "css" / "gui.css").read_text(encoding="utf-8")
     columns = re.search(r"grid-template-columns: 210px minmax\(0, 1fr\) (\d+)px", css)
-    assert columns and int(columns.group(1)) >= 320, "the search rail lost its width"
+    assert columns and int(columns.group(1)) >= 320, "the rail lost its width"
 
 
 def test_surfaces_are_layered_not_flattened():

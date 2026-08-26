@@ -3,22 +3,31 @@
 // 2D canvas rather than DOM text is what lets crt.js push the whole screen
 // through a WebGL post-processing chain.
 
+//: The screen is one fixed colour whatever the hour outside: a terminal that
+//: changed with the daylight would stop reading as a terminal. Every tone is
+//: measured against the ground — the lowest is 5.1:1, the body text 9.8:1.
+export const GROUND = '#363248';
+
 export const PALETTE = {
-  green: '#39ff8b',
-  dark: '#1f8c4d',
-  dim: '#126a45',
-  cyan: '#4df3ff',
-  magenta: '#ff4dd2',
-  amber: '#ffc23d',
-  red: '#ff3b5c',
-  grey: '#7d9c8c',
-  white: '#e8fff4',
+  text: '#e6e4f0',      // everything the machine says
+  command: '#ffffff',   // the line the player typed, lit against the rest
+  prompt: '#e0906d',    // the clay of the rest of the interface
+  green: '#9fd8a8',
+  cyan: '#8ac7e8',
+  amber: '#e8c07a',
+  red: '#f08a8a',
+  magenta: '#d3a0dc',
+  grey: '#b0acc4',
+  white: '#ffffff',
+  //: Kept as names the engine already writes; the phosphor values are gone.
+  dark: '#e0906d',
+  dim: '#b0acc4',
 };
 
 const CURSOR_BLINK_MS = 530;
 const INSTANT_LINES_PER_FRAME = 160;
 
-const colourOf = (style) => PALETTE[style] || style || PALETTE.green;
+const colourOf = (style) => PALETTE[style] || style || PALETTE.text;
 
 export class Terminal {
   constructor(canvas, options = {}) {
@@ -216,8 +225,8 @@ export class Terminal {
     if (key === 'Enter') {
       const command = this.input;
       this.print([
-        { text: this.prompt, style: 'dark' },
-        { text: command, style: 'white' },
+        { text: this.prompt, style: 'prompt' },
+        { text: command, style: 'command' },
       ]);
       this.input = '';
       this.cursor = 0;
@@ -310,7 +319,7 @@ export class Terminal {
 
     const ctx = this.ctx;
     ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
-    ctx.fillStyle = '#03120b';
+    ctx.fillStyle = GROUND;
     ctx.fillRect(0, 0, this.width, this.height);
     ctx.font = `${this.fontSize}px "IBM Plex Mono", "Courier New", monospace`;
     ctx.textBaseline = 'top';
@@ -318,7 +327,7 @@ export class Terminal {
     const visible = this.locked
       ? this.lines
       : [...this.lines, [
-          { text: this.prompt, color: PALETTE.dark },
+          { text: this.prompt, color: PALETTE.prompt },
           { text: this.input, color: PALETTE.white },
         ]];
 
@@ -340,7 +349,7 @@ export class Terminal {
     if (!this.locked && this.cursorVisible && this.scrollOffset === 0) {
       const promptRow = slice.length - 1;
       const column = this.prompt.length + this.cursor;
-      ctx.fillStyle = this.busy ? PALETTE.amber : PALETTE.green;
+      ctx.fillStyle = this.busy ? PALETTE.amber : PALETTE.command;
       ctx.globalAlpha = 0.85;
       ctx.fillRect(
         padX + column * this.cellWidth,

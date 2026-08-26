@@ -23,14 +23,15 @@ import { icon } from '../vendor/feather.js';
 //: `key` still works as a shortcut — it moved off the row and into the row's
 //: title, so the sidebar reads as a list of places rather than a numbered menu.
 const PANELS = [
-  { id: 'cases', glyph: 'folder', label: { en: 'Case files', ru: 'Дела', es: 'Casos', pt: 'Casos' }, key: '1' },
-  { id: 'board', glyph: 'grid', label: { en: 'Contracts', ru: 'Контракты', es: 'Contratos', pt: 'Contratos' }, key: '2' },
-  { id: 'decrypt', glyph: 'key', label: { en: 'Decrypt', ru: 'Дешифровка', es: 'Descifrado', pt: 'Decifração' }, key: '3' },
-  { id: 'ledger', glyph: 'database', label: { en: 'Ledger', ru: 'Реестр', es: 'Registro', pt: 'Registro' }, key: '4' },
-  { id: 'archive', glyph: 'search', label: { en: 'Archive', ru: 'Архив', es: 'Archivo', pt: 'Arquivo' }, key: '5' },
-  { id: 'random', glyph: 'shuffle', label: { en: 'Randomizer', ru: 'Рандомайзер', es: 'Aleatorio', pt: 'Aleatório' }, key: '6' },
-  { id: 'journal', glyph: 'bookOpen', label: { en: 'Journal', ru: 'Журнал', es: 'Diario', pt: 'Diário' }, key: '7' },
-  { id: 'about', glyph: 'info', label: { en: 'About', ru: 'О программе', es: 'Acerca de', pt: 'Sobre' }, key: '8' },
+  { id: 'terminal', glyph: 'terminal', label: { en: 'Terminal', ru: 'Терминал', es: 'Terminal', pt: 'Terminal' }, key: '1' },
+  { id: 'cases', glyph: 'folder', label: { en: 'Case files', ru: 'Дела', es: 'Casos', pt: 'Casos' }, key: '2' },
+  { id: 'board', glyph: 'grid', label: { en: 'Contracts', ru: 'Контракты', es: 'Contratos', pt: 'Contratos' }, key: '3' },
+  { id: 'decrypt', glyph: 'key', label: { en: 'Decrypt', ru: 'Дешифровка', es: 'Descifrado', pt: 'Decifração' }, key: '4' },
+  { id: 'ledger', glyph: 'database', label: { en: 'Ledger', ru: 'Реестр', es: 'Registro', pt: 'Registro' }, key: '5' },
+  { id: 'search', glyph: 'search', label: { en: 'Archive', ru: 'Архив дел', es: 'Archivo', pt: 'Arquivo' }, key: '6' },
+  { id: 'random', glyph: 'shuffle', label: { en: 'Randomizer', ru: 'Рандомайзер', es: 'Aleatorio', pt: 'Aleatório' }, key: '7' },
+  { id: 'journal', glyph: 'bookOpen', label: { en: 'Journal', ru: 'Журнал', es: 'Diario', pt: 'Diário' }, key: '8' },
+  { id: 'about', glyph: 'info', label: { en: 'About', ru: 'О программе', es: 'Acerca de', pt: 'Sobre' }, key: '9' },
 ];
 
 // Every fixed string the GUI shows. Keys carrying {braces} are filled by `tf`.
@@ -72,18 +73,8 @@ const T = {
   copied: { en: 'Copied', ru: 'Скопировано', es: 'Copiado', pt: 'Copiado' },
   journal: { en: 'Journal', ru: 'Журнал', es: 'Diario', pt: 'Diário' },
   recent: { en: 'Recent', ru: 'Последнее', es: 'Reciente', pt: 'Recente' },
-  railTitle: { en: 'Search', ru: 'Поиск', es: 'Búsqueda', pt: 'Busca' },
-  railPlaceholder: {
-    en: 'a word from a case', ru: 'слово из дела',
-    es: 'una palabra de un caso', pt: 'uma palavra de um caso',
-  },
-  railHint: {
-    en: 'Search every case file without leaving the one you are reading. Epilogues join the index only once a case is closed.',
-    ru: 'Ищи по всем делам, не уходя с того, что читаешь. Эпилоги попадают в поиск только после закрытия дела.',
-    es: 'Busca en todos los casos sin salir del que estás leyendo. Los epílogos entran en el índice sólo cuando el caso está cerrado.',
-    pt: 'Busque em todos os casos sem sair do que está lendo. Os epílogos entram no índice só quando o caso está fechado.',
-  },
-  navTitle: { en: 'Archive', ru: 'Архив', es: 'Archivo', pt: 'Arquivo' },
+  railTitle: { en: 'Tools', ru: 'Инструменты', es: 'Herramientas', pt: 'Ferramentas' },
+  navTitle: { en: 'Desk', ru: 'Стол', es: 'Escritorio', pt: 'Mesa' },
   openJournal: { en: 'Open journal', ru: 'Открыть журнал', es: 'Abrir el diario', pt: 'Abrir o diário' },
   recall: { en: 'Recall', ru: 'Вернуться', es: 'Retomar', pt: 'Retomar' },
   pin: { en: 'Pin', ru: 'Закрепить', es: 'Fijar', pt: 'Fixar' },
@@ -335,10 +326,16 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const clock = (at) => new Date(at).toTimeString().slice(0, 8);
 
 export class GuiApp {
-  constructor(root, { lang = 'ru', onLangChange = null } = {}) {
+  constructor(root, {
+    lang = 'ru', onLangChange = null, terminalHost = null, onTerminalShown = null,
+  } = {}) {
     this.root = root;
     this.lang = lang;
     this.onLangChange = onLangChange;
+    //: The terminal's canvas is built once, outside the GUI, and adopted by
+    //: its panel. Rebuilding it would throw away the scrollback.
+    this.terminalHost = terminalHost;
+    this.onTerminalShown = onTerminalShown;
     this.progress = new ProgressStore();
     this.journal = new Journal();
     this.chain = new ChainClient();
@@ -485,7 +482,8 @@ export class GuiApp {
       board: () => this.buildBoard(),
       decrypt: () => this.buildDecrypt(),
       ledger: () => this.buildLedger(),
-      archive: () => this.buildArchive(),
+      terminal: () => this.buildTerminal(),
+      search: () => this.buildSearch(),
       random: () => this.buildRandom(),
       journal: () => this.buildJournal(),
       about: () => this.buildAbout(),
@@ -499,6 +497,10 @@ export class GuiApp {
       pick(panel.label, this.lang);
     const { node } = this.ensurePanel(this.panelKey());
     replace(this.content, node);
+    // The canvas had no box while it was off screen, so it can only measure
+    // itself once it has been put back into the flow.
+    if (this.panel === 'terminal' && this.onTerminalShown) this.onTerminalShown();
+    else if (this.terminalHost) this.terminalHost.classList.add('is-hidden');
     if (this.railOpen) this.paintRail();
   }
 
@@ -554,74 +556,29 @@ export class GuiApp {
   }
 
   /**
-   * The rail searches the case files.
+   * The rail holds the two lookups a detective reaches for mid-thought:
+   * the BIP-39 wordlist, and recovering a word the checksum can name.
    *
-   * It used to mirror the journal, which the Journal panel already shows in
-   * full. Search is the thing a detective reaches for without leaving what
-   * they are reading, so it earns the permanent column instead.
+   * Both are on screen at once and stay there whatever panel is open —
+   * they were tabs inside a panel before, which meant leaving whatever you
+   * were reading to look a word up, and losing the other tool to see one.
    */
   paintRail() {
-    const lang = this.lang;
-    if (!this.railInput) {
-      this.railInput = el('input', {
-        class: 'field', type: 'search', value: this.railQuery || '',
-        placeholder: t('railPlaceholder', lang),
-        'aria-label': t('railTitle', lang),
-        onInput: (event) => {
-          this.railQuery = event.currentTarget.value;
-          this.paintRailResults();
-          clearTimeout(this._railTimer);
-          this._railTimer = setTimeout(() => this.logRailSearch(), 900);
-        },
-      });
-      this.railResults = el('div', { class: 'rail__results' });
+    if (!this.railPanes) {
+      this.railPanes = {
+        words: this.searchWordsPane(),
+        complete: this.searchCompletePane(),
+      };
     }
-    this.railInput.placeholder = t('railPlaceholder', lang);
-    replace(this.railBody, this.railInput, this.railResults);
-    this.paintRailResults();
+    replace(this.railBody,
+      el('div', { class: 'rail__tool' },
+        el('h3', { class: 'rail__tool-title', text: t('tabWords', this.lang) }),
+        this.railPanes.words.node),
+      el('div', { class: 'rail__tool' },
+        el('h3', { class: 'rail__tool-title', text: t('tabComplete', this.lang) }),
+        this.railPanes.complete.node));
   }
 
-  paintRailResults() {
-    const lang = this.lang;
-    const query = (this.railQuery || '').trim();
-    if (!query) {
-      replace(this.railResults,
-        el('p', { class: 'hint-text', text: t('railHint', lang) }));
-      return;
-    }
-    const results = searchCases(query, lang, this.progress);
-    if (!results.length) {
-      replace(this.railResults, empty(t('nothingInArchive', lang)));
-      return;
-    }
-    replace(this.railResults,
-      el('p', { class: 'section__meta', style: 'margin-bottom:7px',
-        text: `${results.length} ${t('casesCount', lang)}` }),
-      el('ol', { class: 'rail__list' },
-        ...results.slice(0, 30).map((result) => el('li', { class: 'rail__item' },
-          el('button', {
-            class: 'rail__btn', type: 'button',
-            onClick: () => this.go('cases', result.case.id),
-          },
-          caseSigil(result.case, { size: 22 }),
-          el('span', { class: 'rail__text' },
-            el('span', { class: 'rail__title',
-              text: pick(result.case.codename, lang) }),
-            el('span', { class: 'rail__hit',
-              text: (result.hits.find((hit) => hit.field !== 'codename')
-                || result.hits[0] || {}).line || '' })))))));
-  }
-
-  logRailSearch() {
-    const query = (this.railQuery || '').trim();
-    if (!query || query === this._railLogged) return;
-    this._railLogged = query;
-    const results = searchCases(query, this.lang, this.progress);
-    this.log('archive', query, {
-      detail: `${results.length} ${t('casesCount', this.lang)}`,
-      payload: { query },
-    });
-  }
 
   /** The sigil that identifies whatever a journal entry is about. */
   entrySigil(entry, size) {
@@ -673,11 +630,17 @@ export class GuiApp {
       this.ensurePanel('ledger').api.run(payload.address, tool);
       return;
     }
-    if (tool === 'search' || tool === 'archive' || tool === 'complete') {
-      this.go('archive');
-      const api = this.ensurePanel('archive').api;
-      const tab = tool === 'search' ? 'words' : tool === 'archive' ? 'archive' : 'complete';
-      api.run(tab, payload.query || payload.pattern || '');
+    if (tool === 'archive') {
+      this.go('search');
+      this.ensurePanel('search').api.run(payload.query || '');
+      return;
+    }
+    if (tool === 'search' || tool === 'complete') {
+      // These live in the rail, so open it rather than changing panel.
+      if (!this.railOpen) this.toggleRail();
+      this.paintRail();
+      const pane = this.railPanes[tool === 'search' ? 'words' : 'complete'];
+      pane.run(payload.query || payload.pattern || '');
     }
   }
 
@@ -1346,62 +1309,30 @@ export class GuiApp {
     };
   }
 
-  // ---- search -----------------------------------------------------------
+  // ---- terminal ---------------------------------------------------------
 
-  buildArchive() {
-    const lang = this.lang;
-    const tabs = [
-      ['terminal', 'Terminal'],
-      ['words', t('tabWords', lang)],
-      ['archive', t('tabArchive', lang)],
-      ['complete', t('tabComplete', lang)],
-    ];
-    const panes = {
-      terminal: this.terminalPane(),
-      words: this.searchWordsPane(),
-      archive: this.searchArchivePane(),
-      complete: this.searchCompletePane(),
-    };
-    let active = 'terminal';
-    const body = el('div', { class: 'tab-content' });
-
-    const show = (id) => {
-      active = id;
-      tabBar.querySelectorAll('.tab').forEach((tab) =>
-        tab.setAttribute('aria-selected', String(tab.dataset.tab === id)));
-      replace(body, panes[id].node);
-    };
-
-    const tabBar = el('div', { class: 'tabs' },
-      ...tabs.map(([id, label]) =>
-        el('button', {
-          class: 'tab', type: 'button', role: 'tab',
-          dataset: { tab: id },
-          'aria-selected': id === active ? 'true' : 'false',
-          text: label,
-          onClick: () => show(id),
-        })));
-
-    show(active);
-    const node = el('div', { class: 'search-container' }, tabBar, body);
-    return {
-      node,
-      api: {
-        run: (tab, value) => {
-          show(tab);
-          panes[tab].run(value);
-        },
-      },
-    };
+  /**
+   * The terminal, adopted rather than built.
+   *
+   * `terminalHost` is the frame main.js created at startup, carrying the
+   * canvas, its scrollback and the hidden input that feeds it. Putting that
+   * element into the content pane keeps every one of those alive across
+   * panel switches; a rebuilt canvas would come back blank each time.
+   */
+  buildTerminal() {
+    const node = this.terminalHost || el('div', { class: 'hint-text', text: 'â€”' });
+    return { node, api: {} };
   }
 
+  // ---- archive: full-text search across the case files -------------------
 
-  terminalPane() {
-    const frame = document.getElementById('screen-frame');
-    frame.classList.remove('is-hidden');
+  buildSearch() {
+    // One tool, no tabs. The wordlist and the missing-word recovery moved to
+    // the rail, where they stay reachable from whatever panel is open.
+    const pane = this.searchArchivePane();
     return {
-      node: frame,
-      run: () => {}
+      node: pane.node,
+      api: { run: (value) => pane.run(value) },
     };
   }
 

@@ -33,20 +33,19 @@ body::before {
   z-index: 0;
 }
 
+/* The screen keeps its own colour whatever the hour: a terminal that drifted
+   with the daylight would stop reading as a terminal. */
 #screen-frame {
   position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 4px;
-  background: var(--tube);
-  border: 1px solid var(--neon-dim);
+  flex: 1;
+  min-height: 320px;
+  border-radius: var(--radius-sm, 8px);
+  background: #363248;
+  border: 1px solid rgba(255, 255, 255, 0.09);
   overflow: hidden;
-  
-  
 }
 
-#term-layer,
-#crt-layer {
+#term-layer {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -56,8 +55,6 @@ body::before {
 
 /* When the shader runs, the 2D canvas is only a texture source. It must stay
    laid out (its size drives the grid) but must not be seen. */
-#term-layer.is-source { opacity: 0; }
-#crt-layer.is-hidden { display: none; }
 
 #keyboard-input {
   position: absolute;
@@ -95,20 +92,23 @@ body::before {
 
 /* ---------- retro rocker switch ----------------------------------------- */
 
+/* The lamp and the daylight switch moved into the banner when the footer
+   went with the GUI/CL rocker it existed to hold. */
+#glitch-bar { position: relative; }
 
 /* ---------- the shell follows the hour, in GUI mode ----------------------- */
 /* The command line is a phosphor tube and keeps its own room; the GUI is a
    daylit desktop, so the ground and the footer around it move with the
    palette rather than staying a black slab under a pale window. */
 
-body.is-gui { background: var(--bg); }
+html, body.is-gui { background: var(--bg); }
+body.is-gui { color: var(--ink); }
 body.is-gui::before { opacity: 0; }
-body.is-gui body.is-gui #switch-hint,
 body.is-gui .switch-label { color: var(--soft); }
 body.is-gui #glitch-canvas { border-radius: var(--radius, 12px); }
 
 .rocker {
-  
+  display: flex;
   border: 1px solid #0c1a12;
   background: #1b2620;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 2px 0 rgba(0, 0, 0, 0.5);
@@ -141,18 +141,7 @@ body.is-gui #glitch-canvas { border-radius: var(--radius, 12px); }
 
 .rocker__btn:focus-visible { outline: 2px solid #4df3ff; outline-offset: 2px; }
 
-#switch-hint {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--phosphor-dim);
-}
-
-#switch-bar .spacer { flex: 1; }
-
 @media (max-width: 640px) {
-  #switch-hint { display: none; }
   .rocker__btn { padding: 7px 14px; }
 }
 
@@ -171,114 +160,26 @@ body.is-gui #glitch-canvas { border-radius: var(--radius, 12px); }
   box-shadow: 0 0 12px #ffc23d;
 }
 
-#switch-bar a {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  color: var(--phosphor-dim);
-  text-decoration: none;
-  border-bottom: 1px dotted currentColor;
-}
-
-#switch-bar a:hover { color: var(--phosphor); }
-
 @media (prefers-reduced-motion: reduce) {
   #power-led { transition: none; }
 }
 
 /* ---------- CRT overlay (covers the GUI, where WebGL cannot reach) -------- */
 
-/* The command line runs its scene through a real WebGL tube. The GUI is DOM,
-   so it gets the same treatment the only way DOM can: a fixed overlay with
-   scanlines, an aperture grille, a vignette and a slow flicker, plus a
-   phosphor bleed on the text underneath. */
+/* ---------- footer switch ------------------------------------------------ */
 
-#crt-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 20;
-  display: none;
-  pointer-events: none;
-}
-
-body.crt-soft #crt-overlay { display: block; }
-
-#crt-overlay::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.22) 0 1px,
-      transparent 1px 3px),
-    repeating-linear-gradient(
-      to right,
-      rgba(255, 0, 90, 0.05) 0 1px,
-      rgba(0, 255, 130, 0.04) 1px 2px,
-      rgba(60, 140, 255, 0.05) 2px 3px);
-  animation: crt-flicker 5.5s steps(60) infinite;
-}
-
-/* Vignette plus a bright band drifting up the tube. */
-#crt-overlay::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(120% 120% at 50% 50%,
-      transparent 52%, rgba(0, 0, 0, 0.42) 100%),
-    linear-gradient(to bottom,
-      transparent 0%, rgba(34, 255, 122, 0.05) 48%, transparent 60%);
-  background-size: 100% 100%, 100% 260%;
-  animation: crt-roll 9s linear infinite;
-}
-
-@keyframes crt-flicker {
-  0%, 96%, 100% { opacity: 1; }
-  97% { opacity: 0.86; }
-  98% { opacity: 1; }
-  99% { opacity: 0.92; }
-}
-
-@keyframes crt-roll {
-  from { background-position: 0 0, 0 -160%; }
-  to { background-position: 0 0, 0 100%; }
-}
-
-/* Phosphor bleed on the interface itself. */
-body.crt-soft #gui-root { text-shadow: 0 0 4px rgba(34, 255, 122, 0.35); }
-
-body.crt-soft #screen-frame,
-body.crt-soft #gui-root { filter: saturate(1.12) contrast(1.04); }
-
-@media (prefers-reduced-motion: reduce) {
-  #crt-overlay::before,
-  #crt-overlay::after { animation: none; }
-}
-
-/* ---------- footer switches ---------------------------------------------- */
-/* The slot on the right holds one of two: daylight for the GUI, CRT for the
-   tube. setMode() swaps them, so they are never both on screen. */
-
-#crt-switch,
 #light-switch {
   position: absolute;
   top: 50%;
   right: 12px;
   transform: translateY(-50%);
-   display: flex; align-items: center; gap: 7px;
-  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  z-index: 2;
 }
 
-
-#crt-switch.is-hidden,
-#light-switch.is-hidden { display: none; }
-
-#crt-switch .rocker__btn,
-#light-switch .rocker__btn { padding: 7px 14px; }
-
-#light-switch .rocker__btn { padding-inline: 11px; }
+#light-switch .rocker__btn { padding: 7px 11px; }
 
 .switch-label {
   font-family: "IBM Plex Mono", monospace;

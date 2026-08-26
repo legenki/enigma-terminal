@@ -155,19 +155,17 @@ def test_no_phosphor_tokens_survive():
         assert f"var({gone})" not in css, f"{gone} is still in use"
 
 
-def test_the_footer_offers_one_switch_per_mode():
-    """Daylight belongs to the GUI and CRT to the tube: a scanline wash over
-    a daylit interface reads as a fault, not a filter."""
+def test_the_footer_carries_the_daylight_switch_and_nothing_else():
+    """The CRT switch shared this slot while the terminal was a second mode.
+    There is one mode now, so there is one switch."""
     html = (DOCS / "index.html").read_text(encoding="utf-8")
     assert 'id="light-switch"' in html
     for button in ("light-live", "light-day", "light-night"):
         assert f'id="{button}"' in html
+    assert 'id="crt-switch"' not in html
 
     main = (DOCS / "js" / "main.js").read_text(encoding="utf-8")
-    assert "lightSwitch.classList.toggle('is-hidden', mode !== 'gui')" in main
-    assert "crtSwitch.classList.toggle('is-hidden', mode !== 'cl')" in main
-    assert "crtMode === 'soft' && mode === 'cl'" in main, \
-        "the CRT wash can still reach the GUI"
+    assert "store(LIGHT_KEY, daylight.mode)" in main
 
 
 def test_the_choice_of_light_survives_a_reload():
