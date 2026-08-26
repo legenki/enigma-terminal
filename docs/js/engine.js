@@ -76,6 +76,7 @@ const HELP = {
     ['TXLOG [addr]', 'pull the most recent on-chain transactions'],
     ['PROVIDER [name]', 'choose the explorer: blockstream|mempool|blockchain'],
     ['EXPLORER', 'open the loaded address in a block explorer'],
+    ['NETINFO', 'probe all explorer nodes and show latency'],
     ['COPY', 'copy the loaded addresses to the clipboard'],
     ['JOURNAL [tool]', 'the investigation journal, newest first'],
     ['RECALL <n>', 'replay entry n from the journal'],
@@ -111,6 +112,7 @@ const HELP = {
     ['TXLOG [адрес]', 'последние транзакции адреса'],
     ['PROVIDER [имя]', 'выбрать эксплорер: blockstream|mempool|blockchain'],
     ['EXPLORER', 'открыть адрес в блокчейн-эксплорере'],
+    ['NETINFO', 'проверить все узлы-эксплореры и показать задержку'],
     ['COPY', 'скопировать адреса в буфер обмена'],
     ['JOURNAL [инструмент]', 'журнал расследования, свежее сверху'],
     ['RECALL <n>', 'повторить запись n из журнала'],
@@ -146,6 +148,7 @@ const HELP = {
     ['TXLOG [addr]', 'obtener transacciones on-chain recientes'],
     ['PROVIDER [nombre]', 'elegir explorador: blockstream|mempool|blockchain'],
     ['EXPLORER', 'abrir la dirección en un explorador de bloques'],
+    ['NETINFO', 'sondear todos los nodos y mostrar latencia'],
     ['COPY', 'copiar las direcciones al portapapeles'],
     ['JOURNAL [herram.]', 'diario de investigación, recientes primero'],
     ['RECALL <n>', 'repetir entrada n del diario'],
@@ -181,6 +184,7 @@ const HELP = {
     ['TXLOG [addr]', 'obter transações on-chain recentes'],
     ['PROVIDER [nome]', 'escolher explorador: blockstream|mempool|blockchain'],
     ['EXPLORER', 'abrir o endereço em um explorador de blocos'],
+    ['NETINFO', 'testar todos os nós e mostrar latência'],
     ['COPY', 'copiar os endereços para a área de transferência'],
     ['JOURNAL [ferram.]', 'diário de investigação, recentes primeiro'],
     ['RECALL <n>', 'repetir a entrada n do diário'],
@@ -491,6 +495,7 @@ export class Engine {
       TXLOG: this.cmdTxlog,
       PROVIDER: this.cmdProvider,
       EXPLORER: this.cmdExplorer,
+      NETINFO: this.cmdNetinfo,
       COPY: this.cmdCopy,
       JOURNAL: this.cmdJournal, LOG: this.cmdJournal,
       RECALL: this.cmdRecall,
@@ -1164,8 +1169,14 @@ export class Engine {
     term.rule('-');
     for (const tx of txs) {
       const height = tx.blockHeight ? String(tx.blockHeight) : 'MEMPOOL';
+      let deltaStr = '';
+      if (tx.valueDeltaSats !== undefined && tx.valueDeltaSats !== null) {
+        const sign = tx.valueDeltaSats >= 0n ? 'IN ' : 'OUT';
+        const delta = formatBtc(tx.valueDeltaSats < 0n ? -tx.valueDeltaSats : tx.valueDeltaSats);
+        deltaStr = `  ${sign}  ${delta.padStart(16)} BTC`;
+      }
       term.print(
-        `  ${tx.confirmed ? 'CONFIRMED' : 'PENDING  '}  BLOCK ${height.padStart(9)}  ${tx.txid}`,
+        `  ${tx.confirmed ? 'CONFIRMED' : 'PENDING  '}  BLOCK ${height.padStart(9)}  ${tx.txid}${deltaStr}`,
         'green',
       );
     }
@@ -1201,6 +1212,30 @@ export class Engine {
     const url = this.chain.explorerUrl(address);
     this.term.keyValue('EXPLORER', url, 'grey', 'cyan');
     window.open(url, '_blank', 'noopener');
+  }
+
+  async cmdNetinfo() {
+    const term = this.term;
+    term.blank();
+    term.print('[NET] PROBING EXPLORER NODES...', 'cyan');
+    let results;
+    try {
+      results = await this.withLogs(NET_LOGS.slice(0, 2), () => this.chain.netinfo());
+    } catch (error) {
+      term.print(`[FATAL] PROBE FAILED: ${error.message}`, 'red');
+      return;
+    }
+    term.rule('-');
+    term.print('NETWORK NODE STATUS:', 'white');
+    const current = this.chain.order[0];
+    for (const [key, status] of Object.entries(results)) {
+      const mark = key === current ? 'PRIMARY  ' : 'FALLBACK ';
+      const style = status.startsWith('OK') ? 'green' : 'red';
+      term.print(`  ${mark} ${key.padEnd(12)} ${PROVIDERS[key].base.padEnd(35)} ${status}`, style);
+    }
+    term.rule('-');
+    term.print(`[STATUS] ACTIVE PROVIDER: ${this.chain.nodeName}`, 'cyan');
+    term.blank();
   }
 
   async cmdCopy() {

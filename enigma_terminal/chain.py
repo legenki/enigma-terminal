@@ -93,7 +93,7 @@ class Provider:
     address_path: Callable[[str], str]
     parse_address: Callable[[Any], AddressStats]
     txs_path: Callable[[str], str] | None = None
-    parse_txs: Callable[[Any], list[Transaction]] | None = None
+    parse_txs: Callable[[Any, str], list[Transaction]] | None = None
     explorer_url: Callable[[str], str] = field(
         default=lambda addr: f"https://mempool.space/address/{addr}"
     )
@@ -131,16 +131,26 @@ def _parse_esplora_address(name: str, data: Any) -> AddressStats:
     )
 
 
-def _parse_esplora_txs(data: Any) -> list[Transaction]:
+def _parse_esplora_txs(data: Any, address: str) -> list[Transaction]:
     out = []
     for tx in data:
         status = tx.get("status", {})
+        received = sum(
+            v["value"] for v in tx.get("vout", []) if v.get("scriptpubkey_address") == address
+        )
+        spent = sum(
+            vin.get("prevout", {}).get("value", 0)
+            for vin in tx.get("vin", [])
+            if vin.get("prevout", {}).get("scriptpubkey_address") == address
+        )
+        delta = received - spent
         out.append(
             Transaction(
                 txid=tx["txid"],
                 confirmed=bool(status.get("confirmed")),
                 block_height=status.get("block_height"),
                 block_time=status.get("block_time"),
+                value_delta_sats=delta,
             )
         )
     return out
@@ -248,8 +258,27 @@ class ChainClient:
                 continue
             url = provider.base + provider.txs_path(address)
             try:
-                return provider.parse_txs(_get_json(url, self.timeout))[:limit]
+                return provider.parse_txs(_get_json(url, self.timeout), address)[:limit]
             except (*NETWORK_ERRORS, KeyError, TypeError, ValueError) as exc:
                 errors.append(f"{provider.name}: {exc.__class__.__name__}")
         self.last_error = " | ".join(errors) or "NO PROVIDER EXPOSES A TX ENDPOINT"
         raise ChainError(self.last_error)
+
+    def netinfo(self) -> dict[str, str]:
+        """Probe each provider and return a status dict for NETINFO display."""
+        import time
+        _PROBE = "1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf"
+        results: dict[str, str] = {}
+        for key in DEFAULT_ORDER:
+            provider = PROVIDERS[key]
+            url = provider.base + provider.address_path(_PROBE)
+            t0 = time.monotonic()
+            try:
+                _get_json(url, min(self.timeout, 5.0))
+                ms = int((time.monotonic() - t0) * 1000)
+                results[key] = f"OK {ms}ms"
+            except NETWORK_ERRORS as exc:
+                results[key] = f"DOWN ({exc.__class__.__name__})"
+            except Exception as exc:
+                results[key] = f"ERR ({exc.__class__.__name__})"
+        return results

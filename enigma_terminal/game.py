@@ -53,6 +53,7 @@ HELP_TEXT = {
         ("TXLOG [addr]", "pull the most recent on-chain transactions"),
         ("PROVIDER [name]", "choose the explorer: blockstream|mempool|blockchain"),
         ("EXPLORER", "print a browser URL for the loaded address"),
+        ("NETINFO", "probe all explorer nodes and show latency"),
         ("JOURNAL [tool]", "the investigation journal, newest first"),
         ("RECALL <n>", "replay entry n from the journal"),
         ("PIN <n>", "pin a journal entry so PURGE keeps it"),
@@ -87,6 +88,7 @@ HELP_TEXT = {
         ("TXLOG [адрес]", "последние транзакции адреса"),
         ("PROVIDER [имя]", "выбрать эксплорер: blockstream|mempool|blockchain"),
         ("EXPLORER", "ссылка на адрес в браузере"),
+        ("NETINFO", "проверить все узлы-эксплореры и показать задержку"),
         ("JOURNAL [инструмент]", "журнал расследования, свежее сверху"),
         ("RECALL <n>", "повторить запись n из журнала"),
         ("PIN <n>", "закрепить запись, чтобы PURGE её не тронул"),
@@ -121,6 +123,7 @@ HELP_TEXT = {
         ("TXLOG [addr]", "obtener transacciones on-chain recientes"),
         ("PROVIDER [nombre]", "elegir explorador: blockstream|mempool|blockchain"),
         ("EXPLORER", "imprimir URL del navegador"),
+        ("NETINFO", "sondear todos los nodos y mostrar latencia"),
         ("JOURNAL [herram.]", "diario de investigación, recientes primero"),
         ("RECALL <n>", "repetir entrada n del diario"),
         ("PIN <n>", "fijar entrada para que PURGE la conserve"),
@@ -155,6 +158,7 @@ HELP_TEXT = {
         ("TXLOG [addr]", "obter transações on-chain recentes"),
         ("PROVIDER [nome]", "escolher explorador: blockstream|mempool|blockchain"),
         ("EXPLORER", "imprimir URL do navegador"),
+        ("NETINFO", "testar todos os nós e mostrar latência"),
         ("JOURNAL [ferram.]", "diário de investigação, recentes primeiro"),
         ("RECALL <n>", "repetir a entrada n do diário"),
         ("PIN <n>", "fixar entrada para que PURGE a mantenha"),
@@ -906,7 +910,15 @@ def cmd_txlog(s: Session, arg: str) -> None:
     for tx in txs:
         height = str(tx.block_height) if tx.block_height else "MEMPOOL"
         state = "CONFIRMED" if tx.confirmed else "PENDING  "
-        s.screen.write(f"  {state}  BLOCK {height:>9}  {tx.txid}", "green")
+        if tx.value_delta_sats is not None:
+            sign = "IN " if tx.value_delta_sats >= 0 else "OUT"
+            delta = AddressStats.btc(abs(tx.value_delta_sats))
+            delta_str = f"  {sign}  {delta:>16} BTC"
+        else:
+            delta_str = ""
+        s.screen.write(
+            f"  {state}  BLOCK {height:>9}  {tx.txid}{delta_str}", "green"
+        )
     s.screen.rule("-")
     _log(s, "txlog", address, detail=f"{len(txs)} transaction(s)",
          payload={"address": address})
@@ -934,6 +946,28 @@ def cmd_explorer(s: Session, arg: str) -> None:
     if address is None:
         return
     s.screen.kv("EXPLORER", s.chain.explorer_url(address), value_styles=("cyan",))
+
+
+def cmd_netinfo(s: Session, _arg: str) -> None:
+    """Probe every configured provider and display latency / status."""
+    s.screen.write()
+    s.screen.write("[NET] PROBING EXPLORER NODES...", "cyan")
+    results, error = s.screen.run_with_logs(
+        s.chain.netinfo, NET_LOGS[:2]
+    )
+    if error is not None or results is None:
+        s.screen.error(f"PROBE FAILED: {error}")
+        return
+    s.screen.rule("-")
+    s.screen.write("NETWORK NODE STATUS:", "white", "bold")
+    current = s.chain.order[0]
+    for key, status in results.items():
+        mark = "PRIMARY  " if key == current else "FALLBACK "
+        style = "green" if status.startswith("OK") else "red"
+        s.screen.write(f"  {mark} {key:<12} {PROVIDERS[key].base:<35} {status}", style)
+    s.screen.rule("-")
+    s.screen.write(f"[STATUS] ACTIVE PROVIDER: {s.chain.node_name}", "cyan")
+    s.screen.write()
 
 
 def _log(s: Session, tool: str, title: str, *, detail: str = "",
@@ -1121,6 +1155,7 @@ COMMANDS = {
     "TXLOG": cmd_txlog,
     "PROVIDER": cmd_provider,
     "EXPLORER": cmd_explorer,
+    "NETINFO": cmd_netinfo,
     "JOURNAL": cmd_journal, "LOG": cmd_journal,
     "RECALL": cmd_recall,
     "PIN": cmd_pin,

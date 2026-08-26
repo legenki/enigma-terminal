@@ -22,12 +22,21 @@ const esploraStats = (name, data) => ({
   provider: name,
 });
 
-const esploraTxs = (data) => data.map((tx) => ({
-  txid: tx.txid,
-  confirmed: Boolean(tx.status && tx.status.confirmed),
-  blockHeight: tx.status ? tx.status.block_height : null,
-  blockTime: tx.status ? tx.status.block_time : null,
-}));
+const esploraTxs = (data, address) => data.map((tx) => {
+  const received = (tx.vout || [])
+    .filter((v) => v.scriptpubkey_address === address)
+    .reduce((sum, v) => sum + BigInt(v.value), 0n);
+  const spent = (tx.vin || [])
+    .filter((v) => v.prevout && v.prevout.scriptpubkey_address === address)
+    .reduce((sum, v) => sum + BigInt(v.prevout.value), 0n);
+  return {
+    txid: tx.txid,
+    confirmed: Boolean(tx.status && tx.status.confirmed),
+    blockHeight: tx.status ? tx.status.block_height : null,
+    blockTime: tx.status ? tx.status.block_time : null,
+    valueDeltaSats: received - spent,
+  };
+});
 
 export const PROVIDERS = {
   blockstream: {
@@ -140,11 +149,29 @@ export class ChainClient {
       if (!provider.txsPath) continue;
       try {
         const data = await this.fetchJson(provider.base + provider.txsPath(address));
-        return provider.parseTxs(data).slice(0, limit);
+        return provider.parseTxs(data, address).slice(0, limit);
       } catch (error) {
         errors.push(`${provider.name}: ${error.message || error.name}`);
       }
     }
     throw new ChainError(errors.join(' | ') || 'NO PROVIDER EXPOSES A TX ENDPOINT');
+  }
+
+  /** Probe every provider; resolves to { blockstream: 'OK 120ms', mempool: 'DOWN ...', ... } */
+  async netinfo() {
+    const PROBE = '1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf';
+    const results = {};
+    await Promise.all(
+      Object.entries(PROVIDERS).map(async ([key, provider]) => {
+        const t0 = performance.now();
+        try {
+          await this.fetchJson(provider.base + provider.addressPath(PROBE));
+          results[key] = `OK ${Math.round(performance.now() - t0)}ms`;
+        } catch (error) {
+          results[key] = `DOWN (${error.message || error.name})`;
+        }
+      }),
+    );
+    return results;
   }
 }
