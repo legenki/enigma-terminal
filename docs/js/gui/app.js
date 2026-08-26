@@ -27,7 +27,7 @@ const PANELS = [
   { id: 'board', glyph: 'grid', label: { en: 'Contracts', ru: 'Контракты', es: 'Contratos', pt: 'Contratos' }, key: '2' },
   { id: 'decrypt', glyph: 'key', label: { en: 'Decrypt', ru: 'Дешифровка', es: 'Descifrado', pt: 'Decifração' }, key: '3' },
   { id: 'ledger', glyph: 'database', label: { en: 'Ledger', ru: 'Реестр', es: 'Registro', pt: 'Registro' }, key: '4' },
-  { id: 'search', glyph: 'search', label: { en: 'Search', ru: 'Поиск', es: 'Búsqueda', pt: 'Busca' }, key: '5' },
+  { id: 'archive', glyph: 'search', label: { en: 'Archive', ru: 'Архив', es: 'Archivo', pt: 'Arquivo' }, key: '5' },
   { id: 'random', glyph: 'shuffle', label: { en: 'Randomizer', ru: 'Рандомайзер', es: 'Aleatorio', pt: 'Aleatório' }, key: '6' },
   { id: 'journal', glyph: 'bookOpen', label: { en: 'Journal', ru: 'Журнал', es: 'Diario', pt: 'Diário' }, key: '7' },
   { id: 'about', glyph: 'info', label: { en: 'About', ru: 'О программе', es: 'Acerca de', pt: 'Sobre' }, key: '8' },
@@ -674,8 +674,8 @@ export class GuiApp {
       return;
     }
     if (tool === 'search' || tool === 'archive' || tool === 'complete') {
-      this.go('search');
-      const api = this.ensurePanel('search').api;
+      this.go('archive');
+      const api = this.ensurePanel('archive').api;
       const tab = tool === 'search' ? 'words' : tool === 'archive' ? 'archive' : 'complete';
       api.run(tab, payload.query || payload.pattern || '');
     }
@@ -1348,21 +1348,22 @@ export class GuiApp {
 
   // ---- search -----------------------------------------------------------
 
-  buildSearch() {
+  buildArchive() {
     const lang = this.lang;
     const tabs = [
+      ['terminal', 'Terminal'],
       ['words', t('tabWords', lang)],
       ['archive', t('tabArchive', lang)],
       ['complete', t('tabComplete', lang)],
     ];
-    // Each tab keeps its own node, so switching tabs does not lose results.
     const panes = {
+      terminal: this.terminalPane(),
       words: this.searchWordsPane(),
       archive: this.searchArchivePane(),
       complete: this.searchCompletePane(),
     };
-    let active = 'words';
-    const body = el('div', {});
+    let active = 'terminal';
+    const body = el('div', { class: 'tab-content' });
 
     const show = (id) => {
       active = id;
@@ -1382,7 +1383,7 @@ export class GuiApp {
         })));
 
     show(active);
-    const node = el('div', {}, tabBar, body);
+    const node = el('div', { class: 'search-container' }, tabBar, body);
     return {
       node,
       api: {
@@ -1391,6 +1392,16 @@ export class GuiApp {
           panes[tab].run(value);
         },
       },
+    };
+  }
+
+
+  terminalPane() {
+    const frame = document.getElementById('screen-frame');
+    frame.classList.remove('is-hidden');
+    return {
+      node: frame,
+      run: () => {}
     };
   }
 

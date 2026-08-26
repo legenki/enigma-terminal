@@ -10,9 +10,7 @@ import { LANGS, loadContracts } from './core.js';
 import { migrated } from './storage.js';
 import { Daylight } from './daylight.js';
 
-const MODE_KEY = 'enigma-terminal/mode/v1';
 const LANG_KEY = 'enigma-terminal/lang/v1';
-const CRT_KEY = 'enigma-terminal/crt/v1';
 const LIGHT_KEY = 'enigma-terminal/light/v1';
 
 const stored = (key, fallback) => migrated(key) || fallback;
@@ -60,7 +58,7 @@ terminal.onCommand = (line) => {
   engine.run(line).finally(() => {
     pending -= 1;
     // The GUI shares progress with the terminal — repaint after every command.
-    if (mode === 'gui') gui.syncFromStorage();
+    gui.syncFromStorage();
   });
 };
 
@@ -73,38 +71,6 @@ const gui = new GuiApp(guiRoot, {
     engine.lang = code;
   },
 });
-
-// ---- CRT simulation, over both modes --------------------------------------
-//
-// The command line runs a real WebGL tube; the GUI is DOM and gets a CSS
-// overlay instead. One switch drives both so the two modes always look like
-// the same monitor.
-
-const lightSwitch = document.getElementById('light-switch');
-const crtSwitch = document.getElementById('crt-switch');
-
-let crtMode = stored(CRT_KEY, 'soft') === 'off' ? 'off' : 'soft';
-
-const crtButtons = {
-  soft: document.getElementById('crt-soft'),
-  off: document.getElementById('crt-off'),
-};
-
-function setCrt(next, { announce = true } = {}) {
-  crtMode = next === 'off' ? 'off' : 'soft';
-  store(CRT_KEY, crtMode);
-  crtButtons.soft.setAttribute('aria-pressed', String(crtMode === 'soft'));
-  crtButtons.off.setAttribute('aria-pressed', String(crtMode === 'off'));
-  document.body.classList.toggle('crt-soft', crtMode === 'soft' && mode === 'cl');
-  if (crt) {
-    crt.applyPreset(crtMode === 'soft' ? 'soft' : 'off');
-    if (crtMode === 'soft') terminal.dirty = true;
-  }
-  if (announce) glitch.kick(0.8);
-}
-
-crtButtons.soft.addEventListener('click', () => setCrt('soft'));
-crtButtons.off.addEventListener('click', () => setCrt('off'));
 
 // ---- daylight -------------------------------------------------------------
 // The GUI takes its whole palette from the hour. Two pinned modes are there
@@ -134,65 +100,31 @@ for (const [key, button] of Object.entries(lightButtons)) {
   button.addEventListener('click', () => setLight(key));
 }
 
-// ---- mode switching -------------------------------------------------------
+// ---- terminal boot --------------------------------------------------------
 
-let mode = stored(MODE_KEY, 'gui') === 'cl' ? 'cl' : 'gui';
+document.body.classList.add('is-gui');
+document.body.classList.add('crt-soft');
+
 let booted = false;
-
-const buttons = {
-  gui: document.getElementById('mode-gui'),
-  cl: document.getElementById('mode-cl'),
-};
-
-function setMode(next, { animate = true } = {}) {
-  mode = next === 'cl' ? 'cl' : 'gui';
-  store(MODE_KEY, mode);
-  buttons.gui.setAttribute('aria-pressed', String(mode === 'gui'));
-  buttons.cl.setAttribute('aria-pressed', String(mode === 'cl'));
-  guiRoot.classList.toggle('is-hidden', mode !== 'gui');
-  screenFrame.classList.toggle('is-hidden', mode !== 'cl');
-  // The daylight switch belongs to the GUI, the CRT switch to the tube.
-  document.body.classList.toggle('is-gui', mode === 'gui');
-  lightSwitch.classList.toggle('is-hidden', mode !== 'gui');
-  crtSwitch.classList.toggle('is-hidden', mode !== 'cl');
-  // Scanlines over a daylit interface look like a fault, not a filter.
-  document.body.classList.toggle('crt-soft', crtMode === 'soft' && mode === 'cl');
-  if (animate) glitch.kick(1.6);
-
-  if (mode === 'cl') {
-    // The terminal was display:none, so its box had no size to measure.
-    terminal.resize();
-    if (crt) crt.resize();
-    terminal.dirty = true;
-    keyboardInput.focus({ preventScroll: true });
-    if (!booted) {
-      booted = true;
-      engine.boot().then(() => {
-        if (!crt) {
-          terminal.print('[WARN] WEBGL UNAVAILABLE — CRT SHADER DISABLED, TEXT MODE ONLY.', 'amber');
-        }
-      });
+export function bootTerminal() {
+  if (booted) return;
+  booted = true;
+  terminal.resize();
+  if (crt) crt.resize();
+  terminal.dirty = true;
+  engine.boot().then(() => {
+    if (!crt) {
+      terminal.print('[WARN] WEBGL UNAVAILABLE — CRT SHADER DISABLED, TEXT MODE ONLY.', 'amber');
     }
-  } else {
-    // The command line shares progress and journal, so re-read both.
-    gui.syncFromStorage();
-  }
+  });
 }
-
-buttons.gui.addEventListener('click', () => setMode('gui'));
-buttons.cl.addEventListener('click', () => setMode('cl'));
+window.bootTerminal = bootTerminal;
 
 // ---- input plumbing -------------------------------------------------------
 
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'F2') {
-    event.preventDefault();
-    setMode(mode === 'cl' ? 'gui' : 'cl');
-    return;
-  }
-  if (mode !== 'cl') {
-    // Digits jump between panels, but never while the player is typing into
-    // the rail search or a seed field.
+  const isTerminal = document.activeElement === keyboardInput;
+  if (!isTerminal) {
     const typing = event.target instanceof HTMLElement
       && ['INPUT', 'TEXTAREA'].includes(event.target.tagName);
     if (!typing && !event.ctrlKey && !event.metaKey && !event.altKey
@@ -206,7 +138,6 @@ document.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'l') { event.preventDefault(); terminal.clear(); }
     return;
   }
-  keyboardInput.focus({ preventScroll: true });
   terminal.handleKey(event);
 });
 
@@ -219,7 +150,7 @@ keyboardInput.addEventListener('input', () => {
 });
 
 document.addEventListener('paste', (event) => {
-  if (mode !== 'cl') return;
+  if (document.activeElement !== keyboardInput) return;
   const text = (event.clipboardData || window.clipboardData).getData('text');
   if (!text) return;
   event.preventDefault();
@@ -238,17 +169,14 @@ window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     glitch.resize();
-    if (mode === 'cl') {
-      terminal.fontSize = window.innerWidth < 640 ? 12 : 16;
-      terminal.resize();
-      if (crt) crt.resize();
-    }
+    terminal.fontSize = window.innerWidth < 640 ? 12 : 16;
+    terminal.resize();
+    if (crt) crt.resize();
   }, 120);
 });
 
-// Another tab (or the other mode) may have written progress.
 window.addEventListener('storage', () => {
-  if (mode === 'gui') gui.syncFromStorage();
+  gui.syncFromStorage();
 });
 
 // ---- animation loop -------------------------------------------------------
@@ -260,7 +188,7 @@ function frame(now) {
 
   glitch.render(now);
 
-  if (mode === 'cl') {
+  if (screenFrame.offsetParent !== null) {
     terminal.tick(delta);
     terminal.render(now);
     if (crt && crt.enabled) {
@@ -273,17 +201,21 @@ function frame(now) {
     }
   }
 
-  powerLed.classList.toggle('is-busy', terminal.busy || pending > 0);
+  // powerLed is removed, so we don't toggle it
   requestAnimationFrame(frame);
 }
 
 gui.mount();
-// The board is fetched in the background: the campaign plays immediately, and
-// contract answers start being recognised the moment it lands.
 loadContracts().then((cases) => {
   if (cases.length) gui.syncFromStorage();
 });
-setCrt(crtMode, { announce: false });
 setLight(daylight.mode);
-setMode(mode, { animate: false });
 requestAnimationFrame(frame);
+
+const observer = new ResizeObserver(() => {
+  if (screenFrame.offsetParent !== null) {
+    terminal.resize();
+    if (crt) crt.resize();
+  }
+});
+observer.observe(screenFrame);

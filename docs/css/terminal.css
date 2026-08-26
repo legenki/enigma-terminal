@@ -34,16 +34,15 @@ body::before {
 }
 
 #screen-frame {
-  position: absolute;
-  inset: 0;
-  border-radius: clamp(10px, 2.4vmin, 26px);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
   background: var(--tube);
-  border: clamp(6px, 1.2vmin, 14px) solid var(--bezel);
-  box-shadow:
-    0 0 0 2px var(--bezel-edge),
-    0 0 60px rgba(57, 255, 139, 0.14),
-    inset 0 0 90px rgba(0, 0, 0, 0.9);
+  border: 1px solid var(--neon-dim);
   overflow: hidden;
+  
+  
 }
 
 #term-layer,
@@ -75,7 +74,7 @@ body::before {
   z-index: 1;
   height: 100%;
   display: grid;
-  grid-template-rows: clamp(52px, 8vh, 78px) 1fr auto;
+  grid-template-rows: clamp(52px, 8vh, 78px) 1fr;
   gap: 8px;
   padding: clamp(8px, 1.6vmin, 18px);
 }
@@ -96,13 +95,6 @@ body::before {
 
 /* ---------- retro rocker switch ----------------------------------------- */
 
-#switch-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 2px;
-  user-select: none;
-}
 
 /* ---------- the shell follows the hour, in GUI mode ----------------------- */
 /* The command line is a phosphor tube and keeps its own room; the GUI is a
@@ -111,13 +103,12 @@ body::before {
 
 body.is-gui { background: var(--bg); }
 body.is-gui::before { opacity: 0; }
-body.is-gui #switch-bar { color: var(--soft); }
-body.is-gui #switch-hint,
+body.is-gui body.is-gui #switch-hint,
 body.is-gui .switch-label { color: var(--soft); }
 body.is-gui #glitch-canvas { border-radius: var(--radius, 12px); }
 
 .rocker {
-  display: flex;
+  
   border: 1px solid #0c1a12;
   background: #1b2620;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 2px 0 rgba(0, 0, 0, 0.5);
@@ -271,7 +262,15 @@ body.crt-soft #gui-root { filter: saturate(1.12) contrast(1.04); }
    tube. setMode() swaps them, so they are never both on screen. */
 
 #crt-switch,
-#light-switch { display: flex; align-items: center; gap: 7px; }
+#light-switch {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+   display: flex; align-items: center; gap: 7px;
+  z-index: 10;
+}
+
 
 #crt-switch.is-hidden,
 #light-switch.is-hidden { display: none; }
