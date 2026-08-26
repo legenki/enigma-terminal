@@ -27,6 +27,11 @@ export const TOOLS = {
   hint: { label: { en: 'Hint', ru: 'Подсказка', es: 'Pista', pt: 'Dica' }, glyph: '!' },
 };
 
+//: How a status reads on the terminal's palette. Same four as the Python
+//: build (enigma_terminal/journal.py) so a journal written in one and listed
+//: in the other looks the same.
+export const STATUS_STYLES = { ok: 'green', warn: 'amber', danger: 'red', info: 'grey' };
+
 const EXPORT_CAPTIONS = {
   en: { title: 'INVESTIGATION JOURNAL', exported: 'Exported', entries: 'Entries' },
   ru: { title: 'ЖУРНАЛ РАССЛЕДОВАНИЯ', exported: 'Выгружено', entries: 'Записей' },

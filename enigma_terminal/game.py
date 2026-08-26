@@ -34,6 +34,8 @@ HELP_TEXT = {
         ("LANG RU|EN|ES|PT", "switch narrative language"),
         ("CASES", "the desk: campaign plus taken contracts"),
         ("CLIENTS", "the eight employers and their contract counts"),
+        ("BOARD <client>", "list one employer's thirty-two contracts"),
+        ("DROP <id>", "return an unsolved contract to the board"),
         ("OPEN <id>", "open a case file and make it active"),
         ("BRIEF / EVIDENCE / CLUES", "re-read the active case"),
         ("HINT", "spend a hint on the active case"),
@@ -66,6 +68,8 @@ HELP_TEXT = {
         ("LANG RU|EN|ES|PT", "язык повествования"),
         ("CASES", "рабочий стол: кампания плюс взятые контракты"),
         ("CLIENTS", "восемь заказчиков и их счётчики"),
+        ("BOARD <заказчик>", "список из 32 контрактов одного заказчика"),
+        ("DROP <id>", "вернуть нерешённый контракт на доску"),
         ("OPEN <id>", "открыть дело и сделать его активным"),
         ("BRIEF / EVIDENCE / CLUES", "перечитать активное дело"),
         ("HINT", "потратить подсказку по активному делу"),
@@ -98,6 +102,8 @@ HELP_TEXT = {
         ("LANG RU|EN|ES|PT", "cambiar idioma narrativo"),
         ("CASES", "el escritorio: campaña más contratos tomados"),
         ("CLIENTS", "los ocho empleadores y sus contratos"),
+        ("BOARD <empleador>", "los treinta y dos contratos de un empleador"),
+        ("DROP <id>", "devolver un contrato sin resolver al tablón"),
         ("OPEN <id>", "abrir un archivo de caso y activarlo"),
         ("BRIEF / EVIDENCE / CLUES", "releer el caso activo"),
         ("HINT", "gastar una pista en el caso activo"),
@@ -130,6 +136,8 @@ HELP_TEXT = {
         ("LANG RU|EN|ES|PT", "mudar idioma da narrativa"),
         ("CASES", "a mesa: campanha mais contratos pegos"),
         ("CLIENTS", "os oito empregadores e seus contratos"),
+        ("BOARD <empregador>", "os trinta e dois contratos de um empregador"),
+        ("DROP <id>", "devolver um contrato não resolvido ao quadro"),
         ("OPEN <id>", "abrir um arquivo de caso e ativá-lo"),
         ("BRIEF / EVIDENCE / CLUES", "reler o caso ativo"),
         ("HINT", "gastar uma dica no caso ativo"),
@@ -1051,7 +1059,11 @@ def cmd_status(s: Session, _arg: str) -> None:
     s.screen.kv("MODE", "OFFLINE" if s.chain.offline else "LIVE NET",
                 value_styles=("amber",) if s.chain.offline else ("green",))
     s.screen.kv("WORDLIST", "AUTHENTIC" if wordlist_is_authentic() else "MODIFIED")
-    s.screen.kv("CASES CLOSED", f"{len(s.progress.solved)}/{len(s.campaign.cases)}")
+    # Against the desk, not the campaign: solved counts contracts too, so
+    # closing one used to read 9/8.
+    desk = s.campaign.caseload(s.progress)
+    closed = sum(1 for case in desk if case.id in s.progress.solved)
+    s.screen.kv("CASES CLOSED", f"{closed}/{len(desk)}")
     s.screen.kv("JOURNAL", f"{len(s.journal)} entries")
     s.screen.kv("ACTIVE CASE",
                 f"{s.active.id:02d} {s.active.codename(s.lang)}" if s.active else "NONE")

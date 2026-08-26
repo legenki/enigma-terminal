@@ -3,7 +3,7 @@
 
 import { CAMPAIGN } from './campaign.js';
 import {
-  CLIENTS, LANGS, ProgressStore, caseForMnemonic, caseload, casesForClient, clientBySlug,
+  CLIENTS, LANGS, ProgressStore, caseById, caseForMnemonic, caseload, casesForClient, clientBySlug,
   completeMnemonic, contractsLoaded, loadContracts, pick, randomMnemonic, searchCases,
 } from './core.js';
 import { WORDLIST_SHA256 } from './wordlist.js';
@@ -28,7 +28,7 @@ const REAL_WALLET = {
   es: 'ESTA ES UNA CARTERA REAL. NO LE PONGAS FONDOS — LA FRASE NO SE GUARDA EN NINGÚN LADO.',
   pt: 'ESTA É UMA CARTEIRA REAL. NÃO COLOQUE FUNDOS — A FRASE NÃO É GUARDADA EM LUGAR NENHUM.',
 };
-import { Journal, TOOLS, maskMnemonic } from './journal.js';
+import { Journal, STATUS_STYLES, TOOLS, maskMnemonic } from './journal.js';
 
 const OFFICIAL_WORDLIST_SHA256 =
   '2f5eed53a4727b4bf8880d8f3f199efc90e58503646d9ff8eff3a2ed3b24dbda';
@@ -57,13 +57,13 @@ const HELP = {
     ['LANG RU|EN|ES|PT', 'switch narrative language'],
     ['CASES', 'list every case file and its state'],
     ['CLIENTS', 'the eight employers and their contract counts'],
-    ['BOARD <client>', "list one employer's thirty-two contracts"],
+    ['BOARD <client>', 'list one employer\'s thirty-two contracts'],
     ['DROP <id>', 'return an unsolved contract to the board'],
     ['OPEN <id>', 'open a case file and make it active'],
     ['BRIEF / EVIDENCE / CLUES', 're-read the active case'],
     ['HINT', 'spend a hint on the active case'],
     ['WORD <1..2048>', 'read one entry of the BIP-39 wordlist'],
-    ['INDEX <word>', "find a word's position in the wordlist"],
+    ['INDEX <word>', 'find a word\'s position in the wordlist'],
     ['SEARCH <prefix>', 'list wordlist entries by prefix'],
     ['ARCHIVE <text>', 'full-text search across the case files'],
     ['RANDOM [12..24]', 'generate a fresh seed phrase from secure randomness'],
@@ -79,11 +79,13 @@ const HELP = {
     ['COPY', 'copy the loaded addresses to the clipboard'],
     ['JOURNAL [tool]', 'the investigation journal, newest first'],
     ['RECALL <n>', 'replay entry n from the journal'],
+    ['PIN <n>', 'pin a journal entry so PURGE keeps it'],
     ['PURGE [all]', 'clear the journal (pinned entries survive unless "all")'],
     ['STATUS', 'operator status and progress'],
     ['ABOUT', 'what this program actually does'],
     ['CLEAR', 'wipe the screen'],
     ['RESET', 'erase saved progress'],
+    ['EXIT', 'close the session'],
   ],
   ru: [
     ['HELP', 'этот список'],
@@ -112,11 +114,83 @@ const HELP = {
     ['COPY', 'скопировать адреса в буфер обмена'],
     ['JOURNAL [инструмент]', 'журнал расследования, свежее сверху'],
     ['RECALL <n>', 'повторить запись n из журнала'],
+    ['PIN <n>', 'закрепить запись, чтобы PURGE её не тронул'],
     ['PURGE [all]', 'очистить журнал (закреплённые остаются, если не "all")'],
     ['STATUS', 'статус оператора и прогресс'],
     ['ABOUT', 'что эта программа делает на самом деле'],
     ['CLEAR', 'очистить экран'],
     ['RESET', 'стереть сохранённый прогресс'],
+    ['EXIT', 'закрыть сессию'],
+  ],
+  es: [
+    ['HELP', 'esta lista'],
+    ['LANG RU|EN|ES|PT', 'cambiar idioma narrativo'],
+    ['CASES', 'el escritorio: campaña más contratos tomados'],
+    ['CLIENTS', 'los ocho empleadores y sus contratos'],
+    ['BOARD <empleador>', 'los treinta y dos contratos de un empleador'],
+    ['DROP <id>', 'devolver un contrato sin resolver al tablón'],
+    ['OPEN <id>', 'abrir un archivo de caso y activarlo'],
+    ['BRIEF / EVIDENCE / CLUES', 'releer el caso activo'],
+    ['HINT', 'gastar una pista en el caso activo'],
+    ['WORD <1..2048>', 'leer una entrada de la lista BIP-39'],
+    ['INDEX <palabra>', 'encontrar la posición de una palabra'],
+    ['SEARCH <prefijo>', 'buscar palabras por prefijo'],
+    ['ARCHIVE <texto>', 'búsqueda de texto completo en los casos'],
+    ['RANDOM [12..24]', 'generar frase semilla aleatoria segura'],
+    ['COMPLETE <frase ?>', 'encontrar la palabra faltante (?)'],
+    ['ENTROPY <hex>', 'reconstruir mnemotécnica desde entropía'],
+    ['DECRYPT <12 palabras>', 'validar frase y derivar direcciones'],
+    ['DERIVE', 'imprimir cuadrícula de derivación'],
+    ['SYNC_LEDGER [addr]', 'consultar saldo en red Bitcoin'],
+    ['SWEEP', 'comprobar tres direcciones a la vez'],
+    ['TXLOG [addr]', 'obtener transacciones on-chain recientes'],
+    ['PROVIDER [nombre]', 'elegir explorador: blockstream|mempool|blockchain'],
+    ['EXPLORER', 'abrir la dirección en un explorador de bloques'],
+    ['COPY', 'copiar las direcciones al portapapeles'],
+    ['JOURNAL [herram.]', 'diario de investigación, recientes primero'],
+    ['RECALL <n>', 'repetir entrada n del diario'],
+    ['PIN <n>', 'fijar entrada para que PURGE la conserve'],
+    ['PURGE [all]', 'limpiar diario (las entradas fijadas sobreviven)'],
+    ['STATUS', 'estado del operador y progreso'],
+    ['ABOUT', 'qué hace este programa en realidad'],
+    ['CLEAR', 'limpiar pantalla'],
+    ['RESET', 'borrar progreso guardado'],
+    ['EXIT', 'cerrar sesión'],
+  ],
+  pt: [
+    ['HELP', 'esta lista'],
+    ['LANG RU|EN|ES|PT', 'mudar idioma da narrativa'],
+    ['CASES', 'a mesa: campanha mais contratos pegos'],
+    ['CLIENTS', 'os oito empregadores e seus contratos'],
+    ['BOARD <empregador>', 'os trinta e dois contratos de um empregador'],
+    ['DROP <id>', 'devolver um contrato não resolvido ao quadro'],
+    ['OPEN <id>', 'abrir um arquivo de caso e ativá-lo'],
+    ['BRIEF / EVIDENCE / CLUES', 'reler o caso ativo'],
+    ['HINT', 'gastar uma dica no caso ativo'],
+    ['WORD <1..2048>', 'ler uma entrada da lista BIP-39'],
+    ['INDEX <palavra>', 'encontrar a posição de uma palavra'],
+    ['SEARCH <prefixo>', 'buscar palavras por prefixo'],
+    ['ARCHIVE <texto>', 'busca de texto completo nos casos'],
+    ['RANDOM [12..24]', 'gerar frase semente aleatória segura'],
+    ['COMPLETE <frase ?>', 'encontrar a palavra que falta (?)'],
+    ['ENTROPY <hex>', 'reconstruir mnemônica a partir da entropia'],
+    ['DECRYPT <12 palavras>', 'validar frase e derivar endereços'],
+    ['DERIVE', 'imprimir grade de derivação'],
+    ['SYNC_LEDGER [addr]', 'consultar saldo na rede Bitcoin'],
+    ['SWEEP', 'verificar três endereços de uma vez'],
+    ['TXLOG [addr]', 'obter transações on-chain recentes'],
+    ['PROVIDER [nome]', 'escolher explorador: blockstream|mempool|blockchain'],
+    ['EXPLORER', 'abrir o endereço em um explorador de blocos'],
+    ['COPY', 'copiar os endereços para a área de transferência'],
+    ['JOURNAL [ferram.]', 'diário de investigação, recentes primeiro'],
+    ['RECALL <n>', 'repetir a entrada n do diário'],
+    ['PIN <n>', 'fixar entrada para que PURGE a mantenha'],
+    ['PURGE [all]', 'limpar diário (as entradas fixadas sobrevivem)'],
+    ['STATUS', 'status do operador e progresso'],
+    ['ABOUT', 'o que este programa realmente faz'],
+    ['CLEAR', 'limpar tela'],
+    ['RESET', 'apagar progresso salvo'],
+    ['EXIT', 'fechar sessão'],
   ],
 };
 
@@ -163,43 +237,124 @@ const ABOUT = {
     'известным фразам и читает публичные данные. Никогда не вводи в программы —',
     'включая эту — сид-фразу от кошелька с реальными деньгами.',
   ],
+  es: [
+    'BIP-39: ENIGMA TERMINAL — una aventura de detectives contra la red real.',
+    '',
+    'Todo lo que hay debajo de la historia es genuino:',
+    '  * las mnemotécnicas se validan contra la lista oficial BIP-39 en inglés,',
+    '    incluida la suma de comprobación SHA-256 en la última palabra;',
+    '  * las semillas vienen de PBKDF2-HMAC-SHA512 con 2048 rondas;',
+    '  * las claves se derivan sobre secp256k1 a través de BIP-32 (rutas',
+    '    BIP-44/49/84);',
+    '  * los saldos provienen de llamadas HTTP a exploradores de bloques',
+    '    públicos.',
+    '',
+    'Todo esto corre en tu navegador. Nada de lo que escribes sale de aquí, salvo',
+    'la consulta de dirección — y en ella no hay nada más que la dirección misma.',
+    '',
+    'Las respuestas de los ocho casos son vectores de prueba BIP-39 publicados.',
+    'Sus carteras son conocidas mundialmente, no contienen nada de valor y tienen',
+    'años de historia real en la cadena, lo que las hace excelentes pruebas.',
+    '',
+    'Este programa no tiene capacidad de piratear carteras y no está planeado:',
+    'deriva direcciones de frases que ya conoces y lee datos públicos. Nunca',
+    'ingreses una frase semilla con fondos reales en ningún programa, incluido',
+    'este.',
+  ],
+  pt: [
+    'BIP-39: ENIGMA TERMINAL — uma aventura de detetives jogada contra a rede',
+    'real.',
+    '',
+    'Tudo abaixo da história é genuíno:',
+    '  * as mnemônicas são validadas contra a lista oficial BIP-39 em inglês,',
+    '    incluindo a soma de verificação SHA-256 na última palavra;',
+    '  * as sementes vêm de PBKDF2-HMAC-SHA512 com 2048 rodadas;',
+    '  * as chaves são derivadas sobre secp256k1 através de BIP-32 (caminhos',
+    '    BIP-44/49/84);',
+    '  * os saldos vêm de chamadas HTTP ativas para exploradores de blocos',
+    '    públicos.',
+    '',
+    'Tudo isto roda no seu navegador. Nada do que você digita sai daqui, exceto a',
+    'consulta de endereço — e nela não há nada além do próprio endereço.',
+    '',
+    'As respostas dos oito casos são vetores de teste BIP-39 publicados. Suas',
+    'carteiras são conhecidas mundialmente, não contêm nada de valor e carregam',
+    'anos de história real on-chain — o que as torna excelentes evidências.',
+    '',
+    'Este programa não tem capacidade de hackear carteiras e nenhuma está',
+    'planejada: ele deriva endereços de frases que você já conhece e lê dados',
+    'públicos. Nunca digite uma frase semente que controla fundos reais em',
+    'qualquer programa, este incluído.',
+  ],
 };
 
 const TEXT = {
   noCase: {
     en: 'NO ACTIVE CASE. RUN: CASES, THEN OPEN <id>',
     ru: 'НЕТ АКТИВНОГО ДЕЛА. ВЫПОЛНИ: CASES, ЗАТЕМ OPEN <id>',
+    es: 'NO HAY CASO ACTIVO. EJECUTA: CASES, LUEGO OPEN <id>',
+    pt: 'NENHUM CASO ATIVO. EXECUTE: CASES, DEPOIS OPEN <id>',
   },
   noWallet: {
     en: 'NO SEED LOADED. RUN: DECRYPT <12 words>',
     ru: 'СИД НЕ ЗАГРУЖЕН. ВЫПОЛНИ: DECRYPT <12 слов>',
+    es: 'NO HAY SEMILLA CARGADA. EJECUTA: DECRYPT <12 palabras>',
+    pt: 'NENHUMA SEMENTE CARREGADA. EXECUTE: DECRYPT <12 palavras>',
   },
   locked: {
     en: 'CASE LOCKED. REQUIRED CASES: {req}',
     ru: 'ДЕЛО ЗАБЛОКИРОВАНО. СНАЧАЛА ЗАКРОЙ ДЕЛА: {req}',
+    es: 'CASO BLOQUEADO. CASOS REQUERIDOS: {req}',
+    pt: 'CASO BLOQUEADO. CASOS NECESSÁRIOS: {req}',
   },
   solved: {
     en: 'CASE {id} CLOSED — SEED MATCHES THE STORED FINGERPRINT',
     ru: 'ДЕЛО {id} ЗАКРЫТО — СИД СОВПАЛ С СОХРАНЁННЫМ ОТПЕЧАТКОМ',
+    es: 'CASO {id} CERRADO — LA SEMILLA COINCIDE CON LA HUELLA',
+    pt: 'CASO {id} FECHADO — A SEMENTE CORRESPONDE À IMPRESSÃO',
   },
-  filedWith: { en: 'FILED WITH {client}.', ru: 'СДАНО ЗАКАЗЧИКУ: {client}.' },
-  tookIt: { en: 'TAKEN INTO WORK', ru: 'ВЗЯТО В РАБОТУ' },
+  filedWith: {
+    en: 'FILED WITH {client}.',
+    ru: 'СДАНО ЗАКАЗЧИКУ: {client}.',
+    es: 'ENTREGADO A {client}.',
+    pt: 'ENTREGUE A {client}.',
+  },
+  tookIt: {
+    en: 'TAKEN INTO WORK',
+    ru: 'ВЗЯТО В РАБОТУ',
+    es: 'TOMADO EN TRABAJO',
+    pt: 'PEGADO PARA TRABALHO',
+  },
   notThisCase: {
     en: 'VALID MNEMONIC, BUT IT IS NOT THE KEY TO CASE {id}.',
     ru: 'МНЕМОНИКА ВАЛИДНА, НО ЭТО НЕ КЛЮЧ К ДЕЛУ {id}.',
+    es: 'MNEMOTÉCNICA VÁLIDA, PERO NO ES LA CLAVE DEL CASO {id}.',
+    pt: 'MNEMÔNICA VÁLIDA, MAS NÃO É A CHAVE DO CASO {id}.',
   },
   wrongCase: {
     en: 'THIS SEED BELONGS TO CASE {id} ({name}).',
     ru: 'ЭТОТ СИД ОТНОСИТСЯ К ДЕЛУ {id} ({name}).',
+    es: 'ESTA SEMILLA PERTENECE AL CASO {id} ({name}).',
+    pt: 'ESTA SEMENTE PERTENCE AO CASO {id} ({name}).',
   },
   hintsDone: {
     en: 'NO HINTS LEFT ON THIS CASE.',
     ru: 'ПОДСКАЗКИ ПО ЭТОМУ ДЕЛУ ЗАКОНЧИЛИСЬ.',
+    es: 'NO QUEDAN PISTAS EN ESTE CASO.',
+    pt: 'NÃO RESTAM DICAS NESTE CASO.',
   },
   allDone: {
     en: 'ALL EIGHT CASES CLOSED. ORACLE’S ARCHIVE IS FULLY RECOVERED.',
     ru: 'ВСЕ ВОСЕМЬ ДЕЛ ЗАКРЫТЫ. АРХИВ ORACLE ВОССТАНОВЛЕН ПОЛНОСТЬЮ.',
+    es: 'LOS OCHO CASOS ESTÁN CERRADOS. EL ARCHIVO DE ORACLE FUE RECUPERADO TOTALMENTE.',
+    pt: 'TODOS OS OITO CASOS ESTÃO FECHADOS. O ARQUIVO DE ORACLE ESTÁ TOTALMENTE RECUPERADO.',
   },
+};
+
+/** HH:MM of a journal entry, the way the Python build stamps them. */
+const clockOf = (at) => {
+  const d = new Date(at);
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -219,8 +374,37 @@ export class Engine {
   t(key, values = {}) {
     return Object.entries(values).reduce(
       (text, [name, value]) => text.replace(`{${name}}`, value),
-      TEXT[key][this.lang],
+      pick(TEXT[key], this.lang),
     );
+  }
+
+  /**
+   * Journal a derivation, masking phrases the game does not recognise.
+   *
+   * Called from DECRYPT and RANDOM and never written, so every derivation the
+   * terminal made threw before it could be recorded. Mirrors _record_decrypt
+   * in the Python build and recordDecrypt in the GUI, which agree on the rule:
+   * a phrase is kept in full only when the game already knows it (a case
+   * answer, all published test vectors) or when this page generated it.
+   */
+  recordDecrypt(wallet, owner, { generated = false } = {}) {
+    const storable = Boolean(owner) || generated;
+    this.log(generated ? 'random' : 'decrypt', wallet.primary.address, {
+      status: owner ? 'ok' : 'info',
+      detail: storable ? wallet.mnemonic : `${maskMnemonic(wallet.mnemonic)} — NOT STORED`,
+      payload: storable ? { mnemonic: wallet.mnemonic } : { masked: true },
+    });
+  }
+
+  /**
+   * One line in the shared journal.
+   *
+   * The GUI and the terminal write to the same log — the point of the journal
+   * is that it does not matter which half of the game you did the work in.
+   * Same shape as GuiApp.log for that reason.
+   */
+  log(tool, title, { detail = '', status = 'info', payload = {} } = {}) {
+    return this.journal.push({ tool, title, detail, status, payload });
   }
 
   // -- persistence ---------------------------------------------------------
@@ -310,6 +494,7 @@ export class Engine {
       COPY: this.cmdCopy,
       JOURNAL: this.cmdJournal, LOG: this.cmdJournal,
       RECALL: this.cmdRecall,
+      PIN: this.cmdPin,
       PURGE: this.cmdPurge,
       STATUS: this.cmdStatus,
       CLEAR: this.cmdClear,
@@ -322,7 +507,7 @@ export class Engine {
 
   cmdHelp() {
     this.term.blank();
-    for (const [command, description] of HELP[this.lang]) {
+    for (const [command, description] of pick(HELP, this.lang)) {
       this.term.print([
         { text: `  ${command.padEnd(26)}`, style: 'green' },
         { text: description, style: 'grey' },
@@ -332,7 +517,7 @@ export class Engine {
   }
 
   cmdAbout() {
-    this.term.blank().printLines(ABOUT[this.lang], 'grey').blank();
+    this.term.blank().printLines(pick(ABOUT, this.lang), 'grey').blank();
   }
 
   cmdLang(argument) {
@@ -450,7 +635,10 @@ export class Engine {
 
   cmdOpen(argument) {
     const id = parseInt(argument.trim(), 10);
-    const caseFile = this.campaign.cases.find((c) => c.id === id);
+    // Every case, not just the campaign's eight: CASES lists taken contracts
+    // on the desk, and OPEN has to reach what the desk shows. The Python
+    // build has always searched both — this was the two drifting apart.
+    const caseFile = caseById(id);
     if (!caseFile) {
       this.term.print(`[FATAL] CASE ${argument.trim() || '?'} NOT FOUND IN ARCHIVE.`, 'red');
       return;
@@ -1031,6 +1219,120 @@ export class Engine {
     }
   }
 
+  // -- the journal ---------------------------------------------------------
+
+  /**
+   * The investigation journal, newest first.
+   *
+   * HELP has advertised JOURNAL, RECALL and PURGE since the web build shipped
+   * and none of the three existed: the dispatch table pointed at methods that
+   * were never written, so every one of them answered UNKNOWN COMMAND. Ported
+   * from the Python build (cmd_journal / cmd_recall / cmd_pin / cmd_purge) so
+   * the two read the same book.
+   */
+  cmdJournal(argument) {
+    const tool = argument.trim().toLowerCase();
+    if (tool && !(tool in TOOLS)) {
+      this.term.print(`[FATAL] UNKNOWN TOOL. TRY: ${Object.keys(TOOLS).join(', ')}`, 'red');
+      return;
+    }
+    // The GUI half of the page writes to the same storage, so re-read first.
+    this.journal.refresh();
+    const entries = this.journal.byTool(tool);
+    if (!entries.length) {
+      this.term.print('[WARN] JOURNAL EMPTY.', 'amber');
+      return;
+    }
+    const term = this.term;
+    term.blank();
+    term.print('  INVESTIGATION JOURNAL', 'cyan');
+    term.rule('=');
+    entries.slice(0, 30).forEach((entry, index) => {
+      const label = pick(TOOLS[entry.tool] ? TOOLS[entry.tool].label : entry.tool, this.lang);
+      term.print([
+        { text: `${String(index + 1).padStart(3)}. ${clockOf(entry.at)} `, style: 'dark' },
+        { text: String(label).toUpperCase().padEnd(12), style: 'cyan' },
+        { text: entry.pinned ? '* ' : '  ', style: 'amber' },
+        { text: entry.title, style: STATUS_STYLES[entry.status] || 'grey' },
+      ]);
+      if (entry.detail) term.print(`      ${entry.detail}`, 'dark');
+    });
+    term.rule('=');
+    term.print(`  ${entries.length} ENTRY(S) — RECALL <n> TO REPLAY`, 'grey');
+    term.blank();
+  }
+
+  /** Replay a journal entry in the tool that produced it. */
+  async cmdRecall(argument) {
+    const position = parseInt(argument.trim(), 10);
+    if (Number.isNaN(position)) {
+      this.term.print('[WARN] USAGE: RECALL <n>  (SEE JOURNAL)', 'amber');
+      return;
+    }
+    this.journal.refresh();
+    const entry = this.journal.at(position);
+    if (!entry) {
+      this.term.print(`[FATAL] NO JOURNAL ENTRY ${position}.`, 'red');
+      return;
+    }
+    const payload = entry.payload || {};
+    this.term.print(`[INFO] REPLAYING #${position}: ${entry.title}`, 'cyan');
+
+    if (entry.tool === 'decrypt' || entry.tool === 'random') {
+      // A phrase the game did not recognise was stored masked, so there is
+      // nothing here to replay — that is the point of masking it.
+      if (!payload.mnemonic) {
+        this.term.print(
+          '[WARN] PHRASE WAS NOT STORED — THE GAME DOES NOT KEEP UNKNOWN SEEDS.', 'amber');
+        return;
+      }
+      await this.cmdDecrypt(payload.mnemonic);
+    } else if (entry.tool === 'ledger') {
+      await this.cmdSync(payload.address || '');
+    } else if (entry.tool === 'sweep') {
+      await this.cmdSweep('');
+    } else if (entry.tool === 'txlog') {
+      await this.cmdTxlog(payload.address || '');
+    } else if (entry.tool === 'search') {
+      this.cmdSearch(payload.query || '');
+    } else if (entry.tool === 'archive') {
+      this.cmdArchive(payload.query || '');
+    } else if (entry.tool === 'complete') {
+      this.cmdComplete(payload.pattern || '');
+    } else if (entry.tool === 'case' || entry.tool === 'hint') {
+      this.cmdOpen(String(payload.caseId ?? ''));
+    } else {
+      this.term.print('[WARN] THIS ENTRY HAS NOTHING TO REPLAY.', 'amber');
+    }
+  }
+
+  cmdPin(argument) {
+    const position = parseInt(argument.trim(), 10);
+    if (Number.isNaN(position)) {
+      this.term.print('[WARN] USAGE: PIN <n>  (SEE JOURNAL)', 'amber');
+      return;
+    }
+    this.journal.refresh();
+    const entry = this.journal.at(position);
+    if (!entry) {
+      this.term.print(`[FATAL] NO JOURNAL ENTRY ${position}.`, 'red');
+      return;
+    }
+    this.journal.togglePin(entry.id);
+    this.term.print(
+      `[ OK ] ${entry.pinned ? 'PINNED: ' : 'UNPINNED: '}${entry.title}`, 'green');
+  }
+
+  cmdPurge(argument) {
+    const purgeAll = argument.trim().toLowerCase() === 'all';
+    this.journal.refresh();
+    this.journal.clear({ keepPinned: !purgeAll });
+    this.term.print(
+      purgeAll ? '[ OK ] JOURNAL CLEARED.' : '[ OK ] JOURNAL CLEARED, PINNED ENTRIES KEPT.',
+      'green',
+    );
+  }
+
   cmdStatus() {
     const term = this.term;
     term.blank();
@@ -1044,7 +1346,12 @@ export class Engine {
       'WORDLIST',
       WORDLIST_SHA256 === OFFICIAL_WORDLIST_SHA256 ? 'AUTHENTIC' : 'MODIFIED',
     );
-    term.keyValue('CASES CLOSED', `${this.progress.solved.length}/${this.campaign.cases.length}`);
+    // Against the desk, not the campaign: solved counts contracts too, so
+    // closing one used to read 9/8.
+    const desk = caseload(this.progress);
+    const closed = desk.filter((entry) => this.progress.isSolved(entry.id)).length;
+    term.keyValue('CASES CLOSED', `${closed}/${desk.length}`);
+    term.keyValue('JOURNAL', `${this.journal.all().length} entries`);
     term.keyValue(
       'ACTIVE CASE',
       this.active
