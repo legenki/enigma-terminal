@@ -644,7 +644,10 @@ export class GuiApp {
     this.progress = new ProgressStore();
     this.journal = new Journal();
     this.chain = new ChainClient();
-    this.panel = 'cases';
+    //: The terminal is the first row in the sidebar and the first thing on
+    //: screen: the game is a command line with an interface around it, not the
+    //: other way round.
+    this.panel = 'terminal';
     this.activeCaseId = null;
     this.activeClient = null;
     this.wallet = null;

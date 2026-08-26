@@ -187,17 +187,36 @@ def test_the_terminal_is_a_panel_that_adopts_its_canvas():
     assert "id('mode-cl')" not in main and "mode-gui" not in main
 
 
-def test_the_screen_keeps_one_colour_whatever_the_hour():
-    """A terminal that drifted with the daylight would stop reading as one."""
+def test_the_screen_follows_the_hour_on_a_ground_of_its_own():
+    """It was pinned to one colour while everything around it moved. It takes
+    `--screen` now — its own token, never the interface's `--bg`."""
     css = (DOCS / "css" / "terminal.css").read_text()
     block = css[css.index("#screen-frame {"):]
     block = block[:block.index("}")]
-    assert "#363248" in block, "the screen lost its fixed ground"
-    assert "var(--bg)" not in block
+    assert "var(--screen)" in block, "the screen does not take the daylight ground"
+    assert "var(--bg)" not in block, "the screen collapsed onto the interface ground"
+    assert not re.search(r"background:\s*#[0-9a-fA-F]{3,6}", block), \
+        "the screen is pinned to a literal again"
 
     term = (DOCS / "js" / "term.js").read_text()
-    assert "export const GROUND = '#363248';" in term
     assert "'#39ff8b'" not in term, "the phosphor palette is still in the terminal"
+
+
+def test_a_palette_change_repaints_what_is_already_on_screen():
+    """Segments used to store the colour resolved at the moment they were
+    printed, so a screen that changed palette kept every old line in the
+    colours of the hour it was written."""
+    term = strip_js_comments((DOCS / "js" / "term.js").read_text())
+    assert "style: segment.style" in term, "wrapped rows drop the style"
+    assert "this.colour(segment.style)" in term, "drawing does not resolve the style"
+    assert not re.search(r"color:\s*colourOf", term), "colours are resolved at write time"
+    assert "setPalette(next)" in term, "the terminal cannot be given a new palette"
+
+
+def test_the_terminal_is_the_panel_the_game_opens_on():
+    source = strip_js_comments((DOCS / "js" / "gui" / "app.js").read_text())
+    assert "this.panel = 'terminal'" in source, "the game no longer opens on the terminal"
+    assert "this.panel = 'cases'" not in source
 
 
 def test_the_typed_command_is_lit_apart_from_the_output():

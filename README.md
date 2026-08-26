@@ -74,7 +74,7 @@ its digit:
 
 | | Panel | |
 |---|---|---|
-| **1** | Terminal | the full command line, the same one the Python build runs |
+| **1** | Terminal | the full command line, the same one the Python build runs — and where the game opens |
 | **2** | Case files | the desk: the campaign plus every contract you have taken |
 | **3** | Contracts | the board, by employer |
 | **4** | Decrypt | a phrase in, a derivation grid out |
@@ -106,9 +106,11 @@ that text stops being comfortable, so the palette holds at the far end and the i
 crosses in ten seconds instead of easing through. `tests/test_daylight.py` walks all 1440
 minutes and measures: body text never falls below 16:1, secondary text never below 4.8:1.
 
-The terminal screen is the one thing that does not move. It stays `#363248` whatever the
-hour, because a terminal that drifted with the daylight would stop reading as a terminal.
-Its own palette is measured against that ground: body text 9.8:1, the lowest tone 4.9:1.
+The terminal follows the hour too, but on a ground of its own — a cooler, violet-leaning
+sibling of the interface's, so it still reads as a screen and not as another panel. Every
+colour it draws is one the interface already defines, lifted just far enough to clear that
+ground: body text never below 7:1, everything else never below AA, measured at all 1440
+minutes.
 
 ## Commands
 
@@ -335,14 +337,14 @@ tools/generate_cases.py    builds the 256-contract board
 tools/build_web_data.py    generates the web build's data from data/
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
-tests/                     342 tests, including the Python ↔ JavaScript diff
+tests/                     345 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests -v          # 342 tests
+python -m pytest tests -v          # 345 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 

@@ -22,16 +22,24 @@ html, body {
 
 /* ---------- the screen --------------------------------------------------- */
 
-/* One flat colour whatever the hour. The terminal's own palette is measured
-   against this ground: body text 9.8:1, the lowest tone 4.9:1. */
+/* The screen follows the hour on its own ground: `--screen` is a cooler,
+   violet-leaning sibling of the interface's, so the terminal still reads as a
+   terminal. Every colour drawn on it is lifted until it clears that ground —
+   body text at 7:1, everything else at AA. See tests/test_daylight.py. */
 #screen-frame {
   position: relative;
   flex: 1;
   min-height: 320px;
   border-radius: var(--radius-sm, 8px);
-  background: #363248;
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: var(--screen);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   overflow: hidden;
+  transition: background 200ms linear, border-color 200ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #screen-frame { transition: none; }
 }
 
 #screen-frame.is-hidden { display: none; }

@@ -15,7 +15,7 @@ import { GlitchBanner } from './glitch.js';
 import { GuiApp } from './gui/app.js';
 import { dropdown } from './select.js';
 import { migrated } from './storage.js';
-import { Terminal } from './term.js';
+import { Terminal, terminalPalette } from './term.js';
 
 const LANG_KEY = 'enigma-terminal/lang/v1';
 const LIGHT_KEY = 'enigma-terminal/light/v1';
@@ -153,6 +153,12 @@ function paintLightLabels(code) {
 // and the type behind every panel — belongs to the same daylight.
 const daylight = new Daylight(document.documentElement, {
   mode: stored(LIGHT_KEY, 'live'),
+  // The screen follows the hour with everything else. It keeps its own ground
+  // so it still reads as a terminal, but it is no longer the one surface on
+  // the page pinned to a single colour.
+  onPaint: (palette) => {
+    if (terminal.setPalette(terminalPalette(palette))) terminal.dirty = true;
+  },
 });
 
 function setLight(next) {

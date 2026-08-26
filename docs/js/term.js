@@ -3,31 +3,119 @@
 // one buffer of rows drawn as glyphs, not DOM text, which is what makes the
 // scrollback cheap and the character grid exact.
 
-//: The screen is one fixed colour whatever the hour outside: a terminal that
-//: changed with the daylight would stop reading as a terminal. Every tone is
-//: measured against the ground — the lowest is 4.9:1, the body text 9.8:1.
+//: The screen follows the hour like the rest of the interface, but on its own
+//: ground: a cooler, violet-leaning sibling of the interface's, so it still
+//: reads as a screen and not as another panel. `screen` and `plum` are its two
+//: tokens in the daylight palette; every other colour it uses is one the
+//: interface already defines, which is what keeps the two in step.
+//:
+//: The defaults below are the deep-evening set, used before the first palette
+//: arrives and by anything that renders a terminal without a clock.
 export const GROUND = '#363248';
 
 export const PALETTE = {
-  text: '#e6e4f0', // everything the machine says
+  text: '#faf9f5', // everything the machine says
   command: '#ffffff', // the line the player typed, lit against the rest
-  prompt: '#e0906d', // the clay of the rest of the interface
-  green: '#9fd8a8',
-  cyan: '#8ac7e8',
-  amber: '#e8c07a',
-  red: '#f08a8a',
+  prompt: '#e08a6a', // the clay of the rest of the interface
+  green: '#9fb37e',
+  cyan: '#85b0d8',
+  amber: '#e0b060',
+  red: '#ef8880',
   magenta: '#d3a0dc',
-  grey: '#b0acc4',
+  grey: '#a4a29a',
   white: '#ffffff',
-  //: Kept as names the engine already writes; the phosphor values are gone.
-  dark: '#e0906d',
-  dim: '#b0acc4',
+  //: Kept as names the engine already writes.
+  dark: '#e08a6a',
+  dim: '#8a8880',
 };
+
+const hex = (c) => [1, 3, 5].map((i) => Number.parseInt(c.slice(i, i + 2), 16));
+const str = (c) =>
+  `#${c
+    .map((v) =>
+      Math.round(Math.min(255, Math.max(0, v)))
+        .toString(16)
+        .padStart(2, '0'),
+    )
+    .join('')}`;
+
+/**
+ * The same colour, lifted toward the readable side of `ground` until it clears
+ * `target`.
+ *
+ * The interface's tones are tuned against the interface's own ground, and the
+ * screen is not that ground — it is deliberately lighter than the night bg and
+ * a shade darker than the day one. Rather than keep a second set of nine
+ * keyframes in step by hand, each colour is moved the smallest distance that
+ * makes it legible where it is actually being drawn. Hue survives; only the
+ * lightness gives.
+ */
+export function ensureContrast(colour, ground, target) {
+  const toward = luminance(ground) < 0.5 ? [255, 255, 255] : [0, 0, 0];
+  const base = hex(colour);
+  let lo = 0;
+  let hi = 1;
+  if (contrast(colour, ground) >= target) return colour;
+  // 12 halvings puts the step below one 8-bit level, so the answer is exact.
+  for (let i = 0; i < 12; i += 1) {
+    const mid = (lo + hi) / 2;
+    const tried = str(base.map((v, n) => v + (toward[n] - v) * mid));
+    if (contrast(tried, ground) >= target) hi = mid;
+    else lo = mid;
+  }
+  return str(base.map((v, n) => v + (toward[n] - v) * hi));
+}
+
+export const contrast = (a, b) => {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
+
+//: Body text is held well above AA because it is most of the screen; the rest
+//: is held at AA, which is where the interface holds its own semantic colours.
+export const TEXT_FLOOR = 7;
+export const ROLE_FLOOR = 4.5;
+
+/**
+ * The terminal's colours, read off one daylight palette.
+ *
+ * `btn` rather than `accent` for the prompt: accent is the identity clay and
+ * is too light to read on a light ground, while btn is the same colour tuned
+ * to stay legible at either end of the day. `command` picks its own side of
+ * the screen, the way the filled button's label does.
+ */
+export function terminalPalette(palette) {
+  const ground = palette.screen;
+  const command = luminance(ground) < 0.3 ? '#ffffff' : '#141413';
+  const lift = (colour, floor = ROLE_FLOOR) =>
+    ensureContrast(colour, ground, floor);
+  return {
+    ground,
+    text: lift(palette.ink, TEXT_FLOOR),
+    command,
+    white: command,
+    prompt: lift(palette.btn),
+    dark: lift(palette.btn),
+    green: lift(palette.ok),
+    cyan: lift(palette.info),
+    amber: lift(palette.warn),
+    red: lift(palette.danger),
+    magenta: lift(palette.plum),
+    grey: lift(palette.soft),
+    dim: lift(palette.muted),
+  };
+}
+
+/** Relative luminance, so a colour can pick its own side of the ground. */
+export function luminance(colour) {
+  const c = [1, 3, 5]
+    .map((i) => Number.parseInt(colour.slice(i, i + 2), 16) / 255)
+    .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+}
 
 const CURSOR_BLINK_MS = 530;
 const INSTANT_LINES_PER_FRAME = 160;
-
-const colourOf = (style) => PALETTE[style] || style || PALETTE.text;
 
 export class Terminal {
   constructor(canvas, options = {}) {
@@ -52,8 +140,29 @@ export class Terminal {
     this.cursorVisible = true;
     this.dirty = true;
     this._lastBlink = 0;
+    //: Its own copy, so a terminal rendered without a clock still has one.
+    this.palette = { ground: GROUND, ...PALETTE };
 
     this.resize();
+  }
+
+  /** One colour by the name the engine wrote, falling back to body text. */
+  colour(style) {
+    return this.palette[style] || style || this.palette.text;
+  }
+
+  /**
+   * Take a new set of colours. Cheap enough to call on every frame of the
+   * live clock: it only marks the screen dirty when something actually
+   * changed, and the palette is quantised to 8-bit hex, so most frames of a
+   * slow interpolation resolve to the identical set.
+   */
+  setPalette(next) {
+    if (this.palette.ground === next.ground && this.palette.text === next.text)
+      return false;
+    this.palette = next;
+    this.dirty = true;
+    return true;
   }
 
   // -- geometry ------------------------------------------------------------
@@ -97,7 +206,7 @@ export class Terminal {
           used = 0;
           continue;
         }
-        current.push({ text: text.slice(0, room), color: segment.color });
+        current.push({ text: text.slice(0, room), style: segment.style });
         used += Math.min(room, text.length);
         text = text.slice(room);
       }
@@ -120,8 +229,8 @@ export class Terminal {
    */
   print(text = '', style = 'green') {
     const segments = Array.isArray(text)
-      ? text.map((s) => ({ text: String(s.text), color: colourOf(s.style) }))
-      : [{ text: String(text), color: colourOf(style) }];
+      ? text.map((s) => ({ text: String(s.text), style: s.style }))
+      : [{ text: String(text), style }];
     this.queue.push({ instant: true, segments });
     return this;
   }
@@ -130,7 +239,7 @@ export class Terminal {
   type(text = '', style = 'green', cps = 420) {
     this.queue.push({
       text: String(text),
-      color: colourOf(style),
+      style,
       cps,
       index: 0,
       acc: 0,
@@ -202,7 +311,7 @@ export class Terminal {
       // The job always owns the tail of the buffer, so replacing from `start`
       // to the end keeps wrapped rows consistent as the line grows.
       const rows = this.wrap([
-        { text: job.text.slice(0, job.index), color: job.color },
+        { text: job.text.slice(0, job.index), style: job.style },
       ]);
       this.lines.splice(job.start, this.lines.length - job.start, ...rows);
       this.dirty = true;
@@ -219,10 +328,10 @@ export class Terminal {
       const job = this.queue.shift();
       if (job.instant) this.commit(job.segments);
       else if (job.start >= 0) {
-        const rows = this.wrap([{ text: job.text, color: job.color }]);
+        const rows = this.wrap([{ text: job.text, style: job.style }]);
         this.lines.splice(job.start, this.lines.length - job.start, ...rows);
       } else {
-        this.commit([{ text: job.text, color: job.color }]);
+        this.commit([{ text: job.text, style: job.style }]);
       }
     }
     this.dirty = true;
@@ -338,7 +447,7 @@ export class Terminal {
 
     const ctx = this.ctx;
     ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
-    ctx.fillStyle = GROUND;
+    ctx.fillStyle = this.palette.ground;
     ctx.fillRect(0, 0, this.width, this.height);
     ctx.font = `${this.fontSize}px "IBM Plex Mono", "Courier New", monospace`;
     ctx.textBaseline = 'top';
@@ -348,8 +457,8 @@ export class Terminal {
       : [
           ...this.lines,
           [
-            { text: this.prompt, color: PALETTE.prompt },
-            { text: this.input, color: PALETTE.white },
+            { text: this.prompt, style: 'prompt' },
+            { text: this.input, style: 'white' },
           ],
         ];
 
@@ -362,7 +471,7 @@ export class Terminal {
       let column = 0;
       const y = padY + row * this.cellHeight;
       for (const segment of segments) {
-        ctx.fillStyle = segment.color;
+        ctx.fillStyle = this.colour(segment.style);
         ctx.fillText(segment.text, padX + column * this.cellWidth, y);
         column += segment.text.length;
       }
@@ -371,7 +480,7 @@ export class Terminal {
     if (!this.locked && this.cursorVisible && this.scrollOffset === 0) {
       const promptRow = slice.length - 1;
       const column = this.prompt.length + this.cursor;
-      ctx.fillStyle = this.busy ? PALETTE.amber : PALETTE.command;
+      ctx.fillStyle = this.colour(this.busy ? 'amber' : 'command');
       ctx.globalAlpha = 0.85;
       ctx.fillRect(
         padX + column * this.cellWidth,
@@ -384,7 +493,7 @@ export class Terminal {
 
     if (this.scrollOffset > 0) {
       const badge = `-- SCROLLBACK ${this.scrollOffset} --`;
-      ctx.fillStyle = PALETTE.amber;
+      ctx.fillStyle = this.colour('amber');
       ctx.fillText(
         badge,
         this.width - padX - badge.length * this.cellWidth,

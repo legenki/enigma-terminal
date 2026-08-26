@@ -174,24 +174,67 @@ def test_the_choice_of_light_survives_a_reload():
     assert "store(LIGHT_KEY, daylight.mode)" in main
 
 
-def test_the_terminal_screen_stays_readable_on_its_fixed_ground():
-    """The screen is the one surface that does not follow the hour, so its
-    contrast is fixed — and three files quote the number. Measure it instead."""
+def test_the_terminal_reads_at_every_hour_on_its_own_ground():
+    """The screen used to be pinned to one colour, so its contrast was a fixed
+    number quoted in three files. It follows the hour now, on a ground of its
+    own — which means every tone has to be measured against that ground at
+    every minute, not against the interface's."""
     script = """
-    import { GROUND, PALETTE } from './docs/js/term.js';
-    import { contrast } from './docs/js/daylight.js';
-    const out = {};
-    for (const [name, colour] of Object.entries(PALETTE)) out[name] = contrast(colour, GROUND);
-    process.stdout.write(JSON.stringify({ ground: GROUND, ratios: out }));
+    import { terminalPalette, contrast, TEXT_FLOOR, ROLE_FLOOR } from './docs/js/term.js';
+    import { paletteAt } from './docs/js/daylight.js';
+    const roles = ['text', 'command', 'prompt', 'green', 'cyan', 'amber', 'red',
+                   'magenta', 'grey', 'dim'];
+    const worst = {};
+    for (let m = 0; m < 1440; m += 1) {
+      const t = terminalPalette(paletteAt(m / 60));
+      for (const role of roles) {
+        const ratio = contrast(t[role], t.ground);
+        if (!worst[role] || ratio < worst[role].ratio) worst[role] = { ratio, minute: m };
+      }
+    }
+    process.stdout.write(JSON.stringify({ worst, TEXT_FLOOR, ROLE_FLOOR }));
+    """
+    done = subprocess.run(
+        ["node", "--input-type=module", "-e", script],
+        cwd=ROOT, capture_output=True, text=True, timeout=120,
+    )
+    assert done.returncode == 0, done.stderr
+    result = json.loads(done.stdout)
+    worst = result["worst"]
+
+    def at(minute):
+        return f"{minute // 60:02d}:{minute % 60:02d}"
+
+    assert worst["text"]["ratio"] >= result["TEXT_FLOOR"], (
+        f"terminal body text falls to {worst['text']['ratio']:.2f}:1 "
+        f"at {at(worst['text']['minute'])}"
+    )
+    for role, found in worst.items():
+        assert found["ratio"] >= result["ROLE_FLOOR"], (
+            f"{role} falls to {found['ratio']:.2f}:1 at {at(found['minute'])}"
+        )
+
+
+def test_the_screen_has_a_ground_of_its_own_at_every_hour():
+    """`screen` is deliberately not `bg`: the terminal that took the interface's
+    own ground would stop reading as a terminal and become another panel."""
+    script = """
+    import { paletteAt } from './docs/js/daylight.js';
+    const rows = [];
+    for (let m = 0; m < 1440; m += 10) {
+      const p = paletteAt(m / 60);
+      rows.push({ minute: m, screen: p.screen, bg: p.bg, plum: p.plum });
+    }
+    process.stdout.write(JSON.stringify(rows));
     """
     done = subprocess.run(
         ["node", "--input-type=module", "-e", script],
         cwd=ROOT, capture_output=True, text=True, timeout=60,
     )
     assert done.returncode == 0, done.stderr
-    result = json.loads(done.stdout)
-    assert result["ground"] == "#363248", "the screen changed colour"
-    worst = min(result["ratios"].items(), key=lambda pair: pair[1])
-    assert result["ratios"]["text"] >= 7.0, \
-        f"terminal body text is {result['ratios']['text']:.2f}:1"
-    assert worst[1] >= SOFT_FLOOR, f"{worst[0]} is {worst[1]:.2f}:1 on the screen"
+    rows = json.loads(done.stdout)
+    assert all(row["screen"] and row["plum"] for row in rows), "a keyframe has no screen"
+    assert all(row["screen"] != row["bg"] for row in rows), \
+        "the screen collapsed onto the interface ground"
+    # And it does move: a screen that never changed would be the old pinned one.
+    assert len({row["screen"] for row in rows}) > 20, "the screen is not following the hour"
