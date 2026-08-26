@@ -19,7 +19,7 @@ JS_FILES = sorted(DOCS.rglob("js/**/*.js"))
 
 
 def strip_css_noise(text: str) -> str:
-    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
     return re.sub(r"'[^']*'|\"[^\"]*\"", "", text)
 
 
@@ -70,7 +70,7 @@ def test_module_imports_resolve(path):
 
 
 def strip_js_comments(source: str) -> str:
-    source = re.sub(r"/\*.*?\*/", "", source, flags=re.S)
+    source = re.sub(r"/\*.*?\*/", "", source, flags=re.DOTALL)
     return re.sub(r"(?<![:\w])//[^\n]*", "", source)
 
 
@@ -205,7 +205,7 @@ def test_the_typed_command_is_lit_apart_from_the_output():
     assert "style: 'command'" in term, "the echoed command is not highlighted"
     assert "style: 'prompt'" in term
     for role in ("text", "command", "prompt"):
-        assert re.search(rf"^  {role}: '#", term, re.M), f"no {role} colour"
+        assert re.search(rf"^  {role}: '#", term, re.MULTILINE), f"no {role} colour"
 
 
 def test_the_banner_carries_the_switch_and_not_a_source_link():
@@ -281,7 +281,7 @@ def test_gui_text_dictionary_is_complete():
     """A key missing es or pt falls back to English without a word of warning."""
     source = (DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8")
     block = source[source.index("const T = {"):source.index("const t = (key, lang)")]
-    entries = re.findall(r"^  (\w+): \{(.*?)\},$", block, re.S | re.M)
+    entries = re.findall(r"^  (\w+): \{(.*?)\},$", block, re.DOTALL | re.MULTILINE)
     assert len(entries) > 50, f"only found {len(entries)} keys — parser drifted"
     for key, body in entries:
         for lang in LANGS:
@@ -306,7 +306,7 @@ def test_the_real_wallet_warning_is_never_left_in_english():
     block = engine[engine.index("const REAL_WALLET = {"):]
     block = block[:block.index("};")]
     for lang in LANGS:
-        assert re.search(rf"^  {lang}: '", block, re.M), f"no {lang} wallet warning"
+        assert re.search(rf"^  {lang}: '", block, re.MULTILINE), f"no {lang} wallet warning"
 
 
 # --- sidebar, rail and surface layering ------------------------------------

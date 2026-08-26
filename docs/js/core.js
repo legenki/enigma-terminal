@@ -6,16 +6,16 @@
 
 import { CAMPAIGN } from './campaign.js';
 import { CLIENTS } from './clients.js';
-import { WORDLIST } from './wordlist.js';
-import { migrated } from './storage.js';
 import {
-  MnemonicError,
   entropyToMnemonic,
   fingerprint,
+  MnemonicError,
   normalize,
   validateMnemonic,
   WORD_INDEX,
 } from './crypto/bip39.js';
+import { migrated } from './storage.js';
+import { WORDLIST } from './wordlist.js';
 
 const STORAGE_KEY = 'enigma-terminal/progress/v1';
 
@@ -26,7 +26,8 @@ export const LANGS = ['ru', 'en', 'es', 'pt'];
 export const LANG_NAMES = { ru: 'РУС', en: 'ENG', es: 'ESP', pt: 'POR' };
 
 /** Resolve a per-language bundle down to one language. */
-export const pick = (bundle, lang) => (bundle && (bundle[lang] || bundle.en)) || bundle;
+export const pick = (bundle, lang) =>
+  (bundle && (bundle[lang] || bundle.en)) || bundle;
 
 // --------------------------------------------------------------------------
 // Progress — one store, shared by both modes through localStorage
@@ -148,7 +149,8 @@ let contractsPromise = null;
 export const CASES = CAMPAIGN_CASES;
 
 /** Campaign plus whatever of the board has arrived. */
-export const allCases = () => contracts.length ? [...CAMPAIGN_CASES, ...contracts] : CAMPAIGN_CASES;
+export const allCases = () =>
+  contracts.length ? [...CAMPAIGN_CASES, ...contracts] : CAMPAIGN_CASES;
 
 export const contractsLoaded = () => contracts.length > 0;
 
@@ -185,11 +187,14 @@ export function caseload(progress) {
   ];
 }
 
-export const clientBySlug = (slug) => CLIENTS.find((client) => client.slug === slug) || null;
+export const clientBySlug = (slug) =>
+  CLIENTS.find((client) => client.slug === slug) || null;
 
-export const casesForClient = (slug) => contracts.filter((entry) => entry.client === slug);
+export const casesForClient = (slug) =>
+  contracts.filter((entry) => entry.client === slug);
 
-export const caseById = (id) => allCases().find((entry) => entry.id === Number(id)) || null;
+export const caseById = (id) =>
+  allCases().find((entry) => entry.id === Number(id)) || null;
 
 export const isUnlocked = (caseFile, progress) =>
   (caseFile.requires || []).every((req) => progress.isSolved(req));
@@ -245,7 +250,9 @@ export const UNKNOWN_TOKENS = new Set(['?', '*', '_', '...', '??', '???']);
  */
 export function completeMnemonic(pattern) {
   const words = normalize(String(pattern)).split(' ').filter(Boolean);
-  if (!Object.keys(WORD_COUNT_TO_ENTROPY_BYTES).map(Number).includes(words.length)) {
+  if (
+    !Object.keys(WORD_COUNT_TO_ENTROPY_BYTES).map(Number).includes(words.length)
+  ) {
     throw new MnemonicError(
       `PHRASE LENGTH ${words.length} INVALID. EXPECTED 12/15/18/21/24 WORDS.`,
       'length',
@@ -258,7 +265,10 @@ export function completeMnemonic(pattern) {
   });
 
   if (blanks.length === 0) {
-    throw new MnemonicError('NO UNKNOWN POSITION MARKED. USE ? FOR THE MISSING WORD.', 'no_blank');
+    throw new MnemonicError(
+      'NO UNKNOWN POSITION MARKED. USE ? FOR THE MISSING WORD.',
+      'no_blank',
+    );
   }
   if (blanks.length > 1) {
     throw new MnemonicError(
@@ -323,7 +333,8 @@ export function searchCases(query, lang = 'en', progress = null) {
     }
     for (const field of CASE_TEXT_FIELDS) {
       // Epilogues are spoilers: only search them once the case is closed.
-      if (field === 'epilogue' && progress && !progress.isSolved(caseFile.id)) continue;
+      if (field === 'epilogue' && progress && !progress.isSolved(caseFile.id))
+        continue;
       for (const line of pick(caseFile[field], lang) || []) {
         if (line.toLowerCase().includes(needle)) hits.push({ field, line });
       }
@@ -333,4 +344,4 @@ export function searchCases(query, lang = 'en', progress = null) {
   return results;
 }
 
-export { MnemonicError, fingerprint, normalize };
+export { fingerprint, MnemonicError, normalize };

@@ -13,12 +13,13 @@ pasting a live wallet into the terminal cannot leave it sitting on disk.
 
 from __future__ import annotations
 
-import os
 import json
-from dataclasses import dataclass, field, replace
+import os
 import time
+from collections.abc import Iterator
+from dataclasses import dataclass, field, replace
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 MAX_ENTRIES = 400
 
@@ -66,7 +67,7 @@ class Entry:
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Entry":
+    def from_dict(cls, data: dict[str, Any]) -> Entry:
         return cls(
             id=int(data.get("id", 0)),
             at=float(data.get("at", 0)) / 1000,
@@ -201,5 +202,5 @@ class Journal:
     def __len__(self) -> int:
         return len(self.entries)
 
-    def __iter__(self) -> Iterable[Entry]:
+    def __iter__(self) -> Iterator[Entry]:
         return iter(self.entries)

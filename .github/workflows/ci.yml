@@ -16,21 +16,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
         with:
-          python-version: ${{ matrix.python-version }}
-
-      - uses: actions/setup-node@v4
+          enable-cache: true
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
 
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+        with:
+          version: latest
+
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-dev.txt
+          uv python pin ${{ matrix.python-version }}
+          uv pip install --system -e ".[dev]"
 
-      - name: Run the test suite
-        run: python -m pytest tests -v
+      - name: Run Linters and Test Suite
+        run: |
+          ruff check .
+          mypy enigma_terminal/
+          biome check $(find docs/js tools -type f -name "*.js" -o -name "*.mjs" | grep -v vendor)
+          pytest tests -v
 
       - name: Check the generated web data is committed
         run: |

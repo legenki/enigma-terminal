@@ -5,13 +5,13 @@
 // object, its scrollback and its input all survive the move, which is why the
 // frame is reparented rather than rebuilt.
 
-import { Terminal } from './term.js';
+import { LANGS, loadContracts } from './core.js';
+import { Daylight } from './daylight.js';
 import { Engine } from './engine.js';
 import { GlitchBanner } from './glitch.js';
 import { GuiApp } from './gui/app.js';
-import { LANGS, loadContracts } from './core.js';
 import { migrated } from './storage.js';
-import { Daylight } from './daylight.js';
+import { Terminal } from './term.js';
 
 const LANG_KEY = 'enigma-terminal/lang/v1';
 const LIGHT_KEY = 'enigma-terminal/light/v1';
@@ -20,13 +20,16 @@ const stored = (key, fallback) => migrated(key) || fallback;
 const store = (key, value) => {
   try {
     localStorage.setItem(key, value);
-  } catch { /* private mode: the choice just will not persist */ }
+  } catch {
+    /* private mode: the choice just will not persist */
+  }
 };
 
 // Match the browser against every language we ship, not just Russian.
-const preferred = (navigator.languages || [navigator.language || 'en'])
-  .map((tag) => String(tag).slice(0, 2).toLowerCase())
-  .find((code) => LANGS.includes(code)) || 'en';
+const preferred =
+  (navigator.languages || [navigator.language || 'en'])
+    .map((tag) => String(tag).slice(0, 2).toLowerCase())
+    .find((code) => LANGS.includes(code)) || 'en';
 const lang = stored(LANG_KEY, preferred);
 
 const glitch = new GlitchBanner(document.getElementById('glitch-canvas'));
@@ -116,15 +119,21 @@ for (const [key, button] of Object.entries(lightButtons)) {
 const atTerminal = () => gui.panel === 'terminal';
 
 document.addEventListener('keydown', (event) => {
-  const typing = event.target instanceof HTMLElement
-    && ['INPUT', 'TEXTAREA'].includes(event.target.tagName)
-    && event.target !== keyboardInput;
+  const typing =
+    event.target instanceof HTMLElement &&
+    ['INPUT', 'TEXTAREA'].includes(event.target.tagName) &&
+    event.target !== keyboardInput;
 
   if (!atTerminal()) {
     // Digits jump between panels, but never while the player is typing into
     // a search box or a seed field.
-    if (!typing && !event.ctrlKey && !event.metaKey && !event.altKey
-        && gui.openByKey(event.key)) {
+    if (
+      !typing &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey &&
+      gui.openByKey(event.key)
+    ) {
       event.preventDefault();
     }
     return;
@@ -132,8 +141,14 @@ document.addEventListener('keydown', (event) => {
   // Inside the terminal every key belongs to the terminal — including the
   // digits, which are part of half the commands.
   if (event.key === 'Tab') return;
-  if ((event.ctrlKey || event.metaKey) && ['c', 'v', 'r', 'l'].includes(event.key.toLowerCase())) {
-    if (event.key.toLowerCase() === 'l') { event.preventDefault(); terminal.clear(); }
+  if (
+    (event.ctrlKey || event.metaKey) &&
+    ['c', 'v', 'r', 'l'].includes(event.key.toLowerCase())
+  ) {
+    if (event.key.toLowerCase() === 'l') {
+      event.preventDefault();
+      terminal.clear();
+    }
     return;
   }
   keyboardInput.focus({ preventScroll: true });
@@ -156,12 +171,18 @@ document.addEventListener('paste', (event) => {
   terminal.setInput(terminal.input + text.replace(/\s+/g, ' ').trim());
 });
 
-screenFrame.addEventListener('click', () => keyboardInput.focus({ preventScroll: true }));
+screenFrame.addEventListener('click', () =>
+  keyboardInput.focus({ preventScroll: true }),
+);
 
-termCanvas.addEventListener('wheel', (event) => {
-  event.preventDefault();
-  terminal.scrollBy(event.deltaY > 0 ? -3 : 3);
-}, { passive: false });
+termCanvas.addEventListener(
+  'wheel',
+  (event) => {
+    event.preventDefault();
+    terminal.scrollBy(event.deltaY > 0 ? -3 : 3);
+  },
+  { passive: false },
+);
 
 let resizeTimer = null;
 window.addEventListener('resize', () => {
@@ -192,7 +213,8 @@ function frame(now) {
     terminal.render(now);
   }
 
-  if (powerLed) powerLed.classList.toggle('is-busy', terminal.busy || pending > 0);
+  if (powerLed)
+    powerLed.classList.toggle('is-busy', terminal.busy || pending > 0);
   requestAnimationFrame(frame);
 }
 

@@ -10,13 +10,14 @@ from __future__ import annotations
 import json
 import urllib.error
 import urllib.request
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Callable
+from typing import Any
 
 try:  # `requests` is preferred when present; urllib keeps the game dependency-free
     import requests
 except ImportError:  # pragma: no cover - exercised only where requests is absent
-    requests = None
+    requests = None  # type: ignore
 
 USER_AGENT = "enigma-terminal/1.0 (+https://github.com/legenki/neon-terminal)"
 SATS_PER_BTC = 100_000_000
@@ -234,15 +235,21 @@ class ChainClient:
             try:
                 return provider.parse_address(_get_json(url, self.timeout))
             except urllib.error.HTTPError as exc:
-                errors.append(f"{provider.name}: HTTP {exc.code}")
+                if exc.code == 429:
+                    errors.append(f"{provider.name}: HTTP 429 TOO MANY REQUESTS")
+                else:
+                    errors.append(f"{provider.name}: HTTP {exc.code}")
             except (KeyError, TypeError) as exc:
                 errors.append(f"{provider.name}: malformed response ({exc})")
             except NETWORK_ERRORS as exc:
                 code = getattr(getattr(exc, "response", None), "status_code", None)
-                errors.append(
-                    f"{provider.name}: HTTP {code}" if code
-                    else f"{provider.name}: {exc.__class__.__name__}"
-                )
+                if code == 429:
+                    errors.append(f"{provider.name}: HTTP 429 TOO MANY REQUESTS")
+                else:
+                    errors.append(
+                        f"{provider.name}: HTTP {code}" if code
+                        else f"{provider.name}: {exc.__class__.__name__}"
+                    )
             except ValueError as exc:
                 errors.append(f"{provider.name}: malformed response ({exc})")
         self.last_error = " | ".join(errors)
@@ -259,8 +266,12 @@ class ChainClient:
             url = provider.base + provider.txs_path(address)
             try:
                 return provider.parse_txs(_get_json(url, self.timeout), address)[:limit]
-            except (*NETWORK_ERRORS, KeyError, TypeError, ValueError) as exc:
-                errors.append(f"{provider.name}: {exc.__class__.__name__}")
+            except tuple(list(NETWORK_ERRORS) + [KeyError, TypeError, ValueError]) as exc:
+                code = getattr(getattr(exc, "response", None), "status_code", getattr(exc, "code", None))
+                if code == 429:
+                    errors.append(f"{provider.name}: HTTP 429 TOO MANY REQUESTS")
+                else:
+                    errors.append(f"{provider.name}: {exc.__class__.__name__}")
         self.last_error = " | ".join(errors) or "NO PROVIDER EXPOSES A TX ENDPOINT"
         raise ChainError(self.last_error)
 

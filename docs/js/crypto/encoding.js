@@ -65,7 +65,8 @@ function convertBits(data, from, to, pad = true) {
 export function segwitAddress(hrp, witnessVersion, program) {
   const data = [witnessVersion, ...convertBits(Array.from(program), 8, 5)];
   const constant = witnessVersion === 0 ? 1 : 0x2bc830a3;
-  const mod = polymod([...hrpExpand(hrp), ...data, 0, 0, 0, 0, 0, 0]) ^ constant;
+  const mod =
+    polymod([...hrpExpand(hrp), ...data, 0, 0, 0, 0, 0, 0]) ^ constant;
   const checksum = [];
   for (let i = 0; i < 6; i++) checksum.push((mod >> (5 * (5 - i))) & 31);
   return `${hrp}1${[...data, ...checksum].map((d) => CHARSET[d]).join('')}`;

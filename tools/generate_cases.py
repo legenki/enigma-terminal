@@ -29,8 +29,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from enigma_terminal.crypto_engine import (  # noqa: E402
-    WORDLIST, entropy_to_mnemonic, fingerprint, index_of, validate, word_at,
+from enigma_terminal.crypto_engine import (
+    WORDLIST,
+    entropy_to_mnemonic,
+    fingerprint,
+    index_of,
+    validate,
+    word_at,
 )
 
 FIRST_ID = 9                     # 1..8 are the hand-written campaign

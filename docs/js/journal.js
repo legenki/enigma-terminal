@@ -15,28 +15,99 @@ const STORAGE_KEY = 'enigma-terminal/journal/v1';
 const MAX_ENTRIES = 400;
 
 export const TOOLS = {
-  decrypt: { label: { en: 'Decrypt', ru: 'Дешифровка', es: 'Descifrado', pt: 'Decifração' }, glyph: '⌘' },
-  ledger: { label: { en: 'Ledger', ru: 'Реестр', es: 'Registro', pt: 'Registro' }, glyph: '₿' },
-  sweep: { label: { en: 'Sweep', ru: 'Обход', es: 'Recorrido', pt: 'Percurso' }, glyph: '≡' },
-  txlog: { label: { en: 'Tx log', ru: 'Транзакции', es: 'Transacciones', pt: 'Transações' }, glyph: '⇄' },
-  search: { label: { en: 'Wordlist', ru: 'Словарь', es: 'Lista', pt: 'Lista' }, glyph: '⌕' },
-  archive: { label: { en: 'Archive', ru: 'Архив', es: 'Archivo', pt: 'Arquivo' }, glyph: '▤' },
-  complete: { label: { en: 'Recovery', ru: 'Восстановление', es: 'Recuperación', pt: 'Recuperação' }, glyph: '?' },
-  random: { label: { en: 'Randomizer', ru: 'Рандомайзер', es: 'Aleatorio', pt: 'Aleatório' }, glyph: '⚄' },
-  case: { label: { en: 'Case', ru: 'Дело', es: 'Caso', pt: 'Caso' }, glyph: '★' },
-  hint: { label: { en: 'Hint', ru: 'Подсказка', es: 'Pista', pt: 'Dica' }, glyph: '!' },
+  decrypt: {
+    label: {
+      en: 'Decrypt',
+      ru: 'Дешифровка',
+      es: 'Descifrado',
+      pt: 'Decifração',
+    },
+    glyph: '⌘',
+  },
+  ledger: {
+    label: { en: 'Ledger', ru: 'Реестр', es: 'Registro', pt: 'Registro' },
+    glyph: '₿',
+  },
+  sweep: {
+    label: { en: 'Sweep', ru: 'Обход', es: 'Recorrido', pt: 'Percurso' },
+    glyph: '≡',
+  },
+  txlog: {
+    label: {
+      en: 'Tx log',
+      ru: 'Транзакции',
+      es: 'Transacciones',
+      pt: 'Transações',
+    },
+    glyph: '⇄',
+  },
+  search: {
+    label: { en: 'Wordlist', ru: 'Словарь', es: 'Lista', pt: 'Lista' },
+    glyph: '⌕',
+  },
+  archive: {
+    label: { en: 'Archive', ru: 'Архив', es: 'Archivo', pt: 'Arquivo' },
+    glyph: '▤',
+  },
+  complete: {
+    label: {
+      en: 'Recovery',
+      ru: 'Восстановление',
+      es: 'Recuperación',
+      pt: 'Recuperação',
+    },
+    glyph: '?',
+  },
+  random: {
+    label: {
+      en: 'Randomizer',
+      ru: 'Рандомайзер',
+      es: 'Aleatorio',
+      pt: 'Aleatório',
+    },
+    glyph: '⚄',
+  },
+  case: {
+    label: { en: 'Case', ru: 'Дело', es: 'Caso', pt: 'Caso' },
+    glyph: '★',
+  },
+  hint: {
+    label: { en: 'Hint', ru: 'Подсказка', es: 'Pista', pt: 'Dica' },
+    glyph: '!',
+  },
 };
 
 //: How a status reads on the terminal's palette. Same four as the Python
 //: build (enigma_terminal/journal.py) so a journal written in one and listed
 //: in the other looks the same.
-export const STATUS_STYLES = { ok: 'green', warn: 'amber', danger: 'red', info: 'grey' };
+export const STATUS_STYLES = {
+  ok: 'green',
+  warn: 'amber',
+  danger: 'red',
+  info: 'grey',
+};
 
 const EXPORT_CAPTIONS = {
-  en: { title: 'INVESTIGATION JOURNAL', exported: 'Exported', entries: 'Entries' },
-  ru: { title: 'ЖУРНАЛ РАССЛЕДОВАНИЯ', exported: 'Выгружено', entries: 'Записей' },
-  es: { title: 'DIARIO DE INVESTIGACIÓN', exported: 'Exportado', entries: 'Registros' },
-  pt: { title: 'DIÁRIO DE INVESTIGAÇÃO', exported: 'Exportado', entries: 'Registros' },
+  en: {
+    title: 'INVESTIGATION JOURNAL',
+    exported: 'Exported',
+    entries: 'Entries',
+  },
+  ru: {
+    title: 'ЖУРНАЛ РАССЛЕДОВАНИЯ',
+    exported: 'Выгружено',
+    entries: 'Записей',
+  },
+  es: {
+    title: 'DIARIO DE INVESTIGACIÓN',
+    exported: 'Exportado',
+    entries: 'Registros',
+  },
+  pt: {
+    title: 'DIÁRIO DE INVESTIGAÇÃO',
+    exported: 'Exportado',
+    entries: 'Registros',
+  },
 };
 
 /** Redact a phrase the game has no business remembering. */
@@ -128,8 +199,9 @@ export class Journal {
       (entry.pinned ? kept : overflow).push(entry);
     }
     const room = Math.max(MAX_ENTRIES - kept.length, 0);
-    this.entries = [...kept, ...overflow.slice(0, room)]
-      .sort((a, b) => b.at - a.at || b.id - a.id);
+    this.entries = [...kept, ...overflow.slice(0, room)].sort(
+      (a, b) => b.at - a.at || b.id - a.id,
+    );
   }
 
   all() {
@@ -137,7 +209,9 @@ export class Journal {
   }
 
   byTool(tool) {
-    return tool ? this.entries.filter((entry) => entry.tool === tool) : this.entries;
+    return tool
+      ? this.entries.filter((entry) => entry.tool === tool)
+      : this.entries;
   }
 
   get(id) {
@@ -171,7 +245,9 @@ export class Journal {
 
   /** Clear everything, or keep the pinned entries. */
   clear({ keepPinned = false } = {}) {
-    this.entries = keepPinned ? this.entries.filter((entry) => entry.pinned) : [];
+    this.entries = keepPinned
+      ? this.entries.filter((entry) => entry.pinned)
+      : [];
     this.save();
     this.notify();
   }
@@ -194,12 +270,18 @@ export class Journal {
       '',
     ];
     const body = this.entries.map((entry, index) => {
-      const stamp = new Date(entry.at).toISOString().replace('T', ' ').slice(0, 19);
-      const tool = (TOOLS[entry.tool] && TOOLS[entry.tool].label.en) || entry.tool;
+      const stamp = new Date(entry.at)
+        .toISOString()
+        .replace('T', ' ')
+        .slice(0, 19);
+      const tool =
+        (TOOLS[entry.tool] && TOOLS[entry.tool].label.en) || entry.tool;
       const pin = entry.pinned ? ' [PINNED]' : '';
-      return `${String(index + 1).padStart(3)}. ${stamp}  ${tool.toUpperCase()}${pin}\n`
-        + `     ${entry.title}`
-        + (entry.detail ? `\n     ${entry.detail}` : '');
+      return (
+        `${String(index + 1).padStart(3)}. ${stamp}  ${tool.toUpperCase()}${pin}\n` +
+        `     ${entry.title}` +
+        (entry.detail ? `\n     ${entry.detail}` : '')
+      );
     });
     return [...header, ...body].join('\n');
   }

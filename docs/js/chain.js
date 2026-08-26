@@ -13,30 +13,36 @@ export class ChainError extends Error {
 
 const esploraStats = (name, data) => ({
   address: data.address,
-  confirmedSats: BigInt(data.chain_stats.funded_txo_sum) - BigInt(data.chain_stats.spent_txo_sum),
-  unconfirmedSats: BigInt(data.mempool_stats.funded_txo_sum) - BigInt(data.mempool_stats.spent_txo_sum),
+  confirmedSats:
+    BigInt(data.chain_stats.funded_txo_sum) -
+    BigInt(data.chain_stats.spent_txo_sum),
+  unconfirmedSats:
+    BigInt(data.mempool_stats.funded_txo_sum) -
+    BigInt(data.mempool_stats.spent_txo_sum),
   totalReceivedSats: BigInt(data.chain_stats.funded_txo_sum),
   totalSentSats: BigInt(data.chain_stats.spent_txo_sum),
   txCount: data.chain_stats.tx_count + data.mempool_stats.tx_count,
-  utxoCount: data.chain_stats.funded_txo_count - data.chain_stats.spent_txo_count,
+  utxoCount:
+    data.chain_stats.funded_txo_count - data.chain_stats.spent_txo_count,
   provider: name,
 });
 
-const esploraTxs = (data, address) => data.map((tx) => {
-  const received = (tx.vout || [])
-    .filter((v) => v.scriptpubkey_address === address)
-    .reduce((sum, v) => sum + BigInt(v.value), 0n);
-  const spent = (tx.vin || [])
-    .filter((v) => v.prevout && v.prevout.scriptpubkey_address === address)
-    .reduce((sum, v) => sum + BigInt(v.prevout.value), 0n);
-  return {
-    txid: tx.txid,
-    confirmed: Boolean(tx.status && tx.status.confirmed),
-    blockHeight: tx.status ? tx.status.block_height : null,
-    blockTime: tx.status ? tx.status.block_time : null,
-    valueDeltaSats: received - spent,
-  };
-});
+const esploraTxs = (data, address) =>
+  data.map((tx) => {
+    const received = (tx.vout || [])
+      .filter((v) => v.scriptpubkey_address === address)
+      .reduce((sum, v) => sum + BigInt(v.value), 0n);
+    const spent = (tx.vin || [])
+      .filter((v) => v.prevout && v.prevout.scriptpubkey_address === address)
+      .reduce((sum, v) => sum + BigInt(v.prevout.value), 0n);
+    return {
+      txid: tx.txid,
+      confirmed: Boolean(tx.status?.confirmed),
+      blockHeight: tx.status ? tx.status.block_height : null,
+      blockTime: tx.status ? tx.status.block_time : null,
+      valueDeltaSats: received - spent,
+    };
+  });
 
 export const PROVIDERS = {
   blockstream: {
@@ -98,7 +104,10 @@ export class ChainClient {
 
   get order() {
     if (this.preferred && PROVIDERS[this.preferred]) {
-      return [this.preferred, ...DEFAULT_ORDER.filter((key) => key !== this.preferred)];
+      return [
+        this.preferred,
+        ...DEFAULT_ORDER.filter((key) => key !== this.preferred),
+      ];
     }
     return DEFAULT_ORDER;
   }
@@ -119,6 +128,8 @@ export class ChainClient {
         signal: controller.signal,
         headers: { Accept: 'application/json' },
       });
+      if (response.status === 429)
+        throw new Error('HTTP 429 TOO MANY REQUESTS');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return await response.json();
     } finally {
@@ -127,12 +138,15 @@ export class ChainClient {
   }
 
   async addressStats(address) {
-    if (this.offline) throw new ChainError('OFFLINE MODE ACTIVE — NETWORK CALLS DISABLED');
+    if (this.offline)
+      throw new ChainError('OFFLINE MODE ACTIVE — NETWORK CALLS DISABLED');
     const errors = [];
     for (const key of this.order) {
       const provider = PROVIDERS[key];
       try {
-        const data = await this.fetchJson(provider.base + provider.addressPath(address));
+        const data = await this.fetchJson(
+          provider.base + provider.addressPath(address),
+        );
         return provider.parseAddress(data);
       } catch (error) {
         errors.push(`${provider.name}: ${error.message || error.name}`);
@@ -142,19 +156,24 @@ export class ChainClient {
   }
 
   async transactions(address, limit = 8) {
-    if (this.offline) throw new ChainError('OFFLINE MODE ACTIVE — NETWORK CALLS DISABLED');
+    if (this.offline)
+      throw new ChainError('OFFLINE MODE ACTIVE — NETWORK CALLS DISABLED');
     const errors = [];
     for (const key of this.order) {
       const provider = PROVIDERS[key];
       if (!provider.txsPath) continue;
       try {
-        const data = await this.fetchJson(provider.base + provider.txsPath(address));
+        const data = await this.fetchJson(
+          provider.base + provider.txsPath(address),
+        );
         return provider.parseTxs(data, address).slice(0, limit);
       } catch (error) {
         errors.push(`${provider.name}: ${error.message || error.name}`);
       }
     }
-    throw new ChainError(errors.join(' | ') || 'NO PROVIDER EXPOSES A TX ENDPOINT');
+    throw new ChainError(
+      errors.join(' | ') || 'NO PROVIDER EXPOSES A TX ENDPOINT',
+    );
   }
 
   /** Probe every provider; resolves to { blockstream: 'OK 120ms', mempool: 'DOWN ...', ... } */

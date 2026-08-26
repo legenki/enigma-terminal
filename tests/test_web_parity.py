@@ -4,10 +4,10 @@ Two independent implementations of BIP-39/32 are easy to let drift apart; this
 runs the JavaScript one under Node and diffs every field.
 """
 
-import sys
 import json
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest

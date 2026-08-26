@@ -1,7 +1,7 @@
 // BIP-39: wordlist handling, checksum validation, entropy <-> mnemonic, seed.
 
-import { sha256, pbkdf2Sha512, toHex, utf8 } from './hash.js';
 import { WORDLIST } from '../wordlist.js';
+import { pbkdf2Sha512, sha256, toHex, utf8 } from './hash.js';
 
 export const WORD_INDEX = new Map(WORDLIST.map((word, i) => [word, i]));
 
@@ -26,7 +26,8 @@ export const wordAt = (position) => {
 
 export const indexOf = (word) => {
   const found = WORD_INDEX.get(word.trim().toLowerCase());
-  if (found === undefined) throw new Error(`'${word}' is not in the BIP-39 dictionary`);
+  if (found === undefined)
+    throw new Error(`'${word}' is not in the BIP-39 dictionary`);
   return found + 1;
 };
 
@@ -45,12 +46,16 @@ const bitsOf = (bytes) =>
 /** Turn 128..256 bits of entropy into a checksummed mnemonic. */
 export function entropyToMnemonic(entropy) {
   if (![16, 20, 24, 28, 32].includes(entropy.length)) {
-    throw new MnemonicError('ENTROPY MUST BE 16, 20, 24, 28 OR 32 BYTES', 'entropy_length');
+    throw new MnemonicError(
+      'ENTROPY MUST BE 16, 20, 24, 28 OR 32 BYTES',
+      'entropy_length',
+    );
   }
   const checksumBits = (entropy.length * 8) / 32;
   const bits = bitsOf(entropy) + bitsOf(sha256(entropy)).slice(0, checksumBits);
   const words = [];
-  for (let i = 0; i < bits.length; i += 11) words.push(WORDLIST[parseInt(bits.slice(i, i + 11), 2)]);
+  for (let i = 0; i < bits.length; i += 11)
+    words.push(WORDLIST[parseInt(bits.slice(i, i + 11), 2)]);
   return words.join(' ');
 }
 
@@ -73,7 +78,9 @@ export function validateMnemonic(mnemonic) {
       'dictionary',
     );
   }
-  const bits = words.map((word) => WORD_INDEX.get(word).toString(2).padStart(11, '0')).join('');
+  const bits = words
+    .map((word) => WORD_INDEX.get(word).toString(2).padStart(11, '0'))
+    .join('');
   const divider = (bits.length * 32) / 33;
   const entropyBits = bits.slice(0, divider);
   const checksumBits = bits.slice(divider);
@@ -82,12 +89,16 @@ export function validateMnemonic(mnemonic) {
     entropy[i] = parseInt(entropyBits.slice(i * 8, i * 8 + 8), 2);
   }
   if (bitsOf(sha256(entropy)).slice(0, checksumBits.length) !== checksumBits) {
-    throw new MnemonicError('MNEMONIC CHECKSUM INVALID. DECRYPTION FAILED.', 'checksum');
+    throw new MnemonicError(
+      'MNEMONIC CHECKSUM INVALID. DECRYPTION FAILED.',
+      'checksum',
+    );
   }
   return { words, entropy };
 }
 
-export const mnemonicToEntropy = (mnemonic) => validateMnemonic(mnemonic).entropy;
+export const mnemonicToEntropy = (mnemonic) =>
+  validateMnemonic(mnemonic).entropy;
 
 /** BIP-39 seed: PBKDF2-HMAC-SHA512, 2048 rounds, salt "mnemonic"+passphrase. */
 export const mnemonicToSeed = (mnemonic, passphrase = '') =>
@@ -99,4 +110,5 @@ export const mnemonicToSeed = (mnemonic, passphrase = '') =>
   );
 
 /** Stable sha256 of a normalised mnemonic — how case answers are stored. */
-export const fingerprint = (mnemonic) => toHex(sha256(utf8(normalize(mnemonic))));
+export const fingerprint = (mnemonic) =>
+  toHex(sha256(utf8(normalize(mnemonic))));

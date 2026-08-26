@@ -14,7 +14,9 @@ export const migrated = (key) => {
   try {
     let value = localStorage.getItem(key);
     if (value === null && key.startsWith(CURRENT_PREFIX)) {
-      const legacy = localStorage.getItem(LEGACY_PREFIX + key.slice(CURRENT_PREFIX.length));
+      const legacy = localStorage.getItem(
+        LEGACY_PREFIX + key.slice(CURRENT_PREFIX.length),
+      );
       if (legacy !== null) {
         localStorage.setItem(key, legacy);
         value = legacy;

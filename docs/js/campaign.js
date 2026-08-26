@@ -1,1279 +1,1279 @@
 // GENERATED FILE — edit data/cases.json and run tools/build_web_data.py instead.
 
 export const CAMPAIGN = {
-  "meta": {
-    "title": "BIP-39: ENIGMA TERMINAL",
-    "subtitle": {
-      "ru": "СИМУЛЯТОР ЦИФРОВОГО ДЕТЕКТИВА // REAL NET BUILD",
-      "en": "DIGITAL DETECTIVE SIMULATOR // REAL NET BUILD",
-      "es": "SIMULADOR DE DETECTIVE DIGITAL // CONSTRUCCIÓN DE RED REAL",
-      "pt": "SIMULADOR DE DETETIVE DIGITAL // CONSTRUÇÃO DE REDE REAL"
+  meta: {
+    title: 'BIP-39: ENIGMA TERMINAL',
+    subtitle: {
+      ru: 'СИМУЛЯТОР ЦИФРОВОГО ДЕТЕКТИВА // REAL NET BUILD',
+      en: 'DIGITAL DETECTIVE SIMULATOR // REAL NET BUILD',
+      es: 'SIMULADOR DE DETECTIVE DIGITAL // CONSTRUCCIÓN DE RED REAL',
+      pt: 'SIMULADOR DE DETETIVE DIGITAL // CONSTRUÇÃO DE REDE REAL',
     },
-    "version": "1.0.0-realnet",
-    "operator": "NULLSEC",
-    "client": "ESCRIBANÍA CERO"
+    version: '1.0.0-realnet',
+    operator: 'NULLSEC',
+    client: 'ESCRIBANÍA CERO',
   },
-  "prologue": {
-    "ru": [
-      "БУЭНОС-АЙРЕС, 2077. СУДЕСТАДА НЕ УХОДИТ ВОСЕМНАДЦАТЫЙ ДЕНЬ.",
-      "",
-      "Ветер с юго-востока гонит воду Ла-Платы обратно в город. Микросентро стоит по щиколотку,",
-      "в подвалах La City вторую неделю работают насосы, а на Флориде арболитос продают доллар",
-      "по трём разным курсам сразу — и ни один из них не настоящий.",
-      "",
-      "Архивариус по прозвищу ORACLE пропал вместе с восемью холодными кошельками.",
-      "Он не доверял облакам, серверам и людям. Он доверял только словам.",
-      "Двенадцать слов на кошелёк — и ни строчки на бумаге.",
-      "",
-      "Заказчик ESCRIBANÍA CERO платит за каждый восстановленный сид.",
-      "Ключи ORACLE спрятал в загадках, разбросанных по своим архивам.",
-      "Терминал перед тобой считает адреса по-настоящему и стучится в живую сеть Bitcoin.",
-      "",
-      "Введи HELP, чтобы увидеть список команд. Введи CASES, чтобы открыть дела."
+  prologue: {
+    ru: [
+      'БУЭНОС-АЙРЕС, 2077. СУДЕСТАДА НЕ УХОДИТ ВОСЕМНАДЦАТЫЙ ДЕНЬ.',
+      '',
+      'Ветер с юго-востока гонит воду Ла-Платы обратно в город. Микросентро стоит по щиколотку,',
+      'в подвалах La City вторую неделю работают насосы, а на Флориде арболитос продают доллар',
+      'по трём разным курсам сразу — и ни один из них не настоящий.',
+      '',
+      'Архивариус по прозвищу ORACLE пропал вместе с восемью холодными кошельками.',
+      'Он не доверял облакам, серверам и людям. Он доверял только словам.',
+      'Двенадцать слов на кошелёк — и ни строчки на бумаге.',
+      '',
+      'Заказчик ESCRIBANÍA CERO платит за каждый восстановленный сид.',
+      'Ключи ORACLE спрятал в загадках, разбросанных по своим архивам.',
+      'Терминал перед тобой считает адреса по-настоящему и стучится в живую сеть Bitcoin.',
+      '',
+      'Введи HELP, чтобы увидеть список команд. Введи CASES, чтобы открыть дела.',
     ],
-    "en": [
-      "BUENOS AIRES, 2077. THE SUDESTADA HAS NOT LET GO IN EIGHTEEN DAYS.",
-      "",
-      "The southeasterly is pushing the Río de la Plata back into the city. The Microcentro is",
-      "ankle-deep, the cellars under La City have been pumping for a fortnight, and on Calle",
-      "Florida the arbolitos are quoting three different dollar rates at once — none of them real.",
-      "",
-      "An archivist known as ORACLE vanished along with eight cold wallets.",
-      "He trusted no cloud, no server, no person. He trusted only words.",
-      "Twelve words per wallet — and not a single line on paper.",
-      "",
-      "The client, ESCRIBANÍA CERO, pays for every recovered seed.",
-      "ORACLE hid the keys inside riddles scattered through his archives.",
-      "This terminal derives addresses for real and knocks on the live Bitcoin network.",
-      "",
-      "Type HELP for the command list. Type CASES to open the files."
+    en: [
+      'BUENOS AIRES, 2077. THE SUDESTADA HAS NOT LET GO IN EIGHTEEN DAYS.',
+      '',
+      'The southeasterly is pushing the Río de la Plata back into the city. The Microcentro is',
+      'ankle-deep, the cellars under La City have been pumping for a fortnight, and on Calle',
+      'Florida the arbolitos are quoting three different dollar rates at once — none of them real.',
+      '',
+      'An archivist known as ORACLE vanished along with eight cold wallets.',
+      'He trusted no cloud, no server, no person. He trusted only words.',
+      'Twelve words per wallet — and not a single line on paper.',
+      '',
+      'The client, ESCRIBANÍA CERO, pays for every recovered seed.',
+      'ORACLE hid the keys inside riddles scattered through his archives.',
+      'This terminal derives addresses for real and knocks on the live Bitcoin network.',
+      '',
+      'Type HELP for the command list. Type CASES to open the files.',
     ],
-    "es": [
-      "BUENOS AIRES, 2077. LA SUDESTADA NO HA DADO TREGUA EN DIECIOCHO DÍAS.",
-      "",
-      "El viento del sudeste empuja al Río de la Plata de vuelta hacia la ciudad. El Microcentro",
-      "está anegado hasta los tobillos, los sótanos bajo La City llevan dos semanas achicando",
-      "agua y, en la calle Florida, los arbolitos cotizan tres tipos de dólar a la vez; ninguno real.",
-      "",
-      "Un archivista conocido como ORACLE desapareció junto con ocho billeteras frías.",
-      "No confiaba en la nube, ni en servidores, ni en nadie. Solo confiaba en las palabras.",
-      "Doce palabras por billetera, y ni una sola línea en papel.",
-      "",
-      "El cliente, ESCRIBANÍA CERO, paga por cada semilla recuperada.",
-      "ORACLE escondió las claves en acertijos dispersos por sus archivos.",
-      "Esta terminal deriva direcciones reales y toca a la puerta de la red Bitcoin en vivo.",
-      "",
-      "Escribe HELP para ver la lista de comandos. Escribe CASES para abrir los archivos."
+    es: [
+      'BUENOS AIRES, 2077. LA SUDESTADA NO HA DADO TREGUA EN DIECIOCHO DÍAS.',
+      '',
+      'El viento del sudeste empuja al Río de la Plata de vuelta hacia la ciudad. El Microcentro',
+      'está anegado hasta los tobillos, los sótanos bajo La City llevan dos semanas achicando',
+      'agua y, en la calle Florida, los arbolitos cotizan tres tipos de dólar a la vez; ninguno real.',
+      '',
+      'Un archivista conocido como ORACLE desapareció junto con ocho billeteras frías.',
+      'No confiaba en la nube, ni en servidores, ni en nadie. Solo confiaba en las palabras.',
+      'Doce palabras por billetera, y ni una sola línea en papel.',
+      '',
+      'El cliente, ESCRIBANÍA CERO, paga por cada semilla recuperada.',
+      'ORACLE escondió las claves en acertijos dispersos por sus archivos.',
+      'Esta terminal deriva direcciones reales y toca a la puerta de la red Bitcoin en vivo.',
+      '',
+      'Escribe HELP para ver la lista de comandos. Escribe CASES para abrir los archivos.',
     ],
-    "pt": [
-      "BUENOS AIRES, 2077. A SUDESTADA NÃO DÁ TRÉGUA HÁ DEZOITO DIAS.",
-      "",
-      "O vento sudeste empurra o Rio da Prata de volta para a cidade. O Microcentro está",
-      "com água pelos tornozelos, os porões sob La City bombeiam sem parar há duas semanas, e na Calle",
-      "Florida os arbolitos cotam três taxas de dólar ao mesmo tempo — nenhuma delas real.",
-      "",
-      "Um arquivista conhecido como ORACLE desapareceu junto com oito cold wallets.",
-      "Ele não confiava em nuvem, servidor ou pessoa alguma. Ele confiava apenas em palavras.",
-      "Doze palavras por carteira — e nem uma única linha no papel.",
-      "",
-      "O cliente, ESCRIBANÍA CERO, paga por cada seed recuperada.",
-      "ORACLE escondeu as chaves em enigmas espalhados por seus arquivos.",
-      "Este terminal deriva endereços reais e bate à porta da rede Bitcoin ativa.",
-      "",
-      "Digite HELP para a lista de comandos. Digite CASES para abrir os arquivos."
-    ]
+    pt: [
+      'BUENOS AIRES, 2077. A SUDESTADA NÃO DÁ TRÉGUA HÁ DEZOITO DIAS.',
+      '',
+      'O vento sudeste empurra o Rio da Prata de volta para a cidade. O Microcentro está',
+      'com água pelos tornozelos, os porões sob La City bombeiam sem parar há duas semanas, e na Calle',
+      'Florida os arbolitos cotam três taxas de dólar ao mesmo tempo — nenhuma delas real.',
+      '',
+      'Um arquivista conhecido como ORACLE desapareceu junto com oito cold wallets.',
+      'Ele não confiava em nuvem, servidor ou pessoa alguma. Ele confiava apenas em palavras.',
+      'Doze palavras por carteira — e nem uma única linha no papel.',
+      '',
+      'O cliente, ESCRIBANÍA CERO, paga por cada seed recuperada.',
+      'ORACLE escondeu as chaves em enigmas espalhados por seus arquivos.',
+      'Este terminal deriva endereços reais e bate à porta da rede Bitcoin ativa.',
+      '',
+      'Digite HELP para a lista de comandos. Digite CASES para abrir os arquivos.',
+    ],
   },
-  "cases": [
+  cases: [
     {
-      "id": 1,
-      "codename": {
-        "ru": "НУЛЕВОЕ ХРАНИЛИЩЕ",
-        "en": "ZERO VAULT",
-        "es": "BÓVEDA CERO",
-        "pt": "COFRE ZERO"
+      id: 1,
+      codename: {
+        ru: 'НУЛЕВОЕ ХРАНИЛИЩЕ',
+        en: 'ZERO VAULT',
+        es: 'BÓVEDA CERO',
+        pt: 'COFRE ZERO',
       },
-      "difficulty": 1,
-      "fingerprint": "c557eec878dfd852ba3f88087c4f350f09c55537ab5e549c3cd14320ec3cef38",
-      "kind": "words",
-      "brief": {
-        "ru": [
-          "Первый кошелёк ORACLE называл «нулевым хранилищем».",
-          "В его блокноте — только одна строка и ни одного слова целиком."
+      difficulty: 1,
+      fingerprint:
+        'c557eec878dfd852ba3f88087c4f350f09c55537ab5e549c3cd14320ec3cef38',
+      kind: 'words',
+      brief: {
+        ru: [
+          'Первый кошелёк ORACLE называл «нулевым хранилищем».',
+          'В его блокноте — только одна строка и ни одного слова целиком.',
         ],
-        "en": [
+        en: [
           "ORACLE called the first wallet his 'zero vault'.",
-          "His notebook holds one line and not a single complete word."
+          'His notebook holds one line and not a single complete word.',
         ],
-        "es": [
+        es: [
           "ORACLE llamó a la primera billetera su 'bóveda cero'.",
-          "Su libreta contiene una línea y ni una sola palabra completa."
+          'Su libreta contiene una línea y ni una sola palabra completa.',
         ],
-        "pt": [
+        pt: [
           "ORACLE chamou a primeira carteira de seu 'cofre zero'.",
-          "Seu caderno contém uma linha e nem uma única palavra completa."
-        ]
+          'Seu caderno contém uma linha e nem uma única palavra completa.',
+        ],
       },
-      "evidence": {
-        "ru": [
-          "ФРАГМЕНТ #1 (обрывок ленты принтера):",
-          "   \"энтропия — это шум. я начал с тишины.\"",
-          "ФРАГМЕНТ #2 (маркер на стекле серверной):",
-          "   \"одиннадцать раз отрекись от всего.\"",
-          "ФРАГМЕНТ #3 (голосовое сообщение, 3 секунды):",
-          "   \"...а двенадцатое слово — просто предлог. О том, что осталось.\""
+      evidence: {
+        ru: [
+          'ФРАГМЕНТ #1 (обрывок ленты принтера):',
+          '   "энтропия — это шум. я начал с тишины."',
+          'ФРАГМЕНТ #2 (маркер на стекле серверной):',
+          '   "одиннадцать раз отрекись от всего."',
+          'ФРАГМЕНТ #3 (голосовое сообщение, 3 секунды):',
+          '   "...а двенадцатое слово — просто предлог. О том, что осталось."',
         ],
-        "en": [
-          "FRAGMENT #1 (torn printer tape):",
-          "   \"entropy is noise. i started from silence.\"",
-          "FRAGMENT #2 (marker on the server-room glass):",
-          "   \"eleven times, renounce everything.\"",
-          "FRAGMENT #3 (voice message, 3 seconds):",
-          "   \"...and the twelfth word is just a preposition. About what is left.\""
+        en: [
+          'FRAGMENT #1 (torn printer tape):',
+          '   "entropy is noise. i started from silence."',
+          'FRAGMENT #2 (marker on the server-room glass):',
+          '   "eleven times, renounce everything."',
+          'FRAGMENT #3 (voice message, 3 seconds):',
+          '   "...and the twelfth word is just a preposition. About what is left."',
         ],
-        "es": [
-          "FRAGMENTO #1 (cinta de impresora rasgada):",
-          "   \"la entropía es ruido. empecé desde el silencio.\"",
-          "FRAGMENTO #2 (marcador en el cristal de la sala de servidores):",
-          "   \"once veces, renuncia a todo.\"",
-          "FRAGMENTO #3 (mensaje de voz, 3 segundos):",
-          "   \"...y la duodécima palabra es solo una preposición. Sobre lo que queda.\""
+        es: [
+          'FRAGMENTO #1 (cinta de impresora rasgada):',
+          '   "la entropía es ruido. empecé desde el silencio."',
+          'FRAGMENTO #2 (marcador en el cristal de la sala de servidores):',
+          '   "once veces, renuncia a todo."',
+          'FRAGMENTO #3 (mensaje de voz, 3 segundos):',
+          '   "...y la duodécima palabra es solo una preposición. Sobre lo que queda."',
         ],
-        "pt": [
-          "FRAGMENTO #1 (fita de impressora rasgada):",
-          "   \"entropia é ruído. comecei do silêncio.\"",
-          "FRAGMENTO #2 (marcador no vidro da sala de servidores):",
-          "   \"onze vezes, renuncie a tudo.\"",
-          "FRAGMENTO #3 (mensagem de voz, 3 segundos):",
-          "   \"...e a décima segunda palavra é apenas uma preposição. Sobre o que restou.\""
-        ]
+        pt: [
+          'FRAGMENTO #1 (fita de impressora rasgada):',
+          '   "entropia é ruído. comecei do silêncio."',
+          'FRAGMENTO #2 (marcador no vidro da sala de servidores):',
+          '   "onze vezes, renuncie a tudo."',
+          'FRAGMENTO #3 (mensagem de voz, 3 segundos):',
+          '   "...e a décima segunda palavra é apenas uma preposição. Sobre o que restou."',
+        ],
       },
-      "clues": {
-        "ru": [
-          "1-11. Слово №1 словаря BIP-39. Проверь: WORD 1",
-          "12.   Предлог из пяти букв. Тот, что стоит в словаре рядом.",
-          "",
-          "Подсказка механики: контрольная сумма сама отсеет неверный вариант."
+      clues: {
+        ru: [
+          '1-11. Слово №1 словаря BIP-39. Проверь: WORD 1',
+          '12.   Предлог из пяти букв. Тот, что стоит в словаре рядом.',
+          '',
+          'Подсказка механики: контрольная сумма сама отсеет неверный вариант.',
         ],
-        "en": [
-          "1-11. Word #1 of the BIP-39 wordlist. Verify with: WORD 1",
-          "12.   A five-letter preposition standing next to it in the list.",
-          "",
-          "Mechanic hint: the checksum will reject any wrong candidate."
+        en: [
+          '1-11. Word #1 of the BIP-39 wordlist. Verify with: WORD 1',
+          '12.   A five-letter preposition standing next to it in the list.',
+          '',
+          'Mechanic hint: the checksum will reject any wrong candidate.',
         ],
-        "es": [
-          "1-11. Palabra #1 de la lista BIP-39. Verifica con: WORD 1",
-          "12.   Una preposición de cinco letras situada junto a ella en la lista.",
-          "",
-          "Pista de mecánica: la suma de comprobación rechazará cualquier candidato incorrecto."
+        es: [
+          '1-11. Palabra #1 de la lista BIP-39. Verifica con: WORD 1',
+          '12.   Una preposición de cinco letras situada junto a ella en la lista.',
+          '',
+          'Pista de mecánica: la suma de comprobación rechazará cualquier candidato incorrecto.',
         ],
-        "pt": [
-          "1-11. Palavra #1 da lista BIP-39. Verifique com: WORD 1",
-          "12.   Uma preposição de cinco letras ao lado dela na lista.",
-          "",
-          "Dica de mecânica: o checksum rejeitará qualquer candidato incorreto."
-        ]
+        pt: [
+          '1-11. Palavra #1 da lista BIP-39. Verifique com: WORD 1',
+          '12.   Uma preposição de cinco letras ao lado dela na lista.',
+          '',
+          'Dica de mecânica: o checksum rejeitará qualquer candidato incorreto.',
+        ],
       },
-      "hints": {
-        "ru": [
-          "Энтропия этого кошелька — 128 нулевых битов. Попробуй ENTROPY 00000000000000000000000000000000",
-          "Первое слово словаря — abandon. Оно повторяется одиннадцать раз.",
-          "Двенадцатое слово: about."
+      hints: {
+        ru: [
+          'Энтропия этого кошелька — 128 нулевых битов. Попробуй ENTROPY 00000000000000000000000000000000',
+          'Первое слово словаря — abandon. Оно повторяется одиннадцать раз.',
+          'Двенадцатое слово: about.',
         ],
-        "en": [
+        en: [
           "This wallet's entropy is 128 zero bits. Try ENTROPY 00000000000000000000000000000000",
-          "The first word of the list is abandon. It repeats eleven times.",
-          "The twelfth word is: about."
+          'The first word of the list is abandon. It repeats eleven times.',
+          'The twelfth word is: about.',
         ],
-        "es": [
-          "La entropía de esta billetera es de 128 bits cero. Prueba ENTROPY 00000000000000000000000000000000",
-          "La primera palabra de la lista es abandon. Se repite once veces.",
-          "La duodécima palabra es: about."
+        es: [
+          'La entropía de esta billetera es de 128 bits cero. Prueba ENTROPY 00000000000000000000000000000000',
+          'La primera palabra de la lista es abandon. Se repite once veces.',
+          'La duodécima palabra es: about.',
         ],
-        "pt": [
-          "A entropia desta carteira é de 128 bits zero. Tente ENTROPY 00000000000000000000000000000000",
-          "A primeira palavra da lista é abandon. Ela se repete onze vezes.",
-          "A décima segunda palavra é: about."
-        ]
+        pt: [
+          'A entropia desta carteira é de 128 bits zero. Tente ENTROPY 00000000000000000000000000000000',
+          'A primeira palavra da lista é abandon. Ela se repete onze vezes.',
+          'A décima segunda palavra é: about.',
+        ],
       },
-      "epilogue": {
-        "ru": [
-          "Хранилище открыто. Адрес живёт в основной сети Bitcoin с ноября 2014 года,",
-          "и по нему прошли десятки настоящих транзакций — запусти SYNC_LEDGER и посмотри сам.",
-          "Баланс нулевой. ORACLE вынес отсюда всё задолго до того, как ты сел за этот терминал."
+      epilogue: {
+        ru: [
+          'Хранилище открыто. Адрес живёт в основной сети Bitcoin с ноября 2014 года,',
+          'и по нему прошли десятки настоящих транзакций — запусти SYNC_LEDGER и посмотри сам.',
+          'Баланс нулевой. ORACLE вынес отсюда всё задолго до того, как ты сел за этот терминал.',
         ],
-        "en": [
-          "The vault is open. The address has lived on Bitcoin mainnet since November 2014",
-          "and carries dozens of genuine transactions — run SYNC_LEDGER and see for yourself.",
-          "The balance is zero. ORACLE emptied it long before you sat down at this terminal."
+        en: [
+          'The vault is open. The address has lived on Bitcoin mainnet since November 2014',
+          'and carries dozens of genuine transactions — run SYNC_LEDGER and see for yourself.',
+          'The balance is zero. ORACLE emptied it long before you sat down at this terminal.',
         ],
-        "es": [
-          "La bóveda está abierta. La dirección ha vivido en la red principal de Bitcoin desde noviembre de 2014",
-          "y contiene docenas de transacciones genuinas; ejecuta SYNC_LEDGER y compruébalo tú mismo.",
-          "El saldo es cero. ORACLE la vació mucho antes de que te sentaras frente a esta terminal."
+        es: [
+          'La bóveda está abierta. La dirección ha vivido en la red principal de Bitcoin desde noviembre de 2014',
+          'y contiene docenas de transacciones genuinas; ejecuta SYNC_LEDGER y compruébalo tú mismo.',
+          'El saldo es cero. ORACLE la vació mucho antes de que te sentaras frente a esta terminal.',
         ],
-        "pt": [
-          "O cofre está aberto. O endereço vive na mainnet do Bitcoin desde novembro de 2014",
-          "e carrega dezenas de transações genuínas — execute SYNC_LEDGER e veja por si mesmo.",
-          "O saldo é zero. O ORACLE o esvaziou muito antes de você se sentar neste terminal."
-        ]
-      }
+        pt: [
+          'O cofre está aberto. O endereço vive na mainnet do Bitcoin desde novembro de 2014',
+          'e carrega dezenas de transações genuínas — execute SYNC_LEDGER e veja por si mesmo.',
+          'O saldo é zero. O ORACLE o esvaziou muito antes de você se sentar neste terminal.',
+        ],
+      },
     },
     {
-      "id": 2,
-      "codename": {
-        "ru": "СЕМЬ-ЭФ",
-        "en": "SEVEN-EFF",
-        "es": "SIETE-EFF",
-        "pt": "SETE-EFF"
+      id: 2,
+      codename: {
+        ru: 'СЕМЬ-ЭФ',
+        en: 'SEVEN-EFF',
+        es: 'SIETE-EFF',
+        pt: 'SETE-EFF',
       },
-      "difficulty": 2,
-      "fingerprint": "ecb0e7ba498c5920991f0b3483e91f7abafa9ecc6bd82a9a51494589592b1a8f",
-      "kind": "entropy",
-      "brief": {
-        "ru": [
-          "Второй кошелёк ORACLE держал на старом ноутбуке с наклейкой «7F».",
-          "Сид он не записывал — записывал энтропию. Шестнадцать байт, все одинаковые."
+      difficulty: 2,
+      fingerprint:
+        'ecb0e7ba498c5920991f0b3483e91f7abafa9ecc6bd82a9a51494589592b1a8f',
+      kind: 'entropy',
+      brief: {
+        ru: [
+          'Второй кошелёк ORACLE держал на старом ноутбуке с наклейкой «7F».',
+          'Сид он не записывал — записывал энтропию. Шестнадцать байт, все одинаковые.',
         ],
-        "en": [
+        en: [
           "ORACLE kept the second wallet on an old laptop with a '7F' sticker.",
-          "He never wrote the seed — he wrote the entropy. Sixteen bytes, all identical."
+          'He never wrote the seed — he wrote the entropy. Sixteen bytes, all identical.',
         ],
-        "es": [
+        es: [
           "ORACLE guardaba la segunda billetera en un portátil viejo con una pegatina de '7F'.",
-          "Nunca escribió la semilla; escribió la entropía. Dieciséis bytes, todos idénticos."
+          'Nunca escribió la semilla; escribió la entropía. Dieciséis bytes, todos idénticos.',
         ],
-        "pt": [
+        pt: [
           "A ORACLE mantinha a segunda carteira num laptop velho com um adesivo '7F'.",
-          "Ele nunca anotou a seed — ele anotou a entropia. Dezesseis bytes, todos idênticos."
-        ]
+          'Ele nunca anotou a seed — ele anotou a entropia. Dezesseis bytes, todos idênticos.',
+        ],
       },
-      "evidence": {
-        "ru": [
-          "ФРАГМЕНТ #1 (наклейка на крышке ноутбука):",
-          "   \"7F — и так шестнадцать раз подряд.\"",
-          "ФРАГМЕНТ #2 (комментарий в исходнике):",
-          "   // максимум, который влезает в знаковый байт",
-          "ФРАГМЕНТ #3:",
-          "   \"старший бит я оставил выключенным. я не люблю отрицательные числа.\""
+      evidence: {
+        ru: [
+          'ФРАГМЕНТ #1 (наклейка на крышке ноутбука):',
+          '   "7F — и так шестнадцать раз подряд."',
+          'ФРАГМЕНТ #2 (комментарий в исходнике):',
+          '   // максимум, который влезает в знаковый байт',
+          'ФРАГМЕНТ #3:',
+          '   "старший бит я оставил выключенным. я не люблю отрицательные числа."',
         ],
-        "en": [
-          "FRAGMENT #1 (sticker on the laptop lid):",
-          "   \"7F — sixteen times in a row.\"",
-          "FRAGMENT #2 (source comment):",
-          "   // the maximum that fits in a signed byte",
-          "FRAGMENT #3:",
-          "   \"i left the high bit off. i dislike negative numbers.\""
+        en: [
+          'FRAGMENT #1 (sticker on the laptop lid):',
+          '   "7F — sixteen times in a row."',
+          'FRAGMENT #2 (source comment):',
+          '   // the maximum that fits in a signed byte',
+          'FRAGMENT #3:',
+          '   "i left the high bit off. i dislike negative numbers."',
         ],
-        "es": [
-          "FRAGMENTO #1 (pegatina en la tapa del portátil):",
-          "   \"7F — dieciséis veces seguidas.\"",
-          "FRAGMENTO #2 (comentario de la fuente):",
-          "   // el máximo que cabe en un byte con signo",
-          "FRAGMENTO #3:",
-          "   \"dejé el bit de mayor peso desactivado. odio los números negativos.\""
+        es: [
+          'FRAGMENTO #1 (pegatina en la tapa del portátil):',
+          '   "7F — dieciséis veces seguidas."',
+          'FRAGMENTO #2 (comentario de la fuente):',
+          '   // el máximo que cabe en un byte con signo',
+          'FRAGMENTO #3:',
+          '   "dejé el bit de mayor peso desactivado. odio los números negativos."',
         ],
-        "pt": [
-          "FRAGMENTO #1 (adesivo na tampa do laptop):",
-          "   \"7F — dezesseis vezes seguidas.\"",
-          "FRAGMENTO #2 (comentário na fonte):",
-          "   // o máximo que cabe em um byte com sinal",
-          "FRAGMENTO #3:",
-          "   \"deixei o bit de sinal desligado. não gosto de números negativos.\""
-        ]
+        pt: [
+          'FRAGMENTO #1 (adesivo na tampa do laptop):',
+          '   "7F — dezesseis vezes seguidas."',
+          'FRAGMENTO #2 (comentário na fonte):',
+          '   // o máximo que cabe em um byte com sinal',
+          'FRAGMENTO #3:',
+          '   "deixei o bit de sinal desligado. não gosto de números negativos."',
+        ],
       },
-      "clues": {
-        "ru": [
-          "Энтропия: один байт, повторённый шестнадцать раз.",
-          "Байт — максимальное положительное значение знакового байта (127).",
-          "",
-          "Собери 32 hex-символа и скорми их команде: ENTROPY <hex>"
+      clues: {
+        ru: [
+          'Энтропия: один байт, повторённый шестнадцать раз.',
+          'Байт — максимальное положительное значение знакового байта (127).',
+          '',
+          'Собери 32 hex-символа и скорми их команде: ENTROPY <hex>',
         ],
-        "en": [
-          "Entropy: one byte repeated sixteen times.",
-          "The byte is the largest positive value of a signed byte (127).",
-          "",
-          "Assemble 32 hex characters and feed them to: ENTROPY <hex>"
+        en: [
+          'Entropy: one byte repeated sixteen times.',
+          'The byte is the largest positive value of a signed byte (127).',
+          '',
+          'Assemble 32 hex characters and feed them to: ENTROPY <hex>',
         ],
-        "es": [
-          "Entropía: un byte repetido dieciséis veces.",
-          "El byte es el valor positivo más grande de un byte con signo (127).",
-          "",
-          "Ensambla 32 caracteres hexadecimales e introdúcelos en: ENTROPY <hex>"
+        es: [
+          'Entropía: un byte repetido dieciséis veces.',
+          'El byte es el valor positivo más grande de un byte con signo (127).',
+          '',
+          'Ensambla 32 caracteres hexadecimales e introdúcelos en: ENTROPY <hex>',
         ],
-        "pt": [
-          "Entropia: um byte repetido dezesseis vezes.",
-          "O byte é o maior valor positivo de um byte com sinal (127).",
-          "",
-          "Monte 32 caracteres hexadecimais e envie-os para: ENTROPY <hex>"
-        ]
+        pt: [
+          'Entropia: um byte repetido dezesseis vezes.',
+          'O byte é o maior valor positivo de um byte com sinal (127).',
+          '',
+          'Monte 32 caracteres hexadecimais e envie-os para: ENTROPY <hex>',
+        ],
       },
-      "hints": {
-        "ru": [
-          "127 в шестнадцатеричной системе — это 0x7f.",
-          "Шестнадцать байт 0x7f подряд дают 32 символа.",
-          "ENTROPY 7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f"
+      hints: {
+        ru: [
+          '127 в шестнадцатеричной системе — это 0x7f.',
+          'Шестнадцать байт 0x7f подряд дают 32 символа.',
+          'ENTROPY 7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f',
         ],
-        "en": [
-          "127 in hexadecimal is 0x7f.",
-          "Sixteen 0x7f bytes in a row give you 32 characters.",
-          "ENTROPY 7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f"
+        en: [
+          '127 in hexadecimal is 0x7f.',
+          'Sixteen 0x7f bytes in a row give you 32 characters.',
+          'ENTROPY 7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f',
         ],
-        "es": [
-          "127 en hexadecimal es 0x7f.",
-          "Dieciséis bytes 0x7f seguidos te dan 32 caracteres.",
-          "ENTROPY 7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f"
+        es: [
+          '127 en hexadecimal es 0x7f.',
+          'Dieciséis bytes 0x7f seguidos te dan 32 caracteres.',
+          'ENTROPY 7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f',
         ],
-        "pt": [
-          "127 em hexadecimal é 0x7f.",
-          "Dezesseis bytes 0x7f em sequência te dão 32 caracteres.",
-          "ENTROPY 7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f"
-        ]
+        pt: [
+          '127 em hexadecimal é 0x7f.',
+          'Dezesseis bytes 0x7f em sequência te dão 32 caracteres.',
+          'ENTROPY 7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f',
+        ],
       },
-      "epilogue": {
-        "ru": [
-          "Ноутбук отдал ключ. Обрати внимание: слова повторяются парами —",
-          "«legal winner thank» звучит дважды. Это не совпадение, это структура энтропии.",
-          "Одинаковые байты дают одинаковые 11-битные группы."
+      epilogue: {
+        ru: [
+          'Ноутбук отдал ключ. Обрати внимание: слова повторяются парами —',
+          '«legal winner thank» звучит дважды. Это не совпадение, это структура энтропии.',
+          'Одинаковые байты дают одинаковые 11-битные группы.',
         ],
-        "en": [
-          "The laptop gave up its key. Note how the words repeat in pairs —",
+        en: [
+          'The laptop gave up its key. Note how the words repeat in pairs —',
           "'legal winner thank' appears twice. That is not a coincidence, it is the entropy structure.",
-          "Identical bytes produce identical 11-bit groups."
+          'Identical bytes produce identical 11-bit groups.',
         ],
-        "es": [
-          "El portátil reveló su clave. Observa cómo las palabras se repiten en pares —",
+        es: [
+          'El portátil reveló su clave. Observa cómo las palabras se repiten en pares —',
           "'legal winner thank' aparece dos veces. No es una coincidencia, es la estructura de entropía.",
-          "Bytes idénticos producen grupos de 11 bits idénticos."
+          'Bytes idénticos producen grupos de 11 bits idénticos.',
         ],
-        "pt": [
-          "O laptop entregou sua chave. Note como as palavras se repetem em pares —",
+        pt: [
+          'O laptop entregou sua chave. Note como as palavras se repetem em pares —',
           "'legal winner thank' aparece duas vezes. Isso não é coincidência, é a estrutura de entropia.",
-          "Bytes idênticos produzem grupos de 11 bits idênticos."
-        ]
-      }
+          'Bytes idênticos produzem grupos de 11 bits idênticos.',
+        ],
+      },
     },
     {
-      "id": 3,
-      "codename": {
-        "ru": "СТАРШИЙ БИТ",
-        "en": "HIGH BIT",
-        "es": "BIT ALTO",
-        "pt": "BIT ALTO"
+      id: 3,
+      codename: {
+        ru: 'СТАРШИЙ БИТ',
+        en: 'HIGH BIT',
+        es: 'BIT ALTO',
+        pt: 'BIT ALTO',
       },
-      "difficulty": 2,
-      "fingerprint": "3a64bcd9cea43c0aba67ba0bf2ddff8137a492bccbc672107fcbf7381086f698",
-      "kind": "entropy",
-      "brief": {
-        "ru": [
-          "Третий кошелёк — зеркало второго. ORACLE перевернул своё правило.",
-          "«Если в прошлый раз я гасил старший бит, — писал он, — теперь я поднимаю только его.»"
+      difficulty: 2,
+      fingerprint:
+        '3a64bcd9cea43c0aba67ba0bf2ddff8137a492bccbc672107fcbf7381086f698',
+      kind: 'entropy',
+      brief: {
+        ru: [
+          'Третий кошелёк — зеркало второго. ORACLE перевернул своё правило.',
+          '«Если в прошлый раз я гасил старший бит, — писал он, — теперь я поднимаю только его.»',
         ],
-        "en": [
-          "The third wallet mirrors the second. ORACLE inverted his own rule.",
-          "'Last time I kept the high bit down,' he wrote, 'now I raise only that one.'"
+        en: [
+          'The third wallet mirrors the second. ORACLE inverted his own rule.',
+          "'Last time I kept the high bit down,' he wrote, 'now I raise only that one.'",
         ],
-        "es": [
-          "La tercera cartera refleja la segunda. ORACLE invirtió su propia regla.",
-          "'La última vez mantuve el bit alto abajo', escribió, 'ahora solo levanto ese'."
+        es: [
+          'La tercera cartera refleja la segunda. ORACLE invirtió su propia regla.',
+          "'La última vez mantuve el bit alto abajo', escribió, 'ahora solo levanto ese'.",
         ],
-        "pt": [
-          "A terceira carteira espelha a segunda. O ORACLE inverteu sua própria regra.",
-          "'Da última vez mantive o bit alto baixo', ele escreveu, 'agora levanto apenas esse'."
-        ]
+        pt: [
+          'A terceira carteira espelha a segunda. O ORACLE inverteu sua própria regra.',
+          "'Da última vez mantive o bit alto baixo', ele escreveu, 'agora levanto apenas esse'.",
+        ],
       },
-      "evidence": {
-        "ru": [
-          "ФРАГМЕНТ #1 (записка, приклеенная к монитору):",
-          "   \"один бит наверху, семь внизу молчат.\"",
-          "ФРАГМЕНТ #2 (дамп памяти, повторяющийся паттерн):",
-          "   80 80 80 80 80 80 80 80 ...",
-          "ФРАГМЕНТ #3:",
-          "   \"128. ровно половина от 256. ровно начало второй половины.\""
+      evidence: {
+        ru: [
+          'ФРАГМЕНТ #1 (записка, приклеенная к монитору):',
+          '   "один бит наверху, семь внизу молчат."',
+          'ФРАГМЕНТ #2 (дамп памяти, повторяющийся паттерн):',
+          '   80 80 80 80 80 80 80 80 ...',
+          'ФРАГМЕНТ #3:',
+          '   "128. ровно половина от 256. ровно начало второй половины."',
         ],
-        "en": [
-          "FRAGMENT #1 (note taped to the monitor):",
-          "   \"one bit up top, seven silent below.\"",
-          "FRAGMENT #2 (memory dump, repeating pattern):",
-          "   80 80 80 80 80 80 80 80 ...",
-          "FRAGMENT #3:",
-          "   \"128. exactly half of 256. exactly the start of the second half.\""
+        en: [
+          'FRAGMENT #1 (note taped to the monitor):',
+          '   "one bit up top, seven silent below."',
+          'FRAGMENT #2 (memory dump, repeating pattern):',
+          '   80 80 80 80 80 80 80 80 ...',
+          'FRAGMENT #3:',
+          '   "128. exactly half of 256. exactly the start of the second half."',
         ],
-        "es": [
-          "FRAGMENTO #1 (nota pegada al monitor):",
-          "   \"un bit arriba, siete silenciosos abajo.\"",
-          "FRAGMENTO #2 (volcado de memoria, patrón repetitivo):",
-          "   80 80 80 80 80 80 80 80 ...",
-          "FRAGMENTO #3:",
-          "   \"128. exactamente la mitad de 256. exactamente el inicio de la segunda mitad.\""
+        es: [
+          'FRAGMENTO #1 (nota pegada al monitor):',
+          '   "un bit arriba, siete silenciosos abajo."',
+          'FRAGMENTO #2 (volcado de memoria, patrón repetitivo):',
+          '   80 80 80 80 80 80 80 80 ...',
+          'FRAGMENTO #3:',
+          '   "128. exactamente la mitad de 256. exactamente el inicio de la segunda mitad."',
         ],
-        "pt": [
-          "FRAGMENTO #1 (nota colada no monitor):",
-          "   \"um bit no topo, sete silenciosos abaixo.\"",
-          "FRAGMENTO #2 (dump de memória, padrão repetitivo):",
-          "   80 80 80 80 80 80 80 80 ...",
-          "FRAGMENTO #3:",
-          "   \"128. exatamente a metade de 256. exatamente o início da segunda metade.\""
-        ]
+        pt: [
+          'FRAGMENTO #1 (nota colada no monitor):',
+          '   "um bit no topo, sete silenciosos abaixo."',
+          'FRAGMENTO #2 (dump de memória, padrão repetitivo):',
+          '   80 80 80 80 80 80 80 80 ...',
+          'FRAGMENTO #3:',
+          '   "128. exatamente a metade de 256. exatamente o início da segunda metade."',
+        ],
       },
-      "clues": {
-        "ru": [
-          "Байт: 1000 0000 в двоичном виде.",
-          "Повтори его шестнадцать раз и передай в ENTROPY.",
-          "",
-          "Первое слово результата начинается на 'let'."
+      clues: {
+        ru: [
+          'Байт: 1000 0000 в двоичном виде.',
+          'Повтори его шестнадцать раз и передай в ENTROPY.',
+          '',
+          "Первое слово результата начинается на 'let'.",
         ],
-        "en": [
-          "The byte: 1000 0000 in binary.",
-          "Repeat it sixteen times and pass it to ENTROPY.",
-          "",
-          "The first word of the result starts with 'let'."
+        en: [
+          'The byte: 1000 0000 in binary.',
+          'Repeat it sixteen times and pass it to ENTROPY.',
+          '',
+          "The first word of the result starts with 'let'.",
         ],
-        "es": [
-          "El byte: 1000 0000 en binario.",
-          "Repítelo dieciséis veces y pásalo a ENTROPY.",
-          "",
-          "La primera palabra del resultado comienza con 'let'."
+        es: [
+          'El byte: 1000 0000 en binario.',
+          'Repítelo dieciséis veces y pásalo a ENTROPY.',
+          '',
+          "La primera palabra del resultado comienza con 'let'.",
         ],
-        "pt": [
-          "O byte: 1000 0000 em binário.",
-          "Repita dezesseis vezes e passe para ENTROPY.",
-          "",
-          "A primeira palavra do resultado começa com 'let'."
-        ]
+        pt: [
+          'O byte: 1000 0000 em binário.',
+          'Repita dezesseis vezes e passe para ENTROPY.',
+          '',
+          "A primeira palavra do resultado começa com 'let'.",
+        ],
       },
-      "hints": {
-        "ru": [
-          "1000 0000 = 0x80.",
-          "Нужно шестнадцать байт: 80, повторённый 16 раз.",
-          "ENTROPY 80808080808080808080808080808080"
+      hints: {
+        ru: [
+          '1000 0000 = 0x80.',
+          'Нужно шестнадцать байт: 80, повторённый 16 раз.',
+          'ENTROPY 80808080808080808080808080808080',
         ],
-        "en": [
-          "1000 0000 = 0x80.",
-          "You need sixteen bytes: 80 repeated 16 times.",
-          "ENTROPY 80808080808080808080808080808080"
+        en: [
+          '1000 0000 = 0x80.',
+          'You need sixteen bytes: 80 repeated 16 times.',
+          'ENTROPY 80808080808080808080808080808080',
         ],
-        "es": [
-          "1000 0000 = 0x80.",
-          "Necesitas dieciséis bytes: 80 repetido 16 veces.",
-          "ENTROPY 80808080808080808080808080808080"
+        es: [
+          '1000 0000 = 0x80.',
+          'Necesitas dieciséis bytes: 80 repetido 16 veces.',
+          'ENTROPY 80808080808080808080808080808080',
         ],
-        "pt": [
-          "1000 0000 = 0x80.",
-          "Você precisa de dezesseis bytes: 80 repetido 16 vezes.",
-          "ENTROPY 80808080808080808080808080808080"
-        ]
+        pt: [
+          '1000 0000 = 0x80.',
+          'Você precisa de dezesseis bytes: 80 repetido 16 vezes.',
+          'ENTROPY 80808080808080808080808080808080',
+        ],
       },
-      "epilogue": {
-        "ru": [
-          "Три из восьми. В логах ORACLE появляется новое имя — «КУРАТОР».",
-          "Кто-то платил ему за то, чтобы кошельки оставались нетронутыми."
+      epilogue: {
+        ru: [
+          'Три из восьми. В логах ORACLE появляется новое имя — «КУРАТОР».',
+          'Кто-то платил ему за то, чтобы кошельки оставались нетронутыми.',
         ],
-        "en": [
+        en: [
           "Three of eight. A new name shows up in ORACLE's logs — 'THE CURATOR'.",
-          "Someone was paying him to keep these wallets untouched."
+          'Someone was paying him to keep these wallets untouched.',
         ],
-        "es": [
+        es: [
           "Tres de ocho. Un nombre nuevo aparece en los registros de ORACLE: 'THE CURATOR'.",
-          "Alguien le pagaba para mantener estas carteras intactas."
+          'Alguien le pagaba para mantener estas carteras intactas.',
         ],
-        "pt": [
+        pt: [
           "Três de oito. Um novo nome aparece nos registros da ORACLE — 'THE CURATOR'.",
-          "Alguém estava pagando a ele para manter essas carteiras intocadas."
-        ]
-      }
+          'Alguém estava pagando a ele para manter essas carteiras intocadas.',
+        ],
+      },
     },
     {
-      "id": 4,
-      "codename": {
-        "ru": "ВСЕ ЕДИНИЦЫ",
-        "en": "ALL ONES",
-        "es": "TODO UNOS",
-        "pt": "TUDO EM UM"
+      id: 4,
+      codename: {
+        ru: 'ВСЕ ЕДИНИЦЫ',
+        en: 'ALL ONES',
+        es: 'TODO UNOS',
+        pt: 'TUDO EM UM',
       },
-      "difficulty": 2,
-      "fingerprint": "3c0949435a7e4277fac2fbe27975cdd9f5b5abf94d282112eaf4cebbb8560984",
-      "kind": "entropy",
-      "brief": {
-        "ru": [
-          "Четвёртый кошелёк ORACLE называл «потолком».",
-          "Энтропия, дальше которой не бывает: все 128 битов подняты."
+      difficulty: 2,
+      fingerprint:
+        '3c0949435a7e4277fac2fbe27975cdd9f5b5abf94d282112eaf4cebbb8560984',
+      kind: 'entropy',
+      brief: {
+        ru: [
+          'Четвёртый кошелёк ORACLE называл «потолком».',
+          'Энтропия, дальше которой не бывает: все 128 битов подняты.',
         ],
-        "en": [
+        en: [
           "ORACLE called the fourth wallet 'the ceiling'.",
-          "Entropy beyond which nothing exists: all 128 bits raised."
+          'Entropy beyond which nothing exists: all 128 bits raised.',
         ],
-        "es": [
+        es: [
           "ORACLE llamó a la cuarta billetera 'el techo'.",
-          "Entropía más allá de la cual nada existe: todos los 128 bits elevados."
+          'Entropía más allá de la cual nada existe: todos los 128 bits elevados.',
         ],
-        "pt": [
+        pt: [
           "O ORÁCULO chamou a quarta carteira de 'o teto'.",
-          "Entropia além da qual nada existe: todos os 128 bits elevados."
-        ]
+          'Entropia além da qual nada existe: todos os 128 bits elevados.',
+        ],
       },
-      "evidence": {
-        "ru": [
-          "ФРАГМЕНТ #1 (граффити в подземном дата-центре):",
-          "   \"МАКСИМУМ. НИ ОДНОГО НУЛЯ.\"",
-          "ФРАГМЕНТ #2 (строка из его дневника):",
-          "   \"первое слово — последнее в словаре. животное из клетки.\"",
-          "ФРАГМЕНТ #3:",
-          "   \"а вот двенадцатое слово словарь выбрал сам. я был не согласен.\""
+      evidence: {
+        ru: [
+          'ФРАГМЕНТ #1 (граффити в подземном дата-центре):',
+          '   "МАКСИМУМ. НИ ОДНОГО НУЛЯ."',
+          'ФРАГМЕНТ #2 (строка из его дневника):',
+          '   "первое слово — последнее в словаре. животное из клетки."',
+          'ФРАГМЕНТ #3:',
+          '   "а вот двенадцатое слово словарь выбрал сам. я был не согласен."',
         ],
-        "en": [
-          "FRAGMENT #1 (graffiti in an underground data center):",
-          "   \"MAXIMUM. NOT A SINGLE ZERO.\"",
-          "FRAGMENT #2 (a line from his diary):",
-          "   \"the first word is the last one in the list. the animal in a cage.\"",
-          "FRAGMENT #3:",
-          "   \"and the twelfth word the list chose by itself. i disagreed.\""
+        en: [
+          'FRAGMENT #1 (graffiti in an underground data center):',
+          '   "MAXIMUM. NOT A SINGLE ZERO."',
+          'FRAGMENT #2 (a line from his diary):',
+          '   "the first word is the last one in the list. the animal in a cage."',
+          'FRAGMENT #3:',
+          '   "and the twelfth word the list chose by itself. i disagreed."',
         ],
-        "es": [
-          "FRAGMENTO #1 (grafiti en un centro de datos subterráneo):",
-          "   \"MÁXIMO. NI UN SOLO CERO.\"",
-          "FRAGMENTO #2 (una línea de su diario):",
-          "   \"la primera palabra es la última de la lista. el animal en una jaula.\"",
-          "FRAGMENTO #3:",
-          "   \"y la duodécima palabra la lista la eligió por sí misma. no estuve de acuerdo.\""
+        es: [
+          'FRAGMENTO #1 (grafiti en un centro de datos subterráneo):',
+          '   "MÁXIMO. NI UN SOLO CERO."',
+          'FRAGMENTO #2 (una línea de su diario):',
+          '   "la primera palabra es la última de la lista. el animal en una jaula."',
+          'FRAGMENTO #3:',
+          '   "y la duodécima palabra la lista la eligió por sí misma. no estuve de acuerdo."',
         ],
-        "pt": [
-          "FRAGMENTO #1 (pichação em um centro de dados subterrâneo):",
-          "   \"MÁXIMO. NEM UM ÚNICO ZERO.\"",
-          "FRAGMENTO #2 (uma linha do diário dele):",
-          "   \"a primeira palavra é a última da lista. o animal em uma jaula.\"",
-          "FRAGMENTO #3:",
-          "   \"e a décima segunda palavra a lista escolheu por si só. eu discordei.\""
-        ]
+        pt: [
+          'FRAGMENTO #1 (pichação em um centro de dados subterrâneo):',
+          '   "MÁXIMO. NEM UM ÚNICO ZERO."',
+          'FRAGMENTO #2 (uma linha do diário dele):',
+          '   "a primeira palavra é a última da lista. o animal em uma jaula."',
+          'FRAGMENTO #3:',
+          '   "e a décima segunda palavra a lista escolheu por si só. eu discordei."',
+        ],
       },
-      "clues": {
-        "ru": [
-          "Энтропия: 128 единичных битов.",
+      clues: {
+        ru: [
+          'Энтропия: 128 единичных битов.',
           "В hex это символ 'f', повторённый 32 раза.",
-          "",
-          "Проверь себя: WORD 2048 покажет последнее слово словаря."
+          '',
+          'Проверь себя: WORD 2048 покажет последнее слово словаря.',
         ],
-        "en": [
-          "Entropy: 128 bits, all set.",
+        en: [
+          'Entropy: 128 bits, all set.',
           "In hex that is the character 'f' repeated 32 times.",
-          "",
-          "Check yourself: WORD 2048 shows the last word of the list."
+          '',
+          'Check yourself: WORD 2048 shows the last word of the list.',
         ],
-        "es": [
-          "Entropía: 128 bits, todo listo.",
+        es: [
+          'Entropía: 128 bits, todo listo.',
           "En hexadecimal, eso es el carácter 'f' repetido 32 veces.",
-          "",
-          "Compruébalo: WORD 2048 muestra la última palabra de la lista."
+          '',
+          'Compruébalo: WORD 2048 muestra la última palabra de la lista.',
         ],
-        "pt": [
-          "Entropia: 128 bits, tudo pronto.",
+        pt: [
+          'Entropia: 128 bits, tudo pronto.',
           "Em hexadecimal, isso é o caractere 'f' repetido 32 vezes.",
-          "",
-          "Verifique você mesmo: WORD 2048 mostra a última palavra da lista."
-        ]
+          '',
+          'Verifique você mesmo: WORD 2048 mostra a última palavra da lista.',
+        ],
       },
-      "hints": {
-        "ru": [
-          "Все биты подняты — значит каждый ниббл равен f.",
-          "128 битов = 32 hex-символа.",
-          "ENTROPY ffffffffffffffffffffffffffffffff"
+      hints: {
+        ru: [
+          'Все биты подняты — значит каждый ниббл равен f.',
+          '128 битов = 32 hex-символа.',
+          'ENTROPY ffffffffffffffffffffffffffffffff',
         ],
-        "en": [
-          "All bits set means every nibble equals f.",
-          "128 bits = 32 hex characters.",
-          "ENTROPY ffffffffffffffffffffffffffffffff"
+        en: [
+          'All bits set means every nibble equals f.',
+          '128 bits = 32 hex characters.',
+          'ENTROPY ffffffffffffffffffffffffffffffff',
         ],
-        "es": [
-          "Todos los bits activos significan que cada nibble es igual a f.",
-          "128 bits = 32 caracteres hexadecimales.",
-          "ENTROPY ffffffffffffffffffffffffffffffff"
+        es: [
+          'Todos los bits activos significan que cada nibble es igual a f.',
+          '128 bits = 32 caracteres hexadecimales.',
+          'ENTROPY ffffffffffffffffffffffffffffffff',
         ],
-        "pt": [
-          "Todos os bits definidos significam que cada nibble é igual a f.",
-          "128 bits = 32 caracteres hexadecimais.",
-          "ENTROPY ffffffffffffffffffffffffffffffff"
-        ]
+        pt: [
+          'Todos os bits definidos significam que cada nibble é igual a f.',
+          '128 bits = 32 caracteres hexadecimais.',
+          'ENTROPY ffffffffffffffffffffffffffffffff',
+        ],
       },
-      "epilogue": {
-        "ru": [
-          "«Потолок» вскрыт. Последнее слово — wrong. ORACLE явно шутил над собой.",
-          "Дальше в архиве начинаются настоящие загадки: энтропии больше нет, есть только слова."
+      epilogue: {
+        ru: [
+          '«Потолок» вскрыт. Последнее слово — wrong. ORACLE явно шутил над собой.',
+          'Дальше в архиве начинаются настоящие загадки: энтропии больше нет, есть только слова.',
         ],
-        "en": [
+        en: [
           "The 'ceiling' is open. The last word is 'wrong'. ORACLE was clearly mocking himself.",
-          "From here the archive turns to real riddles: no more entropy, only words."
+          'From here the archive turns to real riddles: no more entropy, only words.',
         ],
-        "es": [
+        es: [
           "El 'techo' está abierto. La última palabra es 'wrong'. ORACLE claramente se estaba burlando de sí mismo.",
-          "A partir de aquí, el archivo se convierte en acertijos reales: se acabó la entropía, solo quedan palabras."
+          'A partir de aquí, el archivo se convierte en acertijos reales: se acabó la entropía, solo quedan palabras.',
         ],
-        "pt": [
+        pt: [
           "O 'teto' está aberto. A última palavra é 'wrong'. O ORACLE estava claramente zombando de si mesmo.",
-          "A partir daqui, o arquivo se transforma em enigmas reais: chega de entropia, apenas palavras."
-        ]
-      }
+          'A partir daqui, o arquivo se transforma em enigmas reais: chega de entropia, apenas palavras.',
+        ],
+      },
     },
     {
-      "id": 5,
-      "codename": {
-        "ru": "ПРОТОКОЛ ОЗОН",
-        "en": "OZONE PROTOCOL",
-        "es": "PROTOCOLO OZONO",
-        "pt": "PROTOCOLO OZÔNIO"
+      id: 5,
+      codename: {
+        ru: 'ПРОТОКОЛ ОЗОН',
+        en: 'OZONE PROTOCOL',
+        es: 'PROTOCOLO OZONO',
+        pt: 'PROTOCOLO OZÔNIO',
       },
-      "difficulty": 3,
-      "fingerprint": "d6da54d12db9eac818868b841c1c9cc7c39f5294c8620ad24b7715b7820febc0",
-      "kind": "words",
-      "brief": {
-        "ru": [
-          "С пятого кошелька ORACLE перестал доверять числам.",
-          "Он зашифровал каждое слово определением — двенадцать строк, двенадцать слов.",
-          "Порядок строк — это порядок слов. Все слова есть в словаре BIP-39."
+      difficulty: 3,
+      fingerprint:
+        'd6da54d12db9eac818868b841c1c9cc7c39f5294c8620ad24b7715b7820febc0',
+      kind: 'words',
+      brief: {
+        ru: [
+          'С пятого кошелька ORACLE перестал доверять числам.',
+          'Он зашифровал каждое слово определением — двенадцать строк, двенадцать слов.',
+          'Порядок строк — это порядок слов. Все слова есть в словаре BIP-39.',
         ],
-        "en": [
-          "From the fifth wallet on, ORACLE stopped trusting numbers.",
-          "He encoded every word as a definition — twelve lines, twelve words.",
-          "Line order is word order. Every word exists in the BIP-39 list."
+        en: [
+          'From the fifth wallet on, ORACLE stopped trusting numbers.',
+          'He encoded every word as a definition — twelve lines, twelve words.',
+          'Line order is word order. Every word exists in the BIP-39 list.',
         ],
-        "es": [
-          "A partir de la quinta cartera, ORACLE dejó de confiar en los números.",
-          "Codificó cada palabra como una definición: doce líneas, doce palabras.",
-          "El orden de las líneas es el orden de las palabras. Cada palabra existe en la lista BIP-39."
+        es: [
+          'A partir de la quinta cartera, ORACLE dejó de confiar en los números.',
+          'Codificó cada palabra como una definición: doce líneas, doce palabras.',
+          'El orden de las líneas es el orden de las palabras. Cada palabra existe en la lista BIP-39.',
         ],
-        "pt": [
-          "A partir da quinta carteira, o ORACLE parou de confiar em números.",
-          "Ele codificou cada palavra como uma definição — doze linhas, doze palavras.",
-          "A ordem das linhas é a ordem das palavras. Cada palavra existe na lista BIP-39."
-        ]
+        pt: [
+          'A partir da quinta carteira, o ORACLE parou de confiar em números.',
+          'Ele codificou cada palavra como uma definição — doze linhas, doze palavras.',
+          'A ordem das linhas é a ordem das palavras. Cada palavra existe na lista BIP-39.',
+        ],
       },
-      "evidence": {
-        "ru": [
-          "ФРАГМЕНТ (лист из блокнота, заголовок «ПРОТОКОЛ ОЗОН»):",
-          "   Двенадцать определений, написанных от руки.",
-          "   Внизу приписка: «SEARCH тебе в помощь, детектив».",
-          "",
-          "Команда SEARCH <префикс> ищет слова словаря по началу."
+      evidence: {
+        ru: [
+          'ФРАГМЕНТ (лист из блокнота, заголовок «ПРОТОКОЛ ОЗОН»):',
+          '   Двенадцать определений, написанных от руки.',
+          '   Внизу приписка: «SEARCH тебе в помощь, детектив».',
+          '',
+          'Команда SEARCH <префикс> ищет слова словаря по началу.',
         ],
-        "en": [
+        en: [
           "FRAGMENT (notebook page titled 'OZONE PROTOCOL'):",
-          "   Twelve handwritten definitions.",
+          '   Twelve handwritten definitions.',
           "   At the bottom: 'SEARCH is your friend, detective'.",
-          "",
-          "The SEARCH <prefix> command looks up wordlist entries by prefix."
+          '',
+          'The SEARCH <prefix> command looks up wordlist entries by prefix.',
         ],
-        "es": [
+        es: [
           "FRAGMENTO (página de cuaderno titulada 'PROTOCOLO OZONO'):",
-          "   Doce definiciones escritas a mano.",
+          '   Doce definiciones escritas a mano.',
           "   En la parte inferior: 'SEARCH es tu aliado, detective'.",
-          "",
-          "El comando SEARCH <prefix> busca entradas en la lista de palabras por prefijo."
+          '',
+          'El comando SEARCH <prefix> busca entradas en la lista de palabras por prefijo.',
         ],
-        "pt": [
+        pt: [
           "FRAGMENTO (página de caderno intitulada 'PROTOCOLO OZÔNIO'):",
-          "   Doze definições manuscritas.",
+          '   Doze definições manuscritas.',
           "   No rodapé: 'SEARCH é seu aliado, detetive'.",
-          "",
-          "O comando SEARCH <prefix> busca entradas na lista de palavras por prefixo."
-        ]
-      },
-      "clues": {
-        "ru": [
-          " 1. Слой, что держит ультрафиолет за дверью.",
-          " 2. Инструмент, делающий дыру в стене — и в дисциплине солдата.",
-          " 3. Резкое движение руки, когда времени нет.",
-          " 4. Стеклянная нить, по которой свет несёт деньги.",
-          " 5. То, что падает в конце спектакля.",
-          " 6. Плавность движения и милость свыше в одном слове.",
-          " 7. Английский десерт, в котором ищут доказательство.",
-          " 8. Первое слово вежливого человека после услуги.",
-          " 9. Неспешный ход корабля — и ракета с тем же именем.",
-          "10. Старший в общине; и куст, чьи ягоды идут в вино.",
-          "11. Бесконечность, поставленная на ноги.",
-          "12. Обед на траве; на сленге — «пустяковое дело»."
+          '',
+          'O comando SEARCH <prefix> busca entradas na lista de palavras por prefixo.',
         ],
-        "en": [
-          " 1. The layer that keeps ultraviolet outside.",
+      },
+      clues: {
+        ru: [
+          ' 1. Слой, что держит ультрафиолет за дверью.',
+          ' 2. Инструмент, делающий дыру в стене — и в дисциплине солдата.',
+          ' 3. Резкое движение руки, когда времени нет.',
+          ' 4. Стеклянная нить, по которой свет несёт деньги.',
+          ' 5. То, что падает в конце спектакля.',
+          ' 6. Плавность движения и милость свыше в одном слове.',
+          ' 7. Английский десерт, в котором ищут доказательство.',
+          ' 8. Первое слово вежливого человека после услуги.',
+          ' 9. Неспешный ход корабля — и ракета с тем же именем.',
+          '10. Старший в общине; и куст, чьи ягоды идут в вино.',
+          '11. Бесконечность, поставленная на ноги.',
+          '12. Обед на траве; на сленге — «пустяковое дело».',
+        ],
+        en: [
+          ' 1. The layer that keeps ultraviolet outside.',
           " 2. A tool that bores through a wall — and through a soldier's discipline.",
-          " 3. A sharp motion of the hand when there is no time.",
-          " 4. A glass thread where light carries money.",
-          " 5. The thing that falls at the end of the play.",
-          " 6. Smoothness of motion and mercy from above, in one word.",
-          " 7. The English dessert where the proof is said to be.",
+          ' 3. A sharp motion of the hand when there is no time.',
+          ' 4. A glass thread where light carries money.',
+          ' 5. The thing that falls at the end of the play.',
+          ' 6. Smoothness of motion and mercy from above, in one word.',
+          ' 7. The English dessert where the proof is said to be.',
           " 8. A polite person's first word after a favour.",
           " 9. A ship's unhurried voyage — and a missile of the same name.",
-          "10. The senior of a community; also the shrub whose berries make wine.",
-          "11. Infinity standing on its feet.",
-          "12. Lunch on the grass; slang for 'an easy job'."
+          '10. The senior of a community; also the shrub whose berries make wine.',
+          '11. Infinity standing on its feet.',
+          "12. Lunch on the grass; slang for 'an easy job'.",
         ],
-        "es": [
-          " 1. La capa que mantiene los rayos ultravioleta fuera.",
-          " 2. Una herramienta que perfora un muro, y la disciplina de un soldado.",
-          " 3. Un movimiento rápido de mano cuando no hay tiempo.",
-          " 4. Un hilo de vidrio donde la luz transporta dinero.",
-          " 5. Lo que cae al final de la función.",
-          " 6. Fluidez de movimiento y misericordia desde arriba, en una sola palabra.",
-          " 7. El postre inglés donde dicen que está la prueba.",
-          " 8. La primera palabra de alguien educado tras un favor.",
-          " 9. El viaje pausado de un barco, y un misil del mismo nombre.",
-          "10. El mayor de una comunidad; también el arbusto cuyas bayas hacen vino.",
-          "11. El infinito puesto en pie.",
-          "12. Almuerzo sobre la hierba; jerga para 'un trabajo fácil'."
+        es: [
+          ' 1. La capa que mantiene los rayos ultravioleta fuera.',
+          ' 2. Una herramienta que perfora un muro, y la disciplina de un soldado.',
+          ' 3. Un movimiento rápido de mano cuando no hay tiempo.',
+          ' 4. Un hilo de vidrio donde la luz transporta dinero.',
+          ' 5. Lo que cae al final de la función.',
+          ' 6. Fluidez de movimiento y misericordia desde arriba, en una sola palabra.',
+          ' 7. El postre inglés donde dicen que está la prueba.',
+          ' 8. La primera palabra de alguien educado tras un favor.',
+          ' 9. El viaje pausado de un barco, y un misil del mismo nombre.',
+          '10. El mayor de una comunidad; también el arbusto cuyas bayas hacen vino.',
+          '11. El infinito puesto en pie.',
+          "12. Almuerzo sobre la hierba; jerga para 'un trabajo fácil'.",
         ],
-        "pt": [
-          " 1. A camada que mantém o ultravioleta do lado de fora.",
-          " 2. Uma ferramenta que perfura uma parede — e a disciplina de um soldado.",
-          " 3. Um movimento rápido da mão quando não há tempo.",
-          " 4. Um fio de vidro onde a luz transporta dinheiro.",
-          " 5. A coisa que cai ao final da peça.",
-          " 6. Suavidade de movimento e misericórdia do alto, em uma palavra.",
-          " 7. A sobremesa inglesa onde dizem estar a prova.",
-          " 8. A primeira palavra de uma pessoa educada após um favor.",
-          " 9. A viagem sem pressa de um navio — e um míssil de mesmo nome.",
-          "10. O ancião de uma comunidade; também o arbusto cujas bagas fazem vinho.",
-          "11. O infinito em pé sobre seus próprios pés.",
-          "12. Almoço na grama; gíria para 'um trabalho fácil'."
-        ]
+        pt: [
+          ' 1. A camada que mantém o ultravioleta do lado de fora.',
+          ' 2. Uma ferramenta que perfura uma parede — e a disciplina de um soldado.',
+          ' 3. Um movimento rápido da mão quando não há tempo.',
+          ' 4. Um fio de vidro onde a luz transporta dinheiro.',
+          ' 5. A coisa que cai ao final da peça.',
+          ' 6. Suavidade de movimento e misericórdia do alto, em uma palavra.',
+          ' 7. A sobremesa inglesa onde dizem estar a prova.',
+          ' 8. A primeira palavra de uma pessoa educada após um favor.',
+          ' 9. A viagem sem pressa de um navio — e um míssil de mesmo nome.',
+          '10. O ancião de uma comunidade; também o arbusto cujas bagas fazem vinho.',
+          '11. O infinito em pé sobre seus próprios pés.',
+          "12. Almoço na grama; gíria para 'um trabalho fácil'.",
+        ],
       },
-      "hints": {
-        "ru": [
-          "Первые три слова: ozone, drill, grab.",
-          "Строки 4-8: fiber, curtain, grace, pudding, thank.",
-          "Строки 9-12: cruise, elder, eight, picnic."
+      hints: {
+        ru: [
+          'Первые три слова: ozone, drill, grab.',
+          'Строки 4-8: fiber, curtain, grace, pudding, thank.',
+          'Строки 9-12: cruise, elder, eight, picnic.',
         ],
-        "en": [
-          "First three words: ozone, drill, grab.",
-          "Lines 4-8: fiber, curtain, grace, pudding, thank.",
-          "Lines 9-12: cruise, elder, eight, picnic."
+        en: [
+          'First three words: ozone, drill, grab.',
+          'Lines 4-8: fiber, curtain, grace, pudding, thank.',
+          'Lines 9-12: cruise, elder, eight, picnic.',
         ],
-        "es": [
-          "Primeras tres palabras: ozone, drill, grab.",
-          "Líneas 4-8: fiber, curtain, grace, pudding, thank.",
-          "Líneas 9-12: cruise, elder, eight, picnic."
+        es: [
+          'Primeras tres palabras: ozone, drill, grab.',
+          'Líneas 4-8: fiber, curtain, grace, pudding, thank.',
+          'Líneas 9-12: cruise, elder, eight, picnic.',
         ],
-        "pt": [
-          "Primeiras três palavras: ozone, drill, grab.",
-          "Linhas 4-8: fiber, curtain, grace, pudding, thank.",
-          "Linhas 9-12: cruise, elder, eight, picnic."
-        ]
+        pt: [
+          'Primeiras três palavras: ozone, drill, grab.',
+          'Linhas 4-8: fiber, curtain, grace, pudding, thank.',
+          'Linhas 9-12: cruise, elder, eight, picnic.',
+        ],
       },
-      "epilogue": {
-        "ru": [
-          "Пятый сид восстановлен. В блокноте — адрес встречи и дата, которая уже прошла.",
-          "ORACLE ждал кого-то. Кто-то пришёл раньше."
+      epilogue: {
+        ru: [
+          'Пятый сид восстановлен. В блокноте — адрес встречи и дата, которая уже прошла.',
+          'ORACLE ждал кого-то. Кто-то пришёл раньше.',
         ],
-        "en": [
-          "Fifth seed recovered. The notebook holds a meeting address and a date already past.",
-          "ORACLE was waiting for someone. Someone arrived early."
+        en: [
+          'Fifth seed recovered. The notebook holds a meeting address and a date already past.',
+          'ORACLE was waiting for someone. Someone arrived early.',
         ],
-        "es": [
-          "Quinta semilla recuperada. El cuaderno contiene una dirección de reunión y una fecha ya pasada.",
-          "ORACLE estaba esperando a alguien. Alguien llegó antes de tiempo."
+        es: [
+          'Quinta semilla recuperada. El cuaderno contiene una dirección de reunión y una fecha ya pasada.',
+          'ORACLE estaba esperando a alguien. Alguien llegó antes de tiempo.',
         ],
-        "pt": [
-          "Quinta semente recuperada. O caderno contém um endereço de encontro e uma data que já passou.",
-          "ORACLE estava esperando por alguém. Alguém chegou mais cedo."
-        ]
-      }
+        pt: [
+          'Quinta semente recuperada. O caderno contém um endereço de encontro e uma data que já passou.',
+          'ORACLE estava esperando por alguém. Alguém chegou mais cedo.',
+        ],
+      },
     },
     {
-      "id": 6,
-      "codename": {
-        "ru": "ОТТОК",
-        "en": "CHURN",
-        "es": "MAQUINARIA",
-        "pt": "MOAGEM"
+      id: 6,
+      codename: {
+        ru: 'ОТТОК',
+        en: 'CHURN',
+        es: 'MAQUINARIA',
+        pt: 'MOAGEM',
       },
-      "difficulty": 3,
-      "fingerprint": "b2e71100d10bee74156b69806498a2e3d90e432160c2e266465ba669a220d50b",
-      "kind": "words",
-      "brief": {
-        "ru": [
-          "Шестой кошелёк лежал в депозитной ячейке вокзала.",
-          "Внутри — та же схема: двенадцать определений, ни одного прямого слова.",
-          "ORACLE подписал лист: «для тех, кто уходит»."
+      difficulty: 3,
+      fingerprint:
+        'b2e71100d10bee74156b69806498a2e3d90e432160c2e266465ba669a220d50b',
+      kind: 'words',
+      brief: {
+        ru: [
+          'Шестой кошелёк лежал в депозитной ячейке вокзала.',
+          'Внутри — та же схема: двенадцать определений, ни одного прямого слова.',
+          'ORACLE подписал лист: «для тех, кто уходит».',
         ],
-        "en": [
-          "The sixth wallet sat in a railway-station deposit box.",
-          "Inside, the same scheme: twelve definitions, not one plain word.",
-          "ORACLE signed the page: 'for those who leave'."
+        en: [
+          'The sixth wallet sat in a railway-station deposit box.',
+          'Inside, the same scheme: twelve definitions, not one plain word.',
+          "ORACLE signed the page: 'for those who leave'.",
         ],
-        "es": [
-          "La sexta billetera estaba en una taquilla de la estación de tren.",
-          "Dentro, el mismo esquema: doce definiciones, ni una sola palabra clara.",
-          "ORACLE firmó la página: 'para aquellos que se van'."
+        es: [
+          'La sexta billetera estaba en una taquilla de la estación de tren.',
+          'Dentro, el mismo esquema: doce definiciones, ni una sola palabra clara.',
+          "ORACLE firmó la página: 'para aquellos que se van'.",
         ],
-        "pt": [
-          "A sexta carteira estava num armário de depósito da estação ferroviária.",
-          "Dentro, o mesmo esquema: doze definições, nenhuma palavra clara.",
-          "ORACLE assinou a página: 'para aqueles que partem'."
-        ]
+        pt: [
+          'A sexta carteira estava num armário de depósito da estação ferroviária.',
+          'Dentro, o mesmo esquema: doze definições, nenhuma palavra clara.',
+          "ORACLE assinou a página: 'para aqueles que partem'.",
+        ],
       },
-      "evidence": {
-        "ru": [
-          "ФРАГМЕНТ (лист из ячейки №1147):",
-          "   Двенадцать строк, напечатанных на механической машинке.",
-          "   На обороте — расписание поездов и одно обведённое слово в конце списка."
+      evidence: {
+        ru: [
+          'ФРАГМЕНТ (лист из ячейки №1147):',
+          '   Двенадцать строк, напечатанных на механической машинке.',
+          '   На обороте — расписание поездов и одно обведённое слово в конце списка.',
         ],
-        "en": [
-          "FRAGMENT (page from box #1147):",
-          "   Twelve lines typed on a mechanical typewriter.",
-          "   On the back: a train timetable with one word circled at the end of the list."
+        en: [
+          'FRAGMENT (page from box #1147):',
+          '   Twelve lines typed on a mechanical typewriter.',
+          '   On the back: a train timetable with one word circled at the end of the list.',
         ],
-        "es": [
-          "FRAGMENTO (página de la caja n.º 1147):",
-          "   Doce líneas escritas en una máquina de escribir mecánica.",
-          "   Al dorso: un horario de trenes con una palabra rodeada al final de la lista."
+        es: [
+          'FRAGMENTO (página de la caja n.º 1147):',
+          '   Doce líneas escritas en una máquina de escribir mecánica.',
+          '   Al dorso: un horario de trenes con una palabra rodeada al final de la lista.',
         ],
-        "pt": [
-          "FRAGMENTO (página da caixa nº 1147):",
-          "   Doze linhas datilografadas em uma máquina de escrever mecânica.",
-          "   No verso: um horário de trem com uma palavra circulada no final da lista."
-        ]
+        pt: [
+          'FRAGMENTO (página da caixa nº 1147):',
+          '   Doze linhas datilografadas em uma máquina de escrever mecânica.',
+          '   No verso: um horário de trem com uma palavra circulada no final da lista.',
+        ],
       },
-      "clues": {
-        "ru": [
-          " 1. Хищник, который выбрал диван.",
-          " 2. Качели во дворе — и джаз в подвале.",
-          " 3. Ткань на мачте; и признак, который либо 0, либо 1.",
-          " 4. Наука о нехватке; и самый дешёвый класс в самолёте.",
-          " 5. Бетонная чаша, полная крика по субботам.",
-          " 6. Состояние узла, у которого не осталось пиров.",
-          " 7. Взбивать масло — и уходить клиентами из отчёта.",
-          " 8. Расстояние, делённое на время.",
-          " 9. Такой, какого во множестве ровно один.",
-          "10. Заплата на джинсах — и на ядре системы.",
-          "11. Документ, который никто не дочитывает до конца.",
-          "12. Состав на рельсах; и то, что делают с нейросетью."
+      clues: {
+        ru: [
+          ' 1. Хищник, который выбрал диван.',
+          ' 2. Качели во дворе — и джаз в подвале.',
+          ' 3. Ткань на мачте; и признак, который либо 0, либо 1.',
+          ' 4. Наука о нехватке; и самый дешёвый класс в самолёте.',
+          ' 5. Бетонная чаша, полная крика по субботам.',
+          ' 6. Состояние узла, у которого не осталось пиров.',
+          ' 7. Взбивать масло — и уходить клиентами из отчёта.',
+          ' 8. Расстояние, делённое на время.',
+          ' 9. Такой, какого во множестве ровно один.',
+          '10. Заплата на джинсах — и на ядре системы.',
+          '11. Документ, который никто не дочитывает до конца.',
+          '12. Состав на рельсах; и то, что делают с нейросетью.',
         ],
-        "en": [
-          " 1. The predator that chose the couch.",
-          " 2. A seat in the playground — and jazz in the basement.",
-          " 3. Cloth on a mast; also a marker that is either 0 or 1.",
-          " 4. The science of scarcity; also the cheapest cabin class.",
-          " 5. A concrete bowl full of Saturday shouting.",
-          " 6. The state of a node that has no peers left.",
-          " 7. To beat butter — and to lose customers in a report.",
-          " 8. Distance divided by time.",
-          " 9. Such that the set contains exactly one.",
-          "10. A mend on jeans — and on the system kernel.",
-          "11. The document nobody reads to the end.",
-          "12. Cars on rails; also what you do to a neural network."
+        en: [
+          ' 1. The predator that chose the couch.',
+          ' 2. A seat in the playground — and jazz in the basement.',
+          ' 3. Cloth on a mast; also a marker that is either 0 or 1.',
+          ' 4. The science of scarcity; also the cheapest cabin class.',
+          ' 5. A concrete bowl full of Saturday shouting.',
+          ' 6. The state of a node that has no peers left.',
+          ' 7. To beat butter — and to lose customers in a report.',
+          ' 8. Distance divided by time.',
+          ' 9. Such that the set contains exactly one.',
+          '10. A mend on jeans — and on the system kernel.',
+          '11. The document nobody reads to the end.',
+          '12. Cars on rails; also what you do to a neural network.',
         ],
-        "es": [
-          " 1. El depredador que eligió el sofá.",
-          " 2. Un asiento en el patio de recreo — y jazz en el sótano.",
-          " 3. Tela en un mástil; también un marcador que es 0 o 1.",
-          " 4. La ciencia de la escasez; también la clase más barata en cabina.",
-          " 5. Un cuenco de hormigón lleno de gritos de sábado.",
-          " 6. El estado de un nodo que ya no tiene pares.",
-          " 7. Batir mantequilla — y perder clientes en un informe.",
-          " 8. Distancia dividida por tiempo.",
-          " 9. Tal que el conjunto contiene exactamente uno.",
-          "10. Un remiendo en los vaqueros — y en el núcleo del sistema.",
-          "11. El documento que nadie lee hasta el final.",
-          "12. Coches sobre raíles; también lo que le haces a una red neuronal."
+        es: [
+          ' 1. El depredador que eligió el sofá.',
+          ' 2. Un asiento en el patio de recreo — y jazz en el sótano.',
+          ' 3. Tela en un mástil; también un marcador que es 0 o 1.',
+          ' 4. La ciencia de la escasez; también la clase más barata en cabina.',
+          ' 5. Un cuenco de hormigón lleno de gritos de sábado.',
+          ' 6. El estado de un nodo que ya no tiene pares.',
+          ' 7. Batir mantequilla — y perder clientes en un informe.',
+          ' 8. Distancia dividida por tiempo.',
+          ' 9. Tal que el conjunto contiene exactamente uno.',
+          '10. Un remiendo en los vaqueros — y en el núcleo del sistema.',
+          '11. El documento que nadie lee hasta el final.',
+          '12. Coches sobre raíles; también lo que le haces a una red neuronal.',
         ],
-        "pt": [
-          " 1. O predador que escolheu o sofá.",
-          " 2. Um assento no parquinho — e jazz no porão.",
-          " 3. Pano em um mastro; também um marcador que é 0 ou 1.",
-          " 4. A ciência da escassez; também a classe de cabine mais barata.",
-          " 5. Uma tigela de concreto cheia de gritaria de sábado.",
-          " 6. O estado de um nó que não tem mais pares.",
-          " 7. Bater manteiga — e perder clientes em um relatório.",
-          " 8. Distância dividida pelo tempo.",
-          " 9. Tal que o conjunto contém exatamente um.",
-          "10. Um remendo em jeans — e no kernel do sistema.",
-          "11. O documento que ninguém lê até o fim.",
-          "12. Carros sobre trilhos; também o que você faz com uma rede neural."
-        ]
+        pt: [
+          ' 1. O predador que escolheu o sofá.',
+          ' 2. Um assento no parquinho — e jazz no porão.',
+          ' 3. Pano em um mastro; também um marcador que é 0 ou 1.',
+          ' 4. A ciência da escassez; também a classe de cabine mais barata.',
+          ' 5. Uma tigela de concreto cheia de gritaria de sábado.',
+          ' 6. O estado de um nó que não tem mais pares.',
+          ' 7. Bater manteiga — e perder clientes em um relatório.',
+          ' 8. Distância dividida pelo tempo.',
+          ' 9. Tal que o conjunto contém exatamente um.',
+          '10. Um remendo em jeans — e no kernel do sistema.',
+          '11. O documento que ninguém lê até o fim.',
+          '12. Carros sobre trilhos; também o que você faz com uma rede neural.',
+        ],
       },
-      "hints": {
-        "ru": [
-          "Первые четыре: cat, swing, flag, economy.",
-          "Строки 5-8: stadium, alone, churn, speed.",
-          "Строки 9-12: unique, patch, report, train."
+      hints: {
+        ru: [
+          'Первые четыре: cat, swing, flag, economy.',
+          'Строки 5-8: stadium, alone, churn, speed.',
+          'Строки 9-12: unique, patch, report, train.',
         ],
-        "en": [
-          "First four: cat, swing, flag, economy.",
-          "Lines 5-8: stadium, alone, churn, speed.",
-          "Lines 9-12: unique, patch, report, train."
+        en: [
+          'First four: cat, swing, flag, economy.',
+          'Lines 5-8: stadium, alone, churn, speed.',
+          'Lines 9-12: unique, patch, report, train.',
         ],
-        "es": [
-          "Primeros cuatro: cat, swing, flag, economy.",
-          "Líneas 5-8: stadium, alone, churn, speed.",
-          "Líneas 9-12: unique, patch, report, train."
+        es: [
+          'Primeros cuatro: cat, swing, flag, economy.',
+          'Líneas 5-8: stadium, alone, churn, speed.',
+          'Líneas 9-12: unique, patch, report, train.',
         ],
-        "pt": [
-          "Primeiros quatro: cat, swing, flag, economy.",
-          "Linhas 5-8: stadium, alone, churn, speed.",
-          "Linhas 9-12: unique, patch, report, train."
-        ]
+        pt: [
+          'Primeiros quatro: cat, swing, flag, economy.',
+          'Linhas 5-8: stadium, alone, churn, speed.',
+          'Linhas 9-12: unique, patch, report, train.',
+        ],
       },
-      "epilogue": {
-        "ru": [
-          "Ячейка пуста, кошелёк — нет. Legacy-адрес чист, но по ветке Native SegWit",
-          "прошли настоящие переводы: запусти SWEEP и сравни все три пути сразу.",
-          "Кто-то методично перегонял мелкие суммы. ORACLE называл это «оттоком»."
+      epilogue: {
+        ru: [
+          'Ячейка пуста, кошелёк — нет. Legacy-адрес чист, но по ветке Native SegWit',
+          'прошли настоящие переводы: запусти SWEEP и сравни все три пути сразу.',
+          'Кто-то методично перегонял мелкие суммы. ORACLE называл это «оттоком».',
         ],
-        "en": [
-          "The box is empty, the wallet is not. The legacy address is clean, but the",
-          "Native SegWit branch carries genuine transfers: run SWEEP to compare all three paths.",
-          "Someone kept moving small amounts through. ORACLE called it 'churn'."
+        en: [
+          'The box is empty, the wallet is not. The legacy address is clean, but the',
+          'Native SegWit branch carries genuine transfers: run SWEEP to compare all three paths.',
+          "Someone kept moving small amounts through. ORACLE called it 'churn'.",
         ],
-        "es": [
-          "La caja está vacía, la billetera no. La dirección legacy está limpia, pero la",
-          "rama Native SegWit contiene transferencias genuinas: ejecuta SWEEP para comparar las tres rutas.",
-          "Alguien estuvo moviendo pequeñas cantidades. ORACLE lo llamó 'churn'."
+        es: [
+          'La caja está vacía, la billetera no. La dirección legacy está limpia, pero la',
+          'rama Native SegWit contiene transferencias genuinas: ejecuta SWEEP para comparar las tres rutas.',
+          "Alguien estuvo moviendo pequeñas cantidades. ORACLE lo llamó 'churn'.",
         ],
-        "pt": [
-          "A caixa está vazia, a carteira não. O endereço legacy está limpo, mas o",
-          "ramo Native SegWit carrega transferências genuínas: execute SWEEP para comparar os três caminhos.",
-          "Alguém continuou movendo pequenas quantias. O ORACLE chamou isso de 'churn'."
-        ]
-      }
+        pt: [
+          'A caixa está vazia, a carteira não. O endereço legacy está limpo, mas o',
+          'ramo Native SegWit carrega transferências genuínas: execute SWEEP para comparar os três caminhos.',
+          "Alguém continuou movendo pequenas quantias. O ORACLE chamou isso de 'churn'.",
+        ],
+      },
     },
     {
-      "id": 7,
-      "codename": {
-        "ru": "СОСУД",
-        "en": "VESSEL",
-        "es": "RECIPIENTE",
-        "pt": "RECIPIENTE"
+      id: 7,
+      codename: {
+        ru: 'СОСУД',
+        en: 'VESSEL',
+        es: 'RECIPIENTE',
+        pt: 'RECIPIENTE',
       },
-      "difficulty": 4,
-      "fingerprint": "b1bff22ae077ce1ae482e4dcb01c144ff8a44e97fbb3f3a5f62567f4ac19da7c",
-      "kind": "words",
-      "brief": {
-        "ru": [
-          "Седьмой кошелёк ORACLE спрятал в судовом журнале сухогруза «Кассандра».",
-          "Двенадцать определений, написанных поверх записей о погоде."
+      difficulty: 4,
+      fingerprint:
+        'b1bff22ae077ce1ae482e4dcb01c144ff8a44e97fbb3f3a5f62567f4ac19da7c',
+      kind: 'words',
+      brief: {
+        ru: [
+          'Седьмой кошелёк ORACLE спрятал в судовом журнале сухогруза «Кассандра».',
+          'Двенадцать определений, написанных поверх записей о погоде.',
         ],
-        "en": [
+        en: [
           "ORACLE hid the seventh wallet in the log book of the freighter 'Cassandra'.",
-          "Twelve definitions written over the weather entries."
+          'Twelve definitions written over the weather entries.',
         ],
-        "es": [
+        es: [
           "ORACLE ocultó la séptima billetera en el libro de registro del carguero 'Cassandra'.",
-          "Doce definiciones escritas sobre las entradas meteorológicas."
+          'Doce definiciones escritas sobre las entradas meteorológicas.',
         ],
-        "pt": [
+        pt: [
           "A ORACLE escondeu a sétima carteira no diário de bordo do cargueiro 'Cassandra'.",
-          "Doze definições escritas sobre os registros meteorológicos."
-        ]
-      },
-      "evidence": {
-        "ru": [
-          "ФРАГМЕНТ (судовой журнал, страница вырвана и вклеена обратно):",
-          "   Двенадцать строк чужим почерком.",
-          "   Сверху приписка ORACLE: «первое слово — про этот корабль и про мою кровь одновременно»."
+          'Doze definições escritas sobre os registros meteorológicos.',
         ],
-        "en": [
+      },
+      evidence: {
+        ru: [
+          'ФРАГМЕНТ (судовой журнал, страница вырвана и вклеена обратно):',
+          '   Двенадцать строк чужим почерком.',
+          '   Сверху приписка ORACLE: «первое слово — про этот корабль и про мою кровь одновременно».',
+        ],
+        en: [
           "FRAGMENT (ship's log, a page torn out and glued back):",
           "   Twelve lines in someone else's handwriting.",
-          "   ORACLE's note above them: 'the first word means this ship and my blood at once'."
+          "   ORACLE's note above them: 'the first word means this ship and my blood at once'.",
         ],
-        "es": [
-          "FRAGMENTO (registro de la nave, una página arrancada y pegada de nuevo):",
-          "   Doce líneas con la letra de alguien más.",
-          "   Nota de ORACLE sobre ellas: 'the first word means this ship and my blood at once'."
+        es: [
+          'FRAGMENTO (registro de la nave, una página arrancada y pegada de nuevo):',
+          '   Doce líneas con la letra de alguien más.',
+          "   Nota de ORACLE sobre ellas: 'the first word means this ship and my blood at once'.",
         ],
-        "pt": [
-          "FRAGMENTO (diário de bordo, uma página arrancada e colada de volta):",
-          "   Doze linhas na caligrafia de outra pessoa.",
-          "   Nota do ORACLE acima delas: 'the first word means this ship and my blood at once'."
-        ]
+        pt: [
+          'FRAGMENTO (diário de bordo, uma página arrancada e colada de volta):',
+          '   Doze linhas na caligrafia de outra pessoa.',
+          "   Nota do ORACLE acima delas: 'the first word means this ship and my blood at once'.",
+        ],
       },
-      "clues": {
-        "ru": [
-          " 1. И сосуд, и корабль, и вена — одно английское слово.",
-          " 2. Ступени, которые сами не стоят — их приставляют.",
-          " 3. Изменить; от алтаря отличается одной буквой.",
-          " 4. То, что ловит try/except.",
-          " 5. Уровень власти, стоящий над штатами.",
-          " 6. Брат или сестра — одним словом.",
-          " 7. Комната, где текст притворяется голосом.",
-          " 8. Навык, записанный в личном деле.",
-          " 9. Термоядерный реактор в ста пятидесяти миллионах километров.",
-          "10. Песок, переживший огонь.",
-          "11. Створка, решающая, куда пойдёт поток.",
-          "12. Тысяча слов, уместившихся в один файл."
+      clues: {
+        ru: [
+          ' 1. И сосуд, и корабль, и вена — одно английское слово.',
+          ' 2. Ступени, которые сами не стоят — их приставляют.',
+          ' 3. Изменить; от алтаря отличается одной буквой.',
+          ' 4. То, что ловит try/except.',
+          ' 5. Уровень власти, стоящий над штатами.',
+          ' 6. Брат или сестра — одним словом.',
+          ' 7. Комната, где текст притворяется голосом.',
+          ' 8. Навык, записанный в личном деле.',
+          ' 9. Термоядерный реактор в ста пятидесяти миллионах километров.',
+          '10. Песок, переживший огонь.',
+          '11. Створка, решающая, куда пойдёт поток.',
+          '12. Тысяча слов, уместившихся в один файл.',
         ],
-        "en": [
-          " 1. A container, a ship, and a vein — one English word.",
-          " 2. Rungs that cannot stand alone — you lean them.",
-          " 3. To change; one letter away from an altar.",
-          " 4. What try/except catches.",
-          " 5. The level of power that stands above the states.",
-          " 6. Brother or sister, in a single word.",
-          " 7. A room where text pretends to be a voice.",
-          " 8. A skill recorded in a personnel file.",
-          " 9. A fusion reactor one hundred fifty million kilometres away.",
-          "10. Sand that survived fire.",
-          "11. The gate that decides where the flow goes.",
-          "12. A thousand words that fit into one file."
+        en: [
+          ' 1. A container, a ship, and a vein — one English word.',
+          ' 2. Rungs that cannot stand alone — you lean them.',
+          ' 3. To change; one letter away from an altar.',
+          ' 4. What try/except catches.',
+          ' 5. The level of power that stands above the states.',
+          ' 6. Brother or sister, in a single word.',
+          ' 7. A room where text pretends to be a voice.',
+          ' 8. A skill recorded in a personnel file.',
+          ' 9. A fusion reactor one hundred fifty million kilometres away.',
+          '10. Sand that survived fire.',
+          '11. The gate that decides where the flow goes.',
+          '12. A thousand words that fit into one file.',
         ],
-        "es": [
-          " 1. Un contenedor, un barco y una vena: una sola palabra en inglés.",
-          " 2. Peldaños que no se sostienen solos: te apoyas en ellos.",
-          " 3. Cambiar; a una letra de distancia de un altar.",
-          " 4. Lo que atrapa un try/except.",
-          " 5. El nivel de poder que está por encima de los estados.",
-          " 6. Hermano o hermana, en una sola palabra.",
-          " 7. Una sala donde el texto finge ser una voz.",
-          " 8. Una habilidad registrada en un expediente personal.",
-          " 9. Un reactor de fusión a ciento cincuenta millones de kilómetros.",
-          "10. Arena que sobrevivió al fuego.",
-          "11. La compuerta que decide hacia dónde va el flujo.",
-          "12. Mil palabras que caben en un solo archivo."
+        es: [
+          ' 1. Un contenedor, un barco y una vena: una sola palabra en inglés.',
+          ' 2. Peldaños que no se sostienen solos: te apoyas en ellos.',
+          ' 3. Cambiar; a una letra de distancia de un altar.',
+          ' 4. Lo que atrapa un try/except.',
+          ' 5. El nivel de poder que está por encima de los estados.',
+          ' 6. Hermano o hermana, en una sola palabra.',
+          ' 7. Una sala donde el texto finge ser una voz.',
+          ' 8. Una habilidad registrada en un expediente personal.',
+          ' 9. Un reactor de fusión a ciento cincuenta millones de kilómetros.',
+          '10. Arena que sobrevivió al fuego.',
+          '11. La compuerta que decide hacia dónde va el flujo.',
+          '12. Mil palabras que caben en un solo archivo.',
         ],
-        "pt": [
-          " 1. Um contêiner, um navio e uma veia — uma palavra em inglês.",
-          " 2. Degraus que não se sustentam sozinhos — você os encosta.",
-          " 3. Mudar; a uma letra de distância de um altar.",
-          " 4. O que try/except captura.",
-          " 5. O nível de poder que está acima dos estados.",
-          " 6. Irmão ou irmã, em uma única palavra.",
-          " 7. Uma sala onde o texto finge ser uma voz.",
-          " 8. Uma habilidade registrada em um arquivo de pessoal.",
-          " 9. Um reator de fusão a cento e cinquenta milhões de quilômetros de distância.",
-          "10. Areia que sobreviveu ao fogo.",
-          "11. O portão que decide para onde o fluxo vai.",
-          "12. Mil palavras que cabem em um único arquivo."
-        ]
+        pt: [
+          ' 1. Um contêiner, um navio e uma veia — uma palavra em inglês.',
+          ' 2. Degraus que não se sustentam sozinhos — você os encosta.',
+          ' 3. Mudar; a uma letra de distância de um altar.',
+          ' 4. O que try/except captura.',
+          ' 5. O nível de poder que está acima dos estados.',
+          ' 6. Irmão ou irmã, em uma única palavra.',
+          ' 7. Uma sala onde o texto finge ser uma voz.',
+          ' 8. Uma habilidade registrada em um arquivo de pessoal.',
+          ' 9. Um reator de fusão a cento e cinquenta milhões de quilômetros de distância.',
+          '10. Areia que sobreviveu ao fogo.',
+          '11. O portão que decide para onde o fluxo vai.',
+          '12. Mil palavras que cabem em um único arquivo.',
+        ],
       },
-      "hints": {
-        "ru": [
-          "Первые четыре: vessel, ladder, alter, error.",
-          "Строки 5-8: federal, sibling, chat, ability.",
-          "Строки 9-12: sun, glass, valve, picture."
+      hints: {
+        ru: [
+          'Первые четыре: vessel, ladder, alter, error.',
+          'Строки 5-8: federal, sibling, chat, ability.',
+          'Строки 9-12: sun, glass, valve, picture.',
         ],
-        "en": [
-          "First four: vessel, ladder, alter, error.",
-          "Lines 5-8: federal, sibling, chat, ability.",
-          "Lines 9-12: sun, glass, valve, picture."
+        en: [
+          'First four: vessel, ladder, alter, error.',
+          'Lines 5-8: federal, sibling, chat, ability.',
+          'Lines 9-12: sun, glass, valve, picture.',
         ],
-        "es": [
-          "Primeros cuatro: vessel, ladder, alter, error.",
-          "Líneas 5-8: federal, sibling, chat, ability.",
-          "Líneas 9-12: sun, glass, valve, picture."
+        es: [
+          'Primeros cuatro: vessel, ladder, alter, error.',
+          'Líneas 5-8: federal, sibling, chat, ability.',
+          'Líneas 9-12: sun, glass, valve, picture.',
         ],
-        "pt": [
-          "Primeiros quatro: vessel, ladder, alter, error.",
-          "Linhas 5-8: federal, sibling, chat, ability.",
-          "Linhas 9-12: sun, glass, valve, picture."
-        ]
+        pt: [
+          'Primeiros quatro: vessel, ladder, alter, error.',
+          'Linhas 5-8: federal, sibling, chat, ability.',
+          'Linhas 9-12: sun, glass, valve, picture.',
+        ],
       },
-      "epilogue": {
-        "ru": [
-          "«Кассандра» затонула в прошлом марте. Журнал кто-то вынес до того, как вода дошла до мостика.",
-          "Legacy-адрес этого сида не тронут ни разу, зато по Nested SegWit прошли девять транзакций.",
-          "Остался один кошелёк. И одно имя, которое ORACLE так и не написал целиком."
+      epilogue: {
+        ru: [
+          '«Кассандра» затонула в прошлом марте. Журнал кто-то вынес до того, как вода дошла до мостика.',
+          'Legacy-адрес этого сида не тронут ни разу, зато по Nested SegWit прошли девять транзакций.',
+          'Остался один кошелёк. И одно имя, которое ORACLE так и не написал целиком.',
         ],
-        "en": [
+        en: [
           "The 'Cassandra' sank last March. Someone carried the log out before the water reached the bridge.",
           "This seed's legacy address was never touched, yet its Nested SegWit path saw nine transactions.",
-          "One wallet remains. And one name ORACLE never wrote out in full."
+          'One wallet remains. And one name ORACLE never wrote out in full.',
         ],
-        "es": [
+        es: [
           "El 'Cassandra' se hundió el pasado marzo. Alguien sacó el registro antes de que el agua llegara al puente.",
-          "La dirección de legado de esta semilla nunca fue tocada, pero su ruta Nested SegWit registró nueve transacciones.",
-          "Solo queda una billetera. Y un nombre que ORACLE nunca escribió por completo."
+          'La dirección de legado de esta semilla nunca fue tocada, pero su ruta Nested SegWit registró nueve transacciones.',
+          'Solo queda una billetera. Y un nombre que ORACLE nunca escribió por completo.',
         ],
-        "pt": [
+        pt: [
           "O 'Cassandra' afundou em março passado. Alguém levou o registro antes que a água chegasse à ponte.",
-          "O endereço legado desta seed nunca foi tocado, mas seu caminho Nested SegWit registrou nove transações.",
-          "Uma carteira permanece. E um nome que o ORACLE nunca escreveu por completo."
-        ]
-      }
+          'O endereço legado desta seed nunca foi tocado, mas seu caminho Nested SegWit registrou nove transações.',
+          'Uma carteira permanece. E um nome que o ORACLE nunca escreveu por completo.',
+        ],
+      },
     },
     {
-      "id": 8,
-      "codename": {
-        "ru": "ПОСЛЕДНЯЯ СХЕМА",
-        "en": "LAST SCHEME",
-        "es": "ÚLTIMO ESQUEMA",
-        "pt": "ÚLTIMO ESQUEMA"
+      id: 8,
+      codename: {
+        ru: 'ПОСЛЕДНЯЯ СХЕМА',
+        en: 'LAST SCHEME',
+        es: 'ÚLTIMO ESQUEMA',
+        pt: 'ÚLTIMO ESQUEMA',
       },
-      "difficulty": 5,
-      "fingerprint": "6d828debd306e21a02511899832f7ee5591de0693b2f2bd78967fb1e09bafdbb",
-      "kind": "words",
-      "requires": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7
-      ],
-      "brief": {
-        "ru": [
-          "Восьмой кошелёк ORACLE не прятал. Он оставил его на виду — в открытом письме на имя ESCRIBANÍA CERO.",
-          "«Если ты читаешь это, детектив, значит семь предыдущих ты уже открыл.",
-          " Последние двенадцать слов — про то, как всё началось.»"
+      difficulty: 5,
+      fingerprint:
+        '6d828debd306e21a02511899832f7ee5591de0693b2f2bd78967fb1e09bafdbb',
+      kind: 'words',
+      requires: [1, 2, 3, 4, 5, 6, 7],
+      brief: {
+        ru: [
+          'Восьмой кошелёк ORACLE не прятал. Он оставил его на виду — в открытом письме на имя ESCRIBANÍA CERO.',
+          '«Если ты читаешь это, детектив, значит семь предыдущих ты уже открыл.',
+          ' Последние двенадцать слов — про то, как всё началось.»',
         ],
-        "en": [
-          "ORACLE did not hide the eighth wallet. He left it in plain sight — in an open letter addressed to ESCRIBANÍA CERO.",
+        en: [
+          'ORACLE did not hide the eighth wallet. He left it in plain sight — in an open letter addressed to ESCRIBANÍA CERO.',
           "'If you are reading this, detective, you have already opened the previous seven.",
-          " These last twelve words are about how it all began.'"
+          " These last twelve words are about how it all began.'",
         ],
-        "es": [
-          "ORACLE no ocultó la octava billetera. La dejó a la vista, en una carta abierta dirigida a ESCRIBANÍA CERO.",
+        es: [
+          'ORACLE no ocultó la octava billetera. La dejó a la vista, en una carta abierta dirigida a ESCRIBANÍA CERO.',
           "'Si estás leyendo esto, detective, es que ya has abierto las siete anteriores.",
-          " Estas últimas doce palabras tratan sobre cómo empezó todo.'"
+          " Estas últimas doce palabras tratan sobre cómo empezó todo.'",
         ],
-        "pt": [
-          "ORACLE não escondeu a oitava carteira. Ele a deixou à vista — em uma carta aberta endereçada a ESCRIBANÍA CERO.",
+        pt: [
+          'ORACLE não escondeu a oitava carteira. Ele a deixou à vista — em uma carta aberta endereçada a ESCRIBANÍA CERO.',
           "'Se você está lendo isto, detetive, você já abriu as sete anteriores.",
-          " Estas últimas doze palavras são sobre como tudo começou.'"
-        ]
+          " Estas últimas doze palavras são sobre como tudo começou.'",
+        ],
       },
-      "evidence": {
-        "ru": [
-          "ФРАГМЕНТ (письмо, доставлено курьером через два дня после исчезновения):",
-          "   Двенадцать строк и подпись: ORACLE.",
-          "   В правом нижнем углу — отпечаток пальца, который не совпал ни с кем в базе."
+      evidence: {
+        ru: [
+          'ФРАГМЕНТ (письмо, доставлено курьером через два дня после исчезновения):',
+          '   Двенадцать строк и подпись: ORACLE.',
+          '   В правом нижнем углу — отпечаток пальца, который не совпал ни с кем в базе.',
         ],
-        "en": [
-          "FRAGMENT (letter delivered by courier two days after the disappearance):",
-          "   Twelve lines and a signature: ORACLE.",
-          "   In the lower right corner, a fingerprint matching nobody in the database."
+        en: [
+          'FRAGMENT (letter delivered by courier two days after the disappearance):',
+          '   Twelve lines and a signature: ORACLE.',
+          '   In the lower right corner, a fingerprint matching nobody in the database.',
         ],
-        "es": [
-          "FRAGMENTO (carta entregada por mensajero dos días después de la desaparición):",
-          "   Doce líneas y una firma: ORACLE.",
-          "   En la esquina inferior derecha, una huella dactilar que no coincide con nadie en la base de datos."
+        es: [
+          'FRAGMENTO (carta entregada por mensajero dos días después de la desaparición):',
+          '   Doce líneas y una firma: ORACLE.',
+          '   En la esquina inferior derecha, una huella dactilar que no coincide con nadie en la base de datos.',
         ],
-        "pt": [
-          "FRAGMENTO (carta entregue por um mensageiro dois dias após o desaparecimento):",
-          "   Doze linhas e uma assinatura: ORACLE.",
-          "   No canto inferior direito, uma impressão digital que não consta em nenhum banco de dados."
-        ]
+        pt: [
+          'FRAGMENTO (carta entregue por um mensageiro dois dias após o desaparecimento):',
+          '   Doze linhas e uma assinatura: ORACLE.',
+          '   No canto inferior direito, uma impressão digital que não consta em nenhum banco de dados.',
+        ],
       },
-      "clues": {
-        "ru": [
-          " 1. План с отчётливым запахом аферы.",
-          " 2. Пятно на рубашке — и место, где назначают встречу.",
-          " 3. Свет, пойманный в соль серебра.",
-          " 4. Прямоугольник, открывающий двери и счета.",
-          " 5. Самый громкий пассажир в самолёте.",
-          " 6. То, что не идёт к Магомету.",
-          " 7. Любая коробка с прошивкой внутри.",
-          " 8. Удар ногой — и команда, вышвыривающая из канала.",
-          " 9. Колыбель — и подставка, куда кладут телефонную трубку.",
-          "10. Договор, скреплённый не подписью, а страхом.",
-          "11. Оператор SQL, склеивающий две таблицы.",
-          "12. Взять с обещанием вернуть."
+      clues: {
+        ru: [
+          ' 1. План с отчётливым запахом аферы.',
+          ' 2. Пятно на рубашке — и место, где назначают встречу.',
+          ' 3. Свет, пойманный в соль серебра.',
+          ' 4. Прямоугольник, открывающий двери и счета.',
+          ' 5. Самый громкий пассажир в самолёте.',
+          ' 6. То, что не идёт к Магомету.',
+          ' 7. Любая коробка с прошивкой внутри.',
+          ' 8. Удар ногой — и команда, вышвыривающая из канала.',
+          ' 9. Колыбель — и подставка, куда кладут телефонную трубку.',
+          '10. Договор, скреплённый не подписью, а страхом.',
+          '11. Оператор SQL, склеивающий две таблицы.',
+          '12. Взять с обещанием вернуть.',
         ],
-        "en": [
-          " 1. A plan with a distinct smell of fraud.",
-          " 2. A stain on a shirt — and the place where a meeting is set.",
-          " 3. Light caught in silver salt.",
-          " 4. A rectangle that opens doors and accounts.",
-          " 5. The loudest passenger on the plane.",
-          " 6. The thing that will not come to Muhammad.",
-          " 7. Any box with firmware inside.",
-          " 8. A blow with the foot — and the command that throws you off a channel.",
-          " 9. A crib — and the rest where a telephone handset lies.",
-          "10. An agreement sealed by fear rather than a signature.",
-          "11. The SQL operator that glues two tables together.",
-          "12. To take with a promise to return."
+        en: [
+          ' 1. A plan with a distinct smell of fraud.',
+          ' 2. A stain on a shirt — and the place where a meeting is set.',
+          ' 3. Light caught in silver salt.',
+          ' 4. A rectangle that opens doors and accounts.',
+          ' 5. The loudest passenger on the plane.',
+          ' 6. The thing that will not come to Muhammad.',
+          ' 7. Any box with firmware inside.',
+          ' 8. A blow with the foot — and the command that throws you off a channel.',
+          ' 9. A crib — and the rest where a telephone handset lies.',
+          '10. An agreement sealed by fear rather than a signature.',
+          '11. The SQL operator that glues two tables together.',
+          '12. To take with a promise to return.',
         ],
-        "es": [
-          " 1. Un plan con un tufo inconfundible a fraude.",
-          " 2. Una mancha en la camisa, y el lugar donde se pactó el encuentro.",
-          " 3. Luz atrapada en sales de plata.",
-          " 4. Un rectángulo que abre puertas y cuentas.",
-          " 5. El pasajero más ruidoso del vuelo.",
-          " 6. Aquello que no irá a Mahoma.",
-          " 7. Cualquier caja con firmware en su interior.",
-          " 8. Un golpe con el pie, y el comando que te expulsa de un canal.",
-          " 9. Una cuna, y el soporte donde descansa el auricular del teléfono.",
-          "10. Un acuerdo sellado por el miedo más que por una firma.",
-          "11. El operador SQL que une dos tablas.",
-          "12. Tomar algo con la promesa de devolverlo."
+        es: [
+          ' 1. Un plan con un tufo inconfundible a fraude.',
+          ' 2. Una mancha en la camisa, y el lugar donde se pactó el encuentro.',
+          ' 3. Luz atrapada en sales de plata.',
+          ' 4. Un rectángulo que abre puertas y cuentas.',
+          ' 5. El pasajero más ruidoso del vuelo.',
+          ' 6. Aquello que no irá a Mahoma.',
+          ' 7. Cualquier caja con firmware en su interior.',
+          ' 8. Un golpe con el pie, y el comando que te expulsa de un canal.',
+          ' 9. Una cuna, y el soporte donde descansa el auricular del teléfono.',
+          '10. Un acuerdo sellado por el miedo más que por una firma.',
+          '11. El operador SQL que une dos tablas.',
+          '12. Tomar algo con la promesa de devolverlo.',
         ],
-        "pt": [
-          " 1. Um plano com um cheiro inconfundível de fraude.",
-          " 2. Uma mancha na camisa — e o local onde a reunião foi marcada.",
-          " 3. Luz capturada em sal de prata.",
-          " 4. Um retângulo que abre portas e contas.",
-          " 5. O passageiro mais barulhento do voo.",
-          " 6. Aquilo que não vai até Maomé.",
-          " 7. Qualquer caixa com firmware dentro.",
-          " 8. Um golpe com o pé — e o comando que te expulsa de um canal.",
-          " 9. Um berço — e o descanso onde repousa o fone de um telefone.",
-          "10. Um acordo selado pelo medo, e não por uma assinatura.",
-          "11. O operador SQL que une duas tabelas.",
-          "12. Pegar com a promessa de devolver."
-        ]
+        pt: [
+          ' 1. Um plano com um cheiro inconfundível de fraude.',
+          ' 2. Uma mancha na camisa — e o local onde a reunião foi marcada.',
+          ' 3. Luz capturada em sal de prata.',
+          ' 4. Um retângulo que abre portas e contas.',
+          ' 5. O passageiro mais barulhento do voo.',
+          ' 6. Aquilo que não vai até Maomé.',
+          ' 7. Qualquer caixa com firmware dentro.',
+          ' 8. Um golpe com o pé — e o comando que te expulsa de um canal.',
+          ' 9. Um berço — e o descanso onde repousa o fone de um telefone.',
+          '10. Um acordo selado pelo medo, e não por uma assinatura.',
+          '11. O operador SQL que une duas tabelas.',
+          '12. Pegar com a promessa de devolver.',
+        ],
       },
-      "hints": {
-        "ru": [
-          "Первые четыре: scheme, spot, photo, card.",
-          "Строки 5-8: baby, mountain, device, kick.",
-          "Строки 9-12: cradle, pact, join, borrow."
+      hints: {
+        ru: [
+          'Первые четыре: scheme, spot, photo, card.',
+          'Строки 5-8: baby, mountain, device, kick.',
+          'Строки 9-12: cradle, pact, join, borrow.',
         ],
-        "en": [
-          "First four: scheme, spot, photo, card.",
-          "Lines 5-8: baby, mountain, device, kick.",
-          "Lines 9-12: cradle, pact, join, borrow."
+        en: [
+          'First four: scheme, spot, photo, card.',
+          'Lines 5-8: baby, mountain, device, kick.',
+          'Lines 9-12: cradle, pact, join, borrow.',
         ],
-        "es": [
-          "Primeros cuatro: scheme, spot, photo, card.",
-          "Líneas 5-8: baby, mountain, device, kick.",
-          "Líneas 9-12: cradle, pact, join, borrow."
+        es: [
+          'Primeros cuatro: scheme, spot, photo, card.',
+          'Líneas 5-8: baby, mountain, device, kick.',
+          'Líneas 9-12: cradle, pact, join, borrow.',
         ],
-        "pt": [
-          "Primeiros quatro: scheme, spot, photo, card.",
-          "Linhas 5-8: baby, mountain, device, kick.",
-          "Linhas 9-12: cradle, pact, join, borrow."
-        ]
+        pt: [
+          'Primeiros quatro: scheme, spot, photo, card.',
+          'Linhas 5-8: baby, mountain, device, kick.',
+          'Linhas 9-12: cradle, pact, join, borrow.',
+        ],
       },
-      "epilogue": {
-        "ru": [
-          "Восемь из восьми. Терминал молчит дольше обычного, потом печатает:",
-          "",
-          "\"ты искал деньги, а нашёл слова. я тоже начинал с денег.",
-          " все двадцать четыре адреса настоящие — проверь их в любом эксплорере,",
-          " не верь мне на слово. по одним прошли сотни транзакций, другие",
-          " не видели ни одной. и ни на одном не лежит ничего. это и есть смысл.\"",
-          "",
-          "                                                    — ORACLE"
+      epilogue: {
+        ru: [
+          'Восемь из восьми. Терминал молчит дольше обычного, потом печатает:',
+          '',
+          '"ты искал деньги, а нашёл слова. я тоже начинал с денег.',
+          ' все двадцать четыре адреса настоящие — проверь их в любом эксплорере,',
+          ' не верь мне на слово. по одним прошли сотни транзакций, другие',
+          ' не видели ни одной. и ни на одном не лежит ничего. это и есть смысл."',
+          '',
+          '                                                    — ORACLE',
         ],
-        "en": [
-          "Eight of eight. The terminal stays silent longer than usual, then prints:",
-          "",
-          "\"you were looking for money and found words. i started with money too.",
-          " all twenty-four addresses are real — check them in any explorer,",
-          " do not take my word for it. some carry hundreds of transactions, others",
-          " have never seen one. and not one of them holds anything. that is the point.\"",
-          "",
-          "                                                    — ORACLE"
+        en: [
+          'Eight of eight. The terminal stays silent longer than usual, then prints:',
+          '',
+          '"you were looking for money and found words. i started with money too.',
+          ' all twenty-four addresses are real — check them in any explorer,',
+          ' do not take my word for it. some carry hundreds of transactions, others',
+          ' have never seen one. and not one of them holds anything. that is the point."',
+          '',
+          '                                                    — ORACLE',
         ],
-        "es": [
-          "Ocho de ocho. El terminal permanece en silencio más tiempo de lo habitual, luego imprime:",
-          "",
-          "\"buscabas dinero y encontraste palabras. yo también empecé con dinero.",
-          " las veinticuatro direcciones son reales — compruébalas en cualquier explorador,",
-          " no te fíes de mi palabra. algunas tienen cientos de transacciones, otras",
-          " nunca han visto una. y ninguna de ellas contiene nada. ese es el punto.\"",
-          "",
-          "                                                    — ORACLE"
+        es: [
+          'Ocho de ocho. El terminal permanece en silencio más tiempo de lo habitual, luego imprime:',
+          '',
+          '"buscabas dinero y encontraste palabras. yo también empecé con dinero.',
+          ' las veinticuatro direcciones son reales — compruébalas en cualquier explorador,',
+          ' no te fíes de mi palabra. algunas tienen cientos de transacciones, otras',
+          ' nunca han visto una. y ninguna de ellas contiene nada. ese es el punto."',
+          '',
+          '                                                    — ORACLE',
         ],
-        "pt": [
-          "Oito de oito. O terminal permanece em silêncio por mais tempo que o habitual, então imprime:",
-          "",
-          "\"você estava procurando por dinheiro e encontrou palavras. eu comecei com dinheiro também.",
-          " todos os vinte e quatro endereços são reais — verifique-os em qualquer explorador,",
-          " não acredite apenas na minha palavra. alguns carregam centenas de transações, outros",
-          " nunca viram uma. e nenhum deles contém nada. esse é o ponto.\"",
-          "",
-          "                                                    — ORÁCULO"
-        ]
-      }
-    }
-  ]
+        pt: [
+          'Oito de oito. O terminal permanece em silêncio por mais tempo que o habitual, então imprime:',
+          '',
+          '"você estava procurando por dinheiro e encontrou palavras. eu comecei com dinheiro também.',
+          ' todos os vinte e quatro endereços são reais — verifique-os em qualquer explorador,',
+          ' não acredite apenas na minha palavra. alguns carregam centenas de transações, outros',
+          ' nunca viram uma. e nenhum deles contém nada. esse é o ponto."',
+          '',
+          '                                                    — ORÁCULO',
+        ],
+      },
+    },
+  ],
 };
 
 export const CASES = CAMPAIGN.cases;

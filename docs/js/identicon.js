@@ -5,8 +5,8 @@
 // the same rule the journal follows. A masked entry therefore still gets its
 // own stable sigil without the words ever being used as a key.
 
-import { minidenticon } from './vendor/minidenticons.js';
 import { fingerprint } from './crypto/bip39.js';
+import { minidenticon } from './vendor/minidenticons.js';
 
 const cache = new Map();
 
@@ -17,7 +17,8 @@ const cache = new Map();
  */
 export function sigilSvg(seed, { saturation = 92, lightness = 62 } = {}) {
   const key = `${seed}|${saturation}|${lightness}`;
-  if (!cache.has(key)) cache.set(key, minidenticon(String(seed), saturation, lightness));
+  if (!cache.has(key))
+    cache.set(key, minidenticon(String(seed), saturation, lightness));
   return cache.get(key);
 }
 
@@ -32,8 +33,10 @@ export function sigil(seed, { size = 20, title = '', ...options } = {}) {
   const wrapper = document.createElement('span');
   wrapper.className = 'sigil';
   wrapper.style.setProperty('--sigil-size', `${size}px`);
-  const parsed = new DOMParser()
-    .parseFromString(sigilSvg(seed, options), 'image/svg+xml');
+  const parsed = new DOMParser().parseFromString(
+    sigilSvg(seed, options),
+    'image/svg+xml',
+  );
   wrapper.append(document.importNode(parsed.documentElement, true));
   if (title) wrapper.title = title;
   wrapper.setAttribute('aria-hidden', 'true');
@@ -42,11 +45,15 @@ export function sigil(seed, { size = 20, title = '', ...options } = {}) {
 
 /** Sigil for a case file — stable across languages and sessions. */
 export const caseSigil = (caseFile, options) =>
-  sigil(`enigma-case-${caseFile.id}-${caseFile.fingerprint.slice(0, 12)}`, options);
+  sigil(
+    `enigma-case-${caseFile.id}-${caseFile.fingerprint.slice(0, 12)}`,
+    options,
+  );
 
 /** Sigil for a seed phrase, keyed by its fingerprint rather than its words. */
 export const mnemonicSigil = (mnemonic, options) =>
   sigil(`enigma-seed-${fingerprint(mnemonic)}`, options);
 
 /** Sigil for an address, so the same wallet always looks the same. */
-export const addressSigil = (address, options) => sigil(`enigma-addr-${address}`, options);
+export const addressSigil = (address, options) =>
+  sigil(`enigma-addr-${address}`, options);

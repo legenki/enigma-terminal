@@ -2,23 +2,35 @@
 // terminal (enigma_terminal/game.py) so both builds play identically.
 
 import { CAMPAIGN } from './campaign.js';
-import {
-  CLIENTS, LANGS, ProgressStore, caseById, caseForMnemonic, caseload, casesForClient, clientBySlug,
-  completeMnemonic, contractsLoaded, loadContracts, pick, randomMnemonic, searchCases,
-} from './core.js';
-import { WORDLIST_SHA256 } from './wordlist.js';
 import { ChainClient, ChainError, formatBtc, PROVIDERS } from './chain.js';
-import { deriveWallet } from './crypto/wallet.js';
 import {
-  MnemonicError,
+  CLIENTS,
+  caseById,
+  caseForMnemonic,
+  caseload,
+  casesForClient,
+  clientBySlug,
+  completeMnemonic,
+  contractsLoaded,
+  LANGS,
+  loadContracts,
+  ProgressStore,
+  pick,
+  randomMnemonic,
+  searchCases,
+} from './core.js';
+import {
   entropyToMnemonic,
   indexOf,
+  MnemonicError,
   mnemonicToEntropy,
   normalize,
   searchWords,
   wordAt,
 } from './crypto/bip39.js';
 import { fromHex, toHex } from './crypto/hash.js';
+import { deriveWallet } from './crypto/wallet.js';
+import { WORDLIST_SHA256 } from './wordlist.js';
 
 //: The one warning in the game that must never fall back to a language the
 //: player does not read: it is what stands between them and a funded address.
@@ -28,7 +40,8 @@ const REAL_WALLET = {
   es: 'ESTA ES UNA CARTERA REAL. NO LE PONGAS FONDOS — LA FRASE NO SE GUARDA EN NINGÚN LADO.',
   pt: 'ESTA É UMA CARTEIRA REAL. NÃO COLOQUE FUNDOS — A FRASE NÃO É GUARDADA EM LUGAR NENHUM.',
 };
-import { Journal, STATUS_STYLES, TOOLS, maskMnemonic } from './journal.js';
+
+import { Journal, maskMnemonic, STATUS_STYLES, TOOLS } from './journal.js';
 
 const OFFICIAL_WORDLIST_SHA256 =
   '2f5eed53a4727b4bf8880d8f3f199efc90e58503646d9ff8eff3a2ed3b24dbda';
@@ -57,17 +70,20 @@ const HELP = {
     ['LANG RU|EN|ES|PT', 'switch narrative language'],
     ['CASES', 'list every case file and its state'],
     ['CLIENTS', 'the eight employers and their contract counts'],
-    ['BOARD <client>', 'list one employer\'s thirty-two contracts'],
+    ['BOARD <client>', "list one employer's thirty-two contracts"],
     ['DROP <id>', 'return an unsolved contract to the board'],
     ['OPEN <id>', 'open a case file and make it active'],
     ['BRIEF / EVIDENCE / CLUES', 're-read the active case'],
     ['HINT', 'spend a hint on the active case'],
     ['WORD <1..2048>', 'read one entry of the BIP-39 wordlist'],
-    ['INDEX <word>', 'find a word\'s position in the wordlist'],
+    ['INDEX <word>', "find a word's position in the wordlist"],
     ['SEARCH <prefix>', 'list wordlist entries by prefix'],
     ['ARCHIVE <text>', 'full-text search across the case files'],
     ['RANDOM [12..24]', 'generate a fresh seed phrase from secure randomness'],
-    ['COMPLETE <phrase ?>', 'find the missing word of a phrase (one ? marks it)'],
+    [
+      'COMPLETE <phrase ?>',
+      'find the missing word of a phrase (one ? marks it)',
+    ],
     ['ENTROPY <hex>', 'rebuild a mnemonic from raw entropy (32 hex chars)'],
     ['DECRYPT <12 words>', 'validate a seed phrase and derive its addresses'],
     ['DERIVE', 're-print the derivation grid of the loaded seed'],
@@ -395,7 +411,9 @@ export class Engine {
     const storable = Boolean(owner) || generated;
     this.log(generated ? 'random' : 'decrypt', wallet.primary.address, {
       status: owner ? 'ok' : 'info',
-      detail: storable ? wallet.mnemonic : `${maskMnemonic(wallet.mnemonic)} — NOT STORED`,
+      detail: storable
+        ? wallet.mnemonic
+        : `${maskMnemonic(wallet.mnemonic)} — NOT STORED`,
       payload: storable ? { mnemonic: wallet.mnemonic } : { masked: true },
     });
   }
@@ -469,10 +487,12 @@ export class Engine {
 
   commands() {
     return {
-      HELP: this.cmdHelp, '?': this.cmdHelp,
+      HELP: this.cmdHelp,
+      '?': this.cmdHelp,
       ABOUT: this.cmdAbout,
       LANG: this.cmdLang,
-      CASES: this.cmdCases, LS: this.cmdCases,
+      CASES: this.cmdCases,
+      LS: this.cmdCases,
       CLIENTS: this.cmdClients,
       BOARD: this.cmdBoard,
       DROP: this.cmdDrop,
@@ -485,26 +505,31 @@ export class Engine {
       INDEX: this.cmdIndex,
       SEARCH: this.cmdSearch,
       ARCHIVE: this.cmdArchive,
-      RANDOM: this.cmdRandom, ROLL: this.cmdRandom,
-      COMPLETE: this.cmdComplete, FIND: this.cmdComplete,
+      RANDOM: this.cmdRandom,
+      ROLL: this.cmdRandom,
+      COMPLETE: this.cmdComplete,
+      FIND: this.cmdComplete,
       ENTROPY: this.cmdEntropy,
       DECRYPT: this.cmdDecrypt,
       DERIVE: this.cmdDerive,
-      SYNC_LEDGER: this.cmdSync, SYNC: this.cmdSync,
+      SYNC_LEDGER: this.cmdSync,
+      SYNC: this.cmdSync,
       SWEEP: this.cmdSweep,
       TXLOG: this.cmdTxlog,
       PROVIDER: this.cmdProvider,
       EXPLORER: this.cmdExplorer,
       NETINFO: this.cmdNetinfo,
       COPY: this.cmdCopy,
-      JOURNAL: this.cmdJournal, LOG: this.cmdJournal,
+      JOURNAL: this.cmdJournal,
+      LOG: this.cmdJournal,
       RECALL: this.cmdRecall,
       PIN: this.cmdPin,
       PURGE: this.cmdPurge,
       STATUS: this.cmdStatus,
       CLEAR: this.cmdClear,
       RESET: this.cmdReset,
-      EXIT: this.cmdExit, QUIT: this.cmdExit,
+      EXIT: this.cmdExit,
+      QUIT: this.cmdExit,
     };
   }
 
@@ -528,12 +553,17 @@ export class Engine {
   cmdLang(argument) {
     const choice = argument.trim().toLowerCase();
     if (!LANGS.includes(choice)) {
-      const usage = LANGS.map((code) => `LANG ${code.toUpperCase()}`).join(' | ');
+      const usage = LANGS.map((code) => `LANG ${code.toUpperCase()}`).join(
+        ' | ',
+      );
       this.term.print(`[WARN] USAGE: ${usage}`, 'amber');
       return;
     }
     this.lang = choice;
-    this.term.print(`[ OK ] NARRATIVE LANGUAGE: ${choice.toUpperCase()}`, 'green');
+    this.term.print(
+      `[ OK ] NARRATIVE LANGUAGE: ${choice.toUpperCase()}`,
+      'green',
+    );
   }
 
   cmdCases() {
@@ -545,21 +575,31 @@ export class Engine {
     for (const caseFile of desk) {
       let mark = '[  OPEN]';
       let style = 'green';
-      if (this.isSolved(caseFile.id)) { mark = '[CLOSED]'; style = 'dark'; }
-      else if (!this.isUnlocked(caseFile)) { mark = '[LOCKED]'; style = 'grey'; }
+      if (this.isSolved(caseFile.id)) {
+        mark = '[CLOSED]';
+        style = 'dark';
+      } else if (!this.isUnlocked(caseFile)) {
+        mark = '[LOCKED]';
+        style = 'grey';
+      }
       const pointer = this.active && this.active.id === caseFile.id ? '>' : ' ';
       const name = pick(caseFile.codename, this.lang).padEnd(22);
       const client = caseFile.client ? clientBySlug(caseFile.client) : null;
       term.print(
-        ` ${pointer} ${mark} ${String(caseFile.id).padStart(3, '0')}  ${name} `
-        + `${'*'.repeat(caseFile.difficulty).padEnd(5)} `
-        + (client ? pick(client.name, this.lang) : ''),
+        ` ${pointer} ${mark} ${String(caseFile.id).padStart(3, '0')}  ${name} ` +
+          `${'*'.repeat(caseFile.difficulty).padEnd(5)} ` +
+          (client ? pick(client.name, this.lang) : ''),
         style,
       );
     }
-    const solved = desk.filter((entry) => this.progress.isSolved(entry.id)).length;
+    const solved = desk.filter((entry) =>
+      this.progress.isSolved(entry.id),
+    ).length;
     term.rule();
-    term.print(`  ${solved}/${desk.length} CLOSED · BOARD HAS 256 MORE`, 'amber');
+    term.print(
+      `  ${solved}/${desk.length} CLOSED · BOARD HAS 256 MORE`,
+      'amber',
+    );
     term.blank();
   }
 
@@ -571,14 +611,22 @@ export class Engine {
     term.rule();
     for (const client of CLIENTS) {
       const cases = casesForClient(client.slug);
-      const solved = cases.filter((entry) => this.progress.isSolved(entry.id)).length;
+      const solved = cases.filter((entry) =>
+        this.progress.isSolved(entry.id),
+      ).length;
       term.print([
         { text: `  ${String(client.order).padStart(2, '0')} `, style: 'dark' },
         { text: pick(client.name, this.lang).padEnd(20), style: 'magenta' },
-        { text: `${String(solved).padStart(2)}/${cases.length} `, style: solved ? 'green' : 'grey' },
+        {
+          text: `${String(solved).padStart(2)}/${cases.length} `,
+          style: solved ? 'green' : 'grey',
+        },
         { text: pick(client.kind, this.lang), style: 'grey' },
       ]);
-      term.print(`     ${client.slug} · ${pick(client.district, this.lang)}`, 'dark');
+      term.print(
+        `     ${client.slug} · ${pick(client.district, this.lang)}`,
+        'dark',
+      );
     }
     term.rule();
     term.print('  BOARD <client> TO OPEN ONE', 'grey');
@@ -594,7 +642,10 @@ export class Engine {
     await loadContracts();
     const client = clientBySlug(slug);
     if (!client) {
-      this.term.print(`[FATAL] NO CLIENT '${slug.toUpperCase()}'. RUN CLIENTS.`, 'red');
+      this.term.print(
+        `[FATAL] NO CLIENT '${slug.toUpperCase()}'. RUN CLIENTS.`,
+        'red',
+      );
       return;
     }
     if (!contractsLoaded()) {
@@ -603,19 +654,24 @@ export class Engine {
     }
     const term = this.term;
     term.blank();
-    term.print(`  ${pick(client.name, this.lang)} // ${pick(client.district, this.lang)}`, 'magenta');
+    term.print(
+      `  ${pick(client.name, this.lang)} // ${pick(client.district, this.lang)}`,
+      'magenta',
+    );
     term.printLines(pick(client.creed, this.lang), 'white');
     term.blank();
     term.print(`  ${pick(client.dialect, this.lang)}`, 'cyan');
     term.rule();
     for (const caseFile of casesForClient(slug)) {
       const solved = this.progress.isSolved(caseFile.id);
-      const locked = (caseFile.requires || []).some((req) => !this.progress.isSolved(req));
+      const locked = (caseFile.requires || []).some(
+        (req) => !this.progress.isSolved(req),
+      );
       const mark = solved ? '[CLOSED]' : locked ? '[LOCKED]' : '[  OPEN]';
       term.print(
-        `  ${mark} ${String(caseFile.id).padStart(3, '0')}  `
-        + `${pick(caseFile.codename, this.lang).padEnd(24)} `
-        + `${'*'.repeat(caseFile.difficulty).padEnd(5)} ${caseFile.archetype}`,
+        `  ${mark} ${String(caseFile.id).padStart(3, '0')}  ` +
+          `${pick(caseFile.codename, this.lang).padEnd(24)} ` +
+          `${'*'.repeat(caseFile.difficulty).padEnd(5)} ${caseFile.archetype}`,
         solved ? 'dark' : locked ? 'grey' : 'green',
       );
     }
@@ -626,7 +682,10 @@ export class Engine {
   showCase(caseFile) {
     const term = this.term;
     term.blank();
-    term.print(`  CASE ${String(caseFile.id).padStart(2, '0')} // ${pick(caseFile.codename, this.lang)}`, 'magenta');
+    term.print(
+      `  CASE ${String(caseFile.id).padStart(2, '0')} // ${pick(caseFile.codename, this.lang)}`,
+      'magenta',
+    );
     term.rule('=');
     term.typeLines(pick(caseFile.brief, this.lang), 'white', 320);
     term.blank();
@@ -645,11 +704,16 @@ export class Engine {
     // build has always searched both — this was the two drifting apart.
     const caseFile = caseById(id);
     if (!caseFile) {
-      this.term.print(`[FATAL] CASE ${argument.trim() || '?'} NOT FOUND IN ARCHIVE.`, 'red');
+      this.term.print(
+        `[FATAL] CASE ${argument.trim() || '?'} NOT FOUND IN ARCHIVE.`,
+        'red',
+      );
       return;
     }
     if (!this.isUnlocked(caseFile)) {
-      const missing = (caseFile.requires || []).filter((r) => !this.isSolved(r)).join(', ');
+      const missing = (caseFile.requires || [])
+        .filter((r) => !this.isSolved(r))
+        .join(', ');
       this.term.print(`[FATAL] ${this.t('locked', { req: missing })}`, 'red');
       return;
     }
@@ -661,7 +725,9 @@ export class Engine {
         payload: { caseId: caseFile.id },
       });
       this.term.print(
-        `[ OK ] ${this.t('tookIt')} — ${pick(client.name, this.lang)}`, 'green');
+        `[ OK ] ${this.t('tookIt')} — ${pick(client.name, this.lang)}`,
+        'green',
+      );
     }
     this.showCase(caseFile);
   }
@@ -694,17 +760,20 @@ export class Engine {
 
   cmdBrief() {
     const caseFile = this.requireCase();
-    if (caseFile) this.term.printLines(pick(caseFile.brief, this.lang), 'white');
+    if (caseFile)
+      this.term.printLines(pick(caseFile.brief, this.lang), 'white');
   }
 
   cmdEvidence() {
     const caseFile = this.requireCase();
-    if (caseFile) this.term.printLines(pick(caseFile.evidence, this.lang), 'grey');
+    if (caseFile)
+      this.term.printLines(pick(caseFile.evidence, this.lang), 'grey');
   }
 
   cmdClues() {
     const caseFile = this.requireCase();
-    if (caseFile) this.term.printLines(pick(caseFile.clues, this.lang), 'green');
+    if (caseFile)
+      this.term.printLines(pick(caseFile.clues, this.lang), 'green');
   }
 
   cmdHint() {
@@ -717,11 +786,18 @@ export class Engine {
       return;
     }
     this.progress.useHint(caseFile.id);
-    this.log('hint', `${pick(caseFile.codename, this.lang)} — hint ${used + 1}/${hints.length}`, {
-      detail: hints[used],
-      payload: { caseId: caseFile.id },
-    });
-    this.term.print(`[HINT ${used + 1}/${hints.length}] ${hints[used]}`, 'amber');
+    this.log(
+      'hint',
+      `${pick(caseFile.codename, this.lang)} — hint ${used + 1}/${hints.length}`,
+      {
+        detail: hints[used],
+        payload: { caseId: caseFile.id },
+      },
+    );
+    this.term.print(
+      `[HINT ${used + 1}/${hints.length}] ${hints[used]}`,
+      'amber',
+    );
   }
 
   // -- wordlist tools ------------------------------------------------------
@@ -733,7 +809,10 @@ export class Engine {
       return;
     }
     try {
-      this.term.keyValue(`WORD ${String(position).padStart(4, '0')}`, wordAt(position));
+      this.term.keyValue(
+        `WORD ${String(position).padStart(4, '0')}`,
+        wordAt(position),
+      );
     } catch (error) {
       this.term.print(`[FATAL] ${error.message.toUpperCase()}`, 'red');
     }
@@ -746,9 +825,15 @@ export class Engine {
       return;
     }
     try {
-      this.term.keyValue(`INDEX OF ${word}`, String(indexOf(word)).padStart(4, '0'));
+      this.term.keyValue(
+        `INDEX OF ${word}`,
+        String(indexOf(word)).padStart(4, '0'),
+      );
     } catch {
-      this.term.print(`[FATAL] '${word.toUpperCase()}' IS NOT IN THE BIP-39 DICTIONARY.`, 'red');
+      this.term.print(
+        `[FATAL] '${word.toUpperCase()}' IS NOT IN THE BIP-39 DICTIONARY.`,
+        'red',
+      );
     }
   }
 
@@ -760,7 +845,10 @@ export class Engine {
     }
     const hits = searchWords(prefix);
     if (!hits.length) {
-      this.term.print(`[WARN] NO WORDLIST ENTRY STARTS WITH '${prefix.toUpperCase()}'.`, 'amber');
+      this.term.print(
+        `[WARN] NO WORDLIST ENTRY STARTS WITH '${prefix.toUpperCase()}'.`,
+        'amber',
+      );
       return;
     }
     this.log('search', prefix, {
@@ -769,9 +857,14 @@ export class Engine {
     });
     for (let i = 0; i < hits.length; i += 4) {
       this.term.print(
-        '  ' + hits.slice(i, i + 4)
-          .map(([index, word]) => `${String(index).padStart(5)}  ${word.padEnd(14)}`)
-          .join(''),
+        '  ' +
+          hits
+            .slice(i, i + 4)
+            .map(
+              ([index, word]) =>
+                `${String(index).padStart(5)}  ${word.padEnd(14)}`,
+            )
+            .join(''),
         'green',
       );
     }
@@ -786,7 +879,10 @@ export class Engine {
     }
     const results = searchCases(query, this.lang, this.progress);
     if (!results.length) {
-      this.term.print(`[WARN] NOTHING IN THE ARCHIVE MATCHES '${query.toUpperCase()}'.`, 'amber');
+      this.term.print(
+        `[WARN] NOTHING IN THE ARCHIVE MATCHES '${query.toUpperCase()}'.`,
+        'amber',
+      );
       return;
     }
     this.term.blank();
@@ -823,7 +919,10 @@ export class Engine {
     this.term.keyValue('BITS', String(entropy.length * 8), 'grey', 'cyan');
     this.term.type(`${'MNEMONIC'.padEnd(18)}: ${mnemonic}`, 'green', 90);
     this.term.blank();
-    this.term.print(`[WARN] ${REAL_WALLET[this.lang] || REAL_WALLET.en}`, 'amber');
+    this.term.print(
+      `[WARN] ${REAL_WALLET[this.lang] || REAL_WALLET.en}`,
+      'amber',
+    );
     this.log('random', `${entropy.length * 8}-bit phrase`, {
       detail: mnemonic,
       payload: { mnemonic },
@@ -834,14 +933,20 @@ export class Engine {
   async cmdComplete(argument) {
     const phrase = argument.trim();
     if (!phrase) {
-      this.term.print('[WARN] USAGE: COMPLETE <phrase with ? in place of the missing word>', 'amber');
+      this.term.print(
+        '[WARN] USAGE: COMPLETE <phrase with ? in place of the missing word>',
+        'amber',
+      );
       return;
     }
     this.term.blank();
     let found;
     try {
       found = await this.withLogs(
-        ['[~] enumerating candidate words...', '[~] verifying sha256 checksums...'],
+        [
+          '[~] enumerating candidate words...',
+          '[~] verifying sha256 checksums...',
+        ],
         () => completeMnemonic(phrase),
       );
     } catch (error) {
@@ -854,8 +959,14 @@ export class Engine {
       'green',
     );
     for (let i = 0; i < candidates.length; i += 6) {
-      this.term.print('  ' + candidates.slice(i, i + 6)
-        .map((candidate) => candidate.word.padEnd(12)).join(''), 'green');
+      this.term.print(
+        '  ' +
+          candidates
+            .slice(i, i + 6)
+            .map((candidate) => candidate.word.padEnd(12))
+            .join(''),
+        'green',
+      );
     }
     const hit = candidates.find((candidate) => candidate.case);
     if (hit) {
@@ -875,9 +986,16 @@ export class Engine {
   }
 
   cmdEntropy(argument) {
-    const raw = argument.trim().toLowerCase().replace(/^0x/, '').replace(/\s+/g, '');
+    const raw = argument
+      .trim()
+      .toLowerCase()
+      .replace(/^0x/, '')
+      .replace(/\s+/g, '');
     if (!raw) {
-      this.term.print('[WARN] USAGE: ENTROPY <hex> (32 hex chars = 128 bits = 12 words)', 'amber');
+      this.term.print(
+        '[WARN] USAGE: ENTROPY <hex> (32 hex chars = 128 bits = 12 words)',
+        'amber',
+      );
       return;
     }
     let entropy;
@@ -914,7 +1032,9 @@ export class Engine {
       // Yield once so the first frame paints before the heavy synchronous work.
       await sleep(0);
       return work();
-    })().finally(() => { done = true; });
+    })().finally(() => {
+      done = true;
+    });
 
     const ticker = (async () => {
       while (!done && index < logs.length) {
@@ -937,21 +1057,37 @@ export class Engine {
   printDerivation(wallet) {
     const term = this.term;
     term.rule('=');
-    term.keyValue('BIP39 SEED', `${wallet.seed.slice(0, 64)}...`, 'grey', 'dim');
+    term.keyValue(
+      'BIP39 SEED',
+      `${wallet.seed.slice(0, 64)}...`,
+      'grey',
+      'dim',
+    );
     term.keyValue('MASTER XPRV', wallet.masterXprv, 'grey', 'dim');
     term.rule('-');
     for (const entry of wallet.addresses) {
       term.print([
-        { text: `PATH ${entry.path} (${entry.label})`.padEnd(44) + ': ', style: 'grey' },
+        {
+          text: `PATH ${entry.path} (${entry.label})`.padEnd(44) + ': ',
+          style: 'grey',
+        },
         { text: entry.address, style: 'green' },
       ]);
     }
     term.rule('-');
     for (const entry of wallet.addresses) {
-      term.keyValue(`PUBKEY m/${entry.purpose}'`, entry.publicKey, 'grey', 'dim');
+      term.keyValue(
+        `PUBKEY m/${entry.purpose}'`,
+        entry.publicKey,
+        'grey',
+        'dim',
+      );
     }
     term.rule('=');
-    term.print('[STATUS] DERIVATION COMPLETE. RUN SYNC_LEDGER TO QUERY THE CHAIN.', 'cyan');
+    term.print(
+      '[STATUS] DERIVATION COMPLETE. RUN SYNC_LEDGER TO QUERY THE CHAIN.',
+      'cyan',
+    );
   }
 
   async cmdDecrypt(argument) {
@@ -997,24 +1133,34 @@ export class Engine {
         );
       }
     } else if (this.active) {
-      this.term.print(`[WARN] ${this.t('notThisCase', { id: this.active.id })}`, 'amber');
+      this.term.print(
+        `[WARN] ${this.t('notThisCase', { id: this.active.id })}`,
+        'amber',
+      );
     }
   }
 
   closeCase(caseFile) {
     const firstTime = this.progress.markSolved(caseFile.id);
     if (firstTime) {
-      this.log('case', `Case ${caseFile.id} — ${pick(caseFile.codename, this.lang)}`, {
-        status: 'ok',
-        payload: { caseId: caseFile.id },
-      });
+      this.log(
+        'case',
+        `Case ${caseFile.id} — ${pick(caseFile.codename, this.lang)}`,
+        {
+          status: 'ok',
+          payload: { caseId: caseFile.id },
+        },
+      );
     }
     const term = this.term;
     term.blank();
     term.print(`  ${this.t('solved', { id: caseFile.id })}`, 'magenta');
     const client = caseFile.client ? clientBySlug(caseFile.client) : null;
     if (client) {
-      term.print(`  ${this.t('filedWith', { client: pick(client.name, this.lang) })}`, 'cyan');
+      term.print(
+        `  ${this.t('filedWith', { client: pick(client.name, this.lang) })}`,
+        'cyan',
+      );
     }
     term.rule('=');
     const epilogue = pick(caseFile.epilogue, this.lang);
@@ -1023,7 +1169,9 @@ export class Engine {
     term.rule('=');
     // Eight *campaign* cases, not eight solved cases of any kind: a player who
     // closes eight contracts has not finished ORACLE's archive.
-    if (this.campaign.cases.every((entry) => this.progress.isSolved(entry.id))) {
+    if (
+      this.campaign.cases.every((entry) => this.progress.isSolved(entry.id))
+    ) {
       term.blank();
       term.print(`  ${this.t('allDone')}`, 'amber');
     }
@@ -1052,12 +1200,17 @@ export class Engine {
     if (!address) return;
     const term = this.term;
     term.blank();
-    term.print(`[NET] ESTABLISHING ENCRYPTED PROXY TO ${this.chain.nodeName} NODE... OK`, 'cyan');
+    term.print(
+      `[NET] ESTABLISHING ENCRYPTED PROXY TO ${this.chain.nodeName} NODE... OK`,
+      'cyan',
+    );
     term.print(`[NET] QUERYING ADDR: ${address}`, 'cyan');
 
     let stats;
     try {
-      stats = await this.withLogs(NET_LOGS, () => this.chain.addressStats(address));
+      stats = await this.withLogs(NET_LOGS, () =>
+        this.chain.addressStats(address),
+      );
     } catch (error) {
       term.print('[FATAL] NETWORK LINK DOWN. NO EXPLORER ANSWERED.', 'red');
       term.print(`        ${error.message}`, 'red');
@@ -1074,7 +1227,10 @@ export class Engine {
     term.print('ADDRESS BALANCE ANALYSIS:', 'white');
     term.keyValue('CONFIRMED BALANCE', `${formatBtc(stats.confirmedSats)} BTC`);
     term.keyValue('UNCONFIRMED TXs', `${formatBtc(stats.unconfirmedSats)} BTC`);
-    term.keyValue('TOTAL RECEIVED', `${formatBtc(stats.totalReceivedSats)} BTC`);
+    term.keyValue(
+      'TOTAL RECEIVED',
+      `${formatBtc(stats.totalReceivedSats)} BTC`,
+    );
     term.keyValue('TOTAL SENT', `${formatBtc(stats.totalSentSats)} BTC`);
     term.keyValue('TX COUNT', String(stats.txCount));
     term.keyValue('UTXO COUNT', String(stats.utxoCount));
@@ -1083,7 +1239,10 @@ export class Engine {
     if (stats.confirmedSats > 0n) {
       term.print('[STATUS] ACCESS KEY REQUIRED FOR WITHDRAWAL.', 'amber');
     } else if (stats.txCount > 0) {
-      term.print('[STATUS] WALLET DRAINED. HISTORY INTACT — RUN TXLOG.', 'amber');
+      term.print(
+        '[STATUS] WALLET DRAINED. HISTORY INTACT — RUN TXLOG.',
+        'amber',
+      );
     } else {
       term.print('[STATUS] ADDRESS NEVER USED ON MAINNET.', 'grey');
     }
@@ -1098,13 +1257,19 @@ export class Engine {
     }
     const term = this.term;
     term.blank();
-    term.print('[NET] SWEEPING DERIVATION GRID ACROSS THE LIVE CHAIN...', 'cyan');
+    term.print(
+      '[NET] SWEEPING DERIVATION GRID ACROSS THE LIVE CHAIN...',
+      'cyan',
+    );
 
     const rows = await this.withLogs(NET_LOGS, async () => {
       const results = [];
       for (const entry of this.wallet.addresses) {
         try {
-          results.push({ entry, stats: await this.chain.addressStats(entry.address) });
+          results.push({
+            entry,
+            stats: await this.chain.addressStats(entry.address),
+          });
         } catch (error) {
           results.push({ entry, error });
         }
@@ -1121,15 +1286,20 @@ export class Engine {
     for (const row of rows) {
       const path = `m/${row.entry.purpose}'`.padEnd(16);
       if (row.error) {
-        term.print(`${path}${row.entry.address.padEnd(46)}  UNREACHABLE`, 'red');
+        term.print(
+          `${path}${row.entry.address.padEnd(46)}  UNREACHABLE`,
+          'red',
+        );
         continue;
       }
       const used = row.stats.txCount > 0 || row.stats.totalReceivedSats > 0n;
       if (used) touched += 1;
       term.print(
-        path + row.entry.address.padEnd(46)
-        + String(row.stats.txCount).padStart(5) + '  '
-        + formatBtc(row.stats.totalReceivedSats).padStart(16),
+        path +
+          row.entry.address.padEnd(46) +
+          String(row.stats.txCount).padStart(5) +
+          '  ' +
+          formatBtc(row.stats.totalReceivedSats).padStart(16),
         used ? 'green' : 'dark',
       );
     }
@@ -1156,7 +1326,9 @@ export class Engine {
     term.print(`[NET] FETCHING TRANSACTION HISTORY: ${address}`, 'cyan');
     let txs;
     try {
-      txs = await this.withLogs(NET_LOGS.slice(0, 3), () => this.chain.transactions(address, 8));
+      txs = await this.withLogs(NET_LOGS.slice(0, 3), () =>
+        this.chain.transactions(address, 8),
+      );
     } catch (error) {
       term.print('[FATAL] TX HISTORY UNAVAILABLE.', 'red');
       term.print(`        ${error.message}`, 'red');
@@ -1172,7 +1344,9 @@ export class Engine {
       let deltaStr = '';
       if (tx.valueDeltaSats !== undefined && tx.valueDeltaSats !== null) {
         const sign = tx.valueDeltaSats >= 0n ? 'IN ' : 'OUT';
-        const delta = formatBtc(tx.valueDeltaSats < 0n ? -tx.valueDeltaSats : tx.valueDeltaSats);
+        const delta = formatBtc(
+          tx.valueDeltaSats < 0n ? -tx.valueDeltaSats : tx.valueDeltaSats,
+        );
         deltaStr = `  ${sign}  ${delta.padStart(16)} BTC`;
       }
       term.print(
@@ -1194,12 +1368,18 @@ export class Engine {
     if (!name) {
       const current = this.chain.order[0];
       for (const [key, provider] of Object.entries(PROVIDERS)) {
-        this.term.print(` ${key === current ? '>' : ' '} ${key.padEnd(12)} ${provider.base}`, 'green');
+        this.term.print(
+          ` ${key === current ? '>' : ' '} ${key.padEnd(12)} ${provider.base}`,
+          'green',
+        );
       }
       return;
     }
     if (!PROVIDERS[name]) {
-      this.term.print(`[FATAL] UNKNOWN PROVIDER. TRY: ${Object.keys(PROVIDERS).join(', ')}`, 'red');
+      this.term.print(
+        `[FATAL] UNKNOWN PROVIDER. TRY: ${Object.keys(PROVIDERS).join(', ')}`,
+        'red',
+      );
       return;
     }
     this.chain.preferred = name;
@@ -1220,7 +1400,9 @@ export class Engine {
     term.print('[NET] PROBING EXPLORER NODES...', 'cyan');
     let results;
     try {
-      results = await this.withLogs(NET_LOGS.slice(0, 2), () => this.chain.netinfo());
+      results = await this.withLogs(NET_LOGS.slice(0, 2), () =>
+        this.chain.netinfo(),
+      );
     } catch (error) {
       term.print(`[FATAL] PROBE FAILED: ${error.message}`, 'red');
       return;
@@ -1231,7 +1413,10 @@ export class Engine {
     for (const [key, status] of Object.entries(results)) {
       const mark = key === current ? 'PRIMARY  ' : 'FALLBACK ';
       const style = status.startsWith('OK') ? 'green' : 'red';
-      term.print(`  ${mark} ${key.padEnd(12)} ${PROVIDERS[key].base.padEnd(35)} ${status}`, style);
+      term.print(
+        `  ${mark} ${key.padEnd(12)} ${PROVIDERS[key].base.padEnd(35)} ${status}`,
+        style,
+      );
     }
     term.rule('-');
     term.print(`[STATUS] ACTIVE PROVIDER: ${this.chain.nodeName}`, 'cyan');
@@ -1268,7 +1453,10 @@ export class Engine {
   cmdJournal(argument) {
     const tool = argument.trim().toLowerCase();
     if (tool && !(tool in TOOLS)) {
-      this.term.print(`[FATAL] UNKNOWN TOOL. TRY: ${Object.keys(TOOLS).join(', ')}`, 'red');
+      this.term.print(
+        `[FATAL] UNKNOWN TOOL. TRY: ${Object.keys(TOOLS).join(', ')}`,
+        'red',
+      );
       return;
     }
     // The GUI half of the page writes to the same storage, so re-read first.
@@ -1283,9 +1471,15 @@ export class Engine {
     term.print('  INVESTIGATION JOURNAL', 'cyan');
     term.rule('=');
     entries.slice(0, 30).forEach((entry, index) => {
-      const label = pick(TOOLS[entry.tool] ? TOOLS[entry.tool].label : entry.tool, this.lang);
+      const label = pick(
+        TOOLS[entry.tool] ? TOOLS[entry.tool].label : entry.tool,
+        this.lang,
+      );
       term.print([
-        { text: `${String(index + 1).padStart(3)}. ${clockOf(entry.at)} `, style: 'dark' },
+        {
+          text: `${String(index + 1).padStart(3)}. ${clockOf(entry.at)} `,
+          style: 'dark',
+        },
         { text: String(label).toUpperCase().padEnd(12), style: 'cyan' },
         { text: entry.pinned ? '* ' : '  ', style: 'amber' },
         { text: entry.title, style: STATUS_STYLES[entry.status] || 'grey' },
@@ -1318,7 +1512,9 @@ export class Engine {
       // nothing here to replay — that is the point of masking it.
       if (!payload.mnemonic) {
         this.term.print(
-          '[WARN] PHRASE WAS NOT STORED — THE GAME DOES NOT KEEP UNKNOWN SEEDS.', 'amber');
+          '[WARN] PHRASE WAS NOT STORED — THE GAME DOES NOT KEEP UNKNOWN SEEDS.',
+          'amber',
+        );
         return;
       }
       await this.cmdDecrypt(payload.mnemonic);
@@ -1355,7 +1551,9 @@ export class Engine {
     }
     this.journal.togglePin(entry.id);
     this.term.print(
-      `[ OK ] ${entry.pinned ? 'PINNED: ' : 'UNPINNED: '}${entry.title}`, 'green');
+      `[ OK ] ${entry.pinned ? 'PINNED: ' : 'UNPINNED: '}${entry.title}`,
+      'green',
+    );
   }
 
   cmdPurge(argument) {
@@ -1363,7 +1561,9 @@ export class Engine {
     this.journal.refresh();
     this.journal.clear({ keepPinned: !purgeAll });
     this.term.print(
-      purgeAll ? '[ OK ] JOURNAL CLEARED.' : '[ OK ] JOURNAL CLEARED, PINNED ENTRIES KEPT.',
+      purgeAll
+        ? '[ OK ] JOURNAL CLEARED.'
+        : '[ OK ] JOURNAL CLEARED, PINNED ENTRIES KEPT.',
       'green',
     );
   }
@@ -1384,7 +1584,9 @@ export class Engine {
     // Against the desk, not the campaign: solved counts contracts too, so
     // closing one used to read 9/8.
     const desk = caseload(this.progress);
-    const closed = desk.filter((entry) => this.progress.isSolved(entry.id)).length;
+    const closed = desk.filter((entry) =>
+      this.progress.isSolved(entry.id),
+    ).length;
     term.keyValue('CASES CLOSED', `${closed}/${desk.length}`);
     term.keyValue('JOURNAL', `${this.journal.all().length} entries`);
     term.keyValue(
@@ -1396,8 +1598,15 @@ export class Engine {
     if (this.wallet) {
       term.keyValue('LOADED ADDRESS', this.wallet.primary.address);
       try {
-        term.keyValue('SEED ENTROPY', toHex(mnemonicToEntropy(this.wallet.mnemonic)), 'grey', 'dim');
-      } catch { /* validated on load, so this cannot normally fail */ }
+        term.keyValue(
+          'SEED ENTROPY',
+          toHex(mnemonicToEntropy(this.wallet.mnemonic)),
+          'grey',
+          'dim',
+        );
+      } catch {
+        /* validated on load, so this cannot normally fail */
+      }
     }
     term.blank();
   }
@@ -1414,8 +1623,11 @@ export class Engine {
   }
 
   cmdExit() {
-    this.term.print('[SYS] THIS TERMINAL HAS NO EXIT. CLOSE THE TAB, DETECTIVE.', 'dark');
+    this.term.print(
+      '[SYS] THIS TERMINAL HAS NO EXIT. CLOSE THE TAB, DETECTIVE.',
+      'dark',
+    );
   }
 }
 
-export { normalize, ChainError };
+export { ChainError, normalize };

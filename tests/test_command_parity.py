@@ -77,7 +77,7 @@ def test_every_method_the_engine_calls_on_itself_exists():
     language will not report until a player finds it."""
     source = (ROOT / "docs" / "js" / "engine.js").read_text(encoding="utf-8")
     body = source[source.index("export class Engine {"):]
-    defined = set(re.findall(r"^  (?:async )?([A-Za-z_$][\w$]*)\(", body, re.M))
+    defined = set(re.findall(r"^  (?:async )?([A-Za-z_$][\w$]*)\(", body, re.MULTILINE))
     # A callback handed in through the constructor is callable too.
     defined |= set(re.findall(r"this\.([A-Za-z_$][\w$]*) =", body))
     called = set(re.findall(r"this\.([A-Za-z_$][\w$]*)\(", body))
@@ -130,10 +130,10 @@ def test_no_narrative_string_is_missing_a_language(lang):
 def test_the_browsers_narrative_strings_cover_the_same_languages():
     source = (ROOT / "docs" / "js" / "engine.js").read_text(encoding="utf-8")
     block = source[source.index("const TEXT = {"):source.index("\n};", source.index("const TEXT = {"))]
-    for entry in re.findall(r"^  (\w+): \{(.*?)^  \},", block + "\n  },", re.S | re.M):
+    for entry in re.findall(r"^  (\w+): \{(.*?)^  \},", block + "\n  },", re.DOTALL | re.MULTILINE):
         name, body = entry
         for lang in LANGS:
-            assert re.search(rf"^    {lang}: ", body, re.M), f"TEXT.{name} has no {lang}"
+            assert re.search(rf"^    {lang}: ", body, re.MULTILINE), f"TEXT.{name} has no {lang}"
 
 
 # --- OPEN reaches what CASES shows ------------------------------------------

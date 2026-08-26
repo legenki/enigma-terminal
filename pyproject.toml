@@ -1,3 +1,5 @@
+[tool.ruff.lint]
+ignore = ["PLW1510", "BLE001"]
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
@@ -22,7 +24,7 @@ dependencies = []
 
 [project.optional-dependencies]
 net = ["requests>=2.31"]
-dev = ["pytest>=8.0", "requests>=2.31", "mnemonic>=0.20", "bip-utils>=2.9"]
+dev = ["pytest>=8.0", "requests>=2.31", "mnemonic>=0.20", "bip-utils>=2.9", "ruff>=0.1", "mypy>=1.0", "types-requests"]
 
 [project.scripts]
 enigma-terminal = "enigma_terminal.game:main"

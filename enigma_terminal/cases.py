@@ -83,7 +83,7 @@ class Progress:
         return Path.home() / ".enigma_terminal" / "progress.json"
 
     @classmethod
-    def load(cls, path: Path | None = None) -> "Progress":
+    def load(cls, path: Path | None = None) -> Progress:
         path = path or cls.default_path()
         try:
             data = json.loads(path.read_text(encoding="utf-8"))

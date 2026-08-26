@@ -8,22 +8,22 @@ from dataclasses import dataclass, field
 
 from . import __version__
 from .cases import LANGUAGES, Campaign, Case, Progress
-from .chain import ChainClient, ChainError, PROVIDERS
-from .journal import STATUS_STYLES, TOOLS, Journal, mask_mnemonic
+from .chain import PROVIDERS, AddressStats, ChainClient, ChainError
 from .crypto_engine import (
     MnemonicError,
-    normalize,
     Wallet,
     complete_mnemonic,
     derive_wallet,
     entropy_to_mnemonic,
     index_of,
     mnemonic_to_entropy,
+    normalize,
     random_mnemonic,
     search,
     word_at,
     wordlist_is_authentic,
 )
+from .journal import STATUS_STYLES, TOOLS, Journal, mask_mnemonic
 from .ui import DECRYPT_LOGS, NET_LOGS, Screen
 
 PROMPT = "nullsec@enigma:~$ "
@@ -848,9 +848,11 @@ def cmd_sweep(s: Session, _arg: str) -> None:
     s.screen.write()
     s.screen.write("[NET] SWEEPING DERIVATION GRID ACROSS THE LIVE CHAIN...", "cyan")
 
-    def sweep() -> list[tuple[str, object]]:
-        results = []
-        for derived in s.wallet.addresses:
+    wallet = s.wallet
+
+    def sweep() -> list[tuple[str, AddressStats | ChainError]]:
+        results: list[tuple[str, AddressStats | ChainError]] = []
+        for derived in wallet.addresses:
             try:
                 results.append((derived.label, s.chain.address_stats(derived.address)))
             except ChainError as exc:

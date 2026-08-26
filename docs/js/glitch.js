@@ -38,8 +38,12 @@ export class GlitchBanner {
     const seconds = now / 1000;
 
     ctx.setTransform(
-      Math.min(window.devicePixelRatio || 1, 2), 0, 0,
-      Math.min(window.devicePixelRatio || 1, 2), 0, 0,
+      Math.min(window.devicePixelRatio || 1, 2),
+      0,
+      0,
+      Math.min(window.devicePixelRatio || 1, 2),
+      0,
+      0,
     );
     ctx.fillStyle = '#05070a';
     ctx.fillRect(0, 0, w, h);
@@ -98,8 +102,17 @@ export class GlitchBanner {
       const y = Math.max(0, Math.min(h - 1, slice.y));
       const height = Math.min(slice.height, h - y);
       if (height <= 0) continue;
-      ctx.drawImage(this.canvas, 0, y, this.width, height,
-        slice.shift, y, this.width, height);
+      ctx.drawImage(
+        this.canvas,
+        0,
+        y,
+        this.width,
+        height,
+        slice.shift,
+        y,
+        this.width,
+        height,
+      );
     }
 
     // Scanlines on top of everything.

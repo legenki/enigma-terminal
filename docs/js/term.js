@@ -9,9 +9,9 @@
 export const GROUND = '#363248';
 
 export const PALETTE = {
-  text: '#e6e4f0',      // everything the machine says
-  command: '#ffffff',   // the line the player typed, lit against the rest
-  prompt: '#e0906d',    // the clay of the rest of the interface
+  text: '#e6e4f0', // everything the machine says
+  command: '#ffffff', // the line the player typed, lit against the rest
+  prompt: '#e0906d', // the clay of the rest of the interface
   green: '#9fd8a8',
   cyan: '#8ac7e8',
   amber: '#e8c07a',
@@ -39,15 +39,15 @@ export class Terminal {
     this.prompt = options.prompt || 'nullsec@enigma:~$ ';
     this.onCommand = options.onCommand || (() => {});
 
-    this.lines = [];       // committed rows, each an array of {text, color}
-    this.queue = [];       // every write passes through here, preserving order
+    this.lines = []; // committed rows, each an array of {text, color}
+    this.queue = []; // every write passes through here, preserving order
     this.input = '';
     this.cursor = 0;
     this.history = [];
     this.historyIndex = -1;
     this.scrollOffset = 0;
-    this.busy = false;     // a command is running
-    this.locked = false;   // boot sequence owns the screen
+    this.busy = false; // a command is running
+    this.locked = false; // boot sequence owns the screen
     this.typeSpeed = options.typeSpeed || 1;
     this.cursorVisible = true;
     this.dirty = true;
@@ -91,7 +91,12 @@ export class Terminal {
       if (!text) continue;
       while (text.length) {
         const room = this.cols - used;
-        if (room <= 0) { rows.push(current); current = []; used = 0; continue; }
+        if (room <= 0) {
+          rows.push(current);
+          current = [];
+          used = 0;
+          continue;
+        }
         current.push({ text: text.slice(0, room), color: segment.color });
         used += Math.min(room, text.length);
         text = text.slice(room);
@@ -124,7 +129,12 @@ export class Terminal {
   /** Queue a line that appears character by character. */
   type(text = '', style = 'green', cps = 420) {
     this.queue.push({
-      text: String(text), color: colourOf(style), cps, index: 0, acc: 0, start: -1,
+      text: String(text),
+      color: colourOf(style),
+      cps,
+      index: 0,
+      acc: 0,
+      start: -1,
     });
     return this;
   }
@@ -191,7 +201,9 @@ export class Terminal {
 
       // The job always owns the tail of the buffer, so replacing from `start`
       // to the end keeps wrapped rows consistent as the line grows.
-      const rows = this.wrap([{ text: job.text.slice(0, job.index), color: job.color }]);
+      const rows = this.wrap([
+        { text: job.text.slice(0, job.index), color: job.color },
+      ]);
       this.lines.splice(job.start, this.lines.length - job.start, ...rows);
       this.dirty = true;
 
@@ -238,11 +250,13 @@ export class Terminal {
       this.onCommand(command);
     } else if (key === 'Backspace') {
       if (this.cursor > 0) {
-        this.input = this.input.slice(0, this.cursor - 1) + this.input.slice(this.cursor);
+        this.input =
+          this.input.slice(0, this.cursor - 1) + this.input.slice(this.cursor);
         this.cursor -= 1;
       }
     } else if (key === 'Delete') {
-      this.input = this.input.slice(0, this.cursor) + this.input.slice(this.cursor + 1);
+      this.input =
+        this.input.slice(0, this.cursor) + this.input.slice(this.cursor + 1);
     } else if (key === 'ArrowLeft') {
       this.cursor = Math.max(0, this.cursor - 1);
     } else if (key === 'ArrowRight') {
@@ -253,9 +267,10 @@ export class Terminal {
       this.cursor = this.input.length;
     } else if (key === 'ArrowUp') {
       if (this.history.length) {
-        this.historyIndex = this.historyIndex < 0
-          ? this.history.length - 1
-          : Math.max(0, this.historyIndex - 1);
+        this.historyIndex =
+          this.historyIndex < 0
+            ? this.history.length - 1
+            : Math.max(0, this.historyIndex - 1);
         this.input = this.history[this.historyIndex];
         this.cursor = this.input.length;
       }
@@ -278,7 +293,8 @@ export class Terminal {
       this.input = '';
       this.cursor = 0;
     } else if (key.length === 1 && !event.ctrlKey && !event.metaKey) {
-      this.input = this.input.slice(0, this.cursor) + key + this.input.slice(this.cursor);
+      this.input =
+        this.input.slice(0, this.cursor) + key + this.input.slice(this.cursor);
       this.cursor += 1;
     } else {
       return;
@@ -295,7 +311,10 @@ export class Terminal {
 
   scrollBy(lines) {
     const maxScroll = Math.max(0, this.lines.length - this.rows + 1);
-    this.scrollOffset = Math.min(Math.max(0, this.scrollOffset + lines), maxScroll);
+    this.scrollOffset = Math.min(
+      Math.max(0, this.scrollOffset + lines),
+      maxScroll,
+    );
     this.dirty = true;
   }
 
@@ -326,10 +345,13 @@ export class Terminal {
 
     const visible = this.locked
       ? this.lines
-      : [...this.lines, [
-          { text: this.prompt, color: PALETTE.prompt },
-          { text: this.input, color: PALETTE.white },
-        ]];
+      : [
+          ...this.lines,
+          [
+            { text: this.prompt, color: PALETTE.prompt },
+            { text: this.input, color: PALETTE.white },
+          ],
+        ];
 
     const start = Math.max(0, visible.length - this.rows - this.scrollOffset);
     const slice = visible.slice(start, start + this.rows);
@@ -363,7 +385,11 @@ export class Terminal {
     if (this.scrollOffset > 0) {
       const badge = `-- SCROLLBACK ${this.scrollOffset} --`;
       ctx.fillStyle = PALETTE.amber;
-      ctx.fillText(badge, this.width - padX - badge.length * this.cellWidth, padY);
+      ctx.fillText(
+        badge,
+        this.width - padX - badge.length * this.cellWidth,
+        padY,
+      );
     }
 
     this.dirty = false;

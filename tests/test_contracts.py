@@ -9,8 +9,8 @@ that wastes a player's evening.
 
 from __future__ import annotations
 
-import sys
 import json
+import sys
 from pathlib import Path
 
 import pytest
@@ -132,7 +132,7 @@ def test_every_case_is_solvable_from_its_clues(cases):
             ce.validate(phrase)
             if ce.fingerprint(phrase) != case["fingerprint"]:
                 unsolved.append((case["id"], "fingerprint mismatch"))
-        except Exception as exc:  # noqa: BLE001 - report, do not hide
+        except Exception as exc:
             unsolved.append((case["id"], f"{type(exc).__name__}: {exc}"))
     assert not unsolved, f"{len(unsolved)} unsolvable case(s): {unsolved[:6]}"
 
@@ -224,7 +224,7 @@ def test_redacted_sheets_hide_exactly_one_word(cases):
             continue
         pattern = case["solution"]["steps"][0]["pattern"]
         assert pattern.split().count("?") == 1
-        position, candidates = ce.complete_mnemonic(pattern)
+        _position, candidates = ce.complete_mnemonic(pattern)
         assert case["solution"]["steps"][0]["word"] in candidates
 
 
@@ -314,11 +314,7 @@ def test_russian_codenames_agree_in_gender(cases):
     wrong = []
     for case in cases:
         adjective, noun = case["codename"]["ru"].split(" ", 1)
-        if noun in FEMININE and not adjective.endswith(("АЯ", "ЯЯ")):
-            wrong.append(case["codename"]["ru"])
-        elif noun in NEUTER and not adjective.endswith(("ОЕ", "ЕЕ")):
-            wrong.append(case["codename"]["ru"])
-        elif noun not in FEMININE and noun not in NEUTER \
+        if noun in FEMININE and not adjective.endswith(("АЯ", "ЯЯ")) or noun in NEUTER and not adjective.endswith(("ОЕ", "ЕЕ")) or noun not in FEMININE and noun not in NEUTER \
                 and not adjective.endswith(("ЫЙ", "ИЙ", "ОЙ")):
             wrong.append(case["codename"]["ru"])
     assert not wrong, f"gender disagreement: {wrong[:8]}"

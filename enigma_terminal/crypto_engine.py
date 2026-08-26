@@ -11,9 +11,9 @@ import hashlib
 import hmac
 import secrets
 import unicodedata
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable, Sequence
 
 _DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 _WORDLIST_FILE = _DATA_DIR / "english.txt"
@@ -214,7 +214,7 @@ try:  # OpenSSL 3 often ships without the legacy provider that carries ripemd160
     def _ripemd160(data: bytes) -> bytes:
         return hashlib.new("ripemd160", data).digest()
 except (ValueError, TypeError):  # pragma: no cover - depends on the host OpenSSL
-    from ._ripemd160 import ripemd160 as _ripemd160
+    from ._ripemd160 import ripemd160 as _ripemd160  # type: ignore
 
 
 def _hash160(data: bytes) -> bytes:
@@ -233,7 +233,7 @@ class ExtendedKey:
     child_number: int = 0
 
     @classmethod
-    def from_seed(cls, seed: bytes) -> "ExtendedKey":
+    def from_seed(cls, seed: bytes) -> ExtendedKey:
         digest = hmac.new(b"Bitcoin seed", seed, hashlib.sha512).digest()
         return cls(key=digest[:32], chain_code=digest[32:])
 
@@ -245,7 +245,7 @@ class ExtendedKey:
     def fingerprint(self) -> bytes:
         return _hash160(self.public_key)[:4]
 
-    def child(self, index: int) -> "ExtendedKey":
+    def child(self, index: int) -> ExtendedKey:
         hardened = index >= 0x80000000
         payload = (b"\x00" + self.key) if hardened else self.public_key
         data = payload + index.to_bytes(4, "big")
@@ -262,7 +262,7 @@ class ExtendedKey:
             child_number=index,
         )
 
-    def derive_path(self, path: str) -> "ExtendedKey":
+    def derive_path(self, path: str) -> ExtendedKey:
         node = self
         for part in path.strip().split("/"):
             part = part.strip()

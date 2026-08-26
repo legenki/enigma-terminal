@@ -9,7 +9,8 @@ import shutil
 import sys
 import threading
 import time
-from typing import Callable, Iterable, Sequence, TypeVar
+from collections.abc import Callable, Iterable, Sequence
+from typing import TypeVar
 
 T = TypeVar("T")
 
@@ -160,7 +161,7 @@ class Screen:
         def runner() -> None:
             try:
                 box["value"] = work()
-            except BaseException as exc:  # noqa: BLE001 - surfaced to the caller
+            except BaseException as exc:
                 box["error"] = exc
 
         thread = threading.Thread(target=runner, daemon=True)
