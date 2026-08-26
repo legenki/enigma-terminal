@@ -1,9 +1,9 @@
-// Eight icons from Feather (https://feathericons.com), MIT, © Cole Bemis.
+// Twelve icons from Feather (https://feathericons.com), MIT, © Cole Bemis.
 // See LICENSE-feather beside this file.
 //
-// Only the paths are vendored, not the library: the sidebar needs eight fixed
-// glyphs and nothing else, and a build step for that would cost more than it
-// saves. Every icon is the stock 24×24 Feather geometry, unaltered, so a
+// Only the paths are vendored, not the library: the interface needs a fixed
+// handful of glyphs and nothing else, and a build step for that would cost
+// more than it saves. Every icon is the stock 24×24 Feather geometry, unaltered, so a
 // future swap against the real set stays a straight comparison.
 //
 // Written as element descriptors rather than markup, because nothing in this
@@ -61,6 +61,18 @@ const ICONS = {
 		["circle", { cx: 12, cy: 12, r: 10 }],
 		["line", { x1: 12, y1: 16, x2: 12, y2: 12 }],
 		["line", { x1: 12, y1: 8, x2: 12.01, y2: 8 }],
+	],
+	chevronDown: [["polyline", { points: "6 9 12 15 18 9" }]],
+	check: [["polyline", { points: "20 6 9 17 4 12" }]],
+	globe: [
+		["circle", { cx: 12, cy: 12, r: 10 }],
+		["line", { x1: 2, y1: 12, x2: 22, y2: 12 }],
+		[
+			"path",
+			{
+				d: "M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z",
+			},
+		],
 	],
 };
 

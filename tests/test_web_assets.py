@@ -271,10 +271,19 @@ def test_the_language_switcher_offers_every_shipped_language():
     codes = re.findall(r"'(\w+)'", listed.group(1))
     assert tuple(codes) == LANGS, codes
 
+    # The switcher moved out of the sidebar and into the strip; wherever it
+    # lives, it has to be built from LANGS rather than from a hand-written list.
+    main = (DOCS / "js" / "main.js").read_text(encoding="utf-8")
+    assert "LANGS.map" in main, "the switcher hardcodes its languages again"
     gui = (DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8")
-    assert "LANGS.map" in gui, "the GUI switcher hardcodes its languages again"
+    assert "btn--lang" not in gui, "the four sidebar language buttons are back"
     engine = (DOCS / "js" / "engine.js").read_text(encoding="utf-8")
     assert "LANGS.includes(choice)" in engine, "LANG rejects languages the game ships"
+
+    # Every language names itself in the menu, so it is readable by whoever
+    # needs to pick it.
+    for endonym in ("Русский", "English", "Español", "Português"):
+        assert endonym in core, f"core.js has no endonym for {endonym}"
 
 
 def test_gui_text_dictionary_is_complete():
@@ -378,3 +387,76 @@ def test_surfaces_are_layered_not_flattened():
     assert background(".word {") == "--surface"
     assert background(".card {") == "--surface"
     assert background(".notice {") == "--tint"
+
+
+# --- the strip above the interface -----------------------------------------
+
+def test_the_strip_is_a_window_like_the_rest_and_not_a_slab():
+    """It was 72px of its own black with green hardware on it, over a warm
+    daylit interface: the loudest thing on screen was the one thing nobody
+    clicks."""
+    css = (DOCS / "css" / "terminal.css").read_text(encoding="utf-8")
+    shell = css[css.index("#shell {"):css.index("\n}", css.index("#shell {"))]
+    rows = re.search(r"grid-template-rows: (\d+)px", shell)
+    assert rows and int(rows.group(1)) <= 40, f"the strip is back to {shell}"
+
+    bar = css[css.index("#glitch-bar {"):css.index("\n}", css.index("#glitch-bar {"))]
+    assert "var(--surface)" in bar, "the strip does not take the daylight ground"
+    assert "var(--line)" in bar, "the strip does not take the daylight hairline"
+    assert not re.search(r"#[0-9a-fA-F]{3,6}", bar), f"a literal colour is back: {bar}"
+
+    # The canvas must be pinned, or it sizes its backing store from a box that
+    # its own backing store just changed, and grows on every frame.
+    mark = css[css.index("#glitch-canvas {"):css.index("\n}", css.index("#glitch-canvas {"))]
+    assert "width: 18px" in mark and "height: 18px" in mark
+
+
+def test_the_mark_is_drawn_for_the_size_it_is_given():
+    """The banner clamped itself to 200x40 before measuring. At 18px that put
+    the wordmark off its own left edge — the mark rendered as one stray glyph."""
+    source = strip_js_comments((DOCS / "js" / "glitch.js").read_text(encoding="utf-8"))
+    assert "compact" in source, "the banner has no compact mode"
+    resize = source[source.index("resize() {"):]
+    resize = resize[:resize.index("\n  }")]
+    assert "this.compact" in resize, "the size floor does not shrink with the mark"
+
+
+def test_the_strip_carries_both_controls_and_the_status():
+    html = (DOCS / "index.html").read_text(encoding="utf-8")
+    bar = html[html.index('<header id="glitch-bar">'):html.index("</header>")]
+    for required in ('id="light-switch"', 'id="power-led"', 'id="lang-select"',
+                     'id="bar-status"', 'id="glitch-canvas"'):
+        assert required in bar, f"the strip lost {required}"
+    assert "rocker" not in bar, "the phosphor rocker is back"
+    assert "СВЕТ" not in bar and "ДЕНЬ" not in bar, "the strip is pinned to one language again"
+
+
+def test_the_dropdown_is_a_listbox_and_reachable_from_the_keyboard():
+    """A native <select> could not take the interface's own type and ground,
+    so this one is hand-built — which means it owes the keyboard everything a
+    <select> would have given for free."""
+    source = strip_js_comments((DOCS / "js" / "select.js").read_text(encoding="utf-8"))
+    for required in ("aria-haspopup", "aria-expanded", "'listbox'", "'option'",
+                     "aria-selected", "Escape", "ArrowDown", "ArrowUp"):
+        assert required in source, f"the dropdown has no {required}"
+    assert "innerHTML" not in source, "the dropdown builds DOM from strings"
+    assert "focusout" in source, "tabbing out leaves the menu open"
+    assert "pointerdown" in source, "a click outside does not dismiss the menu"
+
+
+def test_the_rail_follows_a_language_change():
+    """The two lookups are cached, and setLang was clearing the panels but not
+    them — so they kept the language the player had just left."""
+    source = strip_js_comments((DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8"))
+    block = source[source.index("setLang(lang) {"):]
+    block = block[:block.index("\n  }")]
+    assert "railPanes = null" in block, "a language change no longer drops the rail"
+
+
+def test_no_phosphor_green_is_left_in_the_stylesheets():
+    """The neon tints outlived the tube: a wash over every window title bar,
+    a grid over the whole interface, an inner glow in every field."""
+    for name in ("gui.css", "terminal.css"):
+        css = (DOCS / "css" / name).read_text(encoding="utf-8")
+        for green in ("34, 255, 122", "57, 255, 139", "#39ff8b", "#22ff7a"):
+            assert green not in css, f"{name} still carries the phosphor tint {green}"

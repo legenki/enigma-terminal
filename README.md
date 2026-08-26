@@ -89,6 +89,10 @@ the **BIP-39 wordlist** and **missing-word recovery**. They are the things you r
 mid-thought, and putting them behind a tab meant leaving whatever you were reading to
 use one, and losing the other to see the first.
 
+Above the panels is a 34&nbsp;px strip in the same idiom as every window below it: the mark
+and the wordmark on the left, then the node, the closed-case count and the journal size,
+then the two controls that change how the whole page reads — daylight and language.
+
 ### The palette follows the hour
 
 There is no theme toggle in the usual sense. The interface takes its whole palette from
@@ -323,21 +327,22 @@ docs/                      the web build; GitHub Pages publishes from here
   js/gui/                  the windowed interface over the same core
   js/journal.js            the journal, shared by both halves of the page
   js/identicon.js          generative sigils for cases, phrases and addresses
-  js/glitch.js             the banner
+  js/glitch.js             the mark in the strip
+  js/select.js             the language dropdown the shell builds for itself
   js/storage.js            localStorage, with migration from the old key names
   js/vendor/               minidenticons and Feather (MIT), with their licences
 tools/generate_cases.py    builds the 256-contract board
 tools/build_web_data.py    generates the web build's data from data/
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
-tests/                     334 tests, including the Python ↔ JavaScript diff
+tests/                     341 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests -v          # 334 tests
+python -m pytest tests -v          # 341 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 

@@ -1,16 +1,19 @@
-// Shell: the glitch banner on top, the interface below, the daylight switch
-// in the banner.
+// Shell: one strip above the interface, carrying the mark, the status line
+// and the two controls that change how the whole page reads — daylight and
+// language. Both used to live elsewhere: the daylight switch in a 72px black
+// banner of its own, the languages as four buttons at the foot of the sidebar.
 //
 // The terminal is no longer a separate mode. It is the first panel in the
 // sidebar, and this file hands its canvas to the GUI to adopt — the Terminal
 // object, its scrollback and its input all survive the move, which is why the
 // frame is reparented rather than rebuilt.
 
-import { LANGS, loadContracts } from './core.js';
+import { LANG_ENDONYMS, LANG_NAMES, LANGS, loadContracts } from './core.js';
 import { Daylight } from './daylight.js';
 import { Engine } from './engine.js';
 import { GlitchBanner } from './glitch.js';
 import { GuiApp } from './gui/app.js';
+import { dropdown } from './select.js';
 import { migrated } from './storage.js';
 import { Terminal } from './term.js';
 
@@ -33,7 +36,11 @@ const preferred =
     .find((code) => LANGS.includes(code)) || 'en';
 const lang = stored(LANG_KEY, preferred);
 
-const glitch = new GlitchBanner(document.getElementById('glitch-canvas'));
+// Compact: an 18px mark beside a typed wordmark, not a canvas being the
+// wordmark itself.
+const glitch = new GlitchBanner(document.getElementById('glitch-canvas'), {
+  compact: true,
+});
 
 // ---- the terminal ---------------------------------------------------------
 
@@ -70,6 +77,7 @@ const gui = new GuiApp(guiRoot, {
   onLangChange: (code) => {
     store(LANG_KEY, code);
     engine.lang = code;
+    langSelect.setValue(code);
     paintLightLabels(code);
   },
   // Called every time the Terminal panel comes on screen. The canvas had no
@@ -96,21 +104,46 @@ const lightButtons = {
   dark: document.getElementById('light-night'),
 };
 
-// The switch sits in the banner, outside the GUI, so it carries its own four
-// languages. It was the last thing on the page still pinned to one.
+// The strip sits outside the GUI, so it carries its own four languages. It was
+// the last thing on the page still pinned to one.
 const LIGHT_WORDS = {
-  en: { caption: 'Light', live: 'LIVE', light: 'DAY', dark: 'NIGHT' },
-  ru: { caption: 'Свет', live: 'LIVE', light: 'ДЕНЬ', dark: 'НОЧЬ' },
-  es: { caption: 'Luz', live: 'LIVE', light: 'DÍA', dark: 'NOCHE' },
-  pt: { caption: 'Luz', live: 'LIVE', light: 'DIA', dark: 'NOITE' },
+  en: {
+    live: 'LIVE',
+    light: 'DAY',
+    dark: 'NIGHT',
+    daylight: 'Daylight',
+    language: 'Language',
+  },
+  ru: {
+    live: 'LIVE',
+    light: 'ДЕНЬ',
+    dark: 'НОЧЬ',
+    daylight: 'Освещение',
+    language: 'Язык',
+  },
+  es: {
+    live: 'LIVE',
+    light: 'DÍA',
+    dark: 'NOCHE',
+    daylight: 'Luz',
+    language: 'Idioma',
+  },
+  pt: {
+    live: 'LIVE',
+    light: 'DIA',
+    dark: 'NOITE',
+    daylight: 'Luz',
+    language: 'Idioma',
+  },
 };
-const lightCaption = document.getElementById('light-caption');
+const lightSwitch = document.getElementById('light-switch');
 
 function paintLightLabels(code) {
   const words = LIGHT_WORDS[code] || LIGHT_WORDS.en;
   // Screen readers announce the page in whatever the player is reading.
   document.documentElement.lang = code;
-  if (lightCaption) lightCaption.textContent = words.caption;
+  if (lightSwitch) lightSwitch.setAttribute('aria-label', words.daylight);
+  langSelect.setLabel(words.language);
   for (const [key, button] of Object.entries(lightButtons)) {
     button.textContent = words[key];
   }
@@ -132,6 +165,49 @@ function setLight(next) {
 
 for (const [key, button] of Object.entries(lightButtons)) {
   button.addEventListener('click', () => setLight(key));
+}
+
+// ---- language -------------------------------------------------------------
+// One control in the chrome rather than four buttons at the foot of the
+// sidebar: the language is a property of the whole page, so it belongs where
+// the daylight switch is, not inside the panel column.
+
+const langSelect = dropdown({
+  options: LANGS.map((code) => ({
+    value: code,
+    name: LANG_ENDONYMS[code],
+    code: LANG_NAMES[code],
+  })),
+  value: lang,
+  label: LIGHT_WORDS[lang] ? LIGHT_WORDS[lang].language : 'Language',
+  onChange: (code) => applyLang(code),
+});
+document.getElementById('lang-select').append(langSelect.node);
+
+function applyLang(code) {
+  store(LANG_KEY, code);
+  engine.lang = code;
+  gui.setLang(code);
+  langSelect.setValue(code);
+  paintLightLabels(code);
+  paintStatus();
+}
+
+// ---- the status line ------------------------------------------------------
+// Node, closed cases and journal size — the sidebar's numbers, up where they
+// are readable from any panel. Written only when the string actually changes,
+// because the frame loop asks every frame.
+
+const statusHost = document.getElementById('bar-status');
+let shownStatus = null;
+
+function paintStatus() {
+  if (!statusHost) return;
+  const { node, closed, total, log } = gui.deskStatus();
+  const line = `${node} · ${closed}/${total} · LOG ${log}`;
+  if (line === shownStatus) return;
+  shownStatus = line;
+  statusHost.textContent = line;
 }
 
 // ---- input plumbing -------------------------------------------------------
@@ -246,5 +322,6 @@ loadContracts().then((cases) => {
   if (cases.length) gui.syncFromStorage();
 });
 paintLightLabels(lang);
+paintStatus();
 setLight(daylight.mode);
 requestAnimationFrame(frame);

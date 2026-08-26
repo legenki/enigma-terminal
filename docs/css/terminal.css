@@ -54,107 +54,227 @@ html, body {
   opacity: 0;
 }
 
-/* ---------- shell: the banner and the stage under it --------------------- */
+/* ---------- shell: the strip and the stage under it ---------------------- */
 
 #shell {
   position: relative;
   z-index: 1;
   height: 100%;
   display: grid;
-  grid-template-rows: clamp(52px, 8vh, 78px) 1fr;
+  grid-template-rows: 34px 1fr;
   gap: 8px;
   padding: clamp(8px, 1.6vmin, 18px);
 }
 
+/* The strip is a window like any other: surface ground, one hairline, and
+   type. It used to be a 72px slab of its own black with green hardware on it,
+   which made the one thing nobody clicks the loudest thing on the screen. */
 #glitch-bar {
-  position: relative;
-  border: 1px solid #143a26;
-  background: #05070a;
-  overflow: hidden;
-}
-
-#glitch-bar canvas { display: block; width: 100%; height: 100%; }
-#glitch-canvas { border-radius: var(--radius, 12px); }
-
-#stage { position: relative; min-height: 0; }
-
-/* ---------- the daylight switch, in the banner --------------------------- */
-
-#light-switch {
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
   display: flex;
   align-items: center;
-  gap: 7px;
-  z-index: 2;
+  gap: 9px;
+  padding: 0 8px 0 7px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 12px);
+  overflow: visible;
 }
 
-#light-switch .rocker__btn { padding: 7px 11px; }
+/* Pinned in CSS on purpose: the canvas sizes its backing store from this box,
+   so a canvas free to take its own width grows on every frame. */
+#glitch-canvas {
+  display: block;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border-radius: 4px;
+}
 
-.switch-label {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 10px;
+.bar__mark {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  min-width: 0;
+  font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #8b9a92;
+  white-space: nowrap;
 }
 
-.rocker {
-  display: flex;
-  border: 1px solid #0c1a12;
-  background: #1b2620;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 2px 0 rgba(0, 0, 0, 0.5);
-}
+.bar__mark b { font-weight: 700; color: var(--ink); }
+.bar__sub { font-weight: 600; color: var(--soft); }
 
-.rocker__btn {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  padding: 7px 20px;
-  color: #8b9a92;
-  background: linear-gradient(180deg, #2a3830 0%, #1d2721 100%);
-  border: 0;
-  border-right: 1px solid #0c1a12;
-  cursor: pointer;
-  transition: color 120ms linear, background 120ms linear;
-}
+.bar__spacer { flex: 1; min-width: 8px; }
 
-.rocker__btn:last-child { border-right: 0; }
-.rocker__btn:hover { color: #c3d6cb; }
-
-.rocker__btn[aria-pressed="true"] {
-  color: #06120b;
-  background: linear-gradient(180deg, #57ffa0 0%, #23c46e 100%);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
-}
-
-.rocker__btn:focus-visible { outline: 2px solid #4df3ff; outline-offset: 2px; }
-
-@media (max-width: 640px) {
-  .rocker__btn { padding: 7px 14px; }
+.bar__status {
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--soft);
+  white-space: nowrap;
 }
 
 /* Green while the terminal is idle, amber while a command or a network call
-   is in flight. It sits on the banner, which keeps its own dark ground. */
+   is in flight. */
 #power-led {
-  width: 9px;
-  height: 9px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   flex: none;
-  background: #39ff8b;
-  box-shadow: 0 0 10px #39ff8b;
-  transition: background 120ms linear, box-shadow 120ms linear;
+  background: var(--ok);
+  transition: background 120ms linear;
 }
 
-#power-led.is-busy {
-  background: #ffc23d;
-  box-shadow: 0 0 12px #ffc23d;
-}
+#power-led.is-busy { background: var(--warn); }
 
 @media (prefers-reduced-motion: reduce) {
   #power-led { transition: none; }
 }
+
+/* ---------- the segmented daylight control ------------------------------- */
+
+.seg {
+  display: inline-flex;
+  flex: none;
+  gap: 1px;
+  padding: 2px;
+  background: var(--sunken);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+}
+
+.seg__btn {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  color: var(--soft);
+  background: none;
+  border: 0;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: color 120ms linear, background 120ms linear;
+}
+
+.seg__btn:hover { color: var(--ink); }
+
+.seg__btn[aria-pressed="true"] {
+  color: var(--ink);
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgba(20, 20, 19, 0.12);
+}
+
+.seg__btn:focus-visible { outline: 2px solid var(--info); outline-offset: 1px; }
+
+/* ---------- the language dropdown ---------------------------------------- */
+
+.drop { position: relative; flex: none; }
+
+.drop__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  padding: 5px 8px 5px 10px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  cursor: pointer;
+  transition: background 120ms linear, border-color 120ms linear;
+}
+
+.drop__btn:hover { background: var(--sunken); }
+.drop__btn:focus-visible { outline: 2px solid var(--info); outline-offset: 1px; }
+.drop__btn[aria-expanded="true"] { background: var(--sunken); border-color: var(--soft); }
+
+/* The chevron turns over rather than swapping glyph, so the control reads as
+   one object opening. */
+.drop__caret {
+  flex: none;
+  color: var(--soft);
+  transition: transform 140ms ease;
+}
+
+.drop__btn[aria-expanded="true"] .drop__caret { transform: rotate(180deg); }
+
+.drop__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 40;
+  min-width: 168px;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm, 8px);
+  box-shadow: 0 2px 6px rgba(20, 20, 19, 0.08), 0 12px 32px rgba(20, 20, 19, 0.14);
+  transform-origin: top right;
+  animation: drop-in 130ms ease;
+}
+
+@keyframes drop-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drop__menu { animation: none; }
+  .drop__caret { transition: none; }
+}
+
+.drop__menu.is-hidden { display: none; }
+
+.drop__opt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 9px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  text-align: left;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.drop__opt:hover,
+.drop__opt.is-active { background: var(--sunken); }
+.drop__opt:focus-visible { outline: 2px solid var(--info); outline-offset: -2px; }
+
+.drop__name { flex: 1; min-width: 0; }
+
+.drop__code {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--soft);
+}
+
+.drop__tick { flex: none; width: 12px; color: var(--btn); }
+.drop__tick.is-off { visibility: hidden; }
+.drop__opt[aria-selected="true"] .drop__name { font-weight: 600; }
+
+/* Narrow windows: the strip keeps the mark and the two controls, and drops
+   the parts that only add context. */
+@media (max-width: 820px) {
+  .bar__status { display: none; }
+}
+
+@media (max-width: 640px) {
+  .bar__sub { display: none; }
+  .seg__btn { padding: 4px 7px; }
+}
+
+#stage { position: relative; min-height: 0; }

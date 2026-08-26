@@ -17,8 +17,6 @@ import {
   clientBySlug,
   completeMnemonic,
   contractsLoaded,
-  LANG_NAMES,
-  LANGS,
   loadContracts,
   META,
   MnemonicError,
@@ -658,8 +656,26 @@ export class GuiApp {
   setLang(lang) {
     this.lang = lang;
     this.panels.clear(); // every label changes, so rebuild on demand
+    // The rail is cached separately and was not being dropped, so the two
+    // lookups kept the language the player had just left.
+    this.railPanes = null;
     this.paintChrome();
     if (this.mounted) this.render();
+    if (this.railOpen) this.paintRail();
+  }
+
+  /**
+   * The line the strip above the interface shows: node, closed cases, journal
+   * size. Same numbers as the sidebar meter, from the same desk.
+   */
+  deskStatus() {
+    const desk = caseload(this.progress);
+    return {
+      node: this.chain.nodeName,
+      closed: desk.filter((entry) => this.progress.isSolved(entry.id)).length,
+      total: desk.length,
+      log: this.journal.all().length,
+    };
   }
 
   /** Window titles live outside the panels, so `render` alone cannot reach them. */
@@ -883,24 +899,6 @@ export class GuiApp {
         'div',
         { class: 'nav__meter' },
         el('div', { text: `OPERATOR ${META.operator}` }),
-        el('div', { text: `NODE ${this.chain.nodeName}` }),
-        el('div', { text: `LOG ${this.journal.all().length}` }),
-      ),
-      el(
-        'div',
-        { class: 'row row--tight', style: 'margin-top:10px;padding:0 9px' },
-        ...LANGS.map((code) =>
-          el('button', {
-            class: 'btn btn--lang',
-            type: 'button',
-            'aria-pressed': this.lang === code ? 'true' : 'false',
-            onClick: () => {
-              this.setLang(code);
-              if (this.onLangChange) this.onLangChange(code);
-            },
-            text: LANG_NAMES[code],
-          }),
-        ),
       ),
     );
   }

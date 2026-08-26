@@ -19,18 +19,21 @@
 <body>
 <div id="shell">
 
-  <!-- The glitch banner stays above the whole interface. -->
+  <!-- One strip above the interface, in the same idiom as every window in it:
+       the mark and the wordmark on the left, status and the two controls on
+       the right. The glitch survives at 18px rather than as a wall. -->
   <header id="glitch-bar">
     <canvas id="glitch-canvas" role="img" aria-label="BIP-39: Enigma Terminal"></canvas>
-    <div id="light-switch" role="group" aria-label="Daylight">
-      <span id="power-led" aria-hidden="true"></span>
-      <span class="switch-label" id="light-caption">Light</span>
-      <div class="rocker">
-        <button id="light-live" class="rocker__btn" type="button" aria-pressed="false">LIVE</button>
-        <button id="light-day" class="rocker__btn" type="button" aria-pressed="false">DAY</button>
-        <button id="light-night" class="rocker__btn" type="button" aria-pressed="false">NIGHT</button>
-      </div>
+    <span class="bar__mark"><b>BIP-39</b><span class="bar__sub">Enigma Terminal</span></span>
+    <span class="bar__spacer"></span>
+    <span id="bar-status" class="bar__status"></span>
+    <span id="power-led" aria-hidden="true"></span>
+    <div id="light-switch" class="seg" role="group" aria-label="Daylight">
+      <button id="light-live" class="seg__btn" type="button" aria-pressed="false">LIVE</button>
+      <button id="light-day" class="seg__btn" type="button" aria-pressed="false">DAY</button>
+      <button id="light-night" class="seg__btn" type="button" aria-pressed="false">NIGHT</button>
     </div>
+    <div id="lang-select"></div>
   </header>
 
   <main id="stage">

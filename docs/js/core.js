@@ -25,6 +25,15 @@ export const LANGS = ['ru', 'en', 'es', 'pt'];
 
 export const LANG_NAMES = { ru: 'РУС', en: 'ENG', es: 'ESP', pt: 'POR' };
 
+//: The name each language has for itself. A language menu that lists them in
+//: the language you are leaving is no help to the person who cannot read it.
+export const LANG_ENDONYMS = {
+  ru: 'Русский',
+  en: 'English',
+  es: 'Español',
+  pt: 'Português',
+};
+
 /** Resolve a per-language bundle down to one language. */
 export const pick = (bundle, lang) =>
   (bundle && (bundle[lang] || bundle.en)) || bundle;
