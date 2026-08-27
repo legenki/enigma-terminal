@@ -9,8 +9,6 @@
 // It goes quiet while the tab is hidden. Nobody needs a countdown they cannot
 // see, and the request it would cost is one the player might want back.
 
-import { readHeader } from './crypto/header.js';
-
 //: Far enough apart to cost almost nothing, close enough that a block is never
 //: more than half a minute stale on screen.
 export const POLL_MS = 30000;
@@ -47,17 +45,13 @@ export class Heartbeat {
   async poll() {
     try {
       const tip = await this.client.tip();
-      let header = null;
-      try {
-        header = readHeader(tip.header);
-      } catch {
-        header = null;
-      }
+      // The header is verified where it is shown; here it is only a fallback
+      // for a timestamp the block already states.
       const next = {
         height: tip.height,
-        hash: tip.hash,
-        timestamp: header ? header.timestamp : tip.adjustedTimestamp,
-        transactionCount: header ? header.transactionCount : null,
+        hash: tip.id || tip.hash,
+        timestamp: Number(tip.timestamp) || 0,
+        transactionCount: tip.tx_count ?? null,
       };
       const first = this.block === null;
       const changed = !first && next.height !== this.block.height;

@@ -5,7 +5,6 @@
 // re-rendering it, so a half-typed phrase, a query and its results all survive
 // the trip to another tool and back.
 
-import { BitapsClient, btc, classify } from '../bitaps.js';
 import { ChainClient, formatBtc, PROVIDERS } from '../chain.js';
 import {
   CAMPAIGN_CASES,
@@ -40,12 +39,12 @@ import { deriveWallet } from '../crypto/wallet.js';
 import { pad2, splitAge } from '../heartbeat.js';
 import { addressSigil, caseSigil, mnemonicSigil, sigil } from '../identicon.js';
 import { Journal, maskMnemonic, TOOLS } from '../journal.js';
+import { btc, classify, ExplorerClient } from '../mempool.js';
 import {
   blockReward,
   formatHashrate,
   formatSpan,
   hashrate,
-  nextDifficulty,
   untilHalving,
   untilRetarget,
 } from '../pow.js';
@@ -149,6 +148,42 @@ export const PANELS = [
 
 // Every fixed string the GUI shows. Keys carrying {braces} are filled by `tf`.
 const T = {
+  minedBy: {
+    en: 'Mined by',
+    ru: 'Смайнил',
+    es: 'Minado por',
+    pt: 'Minerado por',
+  },
+  minerPools: {
+    en: 'Miner pools',
+    ru: 'Майнинг-пулы',
+    es: 'Pools de minería',
+    pt: 'Pools de mineração',
+  },
+  blocksWord: {
+    en: 'blocks',
+    ru: 'блоков',
+    es: 'bloques',
+    pt: 'blocos',
+  },
+  lastDay: {
+    en: 'Last 24 hours',
+    ru: 'За последние 24 часа',
+    es: 'Últimas 24 horas',
+    pt: 'Últimas 24 horas',
+  },
+  fastest: {
+    en: 'fastest',
+    ru: 'быстро',
+    es: 'rápido',
+    pt: 'rápido',
+  },
+  economy: {
+    en: 'economy',
+    ru: 'эконом',
+    es: 'económico',
+    pt: 'econômico',
+  },
   lastBlock: {
     en: 'Last block',
     ru: 'Последний блок',
@@ -528,16 +563,16 @@ const T = {
     pt: 'Isso não é uma altura, um hash nem um endereço.',
   },
   openInExplorer: {
-    en: 'Open at bitaps',
-    ru: 'Открыть на bitaps',
-    es: 'Abrir en bitaps',
-    pt: 'Abrir no bitaps',
+    en: 'Open at mempool.space',
+    ru: 'Открыть на mempool.space',
+    es: 'Abrir en mempool.space',
+    pt: 'Abrir no mempool.space',
   },
   sourceIsLive: {
-    en: 'Live from bitaps.com · 3 requests every 5 seconds',
-    ru: 'Живые данные bitaps.com · 3 запроса в 5 секунд',
-    es: 'En vivo desde bitaps.com · 3 solicitudes cada 5 segundos',
-    pt: 'Ao vivo de bitaps.com · 3 requisições a cada 5 segundos',
+    en: 'Live from mempool.space',
+    ru: 'Живые данные mempool.space',
+    es: 'En vivo desde mempool.space',
+    pt: 'Ao vivo de mempool.space',
   },
   solved: { en: 'Closed', ru: 'Закрыто', es: 'Cerrado', pt: 'Fechado' },
   open: { en: 'Open', ru: 'Открыто', es: 'Abierto', pt: 'Aberto' },
@@ -1041,6 +1076,10 @@ const fmtRate = (rate) => {
   return value >= 10 ? value.toFixed(0) : value.toFixed(1);
 };
 
+//: UTC, to the second, the way a chain writes its times.
+const stamp = (seconds) =>
+  `${new Date(Number(seconds) * 1000).toISOString().replace('T', ' ').slice(0, 19)} UTC`;
+
 //: 964 238 rather than 964,238 — the way a chain height is usually set.
 const group = (value) =>
   Number(value).toLocaleString('en-US').replace(/,/g, ' ');
@@ -1087,7 +1126,7 @@ export class GuiApp {
     this.chain = new ChainClient();
     //: Its own client, because its rate limit is its own: three calls every
     //: five seconds, shared across every lookup the panel makes.
-    this.chainExplorer = new BitapsClient();
+    this.chainExplorer = new ExplorerClient();
     this.pulseAge = null;
     this.pulseBlock = null;
     this.explorerPulseCard = null;
@@ -2567,7 +2606,7 @@ export class GuiApp {
     return { node, api: {} };
   }
 
-  // ---- explorer: the live chain, read from bitaps -------------------------
+  // ---- explorer: the live chain, read from mempool.space ------------------
 
   /**
    * One box, four kinds of answer.
@@ -2611,25 +2650,19 @@ export class GuiApp {
       try {
         const tip = await this.chainExplorer.tip();
         if (showing !== null) return;
+        pulse.paint(this.pulseAge, this.pulseBlock);
         replace(output, pulse.node, this.explorerTip(tip));
-        // The mempool costs a second token, so it lands when it lands rather
-        // than holding the tip back.
-        const pool = await this.chainExplorer.mempool();
+        // Each of these costs one more call, so they land in turn and never
+        // hold back what is already on screen.
+        const [pool, fees] = await Promise.all([
+          this.chainExplorer.mempool(),
+          this.chainExplorer.fees().catch(() => null),
+        ]);
         if (showing !== null) return;
-        pulse.paintPool(pool);
-        output.append(this.explorerPool(pool));
-        // The proof-of-work card costs one more call, so it lands last and
-        // never holds anything above it back.
-        let header = null;
-        try {
-          header = readHeader(tip.header);
-        } catch {
-          header = null;
-        }
-        if (header) {
-          const pow = await this.explorerPow(tip, header);
-          if (showing === null) output.append(pow);
-        }
+        pulse.paintPool(pool, fees);
+        output.append(this.explorerPool(pool, fees));
+        const pow = await this.explorerPow(tip);
+        if (showing === null) output.append(pow);
       } catch (error) {
         fail(error);
       }
@@ -2756,10 +2789,9 @@ export class GuiApp {
       digits[1].value.textContent = pad2(split.minutes);
       digits[2].value.textContent = pad2(split.seconds);
     };
-    const paintPool = (mempool) => {
-      const txs = mempool?.transactions || {};
-      pool.textContent = group(txs.count || 0);
-      fee.textContent = fmtRate(txs.feeRate?.best);
+    const paintPool = (mempool, fees) => {
+      pool.textContent = group(mempool?.count || 0);
+      fee.textContent = fmtRate(fees?.halfHourFee);
     };
 
     return {
@@ -2800,64 +2832,6 @@ export class GuiApp {
     };
   }
 
-  /**
-   * What is waiting to be mined.
-   *
-   * Every figure comes from one call to the mempool state — the counts, the
-   * totals, how much of the pool is replaceable or SegWit, and the fee-rate
-   * histogram the service keeps itself.
-   */
-  explorerPool(pool) {
-    const lang = this.lang;
-    const txs = pool.transactions || {};
-    const ins = pool.inputs || {};
-    const outs = pool.outputs || {};
-    const mb = (bytes) => `${(Number(bytes || 0) / 1000000).toFixed(2)} MB`;
-    const share = (part) =>
-      txs.count
-        ? ` (${((Number(part || 0) / txs.count) * 100).toFixed(1)}%)`
-        : '';
-
-    return el(
-      'div',
-      { class: 'stack', style: 'margin-top:14px' },
-      section(
-        t('poolStats', lang),
-        `${group(txs.count || 0)} ${t('pending', lang)}`,
-      ),
-      el(
-        'div',
-        { class: 'row', style: 'margin-bottom:9px' },
-        el('span', {
-          class: 'chain-card__btc',
-          text: fmtRate(txs.feeRate?.best),
-        }),
-        el('span', { class: 'chain-card__unit', text: 's/vByte' }),
-        el('span', {
-          class: 'section__meta',
-          style: 'margin-left:auto',
-          text: `1h ${fmtRate(txs.feeRate?.bestHourly)} · 4h ${fmtRate(txs.feeRate?.best4h)}`,
-        }),
-      ),
-      kv([
-        [
-          t('sizeLabel', lang),
-          `${mb(txs.size?.total)} · ${mb(txs.vSize?.total)} vB`,
-        ],
-        [t('amountLabel', lang), `${btc(txs.amount?.total || 0)} BTC`],
-        [t('feePaid', lang), `${btc(txs.fee?.total || 0)} BTC`],
-        ['SegWit', `${group(txs.segwitCount || 0)}${share(txs.segwitCount)}`],
-        ['RBF', `${group(txs.rbfCount || 0)}${share(txs.rbfCount)}`],
-        [t('doublespendLabel', lang), group(txs.doublespend?.count || 0)],
-        [
-          t('inputsOutputs', lang),
-          `${group(ins.count || 0)} / ${group(outs.count || 0)}`,
-        ],
-      ]),
-      this.feeSpread(txs),
-    );
-  }
-
   /** The fee-rate histogram the service keeps, drawn as it stands. */
   feeSpread(txs) {
     const buckets = Object.entries(txs.feeRateMap || {})
@@ -2891,53 +2865,190 @@ export class GuiApp {
     );
   }
 
-  /**
-   * Proof of work, worked out rather than asked for.
-   *
-   * None of this has an endpoint. The height gives the reward, the halving and
-   * the retarget; the difficulty inside the header gives the hashrate; and one
-   * extra call — the block that opened this retarget period — turns the
-   * expected ten minutes into the real average, which is what makes the
-   * hashrate and the next-difficulty estimate true rather than nominal.
-   */
-  async explorerPow(tip, header) {
+  /** The chain tip, or any block, with the pool that found it. */
+  explorerTip(block, { seek = false } = {}) {
     const lang = this.lang;
-    const height = Number(tip.height);
-    const retarget = untilRetarget(height);
-    const halving = untilHalving(height);
-    const reward = blockReward(height);
-
-    let measured = null;
-    const periodStart = height - (height % 2016);
-    if (periodStart > 0 && periodStart < height) {
-      try {
-        const first = await this.chainExplorer.block(String(periodStart));
-        const firstHeader = readHeader(first.header);
-        const blocks = height - periodStart;
-        measured = {
-          blocks,
-          seconds: header.timestamp - firstHeader.timestamp,
-        };
-      } catch {
-        measured = null;
-      }
+    const extras = block.extras || {};
+    let header = null;
+    try {
+      if (extras.header) header = readHeader(extras.header);
+    } catch {
+      header = null;
     }
-    const spacing =
-      measured && measured.seconds > 0
-        ? measured.seconds / measured.blocks
-        : null;
-    const next = measured
-      ? nextDifficulty(header.difficulty, measured.blocks, measured.seconds)
-      : null;
-    const span = (seconds) => {
-      const parts = formatSpan(seconds);
-      return `${parts.major} ${t(parts.majorUnit, lang)} ${parts.minor} ${t(parts.minorUnit === 'seconds' ? 'secondsUnit' : parts.minorUnit, lang)}`;
-    };
+    const agrees = header && header.hash === block.id;
+    const pool = extras.pool?.name;
+
+    return el(
+      'div',
+      { class: 'stack' },
+      section(
+        seek ? t('blockTitle', lang) : t('chainTip', lang),
+        `#${group(block.height)}`,
+      ),
+      el(
+        'div',
+        { class: 'chain-card' },
+        el(
+          'div',
+          { class: 'chain-card__head' },
+          addressSigil(block.id, { size: 34 }),
+          el(
+            'div',
+            { class: 'chain-card__id' },
+            el('span', {
+              class: 'chain-card__n',
+              text: `#${group(block.height)}`,
+            }),
+            el('span', { class: 'addr break', text: block.id }),
+          ),
+        ),
+        kv(
+          [
+            [
+              t('mined', lang),
+              `${stamp(block.timestamp)} · ${ago(block.timestamp, lang)}`,
+            ],
+            pool ? [t('minedBy', lang), pool] : null,
+            [t('transactionsIn', lang), group(block.tx_count)],
+            [
+              t('sizeWeight', lang),
+              `${(block.size / 1000000).toFixed(2)} MB · ${group(block.weight)} WU`,
+            ],
+            [
+              t('blockRewardLabel', lang),
+              `${btc(extras.reward || 0)} BTC · ${btc(extras.totalFees || 0)} ${t('feePaid', lang).toLowerCase()}`,
+            ],
+            [t('difficulty', lang), group(Math.round(block.difficulty))],
+            [t('nonce', lang), group(block.nonce)],
+            [t('merkleRoot', lang), block.merkle_root],
+            [t('previousBlock', lang), block.previousblockhash],
+          ].filter(Boolean),
+        ),
+      ),
+      header
+        ? notice(
+            agrees ? 'ok' : 'danger',
+            agrees ? t('hashVerified', lang) : t('hashMismatch', lang),
+            `sha256d(header) = ${header.hash}`,
+          )
+        : null,
+    );
+  }
+
+  /**
+   * What is waiting to be mined.
+   *
+   * `mempool` is the pool's own summary; `fees` is what the service recommends
+   * for the next few blocks. The histogram it keeps comes back as
+   * [feeRate, vsize] pairs, which is a shape a bar chart can take directly.
+   */
+  explorerPool(mempool, fees) {
+    const lang = this.lang;
+    const buckets = (mempool.fee_histogram || [])
+      .map(([rate, vsize]) => ({ rate: Number(rate), weight: Number(vsize) }))
+      .filter((bucket) => Number.isFinite(bucket.rate))
+      .slice(0, 32)
+      .reverse();
+    const peak = Math.max(1, ...buckets.map((bucket) => bucket.weight));
 
     return el(
       'div',
       { class: 'stack', style: 'margin-top:14px' },
-      section(t('powTitle', lang), t('derivedHere', lang)),
+      section(
+        t('poolStats', lang),
+        `${group(mempool.count || 0)} ${t('pending', lang)}`,
+      ),
+      el(
+        'div',
+        { class: 'row', style: 'margin-bottom:9px' },
+        el('span', {
+          class: 'chain-card__btc',
+          text: fmtRate(fees?.halfHourFee),
+        }),
+        el('span', { class: 'chain-card__unit', text: 's/vByte' }),
+        el('span', {
+          class: 'section__meta',
+          style: 'margin-left:auto',
+          text: fees
+            ? `${t('fastest', lang)} ${fmtRate(fees.fastestFee)} · 1h ${fmtRate(fees.hourFee)} · ${t('economy', lang)} ${fmtRate(fees.economyFee)}`
+            : '',
+        }),
+      ),
+      kv([
+        [
+          t('sizeLabel', lang),
+          `${((mempool.vsize || 0) / 1000000).toFixed(2)} MB vB`,
+        ],
+        [t('feePaid', lang), `${btc(mempool.total_fee || 0)} BTC`],
+      ]),
+      buckets.length
+        ? el(
+            'div',
+            { class: 'stack' },
+            el('p', { class: 'section__meta', text: t('feeRateSpread', lang) }),
+            el(
+              'div',
+              { class: 'spread' },
+              ...buckets.map((bucket) =>
+                el('span', {
+                  class: 'spread__bar',
+                  style: `height:${Math.max(3, Math.round((bucket.weight / peak) * 100))}%`,
+                  title: `${bucket.rate.toFixed(1)} sat/vB · ${group(bucket.weight)} vB`,
+                }),
+              ),
+            ),
+            el(
+              'div',
+              { class: 'spread__scale' },
+              el('span', { text: `${buckets[0].rate.toFixed(1)} sat/vB` }),
+              el('span', {
+                text: `${buckets[buckets.length - 1].rate.toFixed(1)} sat/vB`,
+              }),
+            ),
+          )
+        : null,
+    );
+  }
+
+  /**
+   * Proof of work, mostly reported and partly worked out.
+   *
+   * The service measures the hashrate and the retarget, which the old source
+   * could not, so those are taken rather than derived. The subsidy and the
+   * halving still have no endpoint anywhere and are arithmetic on the height —
+   * and the difficulty the service reports is held against the one inside the
+   * block's own header, which is the only figure here nobody has to be trusted
+   * for.
+   */
+  async explorerPow(block) {
+    const lang = this.lang;
+    const height = Number(block.height);
+    const halving = untilHalving(height);
+    let adjustment = null;
+    let pools = null;
+    try {
+      adjustment = await this.chainExplorer.difficultyAdjustment();
+    } catch {
+      adjustment = null;
+    }
+    try {
+      pools = await this.chainExplorer.pools();
+    } catch {
+      pools = null;
+    }
+
+    const span = (seconds) => {
+      const parts = formatSpan(seconds);
+      const unit = (name) => t(name === 'seconds' ? 'secondsUnit' : name, lang);
+      return `${parts.major} ${unit(parts.majorUnit)} ${parts.minor} ${unit(parts.minorUnit)}`;
+    };
+    const top = pools?.pools ? pools.pools.slice(0, 8) : [];
+    const totalBlocks = pools ? pools.blockCount || 0 : 0;
+
+    return el(
+      'div',
+      { class: 'stack', style: 'margin-top:14px' },
+      section(t('powTitle', lang), t('lastDay', lang)),
       el(
         'div',
         { class: 'chain-card' },
@@ -2946,98 +3057,72 @@ export class GuiApp {
           { class: 'chain-card__figure' },
           el('span', {
             class: 'chain-card__btc',
-            text: formatHashrate(
-              hashrate(header.difficulty, spacing || undefined),
-            ),
+            text: pools
+              ? formatHashrate(pools.lastEstimatedHashrate)
+              : formatHashrate(hashrate(block.difficulty)),
           }),
         ),
-        kv([
-          [t('difficulty', lang), group(Math.round(header.difficulty))],
+        kv(
           [
-            t('nextDifficultyLabel', lang),
-            next
-              ? `${group(Math.round(next.value))} · ${next.changePercent >= 0 ? '+' : ''}${next.changePercent.toFixed(2)}%`
-              : '—',
-          ],
-          [
-            t('retargetIn', lang),
-            `${group(retarget.blocks)} · ${span(retarget.seconds)}`,
-          ],
-          [
-            t('averageBlockTime', lang),
-            spacing ? span(Math.round(spacing)) : '—',
-          ],
-          [t('blockRewardLabel', lang), `${btc(reward)} BTC`],
-          [
-            t('halvingIn', lang),
-            `${group(halving.blocks)} · ${span(halving.seconds)}`,
-          ],
-        ]),
-      ),
-    );
-  }
-
-  /** The chain tip, or any block: everything derived from its own header. */
-  explorerTip(block, { seek = false } = {}) {
-    const lang = this.lang;
-    let header = null;
-    let error = null;
-    try {
-      header = readHeader(block.header);
-    } catch (problem) {
-      error = problem.message;
-    }
-    const agrees = header && header.hash === block.hash;
-
-    return el(
-      'div',
-      { class: 'stack' },
-      section(
-        seek ? t('blockTitle', lang) : t('chainTip', lang),
-        `#${block.height}`,
-      ),
-      el(
-        'div',
-        { class: 'chain-card' },
-        el(
-          'div',
-          { class: 'chain-card__head' },
-          addressSigil(block.hash, { size: 34 }),
-          el(
-            'div',
-            { class: 'chain-card__id' },
-            el('span', { class: 'chain-card__n', text: `#${block.height}` }),
-            el('span', { class: 'addr break', text: block.hash }),
-          ),
+            [t('difficulty', lang), group(Math.round(block.difficulty))],
+            adjustment
+              ? [
+                  t('nextDifficultyLabel', lang),
+                  `${adjustment.difficultyChange >= 0 ? '+' : ''}${adjustment.difficultyChange.toFixed(2)}% · ${adjustment.progressPercent.toFixed(1)}%`,
+                ]
+              : null,
+            // The service measures this; when that one call is the one that
+            // failed, the height still knows where the boundary is.
+            [
+              t('retargetIn', lang),
+              adjustment
+                ? `${group(adjustment.remainingBlocks)} · ${span(adjustment.remainingTime / 1000)}`
+                : `${group(untilRetarget(height).blocks)} · ${span(untilRetarget(height).seconds)}`,
+            ],
+            adjustment
+              ? [
+                  t('averageBlockTime', lang),
+                  span(Math.round(adjustment.timeAvg / 1000)),
+                ]
+              : null,
+            [t('blockRewardLabel', lang), `${btc(blockReward(height))} BTC`],
+            [
+              t('halvingIn', lang),
+              `${group(halving.blocks)} · ${span(halving.seconds)}`,
+            ],
+          ].filter(Boolean),
         ),
-        header
-          ? kv([
-              [
-                t('mined', lang),
-                `${new Date(header.timestamp * 1000).toISOString().replace('T', ' ').slice(0, 19)} UTC · ${ago(header.timestamp, lang)}`,
-              ],
-              [
-                t('transactionsIn', lang),
-                header.transactionCount === null
-                  ? '—'
-                  : String(header.transactionCount),
-              ],
-              [
-                t('difficulty', lang),
-                Math.round(header.difficulty).toLocaleString('en-US'),
-              ],
-              [t('target', lang), `0x${header.target.slice(0, 26)}…`],
-              [t('nonce', lang), String(header.nonce)],
-              [t('merkleRoot', lang), header.merkleRoot],
-              [t('previousBlock', lang), header.previousHash],
-            ])
-          : notice('danger', t('blockTitle', lang), error),
       ),
-      header
-        ? notice(
-            agrees ? 'ok' : 'danger',
-            agrees ? t('hashVerified', lang) : t('hashMismatch', lang),
-            `sha256d(header) = ${header.hash}`,
+      top.length
+        ? el(
+            'div',
+            { class: 'stack' },
+            el('p', {
+              class: 'section__meta',
+              text: `${t('minerPools', lang)} · ${group(totalBlocks)} ${t('blocksWord', lang)}`,
+            }),
+            el(
+              'div',
+              { class: 'pools' },
+              ...top.map((pool) =>
+                el(
+                  'div',
+                  { class: 'pools__row' },
+                  el('span', { class: 'pools__name', text: pool.name }),
+                  el(
+                    'span',
+                    { class: 'pools__bar' },
+                    el('span', {
+                      style: `width:${totalBlocks ? (pool.blockCount / totalBlocks) * 100 : 0}%`,
+                    }),
+                  ),
+                  el('span', {
+                    class: 'pools__share',
+                    text: `${totalBlocks ? ((pool.blockCount / totalBlocks) * 100).toFixed(1) : '0'}%`,
+                  }),
+                ),
+              ),
+            ),
           )
         : null,
     );
@@ -3204,7 +3289,7 @@ export class GuiApp {
           class: 'btn',
           target: '_blank',
           rel: 'noopener noreferrer',
-          href: `https://bitaps.com/${encodeURIComponent(address)}`,
+          href: `https://mempool.space/address/${encodeURIComponent(address)}`,
           text: t('openInExplorer', lang),
         }),
       ),

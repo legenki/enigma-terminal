@@ -96,19 +96,19 @@ then the two controls that change how the whole page reads — daylight and lang
 
 ### The chain explorer
 
-Panel 6 reads the live chain from [bitaps.com](https://bitaps.com)'s public API — blocks,
-transactions, addresses and the mempool, in one box that works out from the shape of what
-you typed which of the four you meant. A number is a height; sixty-four hex characters are
-a block or a transaction, and since only the chain knows which, it asks the block index
-first and falls back.
+Panel 6 reads the live chain from [mempool.space](https://mempool.space)'s public API —
+blocks, transactions, addresses, the mempool, and who mined the last day — in one box that
+works out from the shape of what you typed which of those you meant. A number is a height;
+sixty-four hex characters are a block or a transaction, and since only the chain knows
+which, it asks the block index first and falls back.
 
-Two things shape that panel. The service allows **three requests every five seconds**, so
-every lookup goes through one queue that spends tokens as they refill and serves what it
-already knows from memory — a panel that fanned out would come back 429 and read as
-broken. And the service publishes no difficulty, no target and no transaction count, but it
-does hand back the raw eighty-byte block header: all three are in there, so the explorer
-reads them out itself and checks, while it is at it, that the header really does hash to
-the hash it was given.
+Every lookup goes through one queue that caches what cannot change and rations what can. A
+page that hammers a free service deserves to be cut off, and a confirmed transaction is the
+same answer forever.
+
+The service sends the raw eighty-byte header alongside each block, so the difficulty and
+the hash it reports are held against the bytes they came from rather than taken on trust —
+the card says whether the header really does hash to the hash it was given.
 
 Panel 6 also carries the pulse: the height, how long the chain has been quiet, what is
 waiting in the pool, and the going fee rate. One watcher drives it — the countdown in the
@@ -117,11 +117,9 @@ lands. A block roughly every ten minutes is the one clock this game shares with 
 it is playing against, and it is worth hearing. The bell in the strip turns it off, and
 the choice is remembered.
 
-Proof of work has no endpoint anywhere in that API, so it is all worked out here: the
-subsidy and the halving from the height, the retarget countdown from the height, the
-hashrate from the difficulty, and — with one more call, for the block that opened the
-current retarget period — the real average block time, which turns the nominal hashrate
-into the measured one and gives the next difficulty adjustment.
+Proof of work is mostly reported and partly worked out: the measured hashrate, the
+difficulty adjustment and the miner distribution come from the service, while the subsidy
+and the halving countdown have no endpoint anywhere and are arithmetic on the height.
 
 ### The palette follows the hour
 
@@ -361,25 +359,25 @@ docs/                      the web build; GitHub Pages publishes from here
   js/identicon.js          generative sigils for cases, phrases and addresses
   js/glitch.js             the mark in the strip
   js/select.js             the language dropdown the shell builds for itself
-  js/bitaps.js             the explorer's client: one rate-limited queue, cached
+  js/mempool.js            the explorer's client: one queued, cached connection
   js/crypto/header.js      an 80-byte block header, and the numbers inside it
   js/heartbeat.js          one watcher for the block clock, shared by the whole page
   js/chime.js              the three notes a new block makes
-  js/pow.js                subsidy, halving, retarget, hashrate — all derived
+  js/pow.js                subsidy, halving and retarget, derived from the height
   js/storage.js            localStorage, with migration from the old key names
   js/vendor/               minidenticons and Feather (MIT), with their licences
 tools/generate_cases.py    builds the 256-contract board
 tools/build_web_data.py    generates the web build's data from data/
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
-tests/                     373 tests, including the Python ↔ JavaScript diff
+tests/                     372 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests -v          # 373 tests
+python -m pytest tests -v          # 372 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 

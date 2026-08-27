@@ -1,12 +1,15 @@
 """The chain explorer: its client, its header reader, and its panel.
 
-Two things here are worth more than the rest. The service allows three calls
-every five seconds, so the client has to queue rather than fan out — a panel
-that fires four lookups at once comes back 429 and reads to the player as
-broken. And the service publishes no difficulty, no target and no transaction
-count: all three are inside the eighty-byte header it does send, so the
-explorer works them out. That makes the header reader load-bearing, and it is
-checked against the block every implementation is checked against.
+The source is mempool.space, which answers the four things its predecessor
+could not: a block's transactions, the hashrate, the difficulty adjustment and
+who mined the last day. The queue stayed anyway — a page that hammers a free
+service deserves to be cut off, and an answer that cannot change costs nothing
+to keep.
+
+The header reader stayed too, and is still load-bearing: the service sends the
+raw header alongside the block, so the difficulty and the hash it reports can
+be held against the eighty bytes they came from rather than taken on trust. It
+is checked here against the block every implementation is checked against.
 """
 
 from __future__ import annotations
@@ -123,17 +126,17 @@ def test_the_client_never_exceeds_three_calls_in_five_seconds():
     """Fired twelve at once against a clock we control: the calls have to land
     in groups of three, five seconds apart, or the service answers 429."""
     result = node("""
-    import { BitapsClient, RATE } from './docs/js/bitaps.js';
+    import { ExplorerClient, RATE } from './docs/js/mempool.js';
     let now = 0;
     const at = [];
     // Time only moves when the queue waits for it, so the schedule is exact.
     const realTimeout = setTimeout;
     globalThis.setTimeout = (fn, ms) => { now += ms; return realTimeout(fn, 0); };
-    const client = new BitapsClient({
+    const client = new ExplorerClient({
       now: () => now,
       fetcher: async (url) => {
         at.push(now);
-        return { ok: true, status: 200, json: async () => ({ data: { url } }) };
+        return { ok: true, status: 200, json: async () => ({ url }) };
       },
     });
     const jobs = [];
@@ -153,13 +156,13 @@ def test_the_client_never_exceeds_three_calls_in_five_seconds():
 
 def test_an_answer_already_known_is_not_paid_for_again():
     result = node("""
-    import { BitapsClient } from './docs/js/bitaps.js';
+    import { ExplorerClient } from './docs/js/mempool.js';
     let now = 0;
     let calls = 0;
     globalThis.setTimeout = (fn, ms) => { now += ms; return fn(); };
-    const client = new BitapsClient({
+    const client = new ExplorerClient({
       now: () => now,
-      fetcher: async () => { calls += 1; return { ok: true, status: 200, json: async () => ({ data: 1 }) }; },
+      fetcher: async () => { calls += 1; return { ok: true, status: 200, json: async () => 1 }; },
     });
     await client.get('a', { ttl: 1000 });
     await client.get('a', { ttl: 1000 });
@@ -176,15 +179,15 @@ def test_one_failure_does_not_stop_every_later_call():
     """The queue is a chain of promises; a rejection that is not caught takes
     the chain with it and the panel stops answering entirely."""
     result = node("""
-    import { BitapsClient } from './docs/js/bitaps.js';
+    import { ExplorerClient } from './docs/js/mempool.js';
     let now = 0;
     globalThis.setTimeout = (fn, ms) => { now += ms; return fn(); };
     let first = true;
-    const client = new BitapsClient({
+    const client = new ExplorerClient({
       now: () => now,
       fetcher: async () => {
         if (first) { first = false; return { ok: false, status: 500 }; }
-        return { ok: true, status: 200, json: async () => ({ data: 'second' }) };
+        return { ok: true, status: 200, json: async () => 'second' };
       },
     });
     let failed = null;
@@ -198,10 +201,10 @@ def test_one_failure_does_not_stop_every_later_call():
 
 def test_a_missing_thing_is_reported_as_missing():
     result = node("""
-    import { BitapsClient } from './docs/js/bitaps.js';
+    import { ExplorerClient } from './docs/js/mempool.js';
     let now = 0;
     globalThis.setTimeout = (fn, ms) => { now += ms; return fn(); };
-    const client = new BitapsClient({
+    const client = new ExplorerClient({
       now: () => now,
       fetcher: async () => ({ ok: false, status: 404 }),
     });
@@ -218,7 +221,7 @@ def test_a_missing_thing_is_reported_as_missing():
 
 def test_one_box_tells_the_four_kinds_apart():
     result = node("""
-    import { classify } from './docs/js/bitaps.js';
+    import { classify } from './docs/js/mempool.js';
     const cases = ['964237', '0', '1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA',
       'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu',
       '37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf',
@@ -238,7 +241,7 @@ def test_sats_never_go_through_a_float():
     """21 million BTC in sats is past what a double holds exactly, and a
     balance that rounds is a balance that is wrong."""
     result = node("""
-    import { btc } from './docs/js/bitaps.js';
+    import { btc } from './docs/js/mempool.js';
     process.stdout.write(JSON.stringify({
       genesis: btc(5000000000),
       dust: btc(1),
@@ -320,17 +323,20 @@ def test_the_first_block_seen_is_not_an_event():
     assert result[2]["changed"] is True and result[2]["h"] == 2
 
 
-def test_a_header_that_will_not_read_does_not_stop_the_pulse():
+def test_a_block_the_pulse_cannot_read_does_not_stop_the_clock():
+    """A tip missing the fields the countdown needs must leave a usable block
+    rather than a NaN that freezes the display at nothing."""
     result = node("""
     import { Heartbeat } from './docs/js/heartbeat.js';
-    const client = { tip: async () => ({ height: 9, hash: 'x', header: 'nonsense', adjustedTimestamp: 1234 }) };
+    const client = { tip: async () => ({ height: 9, id: 'x' }) };
     const beat = new Heartbeat(client, {});
     const { block } = await beat.poll();
-    process.stdout.write(JSON.stringify(block));
+    process.stdout.write(JSON.stringify({ block, age: beat.age() }));
     """)
-    assert result["height"] == 9
-    # It falls back to the timestamp the service states rather than giving up.
-    assert result["timestamp"] == 1234
+    assert result["block"]["height"] == 9
+    assert result["block"]["hash"] == "x"
+    assert isinstance(result["block"]["timestamp"], int)
+    assert isinstance(result["age"], int), "a missing timestamp produced a NaN age"
 
 
 def test_a_failed_poll_is_reported_rather_than_thrown():
@@ -419,25 +425,6 @@ def test_the_countdowns_land_on_the_right_heights():
     assert result["retarget"]["atHeight"] % 2016 == 0
     # Standing exactly on a boundary means a whole period to the next one, not none.
     assert result["onBoundary"]["blocks"] == 2016
-
-
-def test_the_next_difficulty_cannot_move_more_than_fourfold():
-    """The clamp is consensus, not caution: a period that took a tenth of the
-    expected time still only quadruples the difficulty."""
-    result = node("""
-    import { nextDifficulty } from './docs/js/pow.js';
-    const d = 1000;
-    process.stdout.write(JSON.stringify({
-      steady: nextDifficulty(d, 2016, 2016 * 600),
-      tooFast: nextDifficulty(d, 2016, 2016 * 60),
-      tooSlow: nextDifficulty(d, 2016, 2016 * 6000),
-      noData: nextDifficulty(d, 0, 0),
-    }));
-    """)
-    assert result["steady"]["value"] == 1000, "a period on time should not move it"
-    assert result["tooFast"]["value"] == 4000
-    assert result["tooSlow"]["value"] == 250
-    assert result["noData"] is None
 
 
 def test_the_hashrate_follows_the_spacing_it_is_given():

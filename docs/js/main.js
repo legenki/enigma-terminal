@@ -8,7 +8,6 @@
 // object, its scrollback and its input all survive the move, which is why the
 // frame is reparented rather than rebuilt.
 
-import { BitapsClient } from './bitaps.js';
 import { Chime } from './chime.js';
 import { LANG_ENDONYMS, LANG_NAMES, LANGS, loadContracts } from './core.js';
 import { Daylight } from './daylight.js';
@@ -16,6 +15,7 @@ import { Engine } from './engine.js';
 import { GlitchBanner } from './glitch.js';
 import { GuiApp } from './gui/app.js';
 import { Heartbeat, pad2, splitAge } from './heartbeat.js';
+import { ExplorerClient } from './mempool.js';
 import { dropdown } from './select.js';
 import { migrated } from './storage.js';
 import { Terminal, terminalPalette } from './term.js';
@@ -250,7 +250,7 @@ for (const event of ['pointerdown', 'keydown']) {
 }
 
 const pulseHost = document.getElementById('bar-pulse');
-const heartbeat = new Heartbeat(new BitapsClient(), {
+const heartbeat = new Heartbeat(new ExplorerClient(), {
   onBlock: (block, { changed }) => {
     gui.setPulse(0, block);
     if (changed) chime.play();

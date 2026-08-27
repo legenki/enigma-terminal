@@ -893,3 +893,37 @@ a { color: var(--info); }
 }
 
 .pulse__sat { font-size: 8px; letter-spacing: 0.06em; color: var(--soft); }
+
+/* Who mined the last day, as shares of it. */
+.pools { display: flex; flex-direction: column; gap: 4px; }
+
+.pools__row { display: flex; align-items: center; gap: 8px; font-size: 10.5px; }
+
+.pools__name {
+  flex: none;
+  width: 108px;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pools__bar {
+  flex: 1;
+  height: 8px;
+  min-width: 0;
+  background: var(--sunken);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.pools__bar span { display: block; height: 100%; background: var(--info); }
+
+.pools__share {
+  flex: none;
+  width: 42px;
+  text-align: right;
+  color: var(--soft);
+  font-variant-numeric: tabular-nums;
+}
