@@ -257,8 +257,7 @@ html, body {
   cursor: pointer;
 }
 
-.drop__opt:hover,
-.drop__opt.is-active { background: var(--sunken); }
+.drop__opt:hover { background: var(--sunken); }
 .drop__opt:focus-visible { outline: 2px solid var(--info); outline-offset: -2px; }
 
 .drop__name { flex: 1; min-width: 0; }

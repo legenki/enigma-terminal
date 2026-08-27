@@ -316,18 +316,6 @@ def test_gui_text_dictionary_is_complete():
             assert re.search(rf"\b{lang}:\s*'", body), f"T.{key} has no {lang}"
 
 
-def test_saves_made_before_the_rename_are_adopted_not_orphaned():
-    """Renaming the storage keys would wipe every game already in a browser."""
-    storage = (DOCS / "js" / "storage.js").read_text(encoding="utf-8")
-    assert "neon-terminal/" in storage, "the legacy key prefix is gone"
-    assert "enigma-terminal/" in storage
-    for module in ("js/core.js", "js/journal.js", "js/main.js"):
-        source = (DOCS / module).read_text(encoding="utf-8")
-        assert "from './storage.js'" in source, f"{module} reads localStorage raw"
-        assert "localStorage.getItem" not in source, \
-            f"{module} bypasses the migration and would orphan old saves"
-
-
 def test_the_real_wallet_warning_is_never_left_in_english():
     """The one line standing between a player and a funded address."""
     engine = (DOCS / "js" / "engine.js").read_text(encoding="utf-8")

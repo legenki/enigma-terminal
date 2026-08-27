@@ -141,13 +141,6 @@ class Screen:
 
     # -- theatre ----------------------------------------------------------- #
 
-    def pseudo_logs(self, logs: Sequence[str], per_line: float = 0.12) -> None:
-        """Print pseudo-logs at a steady pace (used when there is no request to wait on)."""
-        for line in logs:
-            self.write(line, "dark")
-            if self.speed and sys.stdout.isatty():
-                time.sleep(per_line / self.speed)
-
     def run_with_logs(self, work: Callable[[], T], logs: Sequence[str],
                       min_seconds: float = 0.0) -> tuple[T | None, BaseException | None]:
         """Run ``work`` on a worker thread while pseudo-logs scroll on screen.

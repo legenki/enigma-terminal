@@ -14,7 +14,7 @@ import {
   validateMnemonic,
   WORD_INDEX,
 } from './crypto/bip39.js';
-import { migrated, write } from './storage.js';
+import { read, write } from './storage.js';
 import { WORDLIST } from './wordlist.js';
 
 const STORAGE_KEY = 'enigma-terminal/progress/v1';
@@ -49,7 +49,7 @@ export class ProgressStore {
 
   static read() {
     try {
-      const raw = migrated(STORAGE_KEY);
+      const raw = read(STORAGE_KEY);
       if (!raw) return { solved: [], hints: {}, taken: [] };
       const parsed = JSON.parse(raw);
       return {

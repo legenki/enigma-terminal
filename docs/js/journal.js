@@ -9,7 +9,7 @@
 // recorded masked, so pasting a live wallet into the terminal cannot leave the
 // phrase sitting in localStorage.
 
-import { migrated, write } from './storage.js';
+import { read, write } from './storage.js';
 
 const STORAGE_KEY = 'enigma-terminal/journal/v1';
 const MAX_ENTRIES = 400;
@@ -139,7 +139,7 @@ export class Journal {
 
   static read() {
     try {
-      const raw = migrated(STORAGE_KEY);
+      const raw = read(STORAGE_KEY);
       if (!raw) return [];
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed) ? parsed : [];

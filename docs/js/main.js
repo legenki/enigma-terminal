@@ -17,14 +17,14 @@ import { GuiApp } from './gui/app.js';
 import { Heartbeat, pad2, splitAge } from './heartbeat.js';
 import { ExplorerClient } from './mempool.js';
 import { dropdown } from './select.js';
-import { migrated, write } from './storage.js';
+import { read, write } from './storage.js';
 import { Terminal, terminalPalette } from './term.js';
 import { icon } from './vendor/feather.js';
 
 const LANG_KEY = 'enigma-terminal/lang/v1';
 const LIGHT_KEY = 'enigma-terminal/light/v1';
 
-const stored = (key, fallback) => migrated(key) || fallback;
+const stored = (key, fallback) => read(key) || fallback;
 const store = write;
 
 // Match the browser against every language we ship, not just Russian.
