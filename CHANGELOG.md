@@ -8,6 +8,11 @@ patch is fixes.
 One version number lives in three files — `pyproject.toml`, `data/cases.json`
 and `enigma_terminal/__init__.py` — and a test fails if they disagree.
 
+Cutting a release is: bump those three, write the entry below, then push a tag
+(`git tag -a v2.1.0 -m "…" && git push origin v2.1.0`). The Release workflow
+refuses a tag that does not match the declared version and takes the published
+notes from the entry, so the tag, the code and these notes cannot drift apart.
+
 ## 2.0.0
 
 The world moves to the present, and the game opens differently every time.

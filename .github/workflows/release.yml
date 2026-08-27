@@ -1,0 +1,74 @@
+name: Release
+
+# Cutting a release is: bump the version in the three files that state it, write
+# the CHANGELOG entry, then push a tag. This turns that tag into a GitHub
+# Release with the notes taken from the CHANGELOG, so the two can never say
+# different things about the same version.
+#
+#   git tag -a v2.1.0 -m "…" && git push origin v2.1.0
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to build a release from"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check the tag matches the version the tree declares
+        run: |
+          tag="${{ inputs.tag || github.ref_name }}"
+          declared=$(python -c "import tomllib,pathlib; print(tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']['version'])")
+          if [ "$tag" != "v$declared" ]; then
+            echo "::error::tag $tag does not match the declared version $declared"
+            exit 1
+          fi
+          echo "releasing $tag"
+
+      - name: Take the notes for this version out of the CHANGELOG
+        id: notes
+        run: |
+          version="${{ inputs.tag || github.ref_name }}"
+          version="${version#v}"
+          python - "$version" <<'PY' > release-notes.md
+          import pathlib, re, sys
+          version = sys.argv[1]
+          text = pathlib.Path("CHANGELOG.md").read_text(encoding="utf-8")
+          # Everything under "## <version>" up to the next version heading.
+          match = re.search(
+              rf"^## {re.escape(version)}\s*$(.*?)(?=^## |\Z)",
+              text, re.MULTILINE | re.DOTALL,
+          )
+          if not match:
+              sys.exit(f"CHANGELOG.md has no entry for {version}")
+          print(match.group(1).strip())
+          PY
+          echo "notes written:"
+          head -5 release-notes.md
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="${{ inputs.tag || github.ref_name }}"
+          gh release create "$tag" \
+            --repo "${{ github.repository }}" \
+            --title "ENIGMA TERMINAL $tag" \
+            --notes-file release-notes.md
