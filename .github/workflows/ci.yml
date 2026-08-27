@@ -16,6 +16,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # setup-python provides the interpreter the matrix actually asks for.
+      # `uv pip install --system` alone did not: it ignores `uv python pin`
+      # and installs into the runner's Debian python3.12, which PEP 668 marks
+      # externally managed and refuses — so all three jobs failed identically,
+      # and none of them was ever testing the version it claimed to.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
       # No cache: this project has no uv.lock, and setup-uv's default
       # cache-dependency-glob (**/uv.lock) hard-fails the job when it matches
       # nothing — which it did on every run, so nothing below ever executed.
@@ -34,9 +43,10 @@ jobs:
           version: latest
 
       - name: Install dependencies
-        run: |
-          uv python pin ${{ matrix.python-version }}
-          uv pip install --system -e ".[dev]"
+        run: uv pip install --system -e ".[dev]"
+
+      - name: Show the interpreter the job is actually running
+        run: python -c "import sys; print(sys.version)"
 
       - name: Run Linters and Test Suite
         run: |

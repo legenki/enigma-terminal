@@ -66,6 +66,32 @@ class Case:
         return fingerprint(mnemonic) == self.fingerprint
 
 
+def _int_set(value: Any) -> set[int]:
+    """Every id in ``value`` that is an integer; anything else is dropped."""
+    if not isinstance(value, list):
+        return set()
+    out = set()
+    for item in value:
+        try:
+            out.add(int(item))
+        except (TypeError, ValueError):
+            continue
+    return out
+
+
+def _int_map(value: Any) -> dict[int, int]:
+    """The int->int pairs in ``value``; anything else is dropped."""
+    if not isinstance(value, dict):
+        return {}
+    out = {}
+    for key, count in value.items():
+        try:
+            out[int(key)] = int(count)
+        except (TypeError, ValueError):
+            continue
+    return out
+
+
 @dataclass
 class Progress:
     """Solved cases, used hints and the contracts on the desk."""
@@ -89,11 +115,17 @@ class Progress:
             data = json.loads(path.read_text(encoding="utf-8"))
         except (FileNotFoundError, ValueError, OSError):
             return cls(path=path)
+        # Valid JSON of the wrong shape used to crash the game at startup with
+        # an AttributeError, while the journal in the same state came back
+        # empty. A hand-edited save is a fresh save, not a stack trace, and the
+        # web build has always read its own store this way.
+        if not isinstance(data, dict):
+            return cls(path=path)
         return cls(
-            solved={int(i) for i in data.get("solved", [])},
-            hints_used={int(k): int(v) for k, v in data.get("hints_used", {}).items()},
+            solved=_int_set(data.get("solved")),
+            hints_used=_int_map(data.get("hints_used")),
             # Saves made before the contract board existed simply have none.
-            taken={int(i) for i in data.get("taken", [])},
+            taken=_int_set(data.get("taken")),
             path=path,
         )
 
