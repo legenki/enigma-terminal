@@ -4,10 +4,10 @@
     "cases_per_client": 32,
     "acts_per_client": 4,
     "setting": {
-      "ru": "Буэнос-Айрес, 2077. Районы, улицы и учреждения — настоящие.",
-      "en": "Buenos Aires, 2077. The neighbourhoods, streets and institutions are real.",
-      "es": "Buenos Aires, 2077. Los barrios, las calles y las instituciones son reales.",
-      "pt": "Buenos Aires, 2077. Os bairros, as ruas e as instituições são reais."
+      "en": "Buenos Aires, now — or a version of now. The neighbourhoods, streets and institutions are real, and so is the chain.",
+      "es": "Buenos Aires, ahora — o una versión de ahora. Los barrios, las calles y las instituciones son reales, y la cadena también.",
+      "pt": "Buenos Aires, agora — ou uma versão de agora. Os bairros, as ruas e as instituições são reais, e a cadeia também.",
+      "ru": "Буэнос-Айрес, сейчас — или одна из версий «сейчас». Районы, улицы и учреждения настоящие. Цепь тоже."
     }
   },
   "clients": [

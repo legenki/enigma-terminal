@@ -167,6 +167,11 @@ export class ExplorerClient {
   pools() {
     return this.get('v1/mining/pools/24h', { ttl: TTL.mining });
   }
+
+  /** What a coin costs, in the currencies mempool.space quotes. */
+  prices() {
+    return this.get('v1/prices', { ttl: TTL.mining });
+  }
 }
 
 //: What a player can type into one box, and what it must be.

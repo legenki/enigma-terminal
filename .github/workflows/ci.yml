@@ -62,7 +62,8 @@ jobs:
         run: |
           python tools/build_web_data.py
           git diff --exit-code -- docs/js/wordlist.js docs/js/campaign.js \
-                                  docs/js/clients.js docs/data/contracts.json
+                                  docs/js/clients.js docs/js/openings.js \
+                                  docs/data/contracts.json
 
       - name: Smoke-test the terminal end to end
         run: |

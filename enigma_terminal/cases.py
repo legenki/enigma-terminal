@@ -22,7 +22,9 @@ CASES_FILE = _ROOT / "data" / "cases.json"
 CONTRACTS_FILE = _ROOT / "data" / "contracts.json"
 CLIENTS_FILE = _ROOT / "data" / "clients.json"
 
-LANGUAGES = ("ru", "en", "es", "pt")
+#: Menu order, matching docs/js/core.js. English leads because it is the
+#: language the project is written and documented in; Russian sits at the end.
+LANGUAGES = ("en", "es", "pt", "ru")
 
 
 def _pick(value: Any, lang: str) -> Any:
@@ -195,7 +197,6 @@ class Campaign:
     def __init__(self, path: Path | None = None, *, contracts: bool = True) -> None:
         data = json.loads((path or CASES_FILE).read_text(encoding="utf-8"))
         self.meta: dict = data["meta"]
-        self._prologue: dict = data["prologue"]
         self.cases: list[Case] = [_to_case(item) for item in data["cases"]]
 
         self.clients: list[dict] = []
@@ -238,9 +239,6 @@ class Campaign:
         """
         wanted = progress.taken | progress.solved
         return self.cases + [case for case in self.contracts if case.id in wanted]
-
-    def prologue(self, lang: str) -> list[str]:
-        return list(_pick(self._prologue, lang))
 
     def get(self, case_id: int) -> Case | None:
         return next((c for c in self.all_cases if c.id == case_id), None)

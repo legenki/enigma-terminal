@@ -21,7 +21,10 @@ const STORAGE_KEY = 'enigma-terminal/progress/v1';
 
 //: Every language the game speaks. English is the fallback: a bundle that has
 //: not been translated yet still renders rather than showing `undefined`.
-export const LANGS = ['ru', 'en', 'es', 'pt'];
+//: Menu order, not preference order — the page still opens in whatever the
+//: browser asks for. English leads because it is the language the project is
+//: written and documented in; Russian sits at the end.
+export const LANGS = ['en', 'es', 'pt', 'ru'];
 
 export const LANG_NAMES = { ru: 'РУС', en: 'ENG', es: 'ESP', pt: 'POR' };
 

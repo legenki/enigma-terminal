@@ -24,6 +24,8 @@ from .crypto_engine import (
     wordlist_is_authentic,
 )
 from .journal import STATUS_STYLES, TOOLS, Journal, mask_address, mask_mnemonic
+from .openings import choose as choose_opening
+from .openings import figures_from_chain
 from .ui import DECRYPT_LOGS, NET_LOGS, Screen
 
 PROMPT = "nullsec@enigma:~$ "
@@ -1254,7 +1256,14 @@ def run(session: Session) -> int:
         operator=session.campaign.meta["operator"],
         client=session.campaign.meta["client"],
     )
-    screen.lines(session.campaign.prologue(session.lang), "white", typed=True)
+    # One of sixteen, most of them written around figures read off the chain a
+    # moment ago. Only the openings whose figures actually arrived are in the
+    # running, so offline still opens on prose rather than on a gap.
+    # Read once: the figures that decide which opening is eligible have to be
+    # the same ones that fill it, and a second round would double the wait.
+    figures = figures_from_chain(session.chain)
+    opening = choose_opening(figures)
+    screen.lines(opening.render(session.lang, figures), "white", typed=True)
     screen.write()
 
     while session.running:
@@ -1276,8 +1285,8 @@ def main(argv: list[str] | None = None) -> int:
         prog="enigma-terminal",
         description="ENIGMA TERMINAL — a detective quest over the live Bitcoin network.",
     )
-    parser.add_argument("--lang", choices=LANGUAGES, default="ru",
-                        help="narrative language (default: ru)")
+    parser.add_argument("--lang", choices=LANGUAGES, default="en",
+                        help="narrative language (default: en)")
     parser.add_argument("--provider", choices=tuple(PROVIDERS), default=None,
                         help="preferred block explorer")
     parser.add_argument("--offline", action="store_true",

@@ -264,7 +264,7 @@ def test_taking_a_contract_is_persisted_in_the_shared_store():
 
 # --- the web build must speak every language it offers ----------------------
 
-LANGS = ("ru", "en", "es", "pt")
+LANGS = ("en", "es", "pt", "ru")
 
 
 def test_no_front_end_decides_language_with_a_binary_ternary():

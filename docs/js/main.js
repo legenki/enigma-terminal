@@ -53,7 +53,13 @@ const terminal = new Terminal(termCanvas, {
   prompt: 'nullsec@enigma:~$ ',
 });
 
-const engine = new Engine(terminal, { lang });
+//: One explorer for the block clock and the opening. Sharing it means the two
+//: of them queue behind the same rate limit and hit the same cache instead of
+//: racing each other for the tip on the first second of the page. The GUI keeps
+//: its own on purpose — its budget is its own.
+const explorer = new ExplorerClient();
+
+const engine = new Engine(terminal, { lang, explorer });
 let pending = 0;
 let booted = false;
 
@@ -244,7 +250,7 @@ for (const event of ['pointerdown', 'keydown']) {
 }
 
 const pulseHost = document.getElementById('bar-pulse');
-const heartbeat = new Heartbeat(new ExplorerClient(), {
+const heartbeat = new Heartbeat(explorer, {
   onBlock: (block, { changed }) => {
     gui.setPulse(0, block);
     if (changed) chime.play();

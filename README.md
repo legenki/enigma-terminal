@@ -2,10 +2,13 @@
 
 **A detective quest played against the live Bitcoin network.**
 
-Buenos Aires, 2077. The sudestada has not let up in eighteen days, Microcentro is
-ankle-deep, and on Florida the *arbolitos* are quoting three dollar rates at once.
-The geography is real: La City, Recoleta, Dársena Sur, Paseo Colón, Barrio Norte,
-Balvanera, Catalinas Norte, San Telmo.
+Buenos Aires, now — or a version of now. The sudestada has not let up in eighteen
+days, Microcentro is ankle-deep, and on Florida the *arbolitos* are quoting three
+dollar rates at once. The geography is real: La City, Recoleta, Dársena Sur, Paseo
+Colón, Barrio Norte, Balvanera, Catalinas Norte, San Telmo. So is the chain the
+story is told against — the game opens on one of sixteen scenes written around
+figures it reads a second earlier: what a coin costs, which pool took the last
+block, how deep the mempool is tonight.
 
 You recover seed phrases from detective riddles and type them into the terminal.
 Nothing underneath the story is simulated: a phrase is checked against the official
@@ -334,6 +337,7 @@ fingerprint and checks what the player typed against it.
 ```
 data/                      one source of truth for both builds
   cases.json               the eight hand-written campaign cases
+  openings.json            sixteen openings and the live figures they are written around
   clients.json             eight employers: voice, district, handwriting, name pools
   contracts.json           256 generated contracts (+ their solution specs)
   english.txt              the official BIP-39 wordlist (sha256 2f5eed53…)
@@ -365,20 +369,21 @@ docs/                      the web build; GitHub Pages publishes from here
   js/heartbeat.js          one watcher for the block clock, shared by the whole page
   js/chime.js              the three notes a new block makes
   js/pow.js                subsidy, halving and retarget, derived from the height
-  js/storage.js            localStorage, with migration from the old key names
+  js/storage.js            the one place that talks to localStorage
+  js/opening.js            picks an opening the live figures can actually fill
   js/vendor/               minidenticons and Feather (MIT), with their licences
 tools/generate_cases.py    builds the 256-contract board
 tools/build_web_data.py    generates the web build's data from data/
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
-tests/                     397 tests, including the Python ↔ JavaScript diff
+tests/                     417 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
 pip install -e ".[dev]"
-python -m pytest tests -v          # 397 tests
+python -m pytest tests -v          # 417 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 
@@ -390,6 +395,13 @@ if any of them has drifted.
 
 Repository settings → **Pages** → **Source: GitHub Actions**. From then on every push to
 `main` publishes `docs/` through `.github/workflows/pages.yml`.
+
+## Releases
+
+Versions follow semantic versioning, with the major number reserved for changes
+that invalidate a saved game. One number lives in `pyproject.toml`,
+`data/cases.json` and `enigma_terminal/__init__.py`, and a test fails if the
+three disagree. What changed in each is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Licence
 

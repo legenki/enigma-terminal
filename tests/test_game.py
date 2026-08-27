@@ -187,7 +187,7 @@ def test_language_switch_changes_the_narrative(session, capsys):
     out = capsys.readouterr().out
     assert "НУЛЕВОЕ ХРАНИЛИЩЕ" in out
     run(session, "LANG de")
-    assert "USAGE: LANG RU | LANG EN" in capsys.readouterr().out
+    assert "USAGE: LANG EN | LANG ES | LANG PT | LANG RU" in capsys.readouterr().out
 
 
 def test_reset_clears_progress(session, capsys):

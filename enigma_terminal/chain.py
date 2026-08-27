@@ -324,6 +324,70 @@ class ChainClient:
     #: whatever their real state was.
     PROBE_ADDRESS = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
 
+    # ----------------------------------------------------------------- #
+    # Figures the openings are written around.
+    #
+    # All of these come from mempool.space, which is the only one of the three
+    # providers that serves blocks, pools and a price. They are decoration, not
+    # gameplay: each is wrapped by the caller so that a failure costs one line
+    # of an opening and never a session.
+    # ----------------------------------------------------------------- #
+
+    _MEMPOOL_API = "https://mempool.space/api"
+
+    def _mempool_get(self, path: str) -> Any:
+        return _get_json(f"{self._MEMPOOL_API}/{path}", min(self.timeout, 6.0))
+
+    def price_usd(self) -> int | None:
+        """One bitcoin in US dollars."""
+        if self.offline:
+            return None
+        return self._mempool_get("v1/prices").get("USD")
+
+    def chain_tip(self) -> dict[str, Any]:
+        """The last block, with the pool that mined it under ``extras``."""
+        if self.offline:
+            return {}
+        blocks = self._mempool_get("v1/blocks")
+        return blocks[0] if blocks else {}
+
+    def best_fee(self) -> int | None:
+        """The fastest recommended fee, in satoshi per vByte."""
+        if self.offline:
+            return None
+        return self._mempool_get("v1/fees/recommended").get("fastestFee")
+
+    def mempool_count(self) -> int | None:
+        """How many transactions are waiting."""
+        if self.offline:
+            return None
+        return self._mempool_get("mempool").get("count")
+
+    def top_pool(self) -> tuple[str | None, float, str | None]:
+        """The largest pool of the last day, its share, and the total hashrate."""
+        if self.offline:
+            return None, 0.0, None
+        payload = self._mempool_get("v1/mining/pools/24h")
+        pools = payload.get("pools") or []
+        total = sum(p.get("blockCount", 0) for p in pools) or 1
+        leader = max(pools, key=lambda p: p.get("blockCount", 0), default=None)
+        hashrate = payload.get("lastEstimatedHashrate")
+        pretty = f"{hashrate / 1e18:.1f} EH/s" if hashrate else None
+        if leader is None:
+            return None, 0.0, pretty
+        share = leader.get("blockCount", 0) * 100 / total
+        return leader.get("name"), share, pretty
+
+    def days_to_halving(self) -> int | None:
+        """Whole days until the subsidy halves, at ten minutes a block."""
+        if self.offline:
+            return None
+        height = self.chain_tip().get("height")
+        if not height:
+            return None
+        remaining = 210_000 - (int(height) % 210_000)
+        return remaining * 10 // (60 * 24)
+
     def netinfo(self) -> dict[str, str]:
         """Probe every provider at once and return a status dict for NETINFO.
 

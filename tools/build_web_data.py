@@ -88,16 +88,32 @@ def build_cases() -> int:
     return len(payload["cases"])
 
 
+def build_openings() -> int:
+    payload = json.loads((DATA / "openings.json").read_text(encoding="utf-8"))
+    body = (
+        HEADER.format(source="data/openings.json")
+        + "\nexport const OPENING_VARIABLES = "
+        + json.dumps(payload["variables"], ensure_ascii=False, indent=2)
+        + ";\n\nexport const OPENINGS = "
+        + json.dumps(payload["openings"], ensure_ascii=False, indent=2)
+        + ";\n"
+    )
+    (OUT / "openings.js").write_text(body, encoding="utf-8")
+    return len(payload["openings"])
+
+
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     words = build_wordlist()
     cases = build_cases()
     clients = build_clients()
     contracts, size = build_contracts()
+    openings = build_openings()
     print(f"docs/js/wordlist.js       : {words} words")
     print(f"docs/js/campaign.js       : {cases} campaign cases")
     print(f"docs/js/clients.js        : {clients} clients")
     print(f"docs/data/contracts.json  : {contracts} contracts ({size / 1024:.0f} KB)")
+    print(f"docs/js/openings.js       : {openings} openings")
     return 0
 
 

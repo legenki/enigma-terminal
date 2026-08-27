@@ -48,6 +48,11 @@ import {
   STATUS_STYLES,
   TOOLS,
 } from './journal.js';
+import {
+  choose as chooseOpening,
+  figuresFromChain,
+  render as renderOpening,
+} from './opening.js';
 
 const OFFICIAL_WORDLIST_SHA256 =
   '2f5eed53a4727b4bf8880d8f3f199efc90e58503646d9ff8eff3a2ed3b24dbda';
@@ -386,10 +391,13 @@ const clockOf = (at) => {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export class Engine {
-  constructor(term, { lang = 'ru' } = {}) {
+  constructor(term, { lang = 'en', explorer = null } = {}) {
     this.term = term;
     this.lang = lang;
     this.chain = new ChainClient();
+    //: Only the opening uses it, and only once. Passed in rather than built
+    //: here so it is the same client the block clock already queues behind.
+    this.explorer = explorer;
     this.campaign = CAMPAIGN;
     this.active = null;
     this.wallet = null;
@@ -468,7 +476,15 @@ export class Engine {
       await sleep(110);
     }
     term.blank();
-    term.typeLines(pick(this.campaign.prologue, this.lang), 'white', 260);
+    // One of sixteen, most written around figures read off the chain a moment
+    // ago. Only the openings whose figures actually arrived are in the running,
+    // so a blocked or rate-limited request still opens on prose, not a gap.
+    const figures = await figuresFromChain(this.explorer);
+    term.typeLines(
+      renderOpening(chooseOpening(figures), this.lang, figures),
+      'white',
+      260,
+    );
     while (term.animating) await sleep(30);
     term.blank();
     term.locked = false;

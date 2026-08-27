@@ -9,7 +9,10 @@ from enigma_terminal.cases import Campaign, Progress
 
 from .answers import LEGACY_ADDRESSES, SOLUTIONS, UNRELATED_MNEMONIC
 
-LANGUAGES = ("ru", "en")
+#: All four the game ships. This read ("ru", "en") for a long time, so the
+#: completeness check below silently passed over every Spanish and Portuguese
+#: field it was written to guard.
+LANGUAGES = ("en", "es", "pt", "ru")
 TEXT_FIELDS = ("brief", "evidence", "clues", "hints", "epilogue")
 
 
@@ -23,12 +26,7 @@ def test_campaign_has_eight_cases(campaign):
     assert [c.id for c in campaign.cases] == list(range(1, 9))
 
 
-@pytest.mark.parametrize("lang", LANGUAGES)
-def test_prologue_exists_in_both_languages(campaign, lang):
-    assert len(campaign.prologue(lang)) > 5
-
-
-def test_every_case_is_bilingual_and_complete(campaign):
+def test_every_case_is_complete_in_every_language(campaign):
     for case in campaign.cases:
         for lang in LANGUAGES:
             assert case.codename(lang), f"case {case.id} missing codename/{lang}"
@@ -36,7 +34,9 @@ def test_every_case_is_bilingual_and_complete(campaign):
                 lines = getattr(case, field)(lang)
                 assert lines, f"case {case.id} has empty {field}/{lang}"
                 assert all(isinstance(line, str) for line in lines)
-        assert case.hints("ru") and len(case.hints("ru")) == len(case.hints("en"))
+        for lang in LANGUAGES:
+            assert len(case.hints(lang)) == len(case.hints("en")), \
+                f"case {case.id} has a different number of hints in {lang}"
         assert case.kind in ("words", "entropy")
         assert 1 <= case.difficulty <= 5
 

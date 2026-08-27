@@ -159,3 +159,38 @@ def test_nothing_still_points_at_the_pre_rename_name(readme):
             offenders.append(str(path.relative_to(ROOT)))
 
     assert not offenders, f"these still carry the pre-rename name: {offenders}"
+
+
+def test_every_place_that_states_a_version_states_the_same_one():
+    """Three files carry it and nothing made them agree.
+
+    pyproject is what pip installs, cases.json meta is what the About panel and
+    the boot banner print, and __init__ is the fallback when the package is not
+    installed. A release that bumps one of them is a release that ships two
+    different version numbers to two different screens.
+    """
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    packaged = re.search(r'^version = "([^"]+)"', pyproject, re.MULTILINE)
+    assert packaged, "pyproject no longer declares a version"
+
+    meta = json.loads((ROOT / "data" / "cases.json").read_text(encoding="utf-8"))["meta"]
+    init = (ROOT / "enigma_terminal" / "__init__.py").read_text(encoding="utf-8")
+    fallback = re.search(r'__version__ = "([^"]+)"', init)
+    assert fallback, "the version fallback is gone"
+
+    stated = {
+        "pyproject.toml": packaged.group(1),
+        "data/cases.json": meta["version"],
+        "enigma_terminal/__init__.py": fallback.group(1),
+    }
+    assert len(set(stated.values())) == 1, f"the version has drifted apart: {stated}"
+
+
+def test_the_changelog_covers_the_version_being_shipped():
+    """A release nobody wrote down is a release nobody can describe later."""
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    version = re.search(r'^version = "([^"]+)"', pyproject, re.MULTILINE).group(1)
+    changelog = ROOT / "CHANGELOG.md"
+    assert changelog.exists(), "there is no CHANGELOG.md"
+    assert f"## {version}" in changelog.read_text(encoding="utf-8"), \
+        f"CHANGELOG.md has no entry for {version}"

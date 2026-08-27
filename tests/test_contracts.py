@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parent.parent
 GRID_COLUMNS = 16
 
 #: Every language a generated contract must be written in.
-LANGS = ("ru", "en", "es", "pt")
+LANGS = ("en", "es", "pt", "ru")
 
 
 @pytest.fixture(scope="module")

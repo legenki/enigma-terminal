@@ -110,7 +110,12 @@ def test_web_data_is_in_sync_with_the_sources():
     )
     assert completed.returncode == 0, completed.stderr
     diff = subprocess.run(
-        ["git", "diff", "--name-only", "--", "docs/js/wordlist.js", "docs/js/campaign.js"],
+        [
+                "git", "diff", "--name-only", "--",
+                "docs/js/wordlist.js", "docs/js/campaign.js",
+                "docs/js/clients.js", "docs/js/openings.js",
+                "docs/data/contracts.json",
+            ],
         cwd=ROOT, capture_output=True, text=True,
     )
     assert not diff.stdout.strip(), (
