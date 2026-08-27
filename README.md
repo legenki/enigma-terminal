@@ -1,4 +1,4 @@
-# BIP-39: ENIGMA TERMINAL
+# ENIGMA TERMINAL
 
 **A detective quest played against the live Bitcoin network.**
 

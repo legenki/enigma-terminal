@@ -184,7 +184,7 @@ class Journal:
 
     def to_text(self) -> str:
         lines = [
-            "INVESTIGATION JOURNAL // BIP-39: ENIGMA TERMINAL",
+            "INVESTIGATION JOURNAL // ENIGMA TERMINAL",
             f"Exported: {time.strftime('%Y-%m-%d %H:%M:%S')}",
             f"Entries: {len(self.entries)}",
             "",

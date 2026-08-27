@@ -248,7 +248,7 @@ TEXT = {
 
 ABOUT_TEXT = {
     "en": [
-        "BIP-39: ENIGMA TERMINAL — a detective quest played against the real network.",
+        "ENIGMA TERMINAL — a detective quest played against the real network.",
         "",
         "Everything below the story is genuine:",
         "  * mnemonics are checked against the official BIP-39 English wordlist,",
@@ -267,7 +267,7 @@ ABOUT_TEXT = {
         "included.",
     ],
     "ru": [
-        "BIP-39: ENIGMA TERMINAL — детективный квест, играющий против настоящей сети.",
+        "ENIGMA TERMINAL — детективный квест, играющий против настоящей сети.",
         "",
         "Всё, что находится под сюжетом, — подлинное:",
         "  * мнемоники проверяются по официальному словарю BIP-39,",
@@ -286,7 +286,7 @@ ABOUT_TEXT = {
         "с реальными деньгами.",
     ],
     "es": [
-        "BIP-39: ENIGMA TERMINAL — una aventura de detectives contra la red real.",
+        "ENIGMA TERMINAL — una aventura de detectives contra la red real.",
         "",
         "Todo lo que hay debajo de la historia es genuino:",
         "  * las mnemotécnicas se validan contra la lista oficial BIP-39 en inglés,",
@@ -305,7 +305,7 @@ ABOUT_TEXT = {
         "este.",
     ],
     "pt": [
-        "BIP-39: ENIGMA TERMINAL — uma aventura de detetives jogada contra a rede real.",
+        "ENIGMA TERMINAL — uma aventura de detetives jogada contra a rede real.",
         "",
         "Tudo abaixo da história é genuíno:",
         "  * as mnemônicas são validadas contra a lista oficial BIP-39 em inglês,",
@@ -1274,7 +1274,7 @@ def run(session: Session) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="enigma-terminal",
-        description="BIP-39: ENIGMA TERMINAL — a detective quest over the live Bitcoin network.",
+        description="ENIGMA TERMINAL — a detective quest over the live Bitcoin network.",
     )
     parser.add_argument("--lang", choices=LANGUAGES, default="ru",
                         help="narrative language (default: ru)")

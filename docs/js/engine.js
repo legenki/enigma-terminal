@@ -216,7 +216,7 @@ const HELP = {
 
 const ABOUT = {
   en: [
-    'BIP-39: ENIGMA TERMINAL — a detective quest played against the real network.',
+    'ENIGMA TERMINAL — a detective quest played against the real network.',
     '',
     'Everything below the story is genuine:',
     '  * mnemonics are checked against the official BIP-39 English wordlist,',
@@ -237,7 +237,7 @@ const ABOUT = {
     'real funds into any program, this one included.',
   ],
   ru: [
-    'BIP-39: ENIGMA TERMINAL — детективный квест, играющий против настоящей сети.',
+    'ENIGMA TERMINAL — детективный квест, играющий против настоящей сети.',
     '',
     'Всё, что находится под сюжетом, — подлинное:',
     '  * мнемоники проверяются по официальному словарю BIP-39,',
@@ -258,7 +258,7 @@ const ABOUT = {
     'включая эту — сид-фразу от кошелька с реальными деньгами.',
   ],
   es: [
-    'BIP-39: ENIGMA TERMINAL — una aventura de detectives contra la red real.',
+    'ENIGMA TERMINAL — una aventura de detectives contra la red real.',
     '',
     'Todo lo que hay debajo de la historia es genuino:',
     '  * las mnemotécnicas se validan contra la lista oficial BIP-39 en inglés,',
@@ -282,7 +282,7 @@ const ABOUT = {
     'este.',
   ],
   pt: [
-    'BIP-39: ENIGMA TERMINAL — uma aventura de detetives jogada contra a rede',
+    'ENIGMA TERMINAL — uma aventura de detetives jogada contra a rede',
     'real.',
     '',
     'Tudo abaixo da história é genuíno:',

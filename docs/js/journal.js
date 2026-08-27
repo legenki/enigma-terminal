@@ -264,7 +264,7 @@ export class Journal {
   toText(lang = 'en') {
     const caption = EXPORT_CAPTIONS[lang] || EXPORT_CAPTIONS.en;
     const header = [
-      `${caption.title} // BIP-39: ENIGMA TERMINAL`,
+      `${caption.title} // ENIGMA TERMINAL`,
       `${caption.exported}: ${new Date().toISOString()}`,
       `${caption.entries}: ${this.entries.length}`,
       '',

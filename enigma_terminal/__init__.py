@@ -1,4 +1,4 @@
-"""BIP-39: ENIGMA TERMINAL — a cyberpunk detective quest over the real Bitcoin network."""
+"""ENIGMA TERMINAL — a cyberpunk detective quest over the real Bitcoin network."""
 
 import importlib.metadata
 

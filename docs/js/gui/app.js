@@ -3737,7 +3737,7 @@ export class GuiApp {
     const node = el(
       'div',
       {},
-      section('BIP-39: ENIGMA TERMINAL', META.version),
+      section('ENIGMA TERMINAL', META.version),
       el(
         'div',
         { class: 'prose' },

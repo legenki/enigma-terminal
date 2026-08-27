@@ -2,12 +2,12 @@
 // and occasional horizontal tear slices. Plain 2D canvas, deliberately cheap —
 // it is on screen the whole time the game is open.
 
-const TITLE = 'BIP-39: ENIGMA TERMINAL';
+const TITLE = 'ENIGMA TERMINAL';
 const SUBTITLE = 'REAL NET BUILD';
 //: What is left of the wordmark once the banner is 18px instead of 72. The
-//: whole title cannot be read at that size, so the mark carries the two
-//: characters that are the game's name and the split does the rest.
-const MARK = '39';
+//: whole title cannot be read at that size, so the mark carries the initials
+//: of the game's name and the split does the rest.
+const MARK = 'ET';
 
 export class GlitchBanner {
   constructor(canvas, { compact = false } = {}) {

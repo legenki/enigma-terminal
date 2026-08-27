@@ -2,7 +2,7 @@
 
 export const CAMPAIGN = {
   "meta": {
-    "title": "BIP-39: ENIGMA TERMINAL",
+    "title": "ENIGMA TERMINAL",
     "subtitle": {
       "ru": "СИМУЛЯТОР ЦИФРОВОГО ДЕТЕКТИВА // REAL NET BUILD",
       "en": "DIGITAL DETECTIVE SIMULATOR // REAL NET BUILD",
