@@ -79,10 +79,11 @@ its digit:
 | **3** | Contracts | the board, by employer |
 | **4** | Decrypt | a phrase in, a derivation grid out |
 | **5** | Ledger | live balance and transaction lookups |
-| **6** | Archive | full-text search across the case files |
-| **7** | Randomizer | a fresh phrase from real entropy |
-| **8** | Journal | every move you have made, filterable and replayable |
-| **9** | About | what the program actually does |
+| **6** | Explorer | the live chain: blocks, transactions, addresses, mempool |
+| **7** | Archive | full-text search across the case files |
+| **8** | Randomizer | a fresh phrase from real entropy |
+| **9** | Journal | every move you have made, filterable and replayable |
+| **0** | About | what the program actually does |
 
 Two lookups sit permanently in the right-hand rail rather than in a panel of their own:
 the **BIP-39 wordlist** and **missing-word recovery**. They are the things you reach for
@@ -92,6 +93,22 @@ use one, and losing the other to see the first.
 Above the panels is a 34&nbsp;px strip in the same idiom as every window below it: the mark
 and the wordmark on the left, then the node, the closed-case count and the journal size,
 then the two controls that change how the whole page reads — daylight and language.
+
+### The chain explorer
+
+Panel 6 reads the live chain from [bitaps.com](https://bitaps.com)'s public API — blocks,
+transactions, addresses and the mempool, in one box that works out from the shape of what
+you typed which of the four you meant. A number is a height; sixty-four hex characters are
+a block or a transaction, and since only the chain knows which, it asks the block index
+first and falls back.
+
+Two things shape that panel. The service allows **three requests every five seconds**, so
+every lookup goes through one queue that spends tokens as they refill and serves what it
+already knows from memory — a panel that fanned out would come back 429 and read as
+broken. And the service publishes no difficulty, no target and no transaction count, but it
+does hand back the raw eighty-byte block header: all three are in there, so the explorer
+reads them out itself and checks, while it is at it, that the header really does hash to
+the hash it was given.
 
 ### The palette follows the hour
 
@@ -331,20 +348,22 @@ docs/                      the web build; GitHub Pages publishes from here
   js/identicon.js          generative sigils for cases, phrases and addresses
   js/glitch.js             the mark in the strip
   js/select.js             the language dropdown the shell builds for itself
+  js/bitaps.js             the explorer's client: one rate-limited queue, cached
+  js/crypto/header.js      an 80-byte block header, and the numbers inside it
   js/storage.js            localStorage, with migration from the old key names
   js/vendor/               minidenticons and Feather (MIT), with their licences
 tools/generate_cases.py    builds the 256-contract board
 tools/build_web_data.py    generates the web build's data from data/
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
-tests/                     345 tests, including the Python ↔ JavaScript diff
+tests/                     360 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests -v          # 345 tests
+python -m pytest tests -v          # 360 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 

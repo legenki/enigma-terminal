@@ -5,6 +5,7 @@
 // re-rendering it, so a half-typed phrase, a query and its results all survive
 // the trip to another tool and back.
 
+import { BitapsClient, btc, classify } from '../bitaps.js';
 import { ChainClient, formatBtc, PROVIDERS } from '../chain.js';
 import {
   CAMPAIGN_CASES,
@@ -34,6 +35,7 @@ import {
   wordAt,
 } from '../crypto/bip39.js';
 import { fromHex, toHex } from '../crypto/hash.js';
+import { readHeader } from '../crypto/header.js';
 import { deriveWallet } from '../crypto/wallet.js';
 import { addressSigil, caseSigil, mnemonicSigil, sigil } from '../identicon.js';
 import { Journal, maskMnemonic, TOOLS } from '../journal.js';
@@ -94,10 +96,21 @@ export const PANELS = [
     key: '5',
   },
   {
+    id: 'explorer',
+    glyph: 'globe',
+    label: {
+      en: 'Explorer',
+      ru: 'Эксплорер',
+      es: 'Explorador',
+      pt: 'Explorador',
+    },
+    key: '6',
+  },
+  {
     id: 'archive',
     glyph: 'search',
     label: { en: 'Archive', ru: 'Архив дел', es: 'Archivo', pt: 'Arquivo' },
-    key: '6',
+    key: '7',
   },
   {
     id: 'random',
@@ -108,24 +121,276 @@ export const PANELS = [
       es: 'Aleatorio',
       pt: 'Aleatório',
     },
-    key: '7',
+    key: '8',
   },
   {
     id: 'journal',
     glyph: 'bookOpen',
     label: { en: 'Journal', ru: 'Журнал', es: 'Diario', pt: 'Diário' },
-    key: '8',
+    key: '9',
   },
   {
     id: 'about',
     glyph: 'info',
     label: { en: 'About', ru: 'О программе', es: 'Acerca de', pt: 'Sobre' },
-    key: '9',
+    key: '0',
   },
 ];
 
 // Every fixed string the GUI shows. Keys carrying {braces} are filled by `tf`.
 const T = {
+  explorer: {
+    en: 'Explorer',
+    ru: 'Эксплорер',
+    es: 'Explorador',
+    pt: 'Explorador',
+  },
+  lookUp: {
+    en: 'Look up',
+    ru: 'Найти',
+    es: 'Buscar',
+    pt: 'Buscar',
+  },
+  explorerTitle: {
+    en: 'Chain explorer',
+    ru: 'Обозреватель цепи',
+    es: 'Explorador de la cadena',
+    pt: 'Explorador da cadeia',
+  },
+  explorerPlaceholder: {
+    en: 'block height, block hash, transaction id, or address',
+    ru: 'высота блока, хеш блока, id транзакции или адрес',
+    es: 'altura de bloque, hash, id de transacción o dirección',
+    pt: 'altura do bloco, hash, id de transação ou endereço',
+  },
+  explorerHelp: {
+    en: 'Everything here is read from the live chain. A number is a height, sixty-four hex characters are a block or a transaction, anything else is an address.',
+    ru: 'Всё здесь читается из живой цепи. Число — это высота, шестьдесят четыре hex-символа — блок или транзакция, остальное — адрес.',
+    es: 'Todo aquí se lee de la cadena en vivo. Un número es una altura, sesenta y cuatro caracteres hex son un bloque o una transacción, lo demás es una dirección.',
+    pt: 'Tudo aqui é lido da cadeia ao vivo. Um número é uma altura, sessenta e quatro caracteres hex são um bloco ou uma transação, o resto é um endereço.',
+  },
+  chainTip: {
+    en: 'Chain tip',
+    ru: 'Вершина цепи',
+    es: 'Punta de la cadena',
+    pt: 'Topo da cadeia',
+  },
+  mempoolTitle: {
+    en: 'Mempool',
+    ru: 'Мемпул',
+    es: 'Mempool',
+    pt: 'Mempool',
+  },
+  blockTitle: {
+    en: 'Block',
+    ru: 'Блок',
+    es: 'Bloque',
+    pt: 'Bloco',
+  },
+  txTitle: {
+    en: 'Transaction',
+    ru: 'Транзакция',
+    es: 'Transacción',
+    pt: 'Transação',
+  },
+  addressTitle: {
+    en: 'Address',
+    ru: 'Адрес',
+    es: 'Dirección',
+    pt: 'Endereço',
+  },
+  height: {
+    en: 'Height',
+    ru: 'Высота',
+    es: 'Altura',
+    pt: 'Altura',
+  },
+  mined: {
+    en: 'Mined',
+    ru: 'Смайнен',
+    es: 'Minado',
+    pt: 'Minerado',
+  },
+  difficulty: {
+    en: 'Difficulty',
+    ru: 'Сложность',
+    es: 'Dificultad',
+    pt: 'Dificuldade',
+  },
+  nonce: {
+    en: 'Nonce',
+    ru: 'Nonce',
+    es: 'Nonce',
+    pt: 'Nonce',
+  },
+  merkleRoot: {
+    en: 'Merkle root',
+    ru: 'Корень Меркла',
+    es: 'Raíz de Merkle',
+    pt: 'Raiz de Merkle',
+  },
+  previousBlock: {
+    en: 'Previous block',
+    ru: 'Предыдущий блок',
+    es: 'Bloque anterior',
+    pt: 'Bloco anterior',
+  },
+  target: {
+    en: 'Target',
+    ru: 'Цель',
+    es: 'Objetivo',
+    pt: 'Alvo',
+  },
+  hashVerified: {
+    en: 'Header hashes to the reported hash',
+    ru: 'Хеш заголовка совпал с заявленным',
+    es: 'El encabezado coincide con el hash informado',
+    pt: 'O cabeçalho confere com o hash informado',
+  },
+  hashMismatch: {
+    en: 'Header does NOT hash to the reported hash',
+    ru: 'Хеш заголовка НЕ совпал с заявленным',
+    es: 'El encabezado NO coincide con el hash informado',
+    pt: 'O cabeçalho NÃO confere com o hash informado',
+  },
+  transactionsIn: {
+    en: 'transactions',
+    ru: 'транзакций',
+    es: 'transacciones',
+    pt: 'transações',
+  },
+  confirmations: {
+    en: 'Confirmations',
+    ru: 'Подтверждений',
+    es: 'Confirmaciones',
+    pt: 'Confirmações',
+  },
+  unconfirmed: {
+    en: 'Unconfirmed',
+    ru: 'Не подтверждена',
+    es: 'Sin confirmar',
+    pt: 'Não confirmada',
+  },
+  feePaid: {
+    en: 'Fee',
+    ru: 'Комиссия',
+    es: 'Comisión',
+    pt: 'Taxa',
+  },
+  feeRate: {
+    en: 'Fee rate',
+    ru: 'Ставка',
+    es: 'Tasa',
+    pt: 'Taxa por vByte',
+  },
+  sizeWeight: {
+    en: 'Size / weight',
+    ru: 'Размер / вес',
+    es: 'Tamaño / peso',
+    pt: 'Tamanho / peso',
+  },
+  inputs: {
+    en: 'Inputs',
+    ru: 'Входы',
+    es: 'Entradas',
+    pt: 'Entradas',
+  },
+  outputs: {
+    en: 'Outputs',
+    ru: 'Выходы',
+    es: 'Saídas',
+    pt: 'Saídas',
+  },
+  coinbaseTx: {
+    en: 'Coinbase — newly issued coin',
+    ru: 'Coinbase — вновь выпущенная монета',
+    es: 'Coinbase — moneda recién emitida',
+    pt: 'Coinbase — moeda recém-emitida',
+  },
+  balance: {
+    en: 'Balance',
+    ru: 'Баланс',
+    es: 'Saldo',
+    pt: 'Saldo',
+  },
+  received: {
+    en: 'Received',
+    ru: 'Получено',
+    es: 'Recibido',
+    pt: 'Recebido',
+  },
+  sent: {
+    en: 'Sent',
+    ru: 'Отправлено',
+    es: 'Enviado',
+    pt: 'Enviado',
+  },
+  largestReceived: {
+    en: 'Largest received',
+    ru: 'Крупнейшее поступление',
+    es: 'Mayor recibido',
+    pt: 'Maior recebido',
+  },
+  unspentOutputs: {
+    en: 'Unspent outputs',
+    ru: 'Непотраченные выходы',
+    es: 'Salidas sin gastar',
+    pt: 'Saídas não gastas',
+  },
+  inMempool: {
+    en: 'in the mempool',
+    ru: 'в мемпуле',
+    es: 'en el mempool',
+    pt: 'no mempool',
+  },
+  feeRateSpread: {
+    en: 'Fee rate spread',
+    ru: 'Распределение ставок',
+    es: 'Distribución de tasas',
+    pt: 'Distribuição de taxas',
+  },
+  recommended: {
+    en: 'Recommended',
+    ru: 'Рекомендуется',
+    es: 'Recomendado',
+    pt: 'Recomendado',
+  },
+  pending: {
+    en: 'pending',
+    ru: 'в ожидании',
+    es: 'pendientes',
+    pt: 'pendentes',
+  },
+  rbfSegwit: {
+    en: 'RBF / SegWit',
+    ru: 'RBF / SegWit',
+    es: 'RBF / SegWit',
+    pt: 'RBF / SegWit',
+  },
+  lookingUp: {
+    en: 'Reading the chain…',
+    ru: 'Читаю цепь…',
+    es: 'Leyendo la cadena…',
+    pt: 'Lendo a cadeia…',
+  },
+  nothingLikeIt: {
+    en: 'That is not a height, a hash, or an address.',
+    ru: 'Это не высота, не хеш и не адрес.',
+    es: 'Eso no es una altura, un hash ni una dirección.',
+    pt: 'Isso não é uma altura, um hash nem um endereço.',
+  },
+  openInExplorer: {
+    en: 'Open at bitaps',
+    ru: 'Открыть на bitaps',
+    es: 'Abrir en bitaps',
+    pt: 'Abrir no bitaps',
+  },
+  sourceIsLive: {
+    en: 'Live from bitaps.com · 3 requests every 5 seconds',
+    ru: 'Живые данные bitaps.com · 3 запроса в 5 секунд',
+    es: 'En vivo desde bitaps.com · 3 solicitudes cada 5 segundos',
+    pt: 'Ao vivo de bitaps.com · 3 requisições a cada 5 segundos',
+  },
   solved: { en: 'Closed', ru: 'Закрыто', es: 'Cerrado', pt: 'Fechado' },
   open: { en: 'Open', ru: 'Открыто', es: 'Abierto', pt: 'Aberto' },
   locked: { en: 'Locked', ru: 'Заперто', es: 'Bloqueado', pt: 'Bloqueado' },
@@ -621,6 +886,30 @@ const tf = (key, lang, fields = {}) =>
     (line, [name, value]) => line.split(`{${name}}`).join(value),
     t(key, lang),
   );
+//: A fee rate as people quote it: whole numbers over ten, one decimal under.
+const fmtRate = (rate) => {
+  const value = Number(rate);
+  if (!Number.isFinite(value)) return '—';
+  return value >= 10 ? value.toFixed(0) : value.toFixed(1);
+};
+
+const AGO = {
+  en: ['just now', 'm ago', 'h ago', 'd ago'],
+  ru: ['только что', ' мин назад', ' ч назад', ' дн назад'],
+  es: ['ahora', ' min', ' h', ' d'],
+  pt: ['agora', ' min', ' h', ' d'],
+};
+
+/** How long ago, in the coarsest unit that still says something. */
+const ago = (seconds, lang) => {
+  const words = AGO[lang] || AGO.en;
+  const delta = Math.max(0, Math.floor(Date.now() / 1000) - Number(seconds));
+  if (delta < 60) return words[0];
+  if (delta < 3600) return `${Math.floor(delta / 60)}${words[1]}`;
+  if (delta < 86400) return `${Math.floor(delta / 3600)}${words[2]}`;
+  return `${Math.floor(delta / 86400)}${words[3]}`;
+};
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const clock = (at) => new Date(at).toTimeString().slice(0, 8);
 
@@ -644,6 +933,9 @@ export class GuiApp {
     this.progress = new ProgressStore();
     this.journal = new Journal();
     this.chain = new ChainClient();
+    //: Its own client, because its rate limit is its own: three calls every
+    //: five seconds, shared across every lookup the panel makes.
+    this.chainExplorer = new BitapsClient();
     //: The terminal is the first row in the sidebar and the first thing on
     //: screen: the game is a command line with an interface around it, not the
     //: other way round.
@@ -822,6 +1114,7 @@ export class GuiApp {
       decrypt: () => this.buildDecrypt(),
       ledger: () => this.buildLedger(),
       terminal: () => this.buildTerminal(),
+      explorer: () => this.buildExplorer(),
       archive: () => this.buildArchive(),
       random: () => this.buildRandom(),
       journal: () => this.buildJournal(),
@@ -2103,6 +2396,434 @@ export class GuiApp {
     const node =
       this.terminalHost || el('div', { class: 'hint-text', text: '—' });
     return { node, api: {} };
+  }
+
+  // ---- explorer: the live chain, read from bitaps -------------------------
+
+  /**
+   * One box, four kinds of answer.
+   *
+   * The chain is one namespace as far as a person is concerned — you have a
+   * string and you want to know what it is — so the panel takes any of the
+   * four and works out which by shape. A sixty-four character hash is the one
+   * ambiguous case: it tries the block index first, because blocks are five
+   * orders of magnitude fewer than transactions, and falls back.
+   */
+  buildExplorer() {
+    const lang = this.lang;
+    const input = el('input', {
+      class: 'field',
+      type: 'search',
+      spellcheck: 'false',
+      placeholder: t('explorerPlaceholder', lang),
+    });
+    const output = el('div', {});
+    let showing = null;
+
+    const fail = (error) =>
+      replace(
+        output,
+        notice('danger', t('explorerTitle', lang), error.message),
+      );
+
+    const overview = async () => {
+      showing = null;
+      replace(
+        output,
+        el('p', { class: 'spinner-line', text: t('lookingUp', lang) }),
+      );
+      try {
+        const tip = await this.chainExplorer.tip();
+        replace(output, this.explorerTip(tip));
+        // The mempool costs a second token, so it lands when it lands rather
+        // than holding the tip back.
+        const pool = await this.chainExplorer.mempool();
+        if (showing === null) output.append(this.explorerMempool(pool));
+      } catch (error) {
+        fail(error);
+      }
+    };
+
+    const run = async (value = null) => {
+      if (value !== null) input.value = value;
+      const { kind, value: query } = classify(input.value);
+      if (!query) return overview();
+      if (!kind) {
+        return replace(
+          output,
+          notice('warn', t('explorerTitle', lang), t('nothingLikeIt', lang)),
+        );
+      }
+      showing = query;
+      replace(
+        output,
+        el('p', { class: 'spinner-line', text: t('lookingUp', lang) }),
+      );
+      try {
+        if (kind === 'height') {
+          replace(
+            output,
+            this.explorerTip(await this.chainExplorer.block(query), {
+              seek: true,
+            }),
+          );
+        } else if (kind === 'address') {
+          replace(output, await this.explorerAddress(query));
+        } else {
+          // Hash: a block or a transaction, and only the chain knows which.
+          let block = null;
+          try {
+            block = await this.chainExplorer.block(query);
+          } catch (error) {
+            if (error.status !== 404) throw error;
+          }
+          replace(
+            output,
+            block
+              ? this.explorerTip(block, { seek: true })
+              : this.explorerTransaction(
+                  await this.chainExplorer.transaction(query),
+                ),
+          );
+        }
+        // Only the address lookup is journalled, and under the tool that
+        // already means exactly that, so RECALL lands somewhere real. Blocks
+        // and transactions get their own entry once the terminal has the
+        // commands to replay them in.
+        if (kind === 'address') {
+          this.log('ledger', query, {
+            detail: t('explorerTitle', lang),
+            payload: { address: query },
+          });
+        }
+      } catch (error) {
+        fail(error);
+      }
+    };
+
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') run();
+    });
+
+    const node = el(
+      'div',
+      {},
+      section(t('explorerTitle', lang), t('sourceIsLive', lang)),
+      el(
+        'div',
+        { class: 'stack' },
+        el(
+          'div',
+          { class: 'row' },
+          input,
+          el('button', {
+            class: 'btn btn--primary',
+            type: 'button',
+            text: t('lookUp', lang),
+            onClick: () => run(),
+          }),
+        ),
+        el('p', { class: 'hint-text', text: t('explorerHelp', lang) }),
+        output,
+      ),
+    );
+    overview();
+    return { node, api: { run: (value) => run(value) } };
+  }
+
+  /** The chain tip, or any block: everything derived from its own header. */
+  explorerTip(block, { seek = false } = {}) {
+    const lang = this.lang;
+    let header = null;
+    let error = null;
+    try {
+      header = readHeader(block.header);
+    } catch (problem) {
+      error = problem.message;
+    }
+    const agrees = header && header.hash === block.hash;
+
+    return el(
+      'div',
+      { class: 'stack' },
+      section(
+        seek ? t('blockTitle', lang) : t('chainTip', lang),
+        `#${block.height}`,
+      ),
+      el(
+        'div',
+        { class: 'chain-card' },
+        el(
+          'div',
+          { class: 'chain-card__head' },
+          addressSigil(block.hash, { size: 34 }),
+          el(
+            'div',
+            { class: 'chain-card__id' },
+            el('span', { class: 'chain-card__n', text: `#${block.height}` }),
+            el('span', { class: 'addr break', text: block.hash }),
+          ),
+        ),
+        header
+          ? kv([
+              [
+                t('mined', lang),
+                `${new Date(header.timestamp * 1000).toISOString().replace('T', ' ').slice(0, 19)} UTC · ${ago(header.timestamp, lang)}`,
+              ],
+              [
+                t('transactionsIn', lang),
+                header.transactionCount === null
+                  ? '—'
+                  : String(header.transactionCount),
+              ],
+              [
+                t('difficulty', lang),
+                Math.round(header.difficulty).toLocaleString('en-US'),
+              ],
+              [t('target', lang), `0x${header.target.slice(0, 26)}…`],
+              [t('nonce', lang), String(header.nonce)],
+              [t('merkleRoot', lang), header.merkleRoot],
+              [t('previousBlock', lang), header.previousHash],
+            ])
+          : notice('danger', t('blockTitle', lang), error),
+      ),
+      header
+        ? notice(
+            agrees ? 'ok' : 'danger',
+            agrees ? t('hashVerified', lang) : t('hashMismatch', lang),
+            `sha256d(header) = ${header.hash}`,
+          )
+        : null,
+    );
+  }
+
+  /** The mempool as it stands, with the fee-rate spread drawn from its own map. */
+  explorerMempool(pool) {
+    const lang = this.lang;
+    const txs = pool.transactions || {};
+    //: `best` and its two horizons come back as plain numbers, not as the
+    //: {txId, value} pairs the rest of this section uses.
+    const rates = txs.feeRate || {};
+    const buckets = Object.entries(txs.feeRateMap || {})
+      .map(([rate, cell]) => ({ rate: Number(rate), count: cell.count || 0 }))
+      .filter((bucket) => Number.isFinite(bucket.rate))
+      .sort((a, b) => a.rate - b.rate)
+      .slice(0, 30);
+    const peak = Math.max(1, ...buckets.map((bucket) => bucket.count));
+
+    return el(
+      'div',
+      { class: 'stack', style: 'margin-top:14px' },
+      section(
+        t('mempoolTitle', lang),
+        `${(txs.count || 0).toLocaleString('en-US')} ${t('pending', lang)}`,
+      ),
+      kv([
+        [
+          t('recommended', lang),
+          `${fmtRate(rates.best)} · 1h ${fmtRate(rates.bestHourly)} · 4h ${fmtRate(rates.best4h)} sat/vB`,
+        ],
+        [t('feePaid', lang), `${btc(txs.fee?.total || 0)} BTC`],
+        [
+          t('rbfSegwit', lang),
+          `${(txs.rbfCount || 0).toLocaleString('en-US')} / ${(txs.segwitCount || 0).toLocaleString('en-US')}`,
+        ],
+      ]),
+      buckets.length
+        ? el(
+            'div',
+            { class: 'stack' },
+            el('p', { class: 'section__meta', text: t('feeRateSpread', lang) }),
+            el(
+              'div',
+              { class: 'spread' },
+              ...buckets.map((bucket) =>
+                el('span', {
+                  class: 'spread__bar',
+                  style: `height:${Math.max(3, Math.round((bucket.count / peak) * 100))}%`,
+                  title: `${bucket.rate} sat/vB · ${bucket.count}`,
+                }),
+              ),
+            ),
+            el(
+              'div',
+              { class: 'spread__scale' },
+              el('span', { text: `${buckets[0].rate} sat/vB` }),
+              el('span', {
+                text: `${buckets[buckets.length - 1].rate} sat/vB`,
+              }),
+            ),
+          )
+        : null,
+    );
+  }
+
+  /** One transaction, with its money flowing left to right. */
+  explorerTransaction(tx) {
+    const lang = this.lang;
+    const ins = Object.values(tx.vIn || {});
+    const outs = Object.values(tx.vOut || {});
+    const side = (entries, coinbase) =>
+      el(
+        'div',
+        { class: 'flow__side' },
+        ...entries.slice(0, 24).map((entry) =>
+          el(
+            'div',
+            { class: 'flow__row' },
+            entry.address ? addressSigil(entry.address, { size: 18 }) : null,
+            el('button', {
+              class: 'flow__addr addr',
+              type: 'button',
+              disabled: entry.address ? undefined : 'true',
+              text: entry.address || (coinbase ? 'COINBASE' : '—'),
+              onClick: entry.address
+                ? () => this.ensurePanel('explorer').api.run(entry.address)
+                : undefined,
+            }),
+            el('span', {
+              class: 'flow__amt',
+              text: btc(entry.value ?? entry.amount ?? 0),
+            }),
+          ),
+        ),
+        entries.length > 24
+          ? el('p', { class: 'hint-text', text: `+${entries.length - 24}` })
+          : null,
+      );
+
+    return el(
+      'div',
+      { class: 'stack' },
+      section(t('txTitle', lang), tx.coinbase ? t('coinbaseTx', lang) : ''),
+      el(
+        'div',
+        { class: 'chain-card' },
+        el(
+          'div',
+          { class: 'chain-card__head' },
+          addressSigil(tx.txId, { size: 34 }),
+          el('span', { class: 'addr break', text: tx.txId }),
+        ),
+        kv([
+          [
+            t('confirmations', lang),
+            tx.confirmations
+              ? `${tx.confirmations.toLocaleString('en-US')} · #${tx.blockHeight}`
+              : t('unconfirmed', lang),
+          ],
+          [
+            t('mined', lang),
+            tx.time
+              ? `${new Date(tx.time * 1000).toISOString().replace('T', ' ').slice(0, 19)} UTC · ${ago(tx.time, lang)}`
+              : '—',
+          ],
+          [
+            t('feePaid', lang),
+            `${btc(tx.fee || 0)} BTC · ${fmtRate(tx.feeRate)} sat/vB`,
+          ],
+          [
+            t('sizeWeight', lang),
+            `${tx.size} B · ${tx.vSize} vB · ${tx.weight} WU`,
+          ],
+          [
+            t('rbfSegwit', lang),
+            `${tx.rbf ? 'RBF' : '—'} / ${tx.segwit ? 'SegWit' : '—'}`,
+          ],
+        ]),
+      ),
+      el(
+        'div',
+        { class: 'flow' },
+        el(
+          'div',
+          {},
+          el('p', {
+            class: 'section__meta',
+            text: `${t('inputs', lang)} · ${ins.length}`,
+          }),
+          side(ins, tx.coinbase),
+        ),
+        el(
+          'div',
+          {},
+          el('p', {
+            class: 'section__meta',
+            text: `${t('outputs', lang)} · ${outs.length}`,
+          }),
+          side(outs, false),
+        ),
+      ),
+    );
+  }
+
+  /** One address: what it holds, what has passed through it, and when. */
+  async explorerAddress(address) {
+    const lang = this.lang;
+    const state = await this.chainExplorer.addressState(address);
+    const balance = Number(state.balance || 0);
+
+    return el(
+      'div',
+      { class: 'stack' },
+      section(t('addressTitle', lang), ''),
+      el(
+        'div',
+        { class: 'chain-card' },
+        el(
+          'div',
+          { class: 'chain-card__head' },
+          addressSigil(address, { size: 34 }),
+          el('span', { class: 'addr break', text: address }),
+        ),
+        el(
+          'div',
+          { class: 'chain-card__figure' },
+          el('span', { class: 'chain-card__btc', text: btc(balance) }),
+          el('span', { class: 'chain-card__unit', text: 'BTC' }),
+        ),
+        kv([
+          [
+            t('received', lang),
+            `${btc(state.receivedAmount || 0)} BTC · ${state.receivedTxCount || 0}`,
+          ],
+          [
+            t('sent', lang),
+            `${btc(state.sentAmount || 0)} BTC · ${state.sentTxCount || 0}`,
+          ],
+          [
+            t('largestReceived', lang),
+            `${btc(state.largestReceivedTxAmount || 0)} BTC`,
+          ],
+          [
+            t('unspentOutputs', lang),
+            String(
+              (state.receivedOutsCount || 0) - (state.spentOutsCount || 0),
+            ),
+          ],
+        ]),
+      ),
+      el(
+        'div',
+        { class: 'row' },
+        el('button', {
+          class: 'btn',
+          type: 'button',
+          text: t('syncOne', lang),
+          onClick: () => {
+            this.go('ledger');
+            this.ensurePanel('ledger').api.run(address);
+          },
+        }),
+        el('a', {
+          class: 'btn',
+          target: '_blank',
+          rel: 'noopener noreferrer',
+          href: `https://bitaps.com/${encodeURIComponent(address)}`,
+          text: t('openInExplorer', lang),
+        }),
+      ),
+    );
   }
 
   // ---- archive: full-text search across the case files -------------------

@@ -211,5 +211,11 @@ def test_every_builder_the_map_names_is_defined(web):
 
 
 def test_the_digit_shortcuts_cover_the_sidebar(web):
-    assert web["panelKeys"] == [str(n) for n in range(1, len(web["panelKeys"]) + 1)], \
-        f"the sidebar digits are not 1..n: {web['panelKeys']}"
+    """One digit per row, in order. The tenth row takes 0, the way a tenth tab
+    always does — there is no key between 9 and 10."""
+    keys = web["panelKeys"]
+    assert len(keys) <= 10, f"{len(keys)} panels, and only ten digits to reach them"
+    expected = [str(n) for n in range(1, min(len(keys), 9) + 1)]
+    if len(keys) == 10:
+        expected.append("0")
+    assert keys == expected, f"the sidebar digits are not in order: {keys}"
