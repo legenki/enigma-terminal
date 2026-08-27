@@ -9,6 +9,18 @@ const SUBTITLE = 'REAL NET BUILD';
 //: of the game's name and the split does the rest.
 const MARK = 'ET';
 
+//: The CSS honours prefers-reduced-motion for its transitions; this banner
+//: redraws every frame for as long as the game is open, so it has to honour it
+//: too. Still means still: no wobble, no drifting grid, no tear bursts — the
+//: three-channel split and the scanlines are the mark, and they hold.
+const STILL = (() => {
+  try {
+    return window.matchMedia('(prefers-reduced-motion: reduce)');
+  } catch {
+    return { matches: false };
+  }
+})();
+
 export class GlitchBanner {
   constructor(canvas, { compact = false } = {}) {
     this.canvas = canvas;
@@ -38,6 +50,7 @@ export class GlitchBanner {
 
   /** Schedule a burst of tearing — used when the mode switches. */
   kick(strength = 1) {
+    if (STILL.matches) return;
     this.nextBurst = 0;
     this.intensity = 1 + strength;
   }
@@ -45,7 +58,10 @@ export class GlitchBanner {
   render(now) {
     const ctx = this.ctx;
     const { width: w, height: h } = this;
-    const seconds = now / 1000;
+    // A frozen clock stops every motion in one place: the grid drift, the
+    // wobble and the burst schedule are all functions of it.
+    const still = STILL.matches;
+    const seconds = still ? 0 : now / 1000;
 
     ctx.setTransform(
       Math.min(window.devicePixelRatio || 1, 2),
@@ -101,7 +117,7 @@ export class GlitchBanner {
     }
 
     // Tear slices: copy narrow bands sideways.
-    if (now > this.nextBurst) {
+    if (!still && now > this.nextBurst) {
       this.nextBurst = now + 900 + Math.random() * 2600;
       const count = 1 + Math.floor(Math.random() * 3 * this.intensity);
       this.slices = Array.from({ length: count }, () => ({
@@ -112,7 +128,7 @@ export class GlitchBanner {
       }));
       this.intensity = Math.max(1, this.intensity * 0.6);
     }
-    this.slices = this.slices.filter((slice) => slice.until > now);
+    this.slices = still ? [] : this.slices.filter((slice) => slice.until > now);
     for (const slice of this.slices) {
       const y = Math.max(0, Math.min(h - 1, slice.y));
       const height = Math.min(slice.height, h - y);

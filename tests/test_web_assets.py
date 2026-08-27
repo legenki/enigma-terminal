@@ -498,3 +498,31 @@ def test_no_phosphor_green_is_left_in_the_stylesheets():
         css = (DOCS / "css" / name).read_text(encoding="utf-8")
         for green in ("34, 255, 122", "57, 255, 139", "#39ff8b", "#22ff7a"):
             assert green not in css, f"{name} still carries the phosphor tint {green}"
+
+
+def test_the_banner_holds_still_for_reduced_motion():
+    """The stylesheets honour prefers-reduced-motion in three places, but the
+    one animation that never stops — a canvas redrawn every frame for as long
+    as the page is open — did not ask about it at all."""
+    source = strip_js_comments((DOCS / "js" / "glitch.js").read_text(encoding="utf-8"))
+    assert "prefers-reduced-motion" in source, \
+        "the banner animates forever without asking whether motion is wanted"
+
+    render = source[source.index("render(now) {"):]
+    render = render[: render.index("\n  }")]
+    assert re.search(r"seconds\s*=.*matches|seconds\s*=\s*still", render), \
+        "the clock the wobble and the drift read from is not frozen"
+
+
+def test_the_title_no_longer_carries_the_specification_it_implements():
+    """The game was called BIP-39: ENIGMA TERMINAL, and the 18px mark was the
+    two digits of it. The spec is still named where it is being implemented —
+    that is what those references are about — but not as the game's name."""
+    named = []
+    for path in [DOCS / "index.html", *JS_FILES, DOCS.parent / "README.md"]:
+        if "vendor" in path.parts:
+            continue
+        text = path.read_text(encoding="utf-8")
+        if re.search(r"BIP.?39\s*[:—–-]\s*ENIGMA", text, re.IGNORECASE):
+            named.append(path.name)
+    assert not named, f"these still title the game with the spec: {named}"

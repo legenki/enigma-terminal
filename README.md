@@ -370,14 +370,14 @@ tools/generate_cases.py    builds the 256-contract board
 tools/build_web_data.py    generates the web build's data from data/
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
-tests/                     383 tests, including the Python ↔ JavaScript diff
+tests/                     385 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
 pip install -e ".[dev]"
-python -m pytest tests -v          # 383 tests
+python -m pytest tests -v          # 385 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 
