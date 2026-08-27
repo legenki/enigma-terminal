@@ -41,7 +41,13 @@ const REAL_WALLET = {
   pt: 'ESTA É UMA CARTEIRA REAL. NÃO COLOQUE FUNDOS — A FRASE NÃO É GUARDADA EM LUGAR NENHUM.',
 };
 
-import { Journal, maskMnemonic, STATUS_STYLES, TOOLS } from './journal.js';
+import {
+  Journal,
+  maskAddress,
+  maskMnemonic,
+  STATUS_STYLES,
+  TOOLS,
+} from './journal.js';
 
 const OFFICIAL_WORDLIST_SHA256 =
   '2f5eed53a4727b4bf8880d8f3f199efc90e58503646d9ff8eff3a2ed3b24dbda';
@@ -409,7 +415,10 @@ export class Engine {
    */
   recordDecrypt(wallet, owner, { generated = false } = {}) {
     const storable = Boolean(owner) || generated;
-    this.log(generated ? 'random' : 'decrypt', wallet.primary.address, {
+    const title = storable
+      ? wallet.primary.address
+      : maskAddress(wallet.primary.address);
+    this.log(generated ? 'random' : 'decrypt', title, {
       status: owner ? 'ok' : 'info',
       detail: storable
         ? wallet.mnemonic

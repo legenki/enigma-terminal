@@ -38,7 +38,7 @@ import { readHeader } from '../crypto/header.js';
 import { deriveWallet } from '../crypto/wallet.js';
 import { pad2, splitAge } from '../heartbeat.js';
 import { addressSigil, caseSigil, mnemonicSigil, sigil } from '../identicon.js';
-import { Journal, maskMnemonic, TOOLS } from '../journal.js';
+import { Journal, maskAddress, maskMnemonic, TOOLS } from '../journal.js';
 import { btc, classify, ExplorerClient } from '../mempool.js';
 import {
   blockReward,
@@ -2238,7 +2238,10 @@ export class GuiApp {
    */
   recordDecrypt(wallet, owner, { generated = false } = {}) {
     const storable = Boolean(owner) || generated;
-    this.log(generated ? 'random' : 'decrypt', wallet.primary.address, {
+    const title = storable
+      ? wallet.primary.address
+      : maskAddress(wallet.primary.address);
+    this.log(generated ? 'random' : 'decrypt', title, {
       status: owner ? 'ok' : 'info',
       detail: storable
         ? wallet.mnemonic

@@ -1,10 +1,14 @@
 """The investigation journal, and the rule that keeps unknown seeds off disk."""
 
 import json
+import os
+import subprocess
+import sys
+from pathlib import Path
 
 import pytest
 
-from enigma_terminal.journal import MAX_ENTRIES, Journal, mask_mnemonic
+from enigma_terminal.journal import MAX_ENTRIES, Journal, mask_address, mask_mnemonic
 
 from .answers import SOLUTIONS, UNRELATED_MNEMONIC
 
@@ -123,3 +127,42 @@ def test_stored_file_is_plain_json(journal, tmp_path):
     assert isinstance(data, list)
     assert data[0]["tool"] == "ledger"
     assert data[0]["payload"] == {"address": "1LqB"}
+
+
+def test_an_unrecognised_phrase_leaves_no_usable_address_behind(tmp_path):
+    """The phrase was masked; the address it derives to was not.
+
+    It is not the phrase and does not lead back to it, but it is the wallet's
+    public name — written out in full, anyone reading this file could pull the
+    balance and the whole on-chain history off any explorer. The module's rule
+    is that pasting a live wallet in leaves nothing usable on disk.
+    """
+    from enigma_terminal.crypto_engine import derive_wallet
+
+    # Valid, and deliberately not one of the published vectors the eight cases
+    # are built on, so the game has no reason to recognise it.
+    phrase = UNRELATED_MNEMONIC
+    address = derive_wallet(phrase).primary.address
+
+    home = tmp_path / "home"
+    home.mkdir()
+    done = subprocess.run(
+        [sys.executable, "-m", "enigma_terminal", "--speed", "0", "--no-color",
+         "--lang", "en", "--offline", "-c", f"DECRYPT {phrase}"],
+        cwd=Path(__file__).resolve().parent.parent,
+        env={**os.environ, "ENIGMA_TERMINAL_HOME": str(home)},
+        capture_output=True, text=True, timeout=120,
+    )
+    assert done.returncode == 0, done.stderr
+
+    written = (home / "journal.json").read_text(encoding="utf-8")
+    assert phrase not in written, "the unrecognised phrase reached the journal"
+    assert address not in written, "the address of an unrecognised phrase reached the journal"
+    assert address[:6] in written, "the entry lost its handle on the derivation entirely"
+
+
+def test_a_recognised_phrase_still_records_its_address_in_full(tmp_path):
+    """Masking is for phrases the game does not know. A case answer is one it
+    does, and its address is what RECALL and the ledger tools work from."""
+    assert mask_address("1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA") == "1LqBGS…eabA"
+    assert mask_address("short") == "•••"

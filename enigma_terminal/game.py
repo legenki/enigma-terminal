@@ -23,7 +23,7 @@ from .crypto_engine import (
     word_at,
     wordlist_is_authentic,
 )
-from .journal import STATUS_STYLES, TOOLS, Journal, mask_mnemonic
+from .journal import STATUS_STYLES, TOOLS, Journal, mask_address, mask_mnemonic
 from .ui import DECRYPT_LOGS, NET_LOGS, Screen
 
 PROMPT = "nullsec@enigma:~$ "
@@ -1001,7 +1001,7 @@ def _record_decrypt(s: Session, wallet: Wallet, owner, *, generated: bool = Fals
     _log(
         s,
         "random" if generated else "decrypt",
-        wallet.primary.address,
+        wallet.primary.address if storable else mask_address(wallet.primary.address),
         status="ok" if owner is not None else "info",
         detail=wallet.mnemonic if storable
         else f"{mask_mnemonic(wallet.mnemonic)} — NOT STORED",

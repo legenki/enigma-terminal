@@ -110,6 +110,20 @@ const EXPORT_CAPTIONS = {
   },
 };
 
+/**
+ * Redact an address belonging to a phrase the game has no business remembering.
+ *
+ * The address is not the phrase and does not lead back to it, but it is the
+ * wallet's public name: stored in full it is enough for anyone reading this
+ * journal to pull the balance and the whole history off any explorer. A masked
+ * phrase gets a masked address to go with it.
+ */
+export function maskAddress(address) {
+  const text = String(address);
+  if (text.length < 14) return '•••';
+  return `${text.slice(0, 6)}…${text.slice(-4)}`;
+}
+
 /** Redact a phrase the game has no business remembering. */
 export function maskMnemonic(mnemonic) {
   const words = String(mnemonic).trim().split(/\s+/);

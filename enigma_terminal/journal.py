@@ -9,6 +9,12 @@ the game does not recognise is never written to disk. Only phrases the game
 already knows (the eight case answers, all published test vectors) and phrases
 this session generated are stored in full. Anything else is recorded masked, so
 pasting a live wallet into the terminal cannot leave it sitting on disk.
+
+That covers the address the phrase derives to as well. It is not the phrase and
+does not lead back to it, but it is the wallet's public name: written out in
+full it is enough for anyone reading this file to pull the balance and the
+whole transaction history off any explorer. A masked phrase gets a masked
+address to go with it.
 """
 
 from __future__ import annotations
@@ -46,6 +52,14 @@ def mask_mnemonic(mnemonic: str) -> str:
     if len(words) < 3:
         return "•••"
     return f"{words[0]} … {words[-1]} ({len(words)} words)"
+
+
+def mask_address(address: str) -> str:
+    """Redact an address belonging to a phrase the game does not recognise."""
+    text = str(address)
+    if len(text) < 14:
+        return "•••"
+    return f"{text[:6]}…{text[-4:]}"
 
 
 @dataclass
