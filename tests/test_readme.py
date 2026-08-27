@@ -90,6 +90,24 @@ def test_every_path_the_layout_names_exists(readme):
         assert (ROOT / path).exists(), f"the layout names {path}, which is not there"
 
 
+def test_every_install_command_names_something_that_exists(readme):
+    """It told readers to install from two requirements files that were never
+    in the tree. The layout check only walks the layout block, so prose like
+    this went unchecked — and `pip install -r requirements.txt` is the very
+    first thing a new reader runs.
+    """
+    for name in re.findall(r"pip install -r ([\w.-]+)", readme):
+        assert (ROOT / name).exists(), f"the README installs from {name}, which is not there"
+
+    if extras := set(re.findall(r'pip install -e "\.\[(\w+)\]"', readme)):
+        pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+        block = pyproject[pyproject.index("[project.optional-dependencies]"):]
+        block = block[: block.index("\n[")]
+        declared = set(re.findall(r"^(\w+) =", block, re.MULTILINE))
+        assert extras <= declared, \
+            f"the README installs extras {sorted(extras - declared)}, pyproject has {sorted(declared)}"
+
+
 def test_the_quoted_test_count_is_the_real_one(readme):
     """The old README claimed 253 for a suite that had grown past 300."""
     quoted = {int(n) for n in re.findall(r"(\d+) tests", readme)}

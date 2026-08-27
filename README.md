@@ -55,7 +55,7 @@ cd enigma-terminal
 python -m enigma_terminal          # no dependencies required
 ```
 
-Optional: `pip install -r requirements.txt` — `requests` handles timeouts more
+Optional: `pip install -e ".[net]"` — `requests` handles timeouts more
 gracefully. `mnemonic` and `bip-utils` are needed only by the tests, as reference
 implementations to check ours against.
 
@@ -370,19 +370,20 @@ tools/generate_cases.py    builds the 256-contract board
 tools/build_web_data.py    generates the web build's data from data/
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
-tests/                     373 tests, including the Python ↔ JavaScript diff
+tests/                     376 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
-pip install -r requirements-dev.txt
-python -m pytest tests -v          # 373 tests
+pip install -e ".[dev]"
+python -m pytest tests -v          # 376 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 
-`data/` is the single source of truth. `docs/js/wordlist.js` and `docs/js/campaign.js` are
-generated from it, and CI fails if they have drifted.
+`data/` is the single source of truth. `docs/js/wordlist.js`, `docs/js/campaign.js`,
+`docs/js/clients.js` and `docs/data/contracts.json` are generated from it, and CI fails
+if any of them has drifted.
 
 ## Publishing to GitHub Pages
 

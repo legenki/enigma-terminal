@@ -177,3 +177,61 @@ def test_both_http_backends_are_wired(monkeypatch):
     monkeypatch.setattr(chain.urllib.request, "urlopen", lambda *a, **k: FakeUrlopen())
     assert chain.ChainClient().address_stats("1Lq...").confirmed_sats == 150402
     assert calls == ["requests", "urllib"]
+
+
+def _b58check_is_valid(address: str) -> bool:
+    """Decode base58check by hand, so the check does not lean on the code under test."""
+    import hashlib
+
+    alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+    number = 0
+    for char in address:
+        if char not in alphabet:
+            return False
+        number = number * 58 + alphabet.index(char)
+    body = number.to_bytes((number.bit_length() + 7) // 8, "big")
+    raw = b"\x00" * (len(address) - len(address.lstrip("1"))) + body
+    if len(raw) != 25:
+        return False
+    payload, checksum = raw[:-4], raw[-4:]
+    return hashlib.sha256(hashlib.sha256(payload).digest()).digest()[:4] == checksum
+
+
+def test_the_netinfo_probe_is_an_address_an_explorer_will_answer(monkeypatch):
+    """It was the genesis address minus its last two characters.
+
+    Every explorer answers an invalid address with HTTP 400, so NETINFO
+    reported all three nodes DOWN however healthy they were — and nothing
+    caught it, because the probe address was never asserted on.
+    """
+    seen: list[str] = []
+
+    def fake_get(url, timeout):
+        seen.append(url)
+        return BLOCKSTREAM_BODY
+
+    monkeypatch.setattr(chain, "_get_json", fake_get)
+    results = chain.ChainClient().netinfo()
+
+    assert set(results) == set(chain.DEFAULT_ORDER)
+    assert all(status.startswith("OK") for status in results.values()), results
+    probes = {url.rsplit("/", 1)[-1].split("?")[0] for url in seen}
+    assert len(probes) == 1, f"the probe should be one address, got {probes}"
+    probe = probes.pop()
+    assert _b58check_is_valid(probe), f"NETINFO probes an invalid address: {probe}"
+
+
+def test_both_builds_probe_the_same_address():
+    """The web build carries its own copy of the probe; they have to agree."""
+    import re
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parent.parent
+    python_probe = re.search(
+        r'_PROBE = "([^"]+)"', (root / "enigma_terminal" / "chain.py").read_text("utf-8")
+    )
+    web_probe = re.search(
+        r"const PROBE = '([^']+)'", (root / "docs" / "js" / "chain.js").read_text("utf-8")
+    )
+    assert python_probe and web_probe, "the NETINFO probe moved in one of the builds"
+    assert python_probe.group(1) == web_probe.group(1)

@@ -282,7 +282,11 @@ class ChainClient:
         if self.offline:
             return {key: "OFFLINE" for key in DEFAULT_ORDER}
         import time
-        _PROBE = "1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf"
+        # The genesis coinbase address, in full: a two-character truncation of
+        # it went unnoticed here for a while, and every explorer answers an
+        # invalid address with HTTP 400 — so NETINFO reported all three nodes
+        # down whatever their real state was.
+        _PROBE = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
         results: dict[str, str] = {}
         for key in DEFAULT_ORDER:
             provider = PROVIDERS[key]

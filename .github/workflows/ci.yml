@@ -16,10 +16,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # No cache: this project has no uv.lock, and setup-uv's default
+      # cache-dependency-glob (**/uv.lock) hard-fails the job when it matches
+      # nothing — which it did on every run, so nothing below ever executed.
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v4
         with:
-          enable-cache: true
+          enable-cache: false
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -39,13 +42,14 @@ jobs:
         run: |
           ruff check .
           mypy enigma_terminal/
-          biome check $(find docs/js tools -type f -name "*.js" -o -name "*.mjs" | grep -v vendor)
+          biome check $(find docs/js tools -type f \( -name "*.js" -o -name "*.mjs" \) | grep -v vendor)
           pytest tests -v
 
       - name: Check the generated web data is committed
         run: |
           python tools/build_web_data.py
-          git diff --exit-code -- docs/js/wordlist.js docs/js/campaign.js
+          git diff --exit-code -- docs/js/wordlist.js docs/js/campaign.js \
+                                  docs/js/clients.js docs/data/contracts.json
 
       - name: Smoke-test the terminal end to end
         run: |

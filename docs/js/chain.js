@@ -178,7 +178,10 @@ export class ChainClient {
 
   /** Probe every provider; resolves to { blockstream: 'OK 120ms', mempool: 'DOWN ...', ... } */
   async netinfo() {
-    const PROBE = '1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf';
+    // The genesis coinbase address, in full. It was truncated by two
+    // characters here, and an invalid address is an HTTP 400 at every
+    // explorer — so NETINFO called all three nodes down regardless.
+    const PROBE = '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa';
     const results = {};
     await Promise.all(
       Object.entries(PROVIDERS).map(async ([key, provider]) => {

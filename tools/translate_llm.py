@@ -150,10 +150,8 @@ def process_dict(d, path=""):
                 modified = True
         elif isinstance(v, list):
             for i, item in enumerate(v):
-                if isinstance(item, dict) and process_dict(item, path + f".{k}[{i}]"): modified = True
-                     
-    
-                        
+                if isinstance(item, dict) and process_dict(item, path + f".{k}[{i}]"):
+                    modified = True
     return modified
 
 def translate_file(filepath):

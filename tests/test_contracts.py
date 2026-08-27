@@ -195,13 +195,18 @@ def _eval_math(expr: str) -> int:
     tokens = expr.replace("×", "*").replace("−", "-").split()
     if len(tokens) == 3:
         a, op, b = int(tokens[0]), tokens[1], int(tokens[2])
-        if op == '+': return a + b
-        if op == '-': return a - b
-        if op == '*': return a * b
+        if op == '+':
+            return a + b
+        if op == '-':
+            return a - b
+        if op == '*':
+            return a * b
     elif len(tokens) == 5:
         a, op, b, op2, c = int(tokens[0]), tokens[1], int(tokens[2]), tokens[3], int(tokens[4])
-        if op == '*' and op2 == '+': return a * b + c
-        if op == '*' and op2 == '-': return a * b - c
+        if op == '*' and op2 == '+':
+            return a * b + c
+        if op == '*' and op2 == '-':
+            return a * b - c
     raise ValueError(f"Unknown math expression: {expr}")
 
 def test_arithmetic_clues_actually_evaluate_to_their_index(cases):
