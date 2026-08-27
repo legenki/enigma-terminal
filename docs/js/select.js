@@ -161,11 +161,16 @@ export function dropdown({ options, value, label, onChange }) {
     if (!root.contains(event.relatedTarget)) close();
   });
 
-  // A click anywhere else is a dismissal. Captured on the document so it fires
-  // before whatever was clicked does its own work.
-  document.addEventListener('pointerdown', (event) => {
-    if (open && !root.contains(event.target)) close();
-  });
+  // A click anywhere else is a dismissal. On the capture phase, so it fires
+  // before whatever was clicked does its own work — the comment said capture
+  // while the listener was on the bubble phase, which is the opposite order.
+  document.addEventListener(
+    'pointerdown',
+    (event) => {
+      if (open && !root.contains(event.target)) close();
+    },
+    true,
+  );
 
   root.append(button, menu);
   paint();
