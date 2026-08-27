@@ -36,8 +36,6 @@ const DAY = [
     ok: '#9fb37e',
     muted: '#8a8880',
     tint: '#2a2320',
-    screen: '#2f2b3d',
-    plum: '#d3a0dc',
   },
   {
     h: 5.3333,
@@ -55,8 +53,6 @@ const DAY = [
     ok: '#9fb37e',
     muted: '#8a8880',
     tint: '#2b2429',
-    screen: '#312d42',
-    plum: '#d3a0dc',
   },
   {
     h: 7.3333,
@@ -74,8 +70,6 @@ const DAY = [
     ok: '#4f6136',
     muted: '#6e6a61',
     tint: '#fbf0eb',
-    screen: '#f6f4fb',
-    plum: '#7d3f88',
   },
   {
     h: 12,
@@ -93,8 +87,6 @@ const DAY = [
     ok: '#4f6136',
     muted: '#6e6a61',
     tint: '#fbf0eb',
-    screen: '#f7f5fc',
-    plum: '#7d3f88',
   },
   {
     h: 15.5,
@@ -112,8 +104,6 @@ const DAY = [
     ok: '#4f6136',
     muted: '#6e6a61',
     tint: '#fbeee6',
-    screen: '#f5f2fa',
-    plum: '#7b3d85',
   },
   {
     h: 17.3333,
@@ -131,8 +121,6 @@ const DAY = [
     ok: '#4f6136',
     muted: '#6e6a61',
     tint: '#fbebe1',
-    screen: '#f3eff8',
-    plum: '#78397f',
   },
   {
     h: 20,
@@ -150,8 +138,6 @@ const DAY = [
     ok: '#9fb37e',
     muted: '#8a8880',
     tint: '#2d2521',
-    screen: '#363248',
-    plum: '#d3a0dc',
   },
   {
     h: 22,
@@ -169,8 +155,6 @@ const DAY = [
     ok: '#9fb37e',
     muted: '#8a8880',
     tint: '#2b2320',
-    screen: '#332f44',
-    plum: '#d3a0dc',
   },
   {
     h: 24,
@@ -188,8 +172,6 @@ const DAY = [
     ok: '#9fb37e',
     muted: '#8a8880',
     tint: '#2a2320',
-    screen: '#2f2b3d',
-    plum: '#d3a0dc',
   },
 ];
 
@@ -208,10 +190,6 @@ export const TOKENS = [
   'ok',
   'muted',
   'tint',
-  //: The terminal's own ground, and the one colour on it with no counterpart
-  //: in the interface.
-  'screen',
-  'plum',
 ];
 
 const hex = (s) => [

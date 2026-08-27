@@ -134,11 +134,11 @@ that text stops being comfortable, so the palette holds at the far end and the i
 crosses in ten seconds instead of easing through. `tests/test_daylight.py` walks all 1440
 minutes and measures: body text never falls below 16:1, secondary text never below 4.8:1.
 
-The terminal follows the hour too, but on a ground of its own — a cooler, violet-leaning
-sibling of the interface's, so it still reads as a screen and not as another panel. Every
-colour it draws is one the interface already defines, lifted just far enough to clear that
-ground: body text never below 7:1, everything else never below AA, measured at all 1440
-minutes.
+The terminal has no colours of its own. It draws on --sunken, the recessed tone already
+under every field in the interface, and every colour on it is one the interface defines,
+lifted just far enough to stay readable there: body text never below 7:1, everything else
+never below AA, measured at all 1440 minutes. A hue the terminal alone knew about would be
+a second design living inside the first.
 
 ## Commands
 
@@ -370,14 +370,14 @@ tools/generate_cases.py    builds the 256-contract board
 tools/build_web_data.py    generates the web build's data from data/
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
-tests/                     372 tests, including the Python ↔ JavaScript diff
+tests/                     373 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests -v          # 372 tests
+python -m pytest tests -v          # 373 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 

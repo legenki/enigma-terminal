@@ -125,7 +125,10 @@ const buildersWithoutPanel = defined
   .filter((name) => /^build[A-Z]/.test(name) && name !== 'buildPanel')
   .filter((name) => !Object.values(mapped).includes(name))
   // These build fragments inside a panel, not panels of their own.
-  .filter((name) => !['buildCaseDetail', 'buildClientBoard'].includes(name));
+  .filter(
+    (name) =>
+      !['buildCaseDetail', 'buildClientBoard', 'buildRailTool'].includes(name),
+  );
 
 process.stdout.write(
   JSON.stringify(

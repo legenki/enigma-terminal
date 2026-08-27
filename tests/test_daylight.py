@@ -215,26 +215,31 @@ def test_the_terminal_reads_at_every_hour_on_its_own_ground():
         )
 
 
-def test_the_screen_has_a_ground_of_its_own_at_every_hour():
-    """`screen` is deliberately not `bg`: the terminal that took the interface's
-    own ground would stop reading as a terminal and become another panel."""
+def test_the_terminal_borrows_the_interface_and_invents_nothing():
+    """It used to have a ground and a hue of its own. It has neither now: the
+    screen is `sunken`, the tone already under every field, and every colour on
+    it is one the interface defines. A colour the terminal alone knows about is
+    a second design living inside the first."""
     script = """
-    import { paletteAt } from './docs/js/daylight.js';
+    import { terminalPalette } from './docs/js/term.js';
+    import { paletteAt, TOKENS } from './docs/js/daylight.js';
     const rows = [];
     for (let m = 0; m < 1440; m += 10) {
       const p = paletteAt(m / 60);
-      rows.push({ minute: m, screen: p.screen, bg: p.bg, plum: p.plum });
+      rows.push({ ground: terminalPalette(p).ground, sunken: p.sunken });
     }
-    process.stdout.write(JSON.stringify(rows));
+    process.stdout.write(JSON.stringify({ rows, TOKENS }));
     """
     done = subprocess.run(
         ["node", "--input-type=module", "-e", script],
         cwd=ROOT, capture_output=True, text=True, timeout=60,
     )
     assert done.returncode == 0, done.stderr
-    rows = json.loads(done.stdout)
-    assert all(row["screen"] and row["plum"] for row in rows), "a keyframe has no screen"
-    assert all(row["screen"] != row["bg"] for row in rows), \
-        "the screen collapsed onto the interface ground"
-    # And it does move: a screen that never changed would be the old pinned one.
-    assert len({row["screen"] for row in rows}) > 20, "the screen is not following the hour"
+    result = json.loads(done.stdout)
+    assert all(row["ground"] == row["sunken"] for row in result["rows"]), \
+        "the screen has a ground of its own again"
+    for gone in ("screen", "plum"):
+        assert gone not in result["TOKENS"], f"the terminal-only token {gone} is back"
+    # And it does move: a ground that never changed would be the old pinned one.
+    assert len({row["ground"] for row in result["rows"]}) > 20, \
+        "the screen is not following the hour"

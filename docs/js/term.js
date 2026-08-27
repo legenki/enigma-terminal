@@ -3,15 +3,15 @@
 // one buffer of rows drawn as glyphs, not DOM text, which is what makes the
 // scrollback cheap and the character grid exact.
 
-//: The screen follows the hour like the rest of the interface, but on its own
-//: ground: a cooler, violet-leaning sibling of the interface's, so it still
-//: reads as a screen and not as another panel. `screen` and `plum` are its two
-//: tokens in the daylight palette; every other colour it uses is one the
-//: interface already defines, which is what keeps the two in step.
+//: The screen has no colours of its own. It is the interface's palette, drawn
+//: on the interface's own recessed tone — the one already under every field
+//: and every well — with each colour lifted just far enough to stay readable
+//: there. Nothing here is invented, which is the point: a terminal that had
+//: its own hues would be a second design living inside the first.
 //:
 //: The defaults below are the deep-evening set, used before the first palette
 //: arrives and by anything that renders a terminal without a clock.
-export const GROUND = '#363248';
+export const GROUND = '#1b1a19';
 
 export const PALETTE = {
   text: '#faf9f5', // everything the machine says
@@ -21,7 +21,7 @@ export const PALETTE = {
   cyan: '#85b0d8',
   amber: '#e0b060',
   red: '#ef8880',
-  magenta: '#d3a0dc',
+  magenta: '#e08a6a',
   grey: '#a4a29a',
   white: '#ffffff',
   //: Kept as names the engine already writes.
@@ -85,7 +85,7 @@ export const ROLE_FLOOR = 4.5;
  * the screen, the way the filled button's label does.
  */
 export function terminalPalette(palette) {
-  const ground = palette.screen;
+  const ground = palette.sunken;
   const command = luminance(ground) < 0.3 ? '#ffffff' : '#141413';
   const lift = (colour, floor = ROLE_FLOOR) =>
     ensureContrast(colour, ground, floor);
@@ -100,7 +100,7 @@ export function terminalPalette(palette) {
     cyan: lift(palette.info),
     amber: lift(palette.warn),
     red: lift(palette.danger),
-    magenta: lift(palette.plum),
+    magenta: lift(palette.accent),
     grey: lift(palette.soft),
     dim: lift(palette.muted),
   };

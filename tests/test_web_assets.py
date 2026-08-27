@@ -188,13 +188,13 @@ def test_the_terminal_is_a_panel_that_adopts_its_canvas():
 
 
 def test_the_screen_follows_the_hour_on_a_ground_of_its_own():
-    """It was pinned to one colour while everything around it moved. It takes
-    `--screen` now — its own token, never the interface's `--bg`."""
+    """It was pinned to one colour while everything around it moved, then took
+    a violet ground of its own. It takes `--sunken` now: the tone the interface
+    already puts under every field."""
     css = (DOCS / "css" / "terminal.css").read_text()
     block = css[css.index("#screen-frame {"):]
     block = block[:block.index("}")]
-    assert "var(--screen)" in block, "the screen does not take the daylight ground"
-    assert "var(--bg)" not in block, "the screen collapsed onto the interface ground"
+    assert "var(--sunken)" in block, "the screen does not take the daylight ground"
     assert not re.search(r"background:\s*#[0-9a-fA-F]{3,6}", block), \
         "the screen is pinned to a literal again"
 
@@ -461,6 +461,25 @@ def test_the_dropdown_is_a_listbox_and_reachable_from_the_keyboard():
     assert "innerHTML" not in source, "the dropdown builds DOM from strings"
     assert "focusout" in source, "tabbing out leaves the menu open"
     assert "pointerdown" in source, "a click outside does not dismiss the menu"
+
+
+def test_the_rail_is_two_windows_that_fold_on_their_own():
+    """It was one pane with two headings inside it. The wordlist is a glance and
+    the recovery tool is a paragraph of chips, so wanting one without the other
+    is the normal case — and a fold that springs back open on every visit is a
+    setting the player is not allowed to keep."""
+    source = strip_js_comments((DOCS / "js" / "gui" / "app.js").read_text())
+    assert "buildRailTool(id, titleKey)" in source, "the rail has no window builder"
+    assert "buildRailTool('words', 'tabWords')" in source
+    assert "buildRailTool('complete', 'tabComplete')" in source
+    fold = source[source.index("foldRailTool(tool, folded"):]
+    fold = fold[:fold.index("\n  }")]
+    assert "is-folded" in fold, "folding does not mark the window"
+    assert "aria-expanded" in fold, "the fold is invisible to a screen reader"
+    assert "store(" in fold, "the fold is not remembered"
+
+    css = (DOCS / "css" / "gui.css").read_text(encoding="utf-8")
+    assert ".rail__win.is-folded .win__body" in css, "a folded window still shows its body"
 
 
 def test_the_rail_follows_a_language_change():

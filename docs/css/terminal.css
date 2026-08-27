@@ -22,16 +22,16 @@ html, body {
 
 /* ---------- the screen --------------------------------------------------- */
 
-/* The screen follows the hour on its own ground: `--screen` is a cooler,
-   violet-leaning sibling of the interface's, so the terminal still reads as a
-   terminal. Every colour drawn on it is lifted until it clears that ground —
-   body text at 7:1, everything else at AA. See tests/test_daylight.py. */
+/* The screen takes `--sunken`, the recessed tone already under every field in
+   the interface, and every colour drawn on it is one the interface defines,
+   lifted until it clears that ground — body text at 7:1, everything else at
+   AA. See tests/test_daylight.py. */
 #screen-frame {
   position: relative;
   flex: 1;
   min-height: 320px;
   border-radius: var(--radius-sm, 8px);
-  background: var(--screen);
+  background: var(--sunken);
   border: 1px solid var(--line);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   overflow: hidden;

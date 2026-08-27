@@ -1076,6 +1076,25 @@ const fmtRate = (rate) => {
   return value >= 10 ? value.toFixed(0) : value.toFixed(1);
 };
 
+//: Whether each rail window is folded, one key apiece.
+const RAIL_FOLD_KEY = 'enigma-terminal/rail';
+
+const stored = (key) => {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+
+const store = (key, value) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    /* private mode: the fold just will not persist */
+  }
+};
+
 //: UTC, to the second, the way a chain writes its times.
 const stamp = (seconds) =>
   `${new Date(Number(seconds) * 1000).toISOString().replace('T', ' ').slice(0, 19)} UTC`;
@@ -1184,14 +1203,10 @@ export class GuiApp {
   /** Window titles live outside the panels, so `render` alone cannot reach them. */
   paintChrome() {
     if (!this.navWindow) return;
-    const titles = [
-      [this.navWindow, t('navTitle', this.lang)],
-      [this.railWindow, t('railTitle', this.lang)],
-    ];
-    for (const [frame, title] of titles) {
-      const node = frame?.querySelector('.win__title');
-      if (node) node.textContent = title;
-    }
+    // The rail's two windows are titled by paintRail, which owns them.
+    const node = this.navWindow.querySelector('.win__title');
+    if (node) node.textContent = t('navTitle', this.lang);
+    if (this.railOpen) this.paintRail();
     if (this.railTab) this.railTab.title = t('railTitle', this.lang);
   }
 
@@ -1209,22 +1224,22 @@ export class GuiApp {
   mount() {
     this.nav = el('nav', { class: 'win__body' });
     this.content = el('div', { class: 'win__body' });
-    this.railBody = el('div', { class: 'win__body rail__body' });
-
     this.navWindow = win(t('navTitle', this.lang), this.nav);
     this.contentWindow = win('—', this.content);
-    this.railWindow = win(
-      t('railTitle', this.lang),
-      this.railBody,
-      el('button', {
-        class: 'win__collapse',
-        type: 'button',
-        title: 'Collapse',
-        text: '–',
-        onClick: () => this.toggleRail(),
-      }),
+
+    // Two windows, not one pane with two headings inside it. Each is the same
+    // furniture as every other window on the page, and each folds on its own:
+    // the wordlist is a glance, the recovery tool is a paragraph of chips, and
+    // wanting one without the other is the normal case.
+    this.railTools = [
+      this.buildRailTool('words', 'tabWords'),
+      this.buildRailTool('complete', 'tabComplete'),
+    ];
+    this.railWindow = el(
+      'div',
+      { class: 'rail' },
+      ...this.railTools.map((tool) => tool.window),
     );
-    this.railWindow.classList.add('rail');
 
     this.railTab = el('button', {
       class: 'rail-tab',
@@ -1249,6 +1264,50 @@ export class GuiApp {
     this.mounted = true;
     this.applyRail();
     this.render();
+  }
+
+  /**
+   * One folding window in the rail.
+   *
+   * The fold is remembered: a panel that springs back open on every visit is a
+   * setting the player is not allowed to keep.
+   */
+  buildRailTool(id, titleKey) {
+    const body = el('div', { class: 'win__body rail__body' });
+    const collapse = el('button', {
+      class: 'win__collapse',
+      type: 'button',
+      'aria-expanded': 'true',
+      title: t(titleKey, this.lang),
+      text: '–',
+    });
+    const node = win(t(titleKey, this.lang), body, collapse);
+    node.classList.add('rail__win');
+    const tool = {
+      id,
+      titleKey,
+      node,
+      window: node,
+      body,
+      collapse,
+      folded: false,
+    };
+    collapse.addEventListener('click', () =>
+      this.foldRailTool(tool, !tool.folded),
+    );
+    this.foldRailTool(tool, stored(`${RAIL_FOLD_KEY}/${id}`) === 'folded', {
+      save: false,
+    });
+    return tool;
+  }
+
+  foldRailTool(tool, folded, { save = true } = {}) {
+    tool.folded = Boolean(folded);
+    tool.node.classList.toggle('is-folded', tool.folded);
+    tool.collapse.textContent = tool.folded ? '+' : '–';
+    tool.collapse.setAttribute('aria-expanded', String(!tool.folded));
+    if (save)
+      store(`${RAIL_FOLD_KEY}/${tool.id}`, tool.folded ? 'folded' : 'open');
   }
 
   toggleRail() {
@@ -1429,24 +1488,13 @@ export class GuiApp {
         complete: this.searchCompletePane(),
       };
     }
-    replace(
-      this.railBody,
-      el(
-        'div',
-        { class: 'rail__tool' },
-        el('h3', { class: 'rail__tool-title', text: t('tabWords', this.lang) }),
-        this.railPanes.words.node,
-      ),
-      el(
-        'div',
-        { class: 'rail__tool' },
-        el('h3', {
-          class: 'rail__tool-title',
-          text: t('tabComplete', this.lang),
-        }),
-        this.railPanes.complete.node,
-      ),
-    );
+    for (const tool of this.railTools || []) {
+      replace(tool.body, this.railPanes[tool.id].node);
+      tool.node.querySelector('.win__title').textContent = t(
+        tool.titleKey,
+        this.lang,
+      );
+    }
   }
 
   /** The sigil that identifies whatever a journal entry is about. */

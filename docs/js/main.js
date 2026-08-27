@@ -55,7 +55,7 @@ const guiRoot = document.getElementById('gui-root');
 const powerLed = document.getElementById('power-led');
 
 const terminal = new Terminal(termCanvas, {
-  fontSize: window.innerWidth < 640 ? 12 : 16,
+  fontSize: window.innerWidth < 640 ? 10 : 14,
   prompt: 'nullsec@enigma:~$ ',
 });
 
@@ -344,7 +344,7 @@ window.addEventListener('resize', () => {
   resizeTimer = setTimeout(() => {
     glitch.resize();
     if (atTerminal()) {
-      terminal.fontSize = window.innerWidth < 640 ? 12 : 16;
+      terminal.fontSize = window.innerWidth < 640 ? 10 : 14;
       terminal.resize();
     }
   }, 120);

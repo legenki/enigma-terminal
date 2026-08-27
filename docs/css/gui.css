@@ -927,3 +927,22 @@ a { color: var(--info); }
   color: var(--soft);
   font-variant-numeric: tabular-nums;
 }
+
+/* The rail holds two windows now rather than one pane with two headings in it.
+   Each folds on its own: the wordlist is a glance, the recovery tool is a
+   paragraph of chips, and wanting one without the other is the normal case. */
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.rail__win { flex: 1 1 auto; min-height: 0; }
+
+/* Folded, a window is its own title bar and nothing else — so it keeps its
+   place in the column instead of collapsing the one below it upward. */
+.rail__win.is-folded { flex: 0 0 auto; }
+.rail__win.is-folded .win__body { display: none; }
+
+.rail__body { overflow-y: auto; }
