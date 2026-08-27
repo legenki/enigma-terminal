@@ -14,7 +14,7 @@ import {
   validateMnemonic,
   WORD_INDEX,
 } from './crypto/bip39.js';
-import { migrated } from './storage.js';
+import { migrated, write } from './storage.js';
 import { WORDLIST } from './wordlist.js';
 
 const STORAGE_KEY = 'enigma-terminal/progress/v1';
@@ -71,11 +71,7 @@ export class ProgressStore {
   }
 
   save() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));
-    } catch {
-      /* private mode or blocked storage: play on, just without persistence */
-    }
+    write(STORAGE_KEY, JSON.stringify(this.data));
   }
 
   get solved() {

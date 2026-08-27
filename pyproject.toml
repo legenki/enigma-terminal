@@ -22,7 +22,20 @@ dependencies = []
 
 [project.optional-dependencies]
 net = ["requests>=2.31"]
-dev = ["pytest>=8.0", "requests>=2.31", "mnemonic>=0.20", "bip-utils>=2.9", "ruff>=0.1", "mypy>=1.0", "types-requests"]
+# The linters carry upper bounds and the rest do not, on purpose. A new pytest
+# or reference implementation failing is a real signal; a new ruff or mypy
+# failing is usually just a new rule, and an unpinned linter turns any upstream
+# release into a red build on a tree nobody touched — which is exactly how
+# RUF100 broke this one.
+dev = [
+  "pytest>=8.0",
+  "requests>=2.31",
+  "mnemonic>=0.20",
+  "bip-utils>=2.9",
+  "ruff>=0.15.8,<0.16",
+  "mypy>=1.18,<2.4",
+  "types-requests",
+]
 
 [project.scripts]
 enigma-terminal = "enigma_terminal.game:main"

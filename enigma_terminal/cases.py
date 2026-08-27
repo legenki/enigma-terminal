@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from .crypto_engine import fingerprint
+from .store import atomic_write_text
 
 _ROOT = Path(__file__).resolve().parent.parent
 CASES_FILE = _ROOT / "data" / "cases.json"
@@ -132,20 +133,15 @@ class Progress:
     def save(self) -> bool:
         if self.path is None:
             return True
-        try:
-            self.path.parent.mkdir(parents=True, exist_ok=True)
-            self.path.write_text(
-                json.dumps(
-                    {"solved": sorted(self.solved),
-                     "hints_used": {str(k): v for k, v in self.hints_used.items()},
-                     "taken": sorted(self.taken)},
-                    indent=2,
-                ),
-                encoding="utf-8",
-            )
-            return True
-        except OSError:
-            return False  # a read-only home must not break the game
+        return atomic_write_text(
+            self.path,
+            json.dumps(
+                {"solved": sorted(self.solved),
+                 "hints_used": {str(k): v for k, v in self.hints_used.items()},
+                 "taken": sorted(self.taken)},
+                indent=2,
+            ),
+        )
 
     def mark_solved(self, case_id: int) -> None:
         self.solved.add(case_id)

@@ -7,7 +7,9 @@ node degrades into the next one instead of killing the session.
 
 from __future__ import annotations
 
+import concurrent.futures
 import json
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -35,7 +37,13 @@ NETWORK_ERRORS: tuple[type[BaseException], ...] = (
 if requests is not None:  # pragma: no branch - trivial
     NETWORK_ERRORS += (requests.RequestException,)
 
-_PARSER_ERRORS = tuple(list(NETWORK_ERRORS) + [KeyError, TypeError, ValueError])
+#: A provider answering with something we cannot read. Kept apart from
+#: NETWORK_ERRORS so the message can say which of the two happened, and kept
+#: narrow: a KeyError raised inside our own adapter is a bug in this file, not
+#: a provider being unreachable, and rolling the two together meant every such
+#: bug was reported to the player as "the network is down" and silently
+#: retried against the next explorer.
+_MALFORMED_ERRORS: tuple[type[BaseException], ...] = (KeyError, TypeError, ValueError)
 
 
 @dataclass
@@ -247,15 +255,18 @@ class ChainClient:
         for key in self.order:
             provider = PROVIDERS[key]
             url = provider.base + provider.address_path(address)
+            # Fetching and parsing are caught separately, as in transactions():
+            # it keeps "the explorer did not answer" apart from "the explorer
+            # answered with something we cannot read", and keeps a bug in an
+            # adapter from being reported to the player as a dead network.
             try:
-                return provider.parse_address(_get_json(url, self.timeout))
+                payload = _get_json(url, self.timeout)
             except urllib.error.HTTPError as exc:
                 if exc.code == 429:
                     errors.append(f"{provider.name}: HTTP 429 TOO MANY REQUESTS")
                 else:
                     errors.append(f"{provider.name}: HTTP {exc.code}")
-            except (KeyError, TypeError) as exc:
-                errors.append(f"{provider.name}: malformed response ({exc})")
+                continue
             except NETWORK_ERRORS as exc:
                 code = getattr(getattr(exc, "response", None), "status_code", None)
                 if code == 429:
@@ -265,7 +276,13 @@ class ChainClient:
                         f"{provider.name}: HTTP {code}" if code
                         else f"{provider.name}: {exc.__class__.__name__}"
                     )
-            except ValueError as exc:
+                continue
+            except ValueError as exc:  # a 200 whose body is not JSON
+                errors.append(f"{provider.name}: malformed response ({exc})")
+                continue
+            try:
+                return provider.parse_address(payload)
+            except _MALFORMED_ERRORS as exc:
                 errors.append(f"{provider.name}: malformed response ({exc})")
         self.last_error = " | ".join(errors)
         raise ChainError(self.last_error)
@@ -280,37 +297,61 @@ class ChainClient:
                 continue
             url = provider.base + provider.txs_path(address)
             try:
-                return provider.parse_txs(_get_json(url, self.timeout), address)[:limit]
-            except _PARSER_ERRORS as exc:
-                code = getattr(getattr(exc, "response", None), "status_code", getattr(exc, "code", None))
+                payload = _get_json(url, self.timeout)
+            except NETWORK_ERRORS as exc:
+                code = getattr(
+                    getattr(exc, "response", None), "status_code", getattr(exc, "code", None)
+                )
                 if code == 429:
                     errors.append(f"{provider.name}: HTTP 429 TOO MANY REQUESTS")
                 else:
                     errors.append(f"{provider.name}: {exc.__class__.__name__}")
+                continue
+            # Parsing is separated from fetching so the two failures stay
+            # distinguishable: this branch is the provider sending a shape we
+            # do not recognise, and anything else raised in the adapter is a
+            # bug here and is allowed to reach the caller as itself.
+            try:
+                return provider.parse_txs(payload, address)[:limit]
+            except _MALFORMED_ERRORS as exc:
+                errors.append(f"{provider.name}: malformed response ({exc})")
         self.last_error = " | ".join(errors) or "NO PROVIDER EXPOSES A TX ENDPOINT"
         raise ChainError(self.last_error)
 
+    #: The genesis coinbase address, in full. A two-character truncation of it
+    #: went unnoticed here for a while, and every explorer answers an invalid
+    #: address with HTTP 400 — so NETINFO reported all three nodes down
+    #: whatever their real state was.
+    PROBE_ADDRESS = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+
     def netinfo(self) -> dict[str, str]:
-        """Probe each provider and return a status dict for NETINFO display."""
+        """Probe every provider at once and return a status dict for NETINFO.
+
+        Probed in parallel, as the web build has always done. Serially, three
+        nodes that are all timing out held the terminal for the sum of their
+        timeouts — up to fifteen seconds of a frozen prompt to be told the
+        network is down. In parallel it is the slowest one, not the total.
+        """
         if self.offline:
             return {key: "OFFLINE" for key in DEFAULT_ORDER}
-        import time
-        # The genesis coinbase address, in full: a two-character truncation of
-        # it went unnoticed here for a while, and every explorer answers an
-        # invalid address with HTTP 400 — so NETINFO reported all three nodes
-        # down whatever their real state was.
-        _PROBE = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
-        results: dict[str, str] = {}
-        for key in DEFAULT_ORDER:
+
+        timeout = min(self.timeout, 5.0)
+
+        def probe(key: str) -> tuple[str, str]:
             provider = PROVIDERS[key]
-            url = provider.base + provider.address_path(_PROBE)
-            t0 = time.monotonic()
+            url = provider.base + provider.address_path(self.PROBE_ADDRESS)
+            started = time.monotonic()
             try:
-                _get_json(url, min(self.timeout, 5.0))
-                ms = int((time.monotonic() - t0) * 1000)
-                results[key] = f"OK {ms}ms"
+                _get_json(url, timeout)
+                return key, f"OK {int((time.monotonic() - started) * 1000)}ms"
             except NETWORK_ERRORS as exc:
-                results[key] = f"DOWN ({exc.__class__.__name__})"
+                return key, f"DOWN ({exc.__class__.__name__})"
             except Exception as exc:
-                results[key] = f"ERR ({exc.__class__.__name__})"
-        return results
+                return key, f"ERR ({exc.__class__.__name__})"
+
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=len(DEFAULT_ORDER)
+        ) as pool:
+            probed = dict(pool.map(probe, DEFAULT_ORDER))
+        # Keyed in the order NETINFO prints them, not the order they answered.
+        return {key: probed[key] for key in DEFAULT_ORDER}

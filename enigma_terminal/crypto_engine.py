@@ -441,9 +441,16 @@ def derive_wallet(mnemonic: str, passphrase: str = "", account: int = 0,
 
 _WORD_COUNT_TO_ENTROPY_BYTES = {12: 16, 15: 20, 18: 24, 21: 28, 24: 32}
 
-#: Tokens a player may type in place of a word they cannot remember.
+#: Tokens a player may type in place of a word they cannot remember. None of
+#: them may also be a wordlist entry, or COMPLETE would read a real word as a
+#: blank. Checked with a raise rather than an assert: `python -O` strips
+#: asserts, and this is an invariant of the shipped data, not a debug aid.
 UNKNOWN_TOKENS = frozenset({"?", "*", "_", "...", "??", "???"})
-assert not (UNKNOWN_TOKENS & set(_WORD_INDEX)), "token/word collision"
+if UNKNOWN_TOKENS & set(_WORD_INDEX):
+    raise RuntimeError(
+        "unknown-word tokens collide with the wordlist: "
+        + ", ".join(sorted(UNKNOWN_TOKENS & set(_WORD_INDEX)))
+    )
 
 
 def random_mnemonic(word_count: int = 12) -> tuple[str, bytes]:

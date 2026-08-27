@@ -17,7 +17,7 @@ import { GuiApp } from './gui/app.js';
 import { Heartbeat, pad2, splitAge } from './heartbeat.js';
 import { ExplorerClient } from './mempool.js';
 import { dropdown } from './select.js';
-import { migrated } from './storage.js';
+import { migrated, write } from './storage.js';
 import { Terminal, terminalPalette } from './term.js';
 import { icon } from './vendor/feather.js';
 
@@ -25,13 +25,7 @@ const LANG_KEY = 'enigma-terminal/lang/v1';
 const LIGHT_KEY = 'enigma-terminal/light/v1';
 
 const stored = (key, fallback) => migrated(key) || fallback;
-const store = (key, value) => {
-  try {
-    localStorage.setItem(key, value);
-  } catch {
-    /* private mode: the choice just will not persist */
-  }
-};
+const store = write;
 
 // Match the browser against every language we ship, not just Russian.
 const preferred =

@@ -37,10 +37,13 @@ jobs:
         with:
           node-version: "20"
 
+      # Pinned to the version biome.json's $schema names, so the formatter
+      # the job runs is the one the config was written for. `latest` meant an
+      # upstream release could redden a tree nobody had touched.
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
         with:
-          version: latest
+          version: 2.5.10
 
       - name: Install dependencies
         run: uv pip install --system -e ".[dev]"

@@ -27,6 +27,8 @@ from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
+from .store import atomic_write_text
+
 MAX_ENTRIES = 400
 
 #: Tools that can write to the journal, and how they are labelled.
@@ -122,16 +124,13 @@ class Journal:
         return [Entry.from_dict(item) for item in raw if isinstance(item, dict)]
 
     def save(self) -> bool:
-        try:
-            self.path.parent.mkdir(parents=True, exist_ok=True)
-            self.path.write_text(
-                json.dumps([entry.to_dict() for entry in self.entries], indent=2,
-                           ensure_ascii=False),
-                encoding="utf-8",
-            )
-            return True
-        except OSError:
-            return False  # a read-only home must not break the game
+        """Write the journal out, replacing the old file in one step."""
+        return atomic_write_text(
+            self.path,
+            json.dumps(
+                [entry.to_dict() for entry in self.entries], indent=2, ensure_ascii=False
+            ),
+        )
 
     def refresh(self) -> list[Entry]:
         self.entries = self._read()
@@ -139,11 +138,19 @@ class Journal:
 
     def push(self, tool: str, title: str, *, detail: str = "", status: str = "info",
              payload: dict[str, Any] | None = None) -> Entry:
-        # Append onto what is on disk: a second terminal sharing this home
-        # must not have its entries erased by this one.
+        # Append onto what is on disk rather than onto what this process last
+        # saw, so a second terminal sharing this home does not have its entries
+        # erased by this one. Two pushes landing in the same instant can still
+        # cost one of them — closing that needs a lock file, which is more
+        # machinery than a single-player journal earns. What the atomic write
+        # in store.py guarantees is that the loser is a lost entry and never a
+        # damaged file.
         self.entries = self._read()
         entry = Entry(
-            id=(self.entries[0].id if self.entries else 0) + 1,
+            # The newest entry by timestamp is not reliably the highest id: a
+            # clock that steps back, or an interleaved write from that second
+            # terminal, is enough to hand out a number twice.
+            id=max((e.id for e in self.entries), default=0) + 1,
             at=time.time(),
             tool=tool,
             title=title,
@@ -175,6 +182,7 @@ class Journal:
         if 1 <= position <= len(self.entries):
             return self.entries[position - 1]
         return None
+
     def toggle_pin(self, position: int) -> Entry | None:
         self.entries = self._read()
         entry = self.at(position)
@@ -185,6 +193,7 @@ class Journal:
         entry = new_entry
         self.save()
         return entry
+
     def clear(self, *, keep_pinned: bool = False) -> None:
         self.entries = self._read()
         self.entries = [e for e in self.entries if e.pinned] if keep_pinned else []

@@ -228,7 +228,7 @@ def test_both_builds_probe_the_same_address():
 
     root = Path(__file__).resolve().parent.parent
     python_probe = re.search(
-        r'_PROBE = "([^"]+)"', (root / "enigma_terminal" / "chain.py").read_text("utf-8")
+        r'PROBE_ADDRESS = "([^"]+)"', (root / "enigma_terminal" / "chain.py").read_text("utf-8")
     )
     web_probe = re.search(
         r"const PROBE = '([^']+)'", (root / "docs" / "js" / "chain.js").read_text("utf-8")

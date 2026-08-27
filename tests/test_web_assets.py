@@ -307,8 +307,8 @@ def test_the_language_switcher_offers_every_shipped_language():
 
 def test_gui_text_dictionary_is_complete():
     """A key missing es or pt falls back to English without a word of warning."""
-    source = (DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8")
-    block = source[source.index("const T = {"):source.index("const t = (key, lang)")]
+    source = (DOCS / "js" / "gui" / "text.js").read_text(encoding="utf-8")
+    block = source[source.index("export const T = {"):source.index("export const t = (key, lang)")]
     entries = re.findall(r"^  (\w+): \{(.*?)\},$", block, re.DOTALL | re.MULTILINE)
     assert len(entries) > 50, f"only found {len(entries)} keys — parser drifted"
     for key, body in entries:
@@ -541,3 +541,19 @@ def test_both_builds_encode_an_address_before_it_reaches_a_url():
         for line in builders:
             if raw in line or "{addr}" in line:
                 assert encoder in line, f"an address reaches a URL unencoded: {line.strip()}"
+
+
+def test_only_storage_js_touches_local_storage():
+    """storage.js says it is the one place that knows about localStorage.
+
+    Four modules had each grown a private copy of the same try/catch — needed
+    because private browsing makes the accessor itself throw — and two of them
+    read straight past the pre-rename migration while doing it.
+    """
+    offenders = []
+    for path in JS_FILES:
+        if path.name == "storage.js" or "vendor" in path.parts:
+            continue
+        if "localStorage" in strip_js_comments(path.read_text()):
+            offenders.append(str(path.relative_to(DOCS)))
+    assert not offenders, f"these reach localStorage around storage.js: {offenders}"

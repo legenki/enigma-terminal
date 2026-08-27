@@ -166,3 +166,55 @@ def test_a_recognised_phrase_still_records_its_address_in_full(tmp_path):
     does, and its address is what RECALL and the ledger tools work from."""
     assert mask_address("1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA") == "1LqBGS…eabA"
     assert mask_address("short") == "•••"
+
+
+def test_a_save_is_never_seen_half_written(tmp_path, monkeypatch):
+    """write_text truncated the target and then filled it.
+
+    A crash, a full disk, or a second terminal reading in the gap saw an empty
+    or half-built journal — and the game reads its own saves back on launch.
+    Simulated here by failing the rename that completes the swap: what is on
+    disk afterwards has to be the previous journal, entire.
+    """
+    from enigma_terminal import store
+
+    path = tmp_path / "journal.json"
+    journal = Journal(path)
+    journal.push("decrypt", "first entry")
+    before = path.read_text(encoding="utf-8")
+    assert "first entry" in before
+
+    def die_before_the_swap(src, dst):
+        raise OSError("no space left on device")
+
+    monkeypatch.setattr(store.os, "replace", die_before_the_swap)
+    journal.entries.insert(0, journal.entries[0])
+    assert journal.save() is False, "a failed save must report itself"
+
+    assert path.read_text(encoding="utf-8") == before, \
+        "a failed save left the journal in a state it was never in"
+    assert Journal(path).entries[0].title == "first entry"
+    leftovers = [p.name for p in tmp_path.iterdir() if p.name != "journal.json"]
+    assert not leftovers, f"a failed save left temporary files behind: {leftovers}"
+
+
+def test_progress_is_written_the_same_way(tmp_path, monkeypatch):
+    """The two save files sit side by side and deserve the same guarantee."""
+    from enigma_terminal import store
+    from enigma_terminal.cases import Progress
+
+    path = tmp_path / "progress.json"
+    progress = Progress.load(path)
+    progress.mark_solved(1)
+    before = path.read_text(encoding="utf-8")
+
+    def die_before_the_swap(src, dst):
+        raise OSError("disk full")
+
+    monkeypatch.setattr(store.os, "replace", die_before_the_swap)
+    progress.mark_solved(2)
+
+    assert path.read_text(encoding="utf-8") == before
+    assert Progress.load(path).solved == {1}
+    leftovers = [p.name for p in tmp_path.iterdir() if p.name != "progress.json"]
+    assert not leftovers, f"a failed save left temporary files behind: {leftovers}"

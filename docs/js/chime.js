@@ -9,6 +9,11 @@
 // Two rules a notification sound owes the person hearing it: it cannot start
 // before they have touched the page (browsers enforce this, and they are
 // right), and it must be possible to turn off. Both are here.
+//
+// The on/off choice goes through storage.js like everything else the page
+// remembers, rather than a private copy of the same guarded accessor.
+
+import { read, write } from './storage.js';
 
 //: D5, A5, D6. The third is barely there — it rounds the figure off rather
 //: than adding a note of its own.
@@ -22,7 +27,7 @@ const STORAGE_KEY = 'enigma-terminal/sound/v1';
 
 export class Chime {
   constructor({ enabled = true, storage = null } = {}) {
-    this.storage = storage || safeStorage();
+    this.storage = storage || { get: read, set: write };
     const saved = this.storage.get(STORAGE_KEY);
     this.enabled = saved === null ? enabled : saved === 'on';
     this.context = null;
@@ -85,25 +90,6 @@ export class Chime {
     }
     return true;
   }
-}
-
-function safeStorage() {
-  return {
-    get(key) {
-      try {
-        return localStorage.getItem(key);
-      } catch {
-        return null;
-      }
-    },
-    set(key, value) {
-      try {
-        localStorage.setItem(key, value);
-      } catch {
-        /* private mode: the choice just will not persist */
-      }
-    },
-  };
 }
 
 export { FIGURE, STORAGE_KEY };

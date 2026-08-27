@@ -344,6 +344,7 @@ enigma_terminal/           the terminal build
   chain.py                 three explorers with automatic failover
   journal.py               the investigation journal, on disk
   cases.py                 case and progress loading
+  store.py                 the one atomic writer both save files go through
   ui.py                    ANSI output, pseudo-logs over a real request
   game.py                  command dispatch and the game loop
 docs/                      the web build; GitHub Pages publishes from here
@@ -354,7 +355,7 @@ docs/                      the web build; GitHub Pages publishes from here
   js/daylight.js           the palette that follows the hour
   js/term.js               the canvas terminal
   js/engine.js             the command line: the same commands as the Python build
-  js/gui/                  the windowed interface over the same core
+  js/gui/                  the windowed interface over the same core (app.js, dom.js, text.js)
   js/journal.js            the journal, shared by both halves of the page
   js/identicon.js          generative sigils for cases, phrases and addresses
   js/glitch.js             the mark in the strip
@@ -370,14 +371,14 @@ tools/generate_cases.py    builds the 256-contract board
 tools/build_web_data.py    generates the web build's data from data/
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
-tests/                     393 tests, including the Python ↔ JavaScript diff
+tests/                     397 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
 pip install -e ".[dev]"
-python -m pytest tests -v          # 393 tests
+python -m pytest tests -v          # 397 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 
