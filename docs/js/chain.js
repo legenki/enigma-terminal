@@ -44,29 +44,41 @@ const esploraTxs = (data, address) =>
     };
   });
 
+/**
+ * Percent-encode an address before it becomes part of a URL path.
+ *
+ * SYNC_LEDGER, TXLOG and EXPLORER take an address straight from what the
+ * player typed, and it was interpolated into the path as-is — so a slash or a
+ * question mark in it addressed a different endpoint than the one intended,
+ * and the explorer link built from it pointed somewhere else again. A real
+ * base58 or bech32 address is unreserved throughout, so valid input is
+ * untouched.
+ */
+const pathSafe = (address) => encodeURIComponent(address);
+
 export const PROVIDERS = {
   blockstream: {
     name: 'BLOCKSTREAM',
     base: 'https://blockstream.info/api',
-    addressPath: (a) => `/address/${a}`,
+    addressPath: (a) => `/address/${pathSafe(a)}`,
     parseAddress: (d) => esploraStats('BLOCKSTREAM', d),
-    txsPath: (a) => `/address/${a}/txs`,
+    txsPath: (a) => `/address/${pathSafe(a)}/txs`,
     parseTxs: esploraTxs,
-    explorer: (a) => `https://blockstream.info/address/${a}`,
+    explorer: (a) => `https://blockstream.info/address/${pathSafe(a)}`,
   },
   mempool: {
     name: 'MEMPOOL.SPACE',
     base: 'https://mempool.space/api',
-    addressPath: (a) => `/address/${a}`,
+    addressPath: (a) => `/address/${pathSafe(a)}`,
     parseAddress: (d) => esploraStats('MEMPOOL.SPACE', d),
-    txsPath: (a) => `/address/${a}/txs`,
+    txsPath: (a) => `/address/${pathSafe(a)}/txs`,
     parseTxs: esploraTxs,
-    explorer: (a) => `https://mempool.space/address/${a}`,
+    explorer: (a) => `https://mempool.space/address/${pathSafe(a)}`,
   },
   blockchain: {
     name: 'BLOCKCHAIN.COM',
     base: 'https://blockchain.info',
-    addressPath: (a) => `/rawaddr/${a}?limit=0&cors=true`,
+    addressPath: (a) => `/rawaddr/${pathSafe(a)}?limit=0&cors=true`,
     parseAddress: (d) => ({
       address: d.address,
       confirmedSats: BigInt(d.final_balance),
@@ -79,7 +91,8 @@ export const PROVIDERS = {
     }),
     txsPath: null,
     parseTxs: null,
-    explorer: (a) => `https://www.blockchain.com/explorer/addresses/btc/${a}`,
+    explorer: (a) =>
+      `https://www.blockchain.com/explorer/addresses/btc/${pathSafe(a)}`,
   },
 };
 

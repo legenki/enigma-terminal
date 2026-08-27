@@ -526,3 +526,18 @@ def test_the_title_no_longer_carries_the_specification_it_implements():
         if re.search(r"BIP.?39\s*[:—–-]\s*ENIGMA", text, re.IGNORECASE):
             named.append(path.name)
     assert not named, f"these still title the game with the spec: {named}"
+
+
+def test_both_builds_encode_an_address_before_it_reaches_a_url():
+    """The web build puts the explorer URL in an href, so an unencoded address
+    misdirects a link as well as a request. Python and JavaScript have to make
+    the same decision, as they do everywhere else."""
+    web = strip_js_comments((DOCS / "js" / "chain.js").read_text(encoding="utf-8"))
+    python = (DOCS.parent / "enigma_terminal" / "chain.py").read_text(encoding="utf-8")
+
+    for source, raw, encoder in ((web, "${a}", "pathSafe"), (python, "{a}", "_path_safe")):
+        builders = re.findall(r"(?:address_?[Pp]ath|txs_?[Pp]ath|explorer(?:_url)?)[:=].*", source)
+        assert builders, "the URL builders moved"
+        for line in builders:
+            if raw in line or "{addr}" in line:
+                assert encoder in line, f"an address reaches a URL unencoded: {line.strip()}"

@@ -235,3 +235,38 @@ def test_both_builds_probe_the_same_address():
     )
     assert python_probe and web_probe, "the NETINFO probe moved in one of the builds"
     assert python_probe.group(1) == web_probe.group(1)
+
+
+@pytest.mark.parametrize(
+    "typed",
+    ["../blocks/tip/height", "1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA?limit=9999", "a b", "x#y"],
+)
+def test_a_typed_address_cannot_reshape_the_request(typed, monkeypatch):
+    """SYNC_LEDGER, TXLOG and EXPLORER pass whatever was typed straight through.
+
+    It went into the URL path unencoded, so a slash or a question mark in it
+    addressed an endpoint other than the one the command meant.
+    """
+    seen: list[str] = []
+    monkeypatch.setattr(chain, "_get_json", lambda url, timeout: seen.append(url) or BLOCKSTREAM_BODY)
+
+    client = chain.ChainClient()
+    client.address_stats(typed)
+    url = seen[-1]
+    tail = url[len("https://blockstream.info/api/address/"):]
+    assert url.startswith("https://blockstream.info/api/address/")
+    assert "/" not in tail and "?" not in tail and "#" not in tail, url
+    assert " " not in client.explorer_url(typed)
+
+
+def test_a_real_address_is_left_exactly_as_it_is(monkeypatch):
+    """Encoding must be a no-op for the addresses the game actually derives."""
+    seen: list[str] = []
+    monkeypatch.setattr(chain, "_get_json", lambda url, timeout: seen.append(url) or BLOCKSTREAM_BODY)
+
+    for address in ("1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA",
+                    "3JvL6Ymt8MVWiCNHC7oWU6nLeHNJKLZGLN",
+                    "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"):
+        seen.clear()
+        chain.ChainClient().address_stats(address)
+        assert seen[-1].endswith(f"/address/{address}"), seen[-1]

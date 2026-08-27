@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import urllib.error
+import urllib.parse
 import urllib.request
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -87,6 +88,18 @@ class Transaction:
     value_delta_sats: int | None = None
 
 
+def _path_safe(address: str) -> str:
+    """Percent-encode an address before it becomes part of a URL path.
+
+    SYNC_LEDGER, TXLOG and EXPLORER all take an address straight from what the
+    player typed, and it was interpolated into the path as-is — so a slash or a
+    question mark in it addressed a different endpoint than the one intended.
+    A real base58 or bech32 address is unreserved throughout, so this changes
+    nothing for valid input.
+    """
+    return urllib.parse.quote(address, safe="")
+
+
 @dataclass
 class Provider:
     """One explorer endpoint plus the adapters that normalise its JSON."""
@@ -98,7 +111,7 @@ class Provider:
     txs_path: Callable[[str], str] | None = None
     parse_txs: Callable[[Any, str], list[Transaction]] | None = None
     explorer_url: Callable[[str], str] = field(
-        default=lambda addr: f"https://mempool.space/address/{addr}"
+        default=lambda addr: f"https://mempool.space/address/{_path_safe(addr)}"
     )
 
 
@@ -176,27 +189,27 @@ PROVIDERS: dict[str, Provider] = {
     "blockstream": Provider(
         name="BLOCKSTREAM",
         base="https://blockstream.info/api",
-        address_path=lambda a: f"/address/{a}",
+        address_path=lambda a: f"/address/{_path_safe(a)}",
         parse_address=lambda d: _parse_esplora_address("BLOCKSTREAM", d),
-        txs_path=lambda a: f"/address/{a}/txs",
+        txs_path=lambda a: f"/address/{_path_safe(a)}/txs",
         parse_txs=_parse_esplora_txs,
-        explorer_url=lambda a: f"https://blockstream.info/address/{a}",
+        explorer_url=lambda a: f"https://blockstream.info/address/{_path_safe(a)}",
     ),
     "mempool": Provider(
         name="MEMPOOL.SPACE",
         base="https://mempool.space/api",
-        address_path=lambda a: f"/address/{a}",
+        address_path=lambda a: f"/address/{_path_safe(a)}",
         parse_address=lambda d: _parse_esplora_address("MEMPOOL.SPACE", d),
-        txs_path=lambda a: f"/address/{a}/txs",
+        txs_path=lambda a: f"/address/{_path_safe(a)}/txs",
         parse_txs=_parse_esplora_txs,
-        explorer_url=lambda a: f"https://mempool.space/address/{a}",
+        explorer_url=lambda a: f"https://mempool.space/address/{_path_safe(a)}",
     ),
     "blockchain": Provider(
         name="BLOCKCHAIN.COM",
         base="https://blockchain.info",
-        address_path=lambda a: f"/rawaddr/{a}?limit=0",
+        address_path=lambda a: f"/rawaddr/{_path_safe(a)}?limit=0",
         parse_address=lambda d: _parse_blockchain_info("BLOCKCHAIN.COM", d),
-        explorer_url=lambda a: f"https://www.blockchain.com/explorer/addresses/btc/{a}",
+        explorer_url=lambda a: f"https://www.blockchain.com/explorer/addresses/btc/{_path_safe(a)}",
     ),
 }
 
