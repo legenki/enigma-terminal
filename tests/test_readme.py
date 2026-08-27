@@ -140,13 +140,15 @@ def test_nothing_still_points_at_the_pre_rename_address(readme):
     """
     stale = "neon-terminal"
 
-    # Two places keep the old name on purpose, and would cost real damage to
-    # "fix": one is the localStorage prefix a pre-rename save is read from, the
-    # other seeds the RNG that wrote all 256 published contract answers.
+    # One place keeps the old name on purpose and always will: the localStorage
+    # prefix a pre-rename save is read from. Deleting it does not tidy anything,
+    # it orphans every game already sitting in somebody's browser.
+    #
+    # The contract-board seed used to be exempt here too. It was replaced —
+    # deliberately, while the board had no players to strand — so it is held to
+    # this rule like everything else now.
     exempt = {
         Path("docs/js/storage.js"),
-        Path("tools/generate_cases.py"),
-        Path("data/contracts.json"),
         Path("tests/test_readme.py"),
         Path("tests/test_web_assets.py"),
     }
@@ -166,10 +168,7 @@ def test_nothing_still_points_at_the_pre_rename_address(readme):
 
     assert not offenders, f"these still point at the pre-rename name: {offenders}"
 
-    # And the two exemptions have to still be the thing they are exempt for.
+    # And the exemption has to still be the thing it is exempt for.
     storage = (ROOT / "docs" / "js" / "storage.js").read_text(encoding="utf-8")
     assert f"LEGACY_PREFIX = '{stale}/'" in storage, \
         "the migration away from the old save keys is gone"
-    generator = (ROOT / "tools" / "generate_cases.py").read_text(encoding="utf-8")
-    assert f'MASTER_SEED = "bip39-{stale}/contract-board/v1"' in generator, \
-        "the board seed moved — every contract answer just changed"

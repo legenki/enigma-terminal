@@ -46,11 +46,18 @@ GRID_COLUMNS = 16                # 2048 words as 128 rows x 16 columns
 
 #: Deterministic: the same board every build, on every machine.
 #:
-#: It keeps the pre-rename name and always will. This string seeds the RNG that
-#: writes all 256 answers, so editing it — to tidy it after the rename, say —
-#: regenerates every contract, invalidates every saved game, and changes
-#: mnemonics that are already published. It is an identifier, not a label.
-MASTER_SEED = "bip39-neon-terminal/contract-board/v1"
+#: This string seeds the RNG that writes all 256 answers, so it is an
+#: identifier and not a label — editing it does not rename the board, it
+#: replaces it. Every contract gets a different mnemonic, and any saved game
+#: holding a solved contract is describing a case that no longer exists.
+#:
+#: It carried the pre-rename name through two renames for exactly that reason.
+#: Changed here on a deliberate call, while the board had no players to strand,
+#: and the version bumped with it: v1 named a board that was published, and
+#: reusing the name for different content is the one thing this field must
+#: never do. The next rename does not get to touch it — bump to v3 instead,
+#: and only with the same call made again.
+MASTER_SEED = "enigma-terminal/contract-board/v2"
 
 
 def board_key(client: dict) -> str:

@@ -10,6 +10,7 @@ that wastes a player's evening.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -383,11 +384,22 @@ def test_the_board_is_reproducible():
 #: board: a player's saved progress refers to these answers and nothing else.
 #: If a change makes this differ, it has silently invalidated every save —
 #: pin a new value only when that is the deliberate, announced intent.
-BOARD_CHECKSUM = "4e78e8e3c46bc072671ed4a0"
+#: The board built by MASTER_SEED = "enigma-terminal/contract-board/v2".
+#:
+#: Moves only when the board is replaced on purpose, and a replacement is a
+#: seed change and a version bump together — never a quiet edit that leaves v2
+#: naming two different boards.
+BOARD_CHECKSUM = "507acc641c6f016b1684174d"
 
 
 def test_the_board_is_the_same_board_players_already_have(cases):
-    """MASTER_SEED once moved with a rename and reshuffled all 256 answers."""
+    """MASTER_SEED reshuffles all 256 answers, and has done so by accident.
+
+    Replacing the board is a decision — it strands every saved game that holds
+    a solved contract — so it may only ever happen deliberately, with this
+    checksum and the seed's version bumped in the same commit. An unexplained
+    failure here means someone edited the seed thinking it was a label.
+    """
     import hashlib
 
     digest = hashlib.sha256(
@@ -396,6 +408,21 @@ def test_the_board_is_the_same_board_players_already_have(cases):
     assert digest == BOARD_CHECKSUM, (
         "the contract board changed: every saved game now points at answers "
         "that no longer exist. Check MASTER_SEED in tools/generate_cases.py."
+    )
+
+
+def test_the_shipped_board_records_the_seed_that_built_it(board):
+    """The file names its own board, so a stale copy is identifiable.
+
+    Without it, a contracts.json regenerated from a different seed is just
+    256 cases that look fine and answer to nothing the code expects.
+    """
+    generator = (ROOT / "tools" / "generate_cases.py").read_text(encoding="utf-8")
+    declared = re.search(r'MASTER_SEED = "([^"]+)"', generator)
+    assert declared, "MASTER_SEED moved or was renamed"
+    assert board["seed"] == declared.group(1), (
+        f"data/contracts.json was built by {board['seed']!r} but the "
+        f"generator now says {declared.group(1)!r} — rerun it"
     )
 
 
