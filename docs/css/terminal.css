@@ -286,3 +286,37 @@ html, body {
 }
 
 #stage { position: relative; min-height: 0; }
+
+/* The block clock, in the strip: height and how long the chain has been quiet.
+   Small, because it is a pulse rather than a headline. */
+.bar__pulse {
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bar__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  padding: 0;
+  color: var(--soft);
+  background: none;
+  border: 0;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: color 120ms linear, background 120ms linear;
+}
+
+.bar__icon:hover { color: var(--ink); background: var(--sunken); }
+.bar__icon[aria-pressed="false"] { color: var(--muted); opacity: 0.6; }
+.bar__icon:focus-visible { outline: 2px solid var(--info); outline-offset: 1px; }
+
+@media (max-width: 820px) {
+  .bar__pulse { display: none; }
+}

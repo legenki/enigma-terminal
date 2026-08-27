@@ -1,4 +1,4 @@
-// Twelve icons from Feather (https://feathericons.com), MIT, © Cole Bemis.
+// Fourteen icons from Feather (https://feathericons.com), MIT, © Cole Bemis.
 // See LICENSE-feather beside this file.
 //
 // Only the paths are vendored, not the library: the interface needs a fixed
@@ -61,6 +61,17 @@ const ICONS = {
 		["circle", { cx: 12, cy: 12, r: 10 }],
 		["line", { x1: 12, y1: 16, x2: 12, y2: 12 }],
 		["line", { x1: 12, y1: 8, x2: 12.01, y2: 8 }],
+	],
+	bell: [
+		["path", { d: "M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" }],
+		["path", { d: "M13.73 21a2 2 0 0 1-3.46 0" }],
+	],
+	bellOff: [
+		["path", { d: "M13.73 21a2 2 0 0 1-3.46 0" }],
+		["path", { d: "M18.63 13A17.89 17.89 0 0 1 18 8" }],
+		["path", { d: "M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14" }],
+		["path", { d: "M18 8a6 6 0 0 0-9.33-5" }],
+		["line", { x1: 1, y1: 1, x2: 23, y2: 23 }],
 	],
 	chevronDown: [["polyline", { points: "6 9 12 15 18 9" }]],
 	check: [["polyline", { points: "20 6 9 17 4 12" }]],

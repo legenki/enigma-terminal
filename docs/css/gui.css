@@ -804,3 +804,92 @@ a { color: var(--info); }
 @media (max-width: 720px) {
   .flow { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* The pulse card: the one clock the game shares with the chain it plays
+   against, laid out the way a countdown wants to be read — the number first,
+   the units under it, nothing competing. */
+.pulse {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 18px 14px 15px;
+  margin-bottom: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.pulse__label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+
+.pulse__height {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  margin: 2px 0 8px;
+}
+
+.pulse__clock {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 6px 0 4px;
+}
+
+.pulse__field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 0 20px;
+  border-right: 1px solid var(--line);
+}
+
+.pulse__field:last-child { border-right: 0; }
+
+.pulse__n {
+  font-size: 25px;
+  font-weight: 500;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.pulse__unit {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--soft);
+}
+
+.pulse__foot {
+  display: flex;
+  gap: 34px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.pulse__cell { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+
+.pulse__pool {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ok);
+  font-variant-numeric: tabular-nums;
+}
+
+.pulse__fee {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.pulse__sat { font-size: 8px; letter-spacing: 0.06em; color: var(--soft); }

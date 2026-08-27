@@ -284,3 +284,176 @@ def test_the_explorer_styles_come_from_the_palette():
         if ":" in line and "#" in line.split(":", 1)[1] and "var(" not in line
     ]
     assert not literals, f"the explorer hardcodes colours: {literals[:4]}"
+
+
+# --- the pulse: the one clock the game shares with the chain ----------------
+
+def test_the_countdown_splits_the_way_a_clock_reads():
+    result = node("""
+    import { splitAge, pad2 } from './docs/js/heartbeat.js';
+    const show = (s) => { const a = splitAge(s); return `${pad2(a.hours)} ${pad2(a.minutes)} ${pad2(a.seconds)}`; };
+    process.stdout.write(JSON.stringify([0, 59, 832, 3600, 7261, -5, NaN].map(show)));
+    """)
+    assert result == ["00 00 00", "00 00 59", "00 13 52", "01 00 00",
+                      "02 01 01", "00 00 00", "00 00 00"]
+
+
+def test_the_first_block_seen_is_not_an_event():
+    """Arriving at a page mid-block is not something happening, and a chime on
+    load is exactly what people turn sound off over."""
+    result = node("""
+    import { Heartbeat } from './docs/js/heartbeat.js';
+    const header = '0100000000000000000000000000000000000000000000000000000000000000000000003b'
+      + 'a3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a29ab5f49ffff001d1dac2b7c';
+    let height = 1;
+    const client = { tip: async () => ({ height, hash: 'h' + height, header }) };
+    const seen = [];
+    const beat = new Heartbeat(client, { onBlock: (b, meta) => seen.push({ h: b.height, ...meta }) });
+    await beat.poll();
+    await beat.poll();
+    height = 2;
+    await beat.poll();
+    process.stdout.write(JSON.stringify(seen));
+    """)
+    assert result[0]["first"] is True and result[0]["changed"] is False
+    assert result[1]["changed"] is False, "the same height fired a block event"
+    assert result[2]["changed"] is True and result[2]["h"] == 2
+
+
+def test_a_header_that_will_not_read_does_not_stop_the_pulse():
+    result = node("""
+    import { Heartbeat } from './docs/js/heartbeat.js';
+    const client = { tip: async () => ({ height: 9, hash: 'x', header: 'nonsense', adjustedTimestamp: 1234 }) };
+    const beat = new Heartbeat(client, {});
+    const { block } = await beat.poll();
+    process.stdout.write(JSON.stringify(block));
+    """)
+    assert result["height"] == 9
+    # It falls back to the timestamp the service states rather than giving up.
+    assert result["timestamp"] == 1234
+
+
+def test_a_failed_poll_is_reported_rather_than_thrown():
+    result = node("""
+    import { Heartbeat } from './docs/js/heartbeat.js';
+    const client = { tip: async () => { throw new Error('down'); } };
+    const beat = new Heartbeat(client, {});
+    const out = await beat.poll();
+    process.stdout.write(JSON.stringify({ error: out.error ? out.error.message : null }));
+    """)
+    assert result["error"] == "down"
+
+
+# --- the sound --------------------------------------------------------------
+
+def test_the_chime_is_silent_until_it_is_allowed_to_sound():
+    """No audio context means no sound, and a muted chime must not build one.
+    A sound that plays before the page is touched is one a browser blocks and a
+    person resents."""
+    result = node("""
+    import { Chime } from './docs/js/chime.js';
+    // Node has no Web Audio, so stand one up: without it every path returns
+    // false for the wrong reason and the test proves nothing.
+    let built = 0;
+    globalThis.AudioContext = class {
+      constructor() { built += 1; this.state = 'running'; this.currentTime = 0; }
+      resume() { this.state = 'running'; }
+    };
+    const store = new Map();
+    const storage = { get: (k) => store.get(k) ?? null, set: (k, v) => store.set(k, v) };
+    const chime = new Chime({ storage });
+    const beforeUnlock = chime.play();
+    chime.setEnabled(false);
+    const muted = chime.unlock();
+    const remembered = store.get('enigma-terminal/sound/v1');
+    const back = new Chime({ storage }).enabled;
+    process.stdout.write(JSON.stringify({ beforeUnlock, muted, remembered, back, built }));
+    """)
+    assert result["beforeUnlock"] is False, "it played without an audio context"
+    assert result["muted"] is False, "a muted chime reported itself ready"
+    assert result["built"] == 0, "a muted chime built an audio context anyway"
+    assert result["remembered"] == "off"
+    assert result["back"] is False, "the choice did not survive a reload"
+
+
+def test_the_figure_is_short_and_quiet():
+    result = node("""
+    import { FIGURE } from './docs/js/chime.js';
+    process.stdout.write(JSON.stringify(FIGURE));
+    """)
+    assert 2 <= len(result) <= 4, "a notification is a figure, not a tune"
+    assert max(n["at"] + n["hold"] for n in result) < 0.6, "it outstays its welcome"
+    assert max(n["gain"] for n in result) <= 0.12, "it is louder than a notification should be"
+    # Rising, which is what makes it read as an arrival rather than a warning.
+    assert [n["hz"] for n in result] == sorted(n["hz"] for n in result)
+
+
+# --- proof of work, which has no endpoint anywhere --------------------------
+
+def test_the_subsidy_halves_on_the_block_it_should():
+    result = node("""
+    import { blockReward } from './docs/js/pow.js';
+    const at = (h) => Number(blockReward(h)) / 1e8;
+    process.stdout.write(JSON.stringify({
+      genesis: at(0), last50: at(209999), first25: at(210000),
+      current: at(964238), far: at(210000 * 33), beyond: at(210000 * 64),
+    }));
+    """)
+    assert result["genesis"] == 50 and result["last50"] == 50
+    assert result["first25"] == 25
+    assert result["current"] == 3.125
+    assert result["far"] == 0, "the subsidy should have shifted away to nothing"
+    assert result["beyond"] == 0
+
+
+def test_the_countdowns_land_on_the_right_heights():
+    result = node("""
+    import { untilHalving, untilRetarget } from './docs/js/pow.js';
+    process.stdout.write(JSON.stringify({
+      halving: untilHalving(964238),
+      retarget: untilRetarget(964238),
+      onBoundary: untilRetarget(2016 * 10),
+    }));
+    """)
+    assert result["halving"]["atHeight"] == 1050000, "the fifth halving is at 1,050,000"
+    assert result["retarget"]["atHeight"] % 2016 == 0
+    # Standing exactly on a boundary means a whole period to the next one, not none.
+    assert result["onBoundary"]["blocks"] == 2016
+
+
+def test_the_next_difficulty_cannot_move_more_than_fourfold():
+    """The clamp is consensus, not caution: a period that took a tenth of the
+    expected time still only quadruples the difficulty."""
+    result = node("""
+    import { nextDifficulty } from './docs/js/pow.js';
+    const d = 1000;
+    process.stdout.write(JSON.stringify({
+      steady: nextDifficulty(d, 2016, 2016 * 600),
+      tooFast: nextDifficulty(d, 2016, 2016 * 60),
+      tooSlow: nextDifficulty(d, 2016, 2016 * 6000),
+      noData: nextDifficulty(d, 0, 0),
+    }));
+    """)
+    assert result["steady"]["value"] == 1000, "a period on time should not move it"
+    assert result["tooFast"]["value"] == 4000
+    assert result["tooSlow"]["value"] == 250
+    assert result["noData"] is None
+
+
+def test_the_hashrate_follows_the_spacing_it_is_given():
+    result = node("""
+    import { hashrate, formatHashrate } from './docs/js/pow.js';
+    const d = 125807076547197.56;
+    process.stdout.write(JSON.stringify({
+      nominal: formatHashrate(hashrate(d)),
+      measured: formatHashrate(hashrate(d, 561)),
+      tiny: formatHashrate(hashrate(1)),
+      none: formatHashrate(0),
+    }));
+    """)
+    # At the nominal ten minutes this difficulty is ~900 EH/s; at the 561s the
+    # chain is actually taking, it is ~963 — which is the number explorers show.
+    assert result["nominal"].endswith("EH/s")
+    assert result["measured"].startswith("963"), result["measured"]
+    assert result["tiny"].endswith("MH/s")
+    assert result["none"] == "—"

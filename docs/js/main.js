@@ -8,14 +8,18 @@
 // object, its scrollback and its input all survive the move, which is why the
 // frame is reparented rather than rebuilt.
 
+import { BitapsClient } from './bitaps.js';
+import { Chime } from './chime.js';
 import { LANG_ENDONYMS, LANG_NAMES, LANGS, loadContracts } from './core.js';
 import { Daylight } from './daylight.js';
 import { Engine } from './engine.js';
 import { GlitchBanner } from './glitch.js';
 import { GuiApp } from './gui/app.js';
+import { Heartbeat, pad2, splitAge } from './heartbeat.js';
 import { dropdown } from './select.js';
 import { migrated } from './storage.js';
 import { Terminal, terminalPalette } from './term.js';
+import { icon } from './vendor/feather.js';
 
 const LANG_KEY = 'enigma-terminal/lang/v1';
 const LIGHT_KEY = 'enigma-terminal/light/v1';
@@ -215,6 +219,53 @@ function paintStatus() {
   shownStatus = line;
   statusHost.textContent = line;
 }
+
+// ---- the pulse ------------------------------------------------------------
+// A block lands about every ten minutes, and it is the one clock this game
+// shares with the world it plays against. One watcher drives all of it: the
+// countdown in the strip, the explorer's card, and the sound.
+
+const chime = new Chime();
+const soundButton = document.getElementById('sound-toggle');
+
+function paintSound() {
+  soundButton.replaceChildren(
+    icon(chime.enabled ? 'bell' : 'bellOff', { size: 12 }),
+  );
+  soundButton.setAttribute('aria-pressed', String(chime.enabled));
+}
+
+soundButton.addEventListener('click', () => {
+  chime.setEnabled(!chime.enabled);
+  paintSound();
+  // Turning it on is a gesture, which is the only moment a browser will let
+  // an audio context start — so take it, and let them hear what they enabled.
+  if (chime.enabled && chime.unlock()) chime.play();
+});
+paintSound();
+
+// Any first touch of the page is the browser's cue that sound is allowed.
+for (const event of ['pointerdown', 'keydown']) {
+  document.addEventListener(event, () => chime.unlock(), { once: true });
+}
+
+const pulseHost = document.getElementById('bar-pulse');
+const heartbeat = new Heartbeat(new BitapsClient(), {
+  onBlock: (block, { changed }) => {
+    gui.setPulse(0, block);
+    if (changed) chime.play();
+  },
+  onTick: (age, block) => {
+    gui.setPulse(age, block);
+    if (!pulseHost || !block) return;
+    const split = splitAge(age || 0);
+    const clock = split.hours
+      ? `${split.hours}:${pad2(split.minutes)}:${pad2(split.seconds)}`
+      : `${split.minutes}:${pad2(split.seconds)}`;
+    pulseHost.textContent = `#${block.height} · ${clock}`;
+  },
+});
+heartbeat.start();
 
 // ---- input plumbing -------------------------------------------------------
 

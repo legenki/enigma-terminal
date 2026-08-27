@@ -110,6 +110,19 @@ does hand back the raw eighty-byte block header: all three are in there, so the 
 reads them out itself and checks, while it is at it, that the header really does hash to
 the hash it was given.
 
+Panel 6 also carries the pulse: the height, how long the chain has been quiet, what is
+waiting in the pool, and the going fee rate. One watcher drives it — the countdown in the
+strip above the interface, the card in the panel, and a three-note chime when a block
+lands. A block roughly every ten minutes is the one clock this game shares with the world
+it is playing against, and it is worth hearing. The bell in the strip turns it off, and
+the choice is remembered.
+
+Proof of work has no endpoint anywhere in that API, so it is all worked out here: the
+subsidy and the halving from the height, the retarget countdown from the height, the
+hashrate from the difficulty, and — with one more call, for the block that opened the
+current retarget period — the real average block time, which turns the nominal hashrate
+into the measured one and gives the next difficulty adjustment.
+
 ### The palette follows the hour
 
 There is no theme toggle in the usual sense. The interface takes its whole palette from
@@ -350,20 +363,23 @@ docs/                      the web build; GitHub Pages publishes from here
   js/select.js             the language dropdown the shell builds for itself
   js/bitaps.js             the explorer's client: one rate-limited queue, cached
   js/crypto/header.js      an 80-byte block header, and the numbers inside it
+  js/heartbeat.js          one watcher for the block clock, shared by the whole page
+  js/chime.js              the three notes a new block makes
+  js/pow.js                subsidy, halving, retarget, hashrate — all derived
   js/storage.js            localStorage, with migration from the old key names
   js/vendor/               minidenticons and Feather (MIT), with their licences
 tools/generate_cases.py    builds the 256-contract board
 tools/build_web_data.py    generates the web build's data from data/
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
-tests/                     360 tests, including the Python ↔ JavaScript diff
+tests/                     373 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests -v          # 360 tests
+python -m pytest tests -v          # 373 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 
