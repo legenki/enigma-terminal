@@ -391,6 +391,7 @@ tools/build_web_data.py    generates the web build's data from data/
 tools/measure_leading.mjs  re-measures the distribution behind nameforge.json
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
+tools/smoke_web.mjs        opens the page in a browser and presses the buttons
 tests/                     465 tests, including the Python ↔ JavaScript diff
 ```
 
@@ -400,6 +401,17 @@ tests/                     465 tests, including the Python ↔ JavaScript diff
 pip install -e ".[dev]"
 python -m pytest tests -v          # 465 tests
 python tools/build_web_data.py     # required after editing data/
+```
+
+The suite is static: it reads the web build rather than running it, which is
+how a call to a method that does not exist and a `t()` for a key nobody wrote
+both reached the published page. `tools/smoke_web.mjs` closes that gap by
+opening the real page in a real browser with the chain stubbed. It wants a
+browser the Python suite does not, so it is opt-in and not part of CI:
+
+```bash
+npm install playwright && npx playwright install chromium
+node tools/smoke_web.mjs
 ```
 
 `data/` is the single source of truth. `docs/js/wordlist.js`, `docs/js/campaign.js`,

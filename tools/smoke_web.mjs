@@ -19,8 +19,8 @@
 //
 // Exits non-zero on any uncaught page error or missing panel.
 
-import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
+import { createServer } from 'node:http';
 import { extname, join, normalize } from 'node:path';
 import { chromium } from 'playwright';
 
@@ -40,7 +40,10 @@ const TYPES = {
 };
 
 const server = createServer(async (request, response) => {
-  const path = normalize(request.url.split('?')[0]).replace(/^(\.\.[/\\])+/, '');
+  const path = normalize(request.url.split('?')[0]).replace(
+    /^(\.\.[/\\])+/,
+    '',
+  );
   try {
     const body = await readFile(join(DOCS, path === '/' ? 'index.html' : path));
     response.writeHead(200, {
@@ -74,12 +77,18 @@ const transaction = (n, confirmed = true) => ({
 
 const EMPTY = {
   chain_stats: {
-    funded_txo_count: 0, funded_txo_sum: 0,
-    spent_txo_count: 0, spent_txo_sum: 0, tx_count: 0,
+    funded_txo_count: 0,
+    funded_txo_sum: 0,
+    spent_txo_count: 0,
+    spent_txo_sum: 0,
+    tx_count: 0,
   },
   mempool_stats: {
-    funded_txo_count: 0, funded_txo_sum: 0,
-    spent_txo_count: 0, spent_txo_sum: 0, tx_count: 0,
+    funded_txo_count: 0,
+    funded_txo_sum: 0,
+    spent_txo_count: 0,
+    spent_txo_sum: 0,
+    tx_count: 0,
   },
 };
 
@@ -104,7 +113,9 @@ const STATS = {
 // Set CHROMIUM_PATH when the browser lives outside Playwright's own cache —
 // a distro package, or a sandbox that ships one already.
 const browser = await chromium.launch(
-  process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {},
+  process.env.CHROMIUM_PATH
+    ? { executablePath: process.env.CHROMIUM_PATH }
+    : {},
 );
 const page = await browser.newPage();
 
@@ -198,7 +209,9 @@ for (let i = 0; i < count; i++) {
 await step('derive a seed', async () => {
   const decrypt = await openPanel('DECRYPT');
   await decrypt.locator('textarea').first().fill(SEED);
-  await decrypt.getByRole('button', { name: /^Derive$/i }).click({ timeout: 3000 });
+  await decrypt
+    .getByRole('button', { name: /^Derive$/i })
+    .click({ timeout: 3000 });
   await page.waitForTimeout(1500);
   const notices = await decrypt.locator('.notice').allInnerTexts();
   if (!notices.some((n) => /VALID/i.test(n)))
@@ -208,7 +221,9 @@ await step('derive a seed', async () => {
 await step('read an address', async () => {
   const ledger = await openPanel('LEDGER');
   await ledger.locator('input.field').first().fill(ADDRESS);
-  await ledger.getByRole('button', { name: /^Read$/i }).click({ timeout: 3000 });
+  await ledger
+    .getByRole('button', { name: /^Read$/i })
+    .click({ timeout: 3000 });
   await page.waitForTimeout(2500);
 });
 
@@ -227,20 +242,26 @@ console.log(
 if (read.headline !== '0.05000000')
   problems.push(`headline balance reads ${read.headline}`);
 if (read.transactions !== 25)
-  problems.push(`${read.transactions} transactions on the first page, expected 25`);
+  problems.push(
+    `${read.transactions} transactions on the first page, expected 25`,
+  );
 if (read.pathRows !== 3)
   problems.push(`${read.pathRows} derivation paths shown, expected 3`);
 if (new Set(read.badges).size !== 2)
-  problems.push(`path badges read ${JSON.stringify(read.badges)}, expected both kinds`);
+  problems.push(
+    `path badges read ${JSON.stringify(read.badges)}, expected both kinds`,
+  );
 
 await step('page the history', async () => {
   const more = panel('LEDGER').getByRole('button', { name: /^Load more$/i });
-  if (!(await more.count())) throw new Error('a full page offered no continuation');
+  if (!(await more.count()))
+    throw new Error('a full page offered no continuation');
   await more.first().click();
   await page.waitForTimeout(1500);
   // The continuation is one row long, which is how the history ends.
   const rows = await page.locator('.led-tx').count();
-  if (rows !== 26) throw new Error(`${rows} transactions after paging, expected 26`);
+  if (rows !== 26)
+    throw new Error(`${rows} transactions after paging, expected 26`);
   if (await more.count()) throw new Error('a short page still offered more');
 });
 
@@ -252,7 +273,9 @@ for (const host of ['blockstream.info', 'mempool.space', 'blockchain.info']) {
 }
 await step('read with the chain down', async () => {
   const ledger = panel('LEDGER');
-  await ledger.getByRole('button', { name: /^Read$/i }).click({ timeout: 3000 });
+  await ledger
+    .getByRole('button', { name: /^Read$/i })
+    .click({ timeout: 3000 });
   await page.waitForTimeout(2500);
   const notice = await ledger.locator('.notice').first().innerText();
   if (!notice.trim()) throw new Error('the outage produced no notice');
