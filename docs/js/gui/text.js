@@ -8,6 +8,57 @@
 // Keys carrying {braces} are filled by `tf`.
 
 export const T = {
+  read: { en: 'Read', ru: 'Прочитать', es: 'Leer', pt: 'Ler' },
+  history: {
+    en: 'History',
+    ru: 'История',
+    es: 'Historial',
+    pt: 'Histórico',
+  },
+  loadMore: {
+    en: 'Load more',
+    ru: 'Ещё',
+    es: 'Cargar más',
+    pt: 'Carregar mais',
+  },
+  showingOf: {
+    en: 'showing {shown} of {total}',
+    ru: 'показано {shown} из {total}',
+    es: 'mostrando {shown} de {total}',
+    pt: 'mostrando {shown} de {total}',
+  },
+  threePaths: {
+    en: 'The three paths',
+    ru: 'Три пути',
+    es: 'Los tres caminos',
+    pt: 'Os três caminhos',
+  },
+  pathsRead: {
+    en: '{n} paths read',
+    ru: 'прочитано путей: {n}',
+    es: '{n} caminos leídos',
+    pt: '{n} caminhos lidos',
+  },
+  confirmed: {
+    en: 'Confirmed',
+    ru: 'Подтверждено',
+    es: 'Confirmado',
+    pt: 'Confirmado',
+  },
+  fee: { en: 'fee', ru: 'комиссия', es: 'comisión', pt: 'taxa' },
+  mempool: { en: 'mempool', ru: 'мемпул', es: 'mempool', pt: 'mempool' },
+  ledgerHelp: {
+    en: 'One read: the balance, the three derivation paths when a seed is loaded, and the whole history, paged.',
+    ru: 'Одно чтение: баланс, три пути вывода (если загружен сид) и вся история постранично.',
+    es: 'Una lectura: el saldo, los tres caminos de derivación si hay semilla, y todo el historial paginado.',
+    pt: 'Uma leitura: o saldo, os três caminhos de derivação se houver semente, e todo o histórico paginado.',
+  },
+  transactions: {
+    en: 'Transactions',
+    ru: 'Транзакции',
+    es: 'Transacciones',
+    pt: 'Transações',
+  },
   forgeTitle: {
     en: 'Nameforge',
     ru: 'Nameforge',
@@ -523,12 +574,6 @@ export const T = {
     ru: 'Отправлено',
     es: 'Enviado',
     pt: 'Enviado',
-  },
-  largestReceived: {
-    en: 'Largest received',
-    ru: 'Крупнейшее поступление',
-    es: 'Mayor recibido',
-    pt: 'Maior recebido',
   },
   unspentOutputs: {
     en: 'Unspent outputs',

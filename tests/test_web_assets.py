@@ -549,3 +549,72 @@ def test_only_storage_js_touches_local_storage():
         if "localStorage" in strip_js_comments(path.read_text()):
             offenders.append(str(path.relative_to(DOCS)))
     assert not offenders, f"these reach localStorage around storage.js: {offenders}"
+
+
+def test_the_panels_only_call_methods_their_clients_actually_have():
+    """The Explorer called `chainExplorer.addressState` and nothing answered.
+
+    The field names it wanted belonged to the API this build moved away from,
+    and the move left the call behind — so the panel threw the moment anyone
+    looked up an address, and every structural test here still passed, because
+    a call to a method that does not exist looks exactly like a call to one
+    that does until it runs.
+    """
+    app = strip_js_comments((DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8"))
+
+    clients = {
+        "chainExplorer": DOCS / "js" / "mempool.js",
+        "chain": DOCS / "js" / "chain.js",
+        "journal": DOCS / "js" / "journal.js",
+        "progress": DOCS / "js" / "core.js",
+    }
+    missing = []
+    for field, path in clients.items():
+        source = path.read_text(encoding="utf-8")
+        defined = set(re.findall(r"^\s{2}(?:async\s+|static\s+|get\s+)?(\w+)\s*\(", source, re.M))
+        defined |= set(re.findall(r"^\s{2}(?:get|set)\s+(\w+)", source, re.M))
+        for called in set(re.findall(rf"this\.{field}\.(\w+)\s*\(", app)):
+            if called not in defined:
+                missing.append(f"this.{field}.{called}() — {path.name} has no such method")
+    assert not missing, "the panels call methods that do not exist:\n  " + "\n  ".join(missing)
+
+
+def test_the_ledger_reads_everything_in_one_action():
+    """It was three buttons — a balance, a sweep of the paths, a truncated
+    history — and reading an address meant pressing all three and assembling
+    the answer yourself."""
+    # Sliced on the raw source — the section markers this cuts between are
+    # comments, and stripping them first throws away the boundary.
+    raw = (DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8")
+    ledger = strip_js_comments(
+        raw[raw.index("buildLedger() {") : raw.index("\n  // ---- terminal")]
+    )
+
+    buttons = re.findall(r"text:\s*t\('(\w+)',\s*lang\)[^}]*onClick", ledger)
+    assert "read" in buttons, "the ledger has no read action"
+    for gone in ("syncOne", "sweep", "txlog"):
+        assert gone not in buttons, f"the ledger still offers a separate {gone} button"
+
+
+def test_the_history_pages_rather_than_truncating():
+    """`transactions(address, limit)` cut the first page and called it the
+    past. An address with 58 transactions showed ten of them."""
+    raw = (DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8")
+    ledger = strip_js_comments(
+        raw[raw.index("buildLedger() {") : raw.index("\n  // ---- terminal")]
+    )
+    assert "transactionPage(" in ledger, "the ledger does not page"
+    assert "loadMore" in ledger, "there is no way to ask for the next page"
+
+    chain = (DOCS / "js" / "chain.js").read_text(encoding="utf-8")
+    assert "async transactionPage(" in chain
+    # Esplora continues from the last txid seen; without that there is no page 2.
+    assert "/chain/" in chain, "the continuation path is gone"
+
+
+def test_a_transaction_row_carries_what_a_ledger_row_should():
+    """Direction, amount, height, time, fee and the identifier. The old list
+    had a txid and a delta, which is not a ledger."""
+    chain = (DOCS / "js" / "chain.js").read_text(encoding="utf-8")
+    for field in ("feeSats", "inputs", "outputs", "blockHeight", "blockTime"):
+        assert field in chain, f"a transaction no longer carries {field}"

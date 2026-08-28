@@ -923,3 +923,75 @@ a { color: var(--info); }
 .rail__win.is-folded .win__body { display: none; }
 
 .rail__body { overflow-y: auto; }
+
+/* ---------- the ledger: one read, and the history under it ---------------- */
+
+/* The confirmed balance is the headline, so it is set larger than the
+   explorer's figure rather than the same. Everything else on the card is
+   support for this one number. */
+.chain-card .chain-card__btc { font-size: 34px; }
+
+.led-fiat {
+  margin: -4px 0 10px;
+  font-size: 12px;
+  color: var(--soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.led-txs {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.led-tx {
+  display: grid;
+  grid-template-columns: 18px minmax(96px, auto) 1fr auto;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--line);
+  font-size: 11.5px;
+}
+
+.led-tx:last-child { border-bottom: 0; }
+.led-tx:nth-child(even) { background: var(--sunken); }
+
+.led-tx__dir { font-weight: 700; }
+.led-tx--in .led-tx__dir { color: var(--ok); }
+.led-tx--out .led-tx__dir { color: var(--warn); }
+
+.led-tx__amount {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.led-tx__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--soft);
+  font-size: 10.5px;
+}
+
+.led-tx__id {
+  font-size: 10.5px;
+  color: var(--info);
+  justify-self: end;
+}
+
+/* Narrow: the identifier drops under the row rather than squeezing the
+   amount, which is the column that has to stay readable. */
+@media (max-width: 620px) {
+  .led-tx {
+    grid-template-columns: 18px 1fr;
+  }
+  .led-tx__meta,
+  .led-tx__id {
+    grid-column: 2;
+    justify-self: start;
+  }
+}

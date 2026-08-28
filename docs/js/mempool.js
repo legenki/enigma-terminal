@@ -144,6 +144,36 @@ export class ExplorerClient {
     return this.get(`address/${encodeURIComponent(address)}`, { ttl: TTL.tip });
   }
 
+  /**
+   * One address, normalised the way the panels read it.
+   *
+   * The Explorer called `addressState` and nothing answered — the field names
+   * it wanted (receivedAmount, largestReceivedTxAmount) belonged to the API
+   * this build moved away from, and the move left the call behind. These are
+   * the figures esplora actually serves, and nothing is invented from them:
+   * a total this endpoint cannot know is not reported at all.
+   */
+  async addressState(address) {
+    const data = await this.address(address);
+    const chain = data.chain_stats || {};
+    const pool = data.mempool_stats || {};
+    const sats = (value) => BigInt(value || 0);
+    return {
+      address: data.address || address,
+      balance: sats(chain.funded_txo_sum) - sats(chain.spent_txo_sum),
+      pending: sats(pool.funded_txo_sum) - sats(pool.spent_txo_sum),
+      received: sats(chain.funded_txo_sum),
+      sent: sats(chain.spent_txo_sum),
+      txCount: (chain.tx_count || 0) + (pool.tx_count || 0),
+      confirmedTxCount: chain.tx_count || 0,
+      pendingTxCount: pool.tx_count || 0,
+      // Outputs funded minus outputs spent: what is still sitting there.
+      utxoCount: (chain.funded_txo_count || 0) - (chain.spent_txo_count || 0),
+      fundedOuts: chain.funded_txo_count || 0,
+      spentOuts: chain.spent_txo_count || 0,
+    };
+  }
+
   addressTransactions(address) {
     return this.get(`address/${encodeURIComponent(address)}/txs`, {
       ttl: TTL.tip,

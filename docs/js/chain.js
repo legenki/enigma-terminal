@@ -41,6 +41,13 @@ const esploraTxs = (data, address) =>
       blockHeight: tx.status ? tx.status.block_height : null,
       blockTime: tx.status ? tx.status.block_time : null,
       valueDeltaSats: received - spent,
+      // The ledger shows these; esplora serves them on the same call, so
+      // reading them costs nothing and asking twice would cost a round trip.
+      feeSats: BigInt(tx.fee || 0),
+      size: tx.size || 0,
+      weight: tx.weight || 0,
+      inputs: (tx.vin || []).length,
+      outputs: (tx.vout || []).length,
     };
   });
 
@@ -166,6 +173,43 @@ export class ChainClient {
       }
     }
     throw new ChainError(errors.join(' | '));
+  }
+
+  /**
+   * One page of history, and the txid to continue from.
+   *
+   * Esplora answers 25 at a time and continues from the last txid seen, which
+   * is the only way to read an address with hundreds of transactions. `limit`
+   * on the older `transactions` cut the first page and called it the history;
+   * this returns the page plus whether there is more, so the caller can page
+   * rather than pretend.
+   */
+  async transactionPage(address, after = null) {
+    if (this.offline)
+      throw new ChainError('OFFLINE MODE ACTIVE — NETWORK CALLS DISABLED');
+    const errors = [];
+    for (const key of this.order) {
+      const provider = PROVIDERS[key];
+      if (!provider.txsPath) continue;
+      const path = after
+        ? `${provider.txsPath(address)}/chain/${encodeURIComponent(after)}`
+        : provider.txsPath(address);
+      try {
+        const data = await this.fetchJson(provider.base + path);
+        const rows = provider.parseTxs(data, address);
+        return {
+          transactions: rows,
+          // Esplora pages at 25; a short page is the end of the history.
+          more: rows.length >= 25 ? rows[rows.length - 1].txid : null,
+          provider: provider.name,
+        };
+      } catch (error) {
+        errors.push(`${provider.name}: ${error.message || error.name}`);
+      }
+    }
+    throw new ChainError(
+      errors.join(' | ') || 'NO PROVIDER EXPOSES A TX ENDPOINT',
+    );
   }
 
   async transactions(address, limit = 8) {

@@ -13,6 +13,42 @@ Cutting a release is: bump those three, write the entry below, then push a tag
 refuses a tag that does not match the declared version and takes the published
 notes from the entry, so the tag, the code and these notes cannot drift apart.
 
+## 2.2.0
+
+### The Explorer's address view was broken
+
+Looking up an address threw `this.chainExplorer.addressState is not a function`
+and showed the error in place of the wallet. The method never existed: the
+field names the panel read — `receivedAmount`, `largestReceivedTxAmount` —
+belong to the API this build moved away from, and the move left the call
+behind. Every structural test still passed, because a call to a method that
+does not exist looks exactly like a call to one that does until it runs.
+
+`addressState` now exists on the explorer client and returns what esplora
+actually serves. `largestReceivedTxAmount` is gone rather than faked: that
+endpoint cannot know it, and a figure the source cannot know is not a figure.
+
+There is a test for the class of bug now — it reads every `this.<client>.x()`
+call in the panels and fails if the client has no such method.
+
+### The ledger is one read
+
+It was three buttons: a balance, a sweep of the three derivation paths, and a
+transaction list truncated to ten. Reading an address meant pressing all three
+and assembling the answer yourself.
+
+**READ** now does all of it:
+
+- The confirmed balance as the headline, set large, with the dollar value
+  beside it when a price has arrived and nothing at all when it has not.
+- Pending, received, sent, transaction count, unspent outputs, source.
+- The three derivation paths beside it whenever a seed is loaded.
+- The whole history, paged properly. Esplora answers 25 at a time and
+  continues from the last txid seen; `transactionPage` follows that, so an
+  address with 58 transactions shows 58 rather than the first ten.
+- Each row carries direction, amount, block height, time, fee, input and
+  output counts, and a link to the transaction.
+
 ## 2.1.0
 
 **Nameforge** — a new tool on the desk and a new terminal command. Pick a short

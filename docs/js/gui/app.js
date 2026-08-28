@@ -60,6 +60,7 @@ import { read, write } from '../storage.js';
 import { icon } from '../vendor/feather.js';
 import {
   badge,
+  clear,
   el,
   empty,
   kv,
@@ -233,6 +234,16 @@ export class GuiApp {
     //: Its own client, because its rate limit is its own: three calls every
     //: five seconds, shared across every lookup the panel makes.
     this.chainExplorer = new ExplorerClient();
+    //: What a coin costs, for the fiat line beside a balance. Fetched once and
+    //: left undefined if it does not arrive: a balance is the truth here, and
+    //: the conversion is a convenience that may simply be absent.
+    this.btcPrice = null;
+    this.chainExplorer
+      .prices()
+      .then((prices) => {
+        this.btcPrice = prices?.USD || null;
+      })
+      .catch(() => {});
     this.pulseAge = null;
     this.pulseBlock = null;
     this.explorerPulseCard = null;
@@ -1521,6 +1532,15 @@ export class GuiApp {
 
   // ---- ledger -----------------------------------------------------------
 
+  /**
+   * The ledger: one address, everything the chain will say about it.
+   *
+   * This was three buttons — a balance, a sweep of the three derivation paths,
+   * and a truncated transaction list — and reading an address meant pressing
+   * all three and assembling the answer yourself. It is one now: READ fetches
+   * the balance, the paths when a wallet is loaded, and the history, which
+   * pages properly rather than showing the first ten and calling it the past.
+   */
   buildLedger() {
     const lang = this.lang;
     const address = el('input', {
@@ -1532,141 +1552,240 @@ export class GuiApp {
     });
     const output = el('div', {});
 
-    const sync = async () => {
-      const target = address.value.trim();
-      if (!target) return replace(output, notice('warn', t('noWallet', lang)));
+    //: Paging state for the address currently on screen.
+    let cursor = null;
+    let shown = 0;
+    let total = 0;
+    let target = '';
+
+    const txRow = (tx) => {
+      const delta = tx.valueDeltaSats ?? 0n;
+      const incoming = delta >= 0n;
+      const when = tx.blockTime
+        ? new Date(tx.blockTime * 1000)
+            .toISOString()
+            .replace('T', ' ')
+            .slice(0, 16)
+        : t('pending', lang);
+      return el(
+        'div',
+        { class: `led-tx led-tx--${incoming ? 'in' : 'out'}` },
+        el('span', {
+          class: 'led-tx__dir',
+          text: incoming ? '↓' : '↑',
+          title: incoming ? t('received', lang) : t('sent', lang),
+        }),
+        el('span', {
+          class: 'led-tx__amount',
+          text: `${incoming ? '+' : '−'}${btc(delta < 0n ? -delta : delta)}`,
+        }),
+        el(
+          'span',
+          { class: 'led-tx__meta' },
+          el('span', {
+            text: tx.blockHeight
+              ? `#${group(tx.blockHeight)}`
+              : t('mempool', lang),
+          }),
+          el('span', { text: when }),
+          el('span', { text: `${t('fee', lang)} ${group(tx.feeSats)} sat` }),
+          el('span', { text: `${tx.inputs}→${tx.outputs}` }),
+        ),
+        el('a', {
+          class: 'led-tx__id break',
+          href: `https://mempool.space/tx/${encodeURIComponent(tx.txid)}`,
+          target: '_blank',
+          rel: 'noopener',
+          text: `${tx.txid.slice(0, 8)}…${tx.txid.slice(-8)}`,
+        }),
+      );
+    };
+
+    const txHost = el('div', { class: 'led-txs' });
+    const moreRow = el('div', { class: 'row' });
+
+    const loadMore = async () => {
       replace(
-        output,
+        moreRow,
         el('p', { class: 'spinner-line', text: t('working', lang) }),
       );
       try {
-        const stats = await this.chain.addressStats(target);
-        const used = stats.txCount > 0 || stats.totalReceivedSats > 0n;
-        this.log('ledger', target, {
-          status: stats.confirmedSats > 0n ? 'warn' : used ? 'info' : 'info',
-          detail: `${formatBtc(stats.confirmedSats)} BTC · ${stats.txCount} tx · ${stats.provider}`,
-          payload: { address: target },
-        });
-        replace(
-          output,
-          kv([
-            ['CONFIRMED', `${formatBtc(stats.confirmedSats)} BTC`],
-            ['UNCONFIRMED', `${formatBtc(stats.unconfirmedSats)} BTC`],
-            ['TOTAL RECEIVED', `${formatBtc(stats.totalReceivedSats)} BTC`],
-            ['TOTAL SENT', `${formatBtc(stats.totalSentSats)} BTC`],
-            ['TX COUNT', stats.txCount],
-            ['UTXO COUNT', stats.utxoCount],
-            ['SOURCE', stats.provider],
-          ]),
-          stats.confirmedSats > 0n
-            ? notice('warn', 'ACCESS KEY REQUIRED FOR WITHDRAWAL.')
-            : used
-              ? notice('info', t('walletDrained', lang))
-              : notice('info', t('neverUsed', lang)),
-          el('a', {
-            class: 'hint-text',
-            target: '_blank',
-            rel: 'noopener',
-            href: this.chain.explorerUrl(target),
-            text: t('openExplorer', lang),
+        const page = await this.chain.transactionPage(target, cursor);
+        for (const tx of page.transactions) txHost.append(txRow(tx));
+        shown += page.transactions.length;
+        cursor = page.more;
+        // Filed as its own tool even though one button did it: the journal is
+        // shared with the terminal, where TXLOG is still a separate command,
+        // and a history read should look the same whichever half made it.
+        this.log('txlog', target, {
+          detail: tf('showingOf', this.lang, {
+            shown: group(shown),
+            total: group(total),
           }),
-        );
-      } catch (error) {
-        this.log('ledger', target, {
-          status: 'danger',
-          detail: error.message,
           payload: { address: target },
         });
-        replace(output, notice('danger', 'NETWORK LINK DOWN', error.message));
+        paintMore();
+      } catch (error) {
+        replace(moreRow, notice('warn', t('netDown', lang), error.message));
       }
     };
 
-    const sweep = async () => {
-      if (!this.wallet)
-        return replace(output, notice('warn', t('noWallet', lang)));
+    function paintMore() {
+      // `total` counts confirmed plus pending; a page is 25. When the cursor
+      // runs out there is nothing further to ask for, whatever the count said.
+      const label = tf('showingOf', lang, {
+        shown: group(shown),
+        total: group(total),
+      });
+      replace(
+        moreRow,
+        el('span', { class: 'section__meta', text: label }),
+        cursor
+          ? el('button', {
+              class: 'btn',
+              type: 'button',
+              text: t('loadMore', lang),
+              onClick: loadMore,
+            })
+          : null,
+      );
+    }
+
+    const read = async () => {
+      target = address.value.trim();
+      if (!target) return replace(output, notice('warn', t('noWallet', lang)));
+
       replace(
         output,
         el('p', { class: 'spinner-line', text: t('working', lang) }),
       );
-      const rows = [];
-      let touched = 0;
-      for (const entry of this.wallet.addresses) {
-        try {
-          const stats = await this.chain.addressStats(entry.address);
-          const used = stats.txCount > 0 || stats.totalReceivedSats > 0n;
-          if (used) touched += 1;
+      cursor = null;
+      shown = 0;
+      clear(txHost);
+
+      let stats;
+      try {
+        stats = await this.chain.addressStats(target);
+      } catch (error) {
+        return replace(
+          output,
+          notice('danger', t('netDown', lang), error.message),
+        );
+      }
+      total = stats.txCount;
+
+      this.log('ledger', target, {
+        status: stats.confirmedSats > 0n ? 'warn' : 'info',
+        detail: `${formatBtc(stats.confirmedSats)} BTC · ${stats.txCount} tx · ${stats.provider}`,
+        payload: { address: target },
+      });
+
+      // The headline: the confirmed balance, large, with the fiat value beside
+      // it when a price has arrived. Everything else is support.
+      const fiat = this.btcPrice
+        ? `≈ $${Math.round((Number(stats.confirmedSats) / 1e8) * this.btcPrice).toLocaleString('en-US')}`
+        : '';
+      const card = el(
+        'div',
+        { class: 'chain-card' },
+        el(
+          'div',
+          { class: 'chain-card__head' },
+          addressSigil(target, { size: 34 }),
+          el('span', { class: 'addr break', text: target }),
+        ),
+        el(
+          'div',
+          { class: 'chain-card__figure' },
+          el('span', {
+            class: 'chain-card__btc',
+            text: btc(stats.confirmedSats),
+          }),
+          el('span', { class: 'chain-card__unit', text: 'BTC' }),
+        ),
+        fiat ? el('p', { class: 'led-fiat', text: fiat }) : null,
+        stats.unconfirmedSats !== 0n
+          ? notice(
+              'info',
+              t('pending', lang),
+              `${btc(stats.unconfirmedSats)} BTC`,
+            )
+          : null,
+        kv([
+          [t('received', lang), `${btc(stats.totalReceivedSats)} BTC`],
+          [t('sent', lang), `${btc(stats.totalSentSats)} BTC`],
+          [t('transactions', lang), group(stats.txCount)],
+          [t('unspentOutputs', lang), group(stats.utxoCount)],
+          [t('source', lang), stats.provider],
+        ]),
+      );
+
+      // The three paths, when there is a wallet to read them from. They used
+      // to be their own button; they belong beside the balance.
+      let paths = null;
+      if (this.wallet) {
+        const rows = [];
+        for (const entry of this.wallet.addresses) {
+          let line;
+          try {
+            const each = await this.chain.addressStats(entry.address);
+            line = {
+              balance: `${btc(each.confirmedSats)} BTC`,
+              txs: group(each.txCount),
+              used: each.txCount > 0 || each.totalReceivedSats > 0n,
+            };
+          } catch {
+            line = { balance: '—', txs: '—', used: false };
+          }
           rows.push([
-            { text: `m/${entry.purpose}'` },
-            { class: 'addr', text: entry.address },
-            { class: 'num', text: String(stats.txCount) },
-            { class: 'num', text: formatBtc(stats.totalReceivedSats) },
+            { text: entry.path },
+            { text: entry.address, class: 'break' },
+            { text: line.balance },
+            { text: line.txs },
             {
-              node: badge(used ? 'solved' : 'locked', used ? 'USED' : 'UNUSED'),
+              node: badge(
+                line.used ? 'warn' : 'muted',
+                t(line.used ? 'used' : 'unused', lang),
+              ),
             },
           ]);
-        } catch {
-          rows.push([
-            { text: `m/${entry.purpose}'` },
-            { class: 'addr', text: entry.address },
-            { text: '—' },
-            { text: '—' },
-            { node: badge('danger', 'UNREACHABLE') },
-          ]);
         }
+        this.log('sweep', this.wallet.primary.address, {
+          detail: tf('pathsRead', lang, { n: rows.length }),
+          payload: { address: this.wallet.primary.address },
+        });
+        paths = el(
+          'div',
+          { class: 'stack' },
+          section(t('threePaths', lang)),
+          table(
+            [
+              t('path', lang),
+              t('address', lang),
+              t('confirmed', lang),
+              'TX',
+              '',
+            ],
+            rows,
+          ),
+        );
       }
-      this.log('sweep', this.wallet.primary.address, {
-        status: touched ? 'ok' : 'info',
-        detail: `${touched}/3 ${t('pathsCarryHistory', lang)}`,
-        payload: { address: this.wallet.primary.address },
-      });
-      replace(output, table(['PATH', 'ADDRESS', 'TX', 'RECEIVED', ''], rows));
-    };
 
-    const txlog = async () => {
-      const target = address.value.trim();
-      if (!target) return replace(output, notice('warn', t('noWallet', lang)));
       replace(
         output,
-        el('p', { class: 'spinner-line', text: t('working', lang) }),
+        card,
+        paths,
+        section(t('history', lang)),
+        txHost,
+        moreRow,
       );
-      try {
-        const txs = await this.chain.transactions(target, 10);
-        this.log('txlog', target, {
-          detail: `${txs.length} ${t('transactionsCount', lang)}`,
-          payload: { address: target },
-        });
-        replace(
-          output,
-          txs.length
-            ? table(
-                ['STATE', 'BLOCK', 'TXID'],
-                txs.map((tx) => [
-                  {
-                    node: badge(
-                      tx.confirmed ? 'solved' : 'warn',
-                      tx.confirmed ? 'CONFIRMED' : 'PENDING',
-                    ),
-                  },
-                  {
-                    class: 'num',
-                    text: tx.blockHeight ? String(tx.blockHeight) : 'mempool',
-                  },
-                  { class: 'addr', text: tx.txid },
-                ]),
-              )
-            : empty(t('noTransactions', lang)),
-        );
-      } catch (error) {
-        replace(
-          output,
-          notice('danger', 'TX HISTORY UNAVAILABLE', error.message),
-        );
-      }
+      await loadMore();
     };
 
     const providerRow = el(
       'div',
       { class: 'row row--tight' },
+      el('span', { class: 'section__meta', text: t('source', lang) }),
       ...Object.entries(PROVIDERS).map(([key, provider]) =>
         el('button', {
           class: 'btn',
@@ -1679,7 +1798,6 @@ export class GuiApp {
               .querySelectorAll('.btn')
               .forEach((b) => b.setAttribute('aria-pressed', 'false'));
             event.currentTarget.setAttribute('aria-pressed', 'true');
-            this.paintNav();
           },
         }),
       ),
@@ -1699,23 +1817,12 @@ export class GuiApp {
           el('button', {
             class: 'btn btn--primary',
             type: 'button',
-            text: t('syncOne', lang),
-            onClick: sync,
-          }),
-          el('button', {
-            class: 'btn',
-            type: 'button',
-            text: t('sweep', lang),
-            onClick: sweep,
-          }),
-          el('button', {
-            class: 'btn',
-            type: 'button',
-            text: t('txlog', lang),
-            onClick: txlog,
+            text: t('read', lang),
+            onClick: read,
           }),
         ),
         providerRow,
+        el('p', { class: 'hint-text', text: t('ledgerHelp', lang) }),
         output,
       ),
     );
@@ -1723,11 +1830,9 @@ export class GuiApp {
     return {
       node,
       api: {
-        run: (target, kind = 'ledger') => {
-          if (target) address.value = target;
-          if (kind === 'sweep') return sweep();
-          if (kind === 'txlog') return txlog();
-          return sync();
+        run: (wanted) => {
+          if (wanted) address.value = wanted;
+          return read();
         },
       },
     };
@@ -2374,7 +2479,7 @@ export class GuiApp {
   async explorerAddress(address) {
     const lang = this.lang;
     const state = await this.chainExplorer.addressState(address);
-    const balance = Number(state.balance || 0);
+    const balance = state.balance;
 
     return el(
       'div',
@@ -2396,24 +2501,15 @@ export class GuiApp {
           el('span', { class: 'chain-card__unit', text: 'BTC' }),
         ),
         kv([
+          [t('received', lang), `${btc(state.received)} BTC`],
+          [t('sent', lang), `${btc(state.sent)} BTC`],
           [
-            t('received', lang),
-            `${btc(state.receivedAmount || 0)} BTC · ${state.receivedTxCount || 0}`,
+            t('transactions', lang),
+            state.pendingTxCount
+              ? `${state.confirmedTxCount} + ${state.pendingTxCount} ${t('pending', lang)}`
+              : String(state.confirmedTxCount),
           ],
-          [
-            t('sent', lang),
-            `${btc(state.sentAmount || 0)} BTC · ${state.sentTxCount || 0}`,
-          ],
-          [
-            t('largestReceived', lang),
-            `${btc(state.largestReceivedTxAmount || 0)} BTC`,
-          ],
-          [
-            t('unspentOutputs', lang),
-            String(
-              (state.receivedOutsCount || 0) - (state.spentOutsCount || 0),
-            ),
-          ],
+          [t('unspentOutputs', lang), String(state.utxoCount)],
         ]),
       ),
       el(
