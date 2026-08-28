@@ -29,13 +29,17 @@ export class ExtendedKey {
     key,
     chainCode,
     depth = 0,
-    parentFingerprint = new Uint8Array(4),
+    parent = null,
     childNumber = 0,
   ) {
     this.key = key;
     this.chainCode = chainCode;
     this.depth = depth;
-    this.parentFingerprint = parentFingerprint;
+    //: The parent node rather than its fingerprint. Computing the fingerprint
+    //: costs a point multiplication, and only toExtended() ever reads it —
+    //: deriving an address does not. Held as the parent and resolved on demand,
+    //: a path like m/44'/0'/0'/0/0 needs three multiplications instead of six.
+    this.parent = parent;
     this.childNumber = childNumber;
   }
 
@@ -50,7 +54,12 @@ export class ExtendedKey {
   }
 
   get fingerprint() {
-    return hash160(this.publicKey).subarray(0, 4);
+    if (!this._fingerprint) this._fingerprint = hash160(this.publicKey).subarray(0, 4);
+    return this._fingerprint;
+  }
+
+  get parentFingerprint() {
+    return this.parent ? this.parent.fingerprint : new Uint8Array(4);
   }
 
   child(index) {
@@ -66,7 +75,7 @@ export class ExtendedKey {
       bigIntToBytes32(childKey),
       digest.subarray(32),
       this.depth + 1,
-      this.fingerprint,
+      this,
       index,
     );
   }

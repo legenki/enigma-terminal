@@ -161,3 +161,17 @@ def test_every_web_module_actually_parses_as_a_module():
         capture_output=True, text=True, timeout=120,
     )
     assert completed.returncode == 0, completed.stdout + completed.stderr
+
+
+def test_deriving_an_address_does_not_pay_for_fingerprints_it_never_uses():
+    """A fingerprint costs a point multiplication and only xprv serialisation
+    reads one. Computing it eagerly on every child doubled the cost of a path:
+    m/44'/0'/0'/0/0 did six multiplications where three would do, on every
+    DECRYPT and on every candidate a vanity search tries."""
+    source = (ROOT / "docs" / "js" / "crypto" / "wallet.js").read_text(encoding="utf-8")
+    child = source[source.index("  child(index) {"):]
+    child = child[: child.index("\n  }")]
+    assert "this.fingerprint" not in child, \
+        "child() computes a fingerprint again; the address path does not need one"
+    assert "get parentFingerprint()" in source, \
+        "toExtended still needs a parent fingerprint, resolved on demand"
