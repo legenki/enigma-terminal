@@ -41,6 +41,7 @@ TOOLS: dict[str, str] = {
     "archive": "Archive",
     "complete": "Recovery",
     "random": "Randomizer",
+    "forge": "Nameforge",
     "case": "Case",
     "hint": "Hint",
 }

@@ -102,6 +102,22 @@ def build_openings() -> int:
     return len(payload["openings"])
 
 
+def build_nameforge() -> int:
+    """The measured leading-character distribution Nameforge prices names by."""
+    payload = json.loads((DATA / "nameforge.json").read_text(encoding="utf-8"))
+    body = (
+        HEADER.format(source="data/nameforge.json")
+        + "\n//: Measured over "
+        + f"{payload['sample']:,}"
+        + " random addresses; see the source file for why it is not uniform.\n"
+        + "export const LEADING = "
+        + json.dumps(payload["leading"], ensure_ascii=False, indent=2)
+        + ";\n"
+    )
+    (OUT / "leading.js").write_text(body, encoding="utf-8")
+    return len(payload["leading"])
+
+
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     words = build_wordlist()
@@ -109,11 +125,13 @@ def main() -> int:
     clients = build_clients()
     contracts, size = build_contracts()
     openings = build_openings()
+    leading = build_nameforge()
     print(f"docs/js/wordlist.js       : {words} words")
     print(f"docs/js/campaign.js       : {cases} campaign cases")
     print(f"docs/js/clients.js        : {clients} clients")
     print(f"docs/data/contracts.json  : {contracts} contracts ({size / 1024:.0f} KB)")
     print(f"docs/js/openings.js       : {openings} openings")
+    print(f"docs/js/leading.js        : {leading} base58 characters")
     return 0
 
 

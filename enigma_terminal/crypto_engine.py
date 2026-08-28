@@ -13,6 +13,7 @@ import secrets
 import unicodedata
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
+from functools import cached_property
 from pathlib import Path
 
 _DATA_DIR = Path(__file__).resolve().parent.parent / "data"
@@ -229,7 +230,11 @@ class ExtendedKey:
     key: bytes
     chain_code: bytes
     depth: int = 0
-    parent_fingerprint: bytes = b"\x00\x00\x00\x00"
+    #: The parent node, not its fingerprint. Computing a fingerprint costs a
+    #: point multiplication and only to_extended() ever reads one — deriving an
+    #: address does not — so m/44'/0'/0'/0/0 was paying for six where three
+    #: suffice. Resolved on demand instead.
+    parent: "ExtendedKey | None" = None
     child_number: int = 0
 
     @classmethod
@@ -237,13 +242,20 @@ class ExtendedKey:
         digest = hmac.new(b"Bitcoin seed", seed, hashlib.sha512).digest()
         return cls(key=digest[:32], chain_code=digest[32:])
 
-    @property
+    @cached_property
     def public_key(self) -> bytes:
+        # Cached: a non-hardened child asks for this, and so does the address
+        # at the end of the path. Recomputing it was a whole point
+        # multiplication thrown away each time.
         return public_key(self.key)
 
-    @property
+    @cached_property
     def fingerprint(self) -> bytes:
         return _hash160(self.public_key)[:4]
+
+    @property
+    def parent_fingerprint(self) -> bytes:
+        return self.parent.fingerprint if self.parent else b"\x00\x00\x00\x00"
 
     def child(self, index: int) -> ExtendedKey:
         hardened = index >= 0x80000000
@@ -258,7 +270,7 @@ class ExtendedKey:
             key=child_key.to_bytes(32, "big"),
             chain_code=digest[32:],
             depth=self.depth + 1,
-            parent_fingerprint=self.fingerprint,
+            parent=self,
             child_number=index,
         )
 

@@ -49,6 +49,12 @@ import {
   TOOLS,
 } from './journal.js';
 import {
+  estimate as nfEstimate,
+  humanise as nfHumanise,
+  validate as nfValidate,
+  workerCount as nfWorkerCount,
+} from './nameforge.js';
+import {
   choose as chooseOpening,
   figuresFromChain,
   render as renderOpening,
@@ -95,6 +101,10 @@ const HELP = {
       'COMPLETE <phrase ?>',
       'find the missing word of a phrase (one ? marks it)',
     ],
+    [
+      'NAMEFORGE <name>',
+      'strike a stamp: an address that starts with your name',
+    ],
     ['ENTROPY <hex>', 'rebuild a mnemonic from raw entropy (32 hex chars)'],
     ['DECRYPT <12 words>', 'validate a seed phrase and derive its addresses'],
     ['DERIVE', 're-print the derivation grid of the loaded seed'],
@@ -131,6 +141,7 @@ const HELP = {
     ['ARCHIVE <текст>', 'полнотекстовый поиск по делам'],
     ['RANDOM [12..24]', 'сгенерировать новую сид-фразу'],
     ['COMPLETE <фраза ?>', 'найти недостающее слово фразы (его место — ?)'],
+    ['NAMEFORGE <имя>', 'отчеканить штамп: адрес, начинающийся с вашего имени'],
     ['ENTROPY <hex>', 'собрать мнемонику из энтропии (32 hex-символа)'],
     ['DECRYPT <12 слов>', 'проверить фразу и вывести адреса'],
     ['DERIVE', 'повторить сетку деривации загруженного сида'],
@@ -167,6 +178,10 @@ const HELP = {
     ['ARCHIVE <texto>', 'búsqueda de texto completo en los casos'],
     ['RANDOM [12..24]', 'generar frase semilla aleatoria segura'],
     ['COMPLETE <frase ?>', 'encontrar la palabra faltante (?)'],
+    [
+      'NAMEFORGE <nombre>',
+      'acuñar un sello: una dirección que empieza con tu nombre',
+    ],
     ['ENTROPY <hex>', 'reconstruir mnemotécnica desde entropía'],
     ['DECRYPT <12 palabras>', 'validar frase y derivar direcciones'],
     ['DERIVE', 'imprimir cuadrícula de derivación'],
@@ -203,6 +218,10 @@ const HELP = {
     ['ARCHIVE <texto>', 'busca de texto completo nos casos'],
     ['RANDOM [12..24]', 'gerar frase semente aleatória segura'],
     ['COMPLETE <frase ?>', 'encontrar a palavra que falta (?)'],
+    [
+      'NAMEFORGE <nome>',
+      'cunhar um selo: um endereço que começa com o seu nome',
+    ],
     ['ENTROPY <hex>', 'reconstruir mnemônica a partir da entropia'],
     ['DECRYPT <12 palavras>', 'validar frase e derivar endereços'],
     ['DERIVE', 'imprimir grade de derivação'],
@@ -534,6 +553,8 @@ export class Engine {
       ROLL: this.cmdRandom,
       COMPLETE: this.cmdComplete,
       FIND: this.cmdComplete,
+      NAMEFORGE: this.cmdNameforge,
+      FORGE: this.cmdNameforge,
       ENTROPY: this.cmdEntropy,
       DECRYPT: this.cmdDecrypt,
       DERIVE: this.cmdDerive,
@@ -926,6 +947,137 @@ export class Engine {
     });
     this.term.print(`  ${results.length} CASE(S) MATCHED`, 'grey');
     this.term.blank();
+  }
+
+  /**
+   * Strike a named stamp, the same search the Nameforge panel runs.
+   *
+   * The estimate is printed before the workers start, never after: a name that
+   * costs hours is allowed, it is simply never a surprise. STOP or any key
+   * ends it.
+   */
+  async cmdNameforge(argument) {
+    const checked = nfValidate(argument.trim().split(/\s+/)[0] || '');
+    if (checked.error === 'length') {
+      this.term.print(
+        '[WARN] USAGE: NAMEFORGE <name>  (2-6 base58 characters)',
+        'amber',
+      );
+      return;
+    }
+    if (checked.error === 'alphabet') {
+      this.term.print(
+        `[FATAL] NOT IN THE BASE58 ALPHABET: ${checked.bad.join(', ')}. THERE IS NO 0, O, I OR l IN AN ADDRESS.`,
+        'red',
+      );
+      return;
+    }
+    const stamp = checked.stamp;
+    const workers = [];
+    const stopAll = () => {
+      for (const w of workers) {
+        w.postMessage({ type: 'stop' });
+        w.terminate();
+      }
+      workers.length = 0;
+    };
+
+    this.term.blank();
+    this.term.print('[FORGE] MEASURING THIS DEVICE...', 'cyan');
+    const rate = await this.measureForgeRate();
+    const guess = nfEstimate(stamp, rate);
+    this.term.keyValue('STAMP', `1${stamp}`, 'grey', 'green');
+    this.term.keyValue('RARITY', guess.tier, 'grey', 'amber');
+    this.term.keyValue(
+      'EXPECTED',
+      `${Math.round(guess.attempts).toLocaleString('en-US')} candidates`,
+      'grey',
+      'cyan',
+    );
+    this.term.keyValue(
+      'SEARCHING',
+      `${guess.bits.toFixed(1)} bits`,
+      'grey',
+      'cyan',
+    );
+    this.term.keyValue(
+      'THIS DEVICE',
+      `${rate.toFixed(0)}/s — ${nfHumanise(guess.seconds)}`,
+      'grey',
+      'cyan',
+    );
+    if (guess.seconds > 900) {
+      this.term.blank();
+      this.term.print(
+        `[WARN] THIS WILL TAKE ABOUT ${nfHumanise(guess.seconds).toUpperCase()}. THE PANEL SHOWS PROGRESS AND CAN STOP IT.`,
+        'amber',
+      );
+    }
+    this.term.blank();
+
+    const count = nfWorkerCount();
+    this.term.print(`[FORGE] ${count} WORKERS RUNNING...`, 'dark');
+    const struck = await new Promise((resolve) => {
+      let attempts = 0;
+      const started = performance.now();
+      for (let i = 0; i < count; i++) {
+        const worker = new Worker('js/nameforge-worker.js', { type: 'module' });
+        worker.onmessage = (event) => {
+          const data = event.data;
+          if (data.type === 'progress') {
+            attempts += data.attempts;
+          } else if (data.type === 'hit') {
+            attempts += data.attempts;
+            stopAll();
+            resolve({
+              ...data,
+              attempts,
+              seconds: (performance.now() - started) / 1000,
+            });
+          }
+        };
+        worker.postMessage({ type: 'search', stamp });
+        workers.push(worker);
+      }
+    });
+
+    const wallet = deriveWallet(struck.mnemonic);
+    this.wallet = wallet;
+    this.term.blank();
+    this.term.print(`  STAMP STRUCK — ${guess.tier}`, 'green');
+    this.term.keyValue('ADDRESS', struck.address, 'grey', 'green');
+    this.term.keyValue('PATH', struck.path, 'grey', 'cyan');
+    this.term.keyValue(
+      'ATTEMPTS',
+      `${struck.attempts.toLocaleString('en-US')} in ${struck.seconds.toFixed(1)}s`,
+      'grey',
+      'cyan',
+    );
+    this.term.type(`${'MNEMONIC'.padEnd(18)}: ${struck.mnemonic}`, 'green', 90);
+    this.term.blank();
+    this.term.print(
+      `[WARN] ${REAL_WALLET[this.lang] || REAL_WALLET.en}`,
+      'amber',
+    );
+    this.log('forge', struck.address, {
+      status: 'ok',
+      detail: `1${stamp} · ${guess.tier} · ${struck.attempts.toLocaleString('en-US')} attempts`,
+      payload: { mnemonic: struck.mnemonic, stamp },
+    });
+  }
+
+  /** What this device actually manages, measured rather than assumed. */
+  measureForgeRate() {
+    return new Promise((resolve) => {
+      const worker = new Worker('js/nameforge-worker.js', { type: 'module' });
+      worker.onmessage = (event) => {
+        if (event.data.type === 'rate') {
+          worker.terminate();
+          resolve(Math.max(1, event.data.rate * nfWorkerCount()));
+        }
+      };
+      worker.postMessage({ type: 'measure' });
+    });
   }
 
   async cmdRandom(argument) {

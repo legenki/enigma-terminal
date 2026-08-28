@@ -26,7 +26,7 @@ README = ROOT / "README.md"
 #: Only the browser has a clipboard.
 WEB_ONLY = {"COPY"}
 #: Short forms, called out in one line rather than given rows of their own.
-ALIASES = {"?", "LS", "ROLL", "FIND", "SYNC", "LOG", "QUIT", "EVIDENCE", "CLUES"}
+ALIASES = {"?", "LS", "ROLL", "FIND", "SYNC", "LOG", "QUIT", "EVIDENCE", "CLUES", "FORGE"}
 
 
 @pytest.fixture(scope="module")

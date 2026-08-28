@@ -12,6 +12,7 @@
 			"!docs/js/vendor/**",
 			"!docs/js/campaign.js",
 			"!docs/js/openings.js",
+			"!docs/js/leading.js",
 			"!docs/js/clients.js",
 			"!docs/js/wordlist.js"
 		]

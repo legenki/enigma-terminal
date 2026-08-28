@@ -24,6 +24,7 @@ from .crypto_engine import (
     wordlist_is_authentic,
 )
 from .journal import STATUS_STYLES, TOOLS, Journal, mask_address, mask_mnemonic
+from . import nameforge
 from .openings import choose as choose_opening
 from .openings import figures_from_chain
 from .ui import DECRYPT_LOGS, NET_LOGS, Screen
@@ -47,6 +48,7 @@ HELP_TEXT = {
         ("ARCHIVE <text>", "full-text search across the case files"),
         ("RANDOM [12..24]", "generate a fresh seed phrase from secure randomness"),
         ("COMPLETE <phrase ?>", "find the missing word of a phrase (one ? marks it)"),
+        ("NAMEFORGE <name>", "strike a stamp: an address that starts with your name"),
         ("ENTROPY <hex>", "rebuild a mnemonic from raw entropy (32 hex chars)"),
         ("DECRYPT <12 words>", "validate a seed phrase and derive its addresses"),
         ("DERIVE", "re-print the derivation grid of the loaded seed"),
@@ -82,6 +84,7 @@ HELP_TEXT = {
         ("ARCHIVE <текст>", "полнотекстовый поиск по делам"),
         ("RANDOM [12..24]", "сгенерировать новую сид-фразу"),
         ("COMPLETE <фраза ?>", "найти недостающее слово фразы (его место — ?)"),
+        ("NAMEFORGE <имя>", "отчеканить штамп: адрес, начинающийся с вашего имени"),
         ("ENTROPY <hex>", "собрать мнемонику из энтропии (32 hex-символа)"),
         ("DECRYPT <12 слов>", "проверить фразу и вывести адреса"),
         ("DERIVE", "повторить сетку деривации загруженного сида"),
@@ -117,6 +120,7 @@ HELP_TEXT = {
         ("ARCHIVE <texto>", "búsqueda de texto completo"),
         ("RANDOM [12..24]", "generar frase semilla aleatoria segura"),
         ("COMPLETE <frase ?>", "encontrar la palabra faltante (?)"),
+        ("NAMEFORGE <nombre>", "acuñar un sello: una dirección que empieza con tu nombre"),
         ("ENTROPY <hex>", "reconstruir mnemotécnica desde entropía"),
         ("DECRYPT <12 palabras>", "validar frase y derivar direcciones"),
         ("DERIVE", "imprimir cuadrícula de derivación"),
@@ -152,6 +156,7 @@ HELP_TEXT = {
         ("ARCHIVE <texto>", "busca de texto completo"),
         ("RANDOM [12..24]", "gerar frase semente aleatória segura"),
         ("COMPLETE <frase ?>", "encontrar a palavra que falta (?)"),
+        ("NAMEFORGE <nome>", "cunhar um selo: um endereço que começa com o seu nome"),
         ("ENTROPY <hex>", "reconstruir mnemônica a partir da entropia"),
         ("DECRYPT <12 palavras>", "validar frase e derivar endereços"),
         ("DERIVE", "imprimir grade de derivação"),
@@ -638,6 +643,81 @@ def cmd_random(s: Session, arg: str) -> None:
     _log(s, "random", f"{len(entropy) * 8}-bit phrase", detail=mnemonic,
          payload={"mnemonic": mnemonic})
     s.screen.info(f"RUN: DECRYPT {mnemonic}")
+
+
+def cmd_nameforge(s: Session, arg: str) -> None:
+    """Strike a named stamp: a real phrase whose first address carries a name."""
+    parts = arg.split()
+    if not parts:
+        s.screen.warn("USAGE: NAMEFORGE <name>  (2-6 base58 characters)")
+        return
+    try:
+        stamp = nameforge.validate(parts[0])
+    except nameforge.NameError_ as exc:
+        s.screen.error(str(exc))
+        return
+
+    s.screen.write()
+    s.screen.write("[FORGE] MEASURING THIS MACHINE...", "cyan")
+    rate = nameforge.measure_rate(1.0)
+    guess = nameforge.estimate(stamp, rate)
+
+    s.screen.kv("STAMP", "1" + stamp, value_styles=("green", "bold"))
+    s.screen.kv("RARITY", guess.tier, value_styles=("amber",))
+    s.screen.kv("EXPECTED", f"{guess.attempts:,.0f} candidates", value_styles=("cyan",))
+    s.screen.kv("SEARCHING", f"{guess.bits:.1f} bits", value_styles=("cyan",))
+    s.screen.kv("THIS MACHINE", f"{rate:.0f}/s — {nameforge.humanise(guess.seconds)}",
+                value_styles=("cyan",))
+
+    # The estimate is shown before the wait, never after. A name that costs
+    # hours is allowed — it is just never a surprise.
+    if guess.is_long:
+        s.screen.write()
+        s.screen.warn(
+            f"THIS WILL TAKE ABOUT {nameforge.humanise(guess.seconds).upper()}. "
+            "CTRL-C STOPS IT."
+        )
+        first = "1" + stamp[0]
+        s.screen.write(
+            f"        A SHORTER STAMP IS CHEAPER: {first}... IS "
+            f"{nameforge.humanise(nameforge.estimate(stamp[:2], rate).seconds).upper()}.",
+            "grey",
+        )
+    s.screen.write()
+
+    def tick(attempts: int, closest: str) -> None:
+        done = attempts / guess.attempts if guess.attempts else 0
+        s.screen.write(
+            f"  {attempts:>12,} tried  ({done * 100:5.1f}% of expected)   closest {closest[:12]}",
+            "dark",
+        )
+
+    try:
+        struck = nameforge.forge(stamp, on_progress=tick, progress_every=max(200, int(rate) * 5))
+    except KeyboardInterrupt:
+        s.screen.write()
+        s.screen.warn("FORGE STOPPED. NOTHING WAS STRUCK.")
+        return
+
+    if struck is None:
+        s.screen.warn("FORGE STOPPED. NOTHING WAS STRUCK.")
+        return
+
+    s.screen.write()
+    s.screen.rule()
+    s.screen.write(f"  STAMP STRUCK — {struck.tier}", "green", "bold")
+    s.screen.rule()
+    s.screen.kv("ADDRESS", struck.address, value_styles=("green", "bold"))
+    s.screen.kv("PATH", struck.path)
+    s.screen.kv("ATTEMPTS", f"{struck.attempts:,} in {struck.seconds:.1f}s")
+    s.screen.kv("SEARCHED", f"{struck.bits:.1f} bits")
+    s.screen.stream(f"{'MNEMONIC':<18}: {struck.mnemonic}", "green", "bold", cps=120)
+    s.screen.write()
+    s.screen.warn(REAL_WALLET.get(s.lang, REAL_WALLET["en"]))
+    _log(s, "forge", struck.address, status="ok",
+         detail=f"1{struck.stamp} — {struck.tier}, {struck.attempts:,} attempts",
+         payload={"mnemonic": struck.mnemonic, "stamp": struck.stamp})
+    s.screen.info(f"RUN: DECRYPT {struck.mnemonic}")
 
 
 def cmd_complete(s: Session, arg: str) -> None:
@@ -1202,6 +1282,7 @@ COMMANDS = {
     "ARCHIVE": cmd_archive,
     "RANDOM": cmd_random, "ROLL": cmd_random,
     "COMPLETE": cmd_complete, "FIND": cmd_complete,
+    "NAMEFORGE": cmd_nameforge, "FORGE": cmd_nameforge,
     "ENTROPY": cmd_entropy,
     "DECRYPT": cmd_decrypt,
     "DERIVE": cmd_derive,

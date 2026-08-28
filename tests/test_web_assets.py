@@ -313,7 +313,9 @@ def test_gui_text_dictionary_is_complete():
     assert len(entries) > 50, f"only found {len(entries)} keys — parser drifted"
     for key, body in entries:
         for lang in LANGS:
-            assert re.search(rf"\b{lang}:\s*'", body), f"T.{key} has no {lang}"
+            # Either quote style: a value containing an apostrophe — a
+            # derivation path, say — is legitimately double-quoted.
+            assert re.search(rf"\b{lang}:\s*['\"]", body), f"T.{key} has no {lang}"
 
 
 def test_the_real_wallet_warning_is_never_left_in_english():
@@ -348,7 +350,9 @@ def test_the_panel_digits_actually_do_something():
     nothing listened for them. The number moved into the row's title, so the
     handler has to exist or the tooltip is lying in its place."""
     app = strip_js_comments((DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8"))
-    assert "openByKey(digit)" in app
+    # Named for what it receives rather than for a digit: the eleventh row
+    # carries a letter, because there is no eleventh digit.
+    assert "openByKey(pressed)" in app
 
     main = strip_js_comments((DOCS / "js" / "main.js").read_text(encoding="utf-8"))
     assert "gui.openByKey(event.key)" in main

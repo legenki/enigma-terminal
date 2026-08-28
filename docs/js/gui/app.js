@@ -41,6 +41,14 @@ import { addressSigil, caseSigil, mnemonicSigil, sigil } from '../identicon.js';
 import { Journal, maskAddress, maskMnemonic, TOOLS } from '../journal.js';
 import { btc, classify, ExplorerClient } from '../mempool.js';
 import {
+  estimate as nfEstimate,
+  humanise as nfHumanise,
+  MAX_LENGTH as nfMaxLength,
+  preview as nfPreview,
+  validate as nfValidate,
+  workerCount as nfWorkerCount,
+} from '../nameforge.js';
+import {
   blockReward,
   formatHashrate,
   formatSpan,
@@ -133,6 +141,17 @@ export const PANELS = [
       pt: 'Aleatório',
     },
     key: '8',
+  },
+  {
+    id: 'forge',
+    glyph: 'award',
+    label: {
+      en: 'Nameforge',
+      es: 'Nameforge',
+      pt: 'Nameforge',
+      ru: 'Nameforge',
+    },
+    key: 'F',
   },
   {
     id: 'journal',
@@ -414,8 +433,12 @@ export class GuiApp {
    * has moved into the row's title, so the promise is kept now rather than
    * merely displayed.
    */
-  openByKey(digit) {
-    const panel = PANELS.find((entry) => entry.key === digit);
+  openByKey(pressed) {
+    // Case-folded: the digits are unambiguous but a letter arrives from
+    // event.key in whatever case the player pressed it, and 'f' would never
+    // have matched a panel keyed 'F'.
+    const wanted = String(pressed).toLowerCase();
+    const panel = PANELS.find((entry) => entry.key.toLowerCase() === wanted);
     if (!panel) return false;
     this.openSection(panel.id);
     return true;
@@ -452,6 +475,7 @@ export class GuiApp {
       explorer: () => this.buildExplorer(),
       archive: () => this.buildArchive(),
       random: () => this.buildRandom(),
+      forge: () => this.buildNameforge(),
       journal: () => this.buildJournal(),
       about: () => this.buildAbout(),
     }[key];
@@ -2798,6 +2822,279 @@ export class GuiApp {
       ),
     );
     return { node, api: { run: generate } };
+  }
+
+  // ---- nameforge ---------------------------------------------------------
+
+  /**
+   * Strike a named stamp: a real phrase whose first address carries a name.
+   *
+   * The estimate is shown before the search starts and never after. A name
+   * that costs hours is allowed to be attempted — the spec asks for that — but
+   * it is never a surprise, and the panel says how long in the same breath as
+   * it offers the button.
+   */
+  buildNameforge() {
+    const lang = this.lang;
+    const output = el('div', {});
+    const readout = el('div', { class: 'stack' });
+    let workers = [];
+    let attempts = 0;
+    let started = 0;
+    let ticker = null;
+    let rate = this.forgeRate || 120;
+
+    const input = el('input', {
+      class: 'field',
+      type: 'text',
+      maxlength: String(nfMaxLength),
+      placeholder: t('forgePlaceholder', lang),
+      spellcheck: 'false',
+      autocomplete: 'off',
+    });
+
+    const stopAll = () => {
+      for (const w of workers) {
+        w.postMessage({ type: 'stop' });
+        w.terminate();
+      }
+      workers = [];
+      if (ticker) clearInterval(ticker);
+      ticker = null;
+    };
+    this.stopForge = stopAll;
+
+    const paintEstimate = () => {
+      const checked = nfValidate(input.value);
+      if (checked.error === 'length') {
+        replace(
+          readout,
+          el('p', { class: 'hint-text', text: t('forgeLength', lang) }),
+        );
+        return null;
+      }
+      if (checked.error === 'alphabet') {
+        replace(
+          readout,
+          notice(
+            'warn',
+            t('forgeAlphabetTitle', lang),
+            tf('forgeAlphabetBody', lang, { chars: checked.bad.join(' ') }),
+          ),
+        );
+        return null;
+      }
+      const guess = nfEstimate(checked.stamp, rate);
+      replace(
+        readout,
+        kv([
+          [t('forgeStamp', lang), `1${checked.stamp}…`],
+          [t('forgeRarity', lang), guess.tier],
+          [
+            t('forgeExpected', lang),
+            `${Math.round(guess.attempts).toLocaleString('en-US').replace(/,/g, ' ')} ${t('forgeCandidates', lang)}`,
+          ],
+          [t('forgeSearched', lang), `${guess.bits.toFixed(1)} bits`],
+          [t('forgeOnThis', lang), nfHumanise(guess.seconds)],
+        ]),
+        guess.seconds > 900
+          ? notice(
+              'warn',
+              t('forgeLongTitle', lang),
+              tf('forgeLongBody', lang, { time: nfHumanise(guess.seconds) }),
+            )
+          : null,
+      );
+      return checked.stamp;
+    };
+
+    const start = () => {
+      const stamp = paintEstimate();
+      if (!stamp) return;
+      stopAll();
+      attempts = 0;
+      started = performance.now();
+      const guess = nfEstimate(stamp, rate);
+      const count = nfWorkerCount();
+
+      const bar = el('div', { class: 'meter' }, el('i', { style: 'width:0%' }));
+      const line = el('p', { class: 'hint-text', text: '' });
+      const stopButton = el('button', {
+        class: 'btn',
+        type: 'button',
+        text: t('forgeStop', lang),
+        onClick: () => {
+          stopAll();
+          line.textContent = t('forgeStopped', lang);
+        },
+      });
+      replace(
+        output,
+        el(
+          'div',
+          { class: 'row', style: 'margin-bottom:8px' },
+          el('span', {
+            class: 'section__meta',
+            text: tf('forgeWorkers', lang, { n: count }),
+          }),
+          stopButton,
+        ),
+        bar,
+        line,
+      );
+
+      let best = { score: -1, address: '' };
+      for (let i = 0; i < count; i++) {
+        const worker = new Worker('js/nameforge-worker.js', { type: 'module' });
+        worker.onmessage = (event) => {
+          const data = event.data;
+          if (data.type === 'progress') {
+            attempts += data.attempts;
+            if (data.closestScore > best.score)
+              best = { score: data.closestScore, address: data.closest };
+          } else if (data.type === 'hit') {
+            attempts += data.attempts;
+            stopAll();
+            this.showStamp(
+              output,
+              stamp,
+              data,
+              attempts,
+              (performance.now() - started) / 1000,
+            );
+          }
+        };
+        worker.postMessage({ type: 'search', stamp });
+        workers.push(worker);
+      }
+
+      ticker = setInterval(() => {
+        const elapsed = (performance.now() - started) / 1000;
+        if (elapsed > 2 && attempts > 0) rate = attempts / elapsed;
+        const share = Math.min(0.999, attempts / guess.attempts);
+        bar.firstChild.style.width = `${(share * 100).toFixed(1)}%`;
+        const left = Math.max(0, guess.attempts - attempts) / Math.max(rate, 1);
+        line.textContent = tf('forgeProgress', lang, {
+          tried: attempts.toLocaleString('en-US').replace(/,/g, ' '),
+          percent: (share * 100).toFixed(1),
+          left: nfHumanise(left),
+          closest: best.address ? best.address.slice(0, 10) : '—',
+        });
+      }, 400);
+    };
+
+    input.addEventListener('input', () => {
+      input.value = input.value.replace(/[^A-Za-z0-9]/g, '');
+      paintEstimate();
+    });
+
+    const node = el(
+      'div',
+      {},
+      section(t('forgeTitle', lang)),
+      el(
+        'div',
+        { class: 'stack' },
+        el('p', { class: 'prose', text: t('forgeIntro', lang) }),
+        el(
+          'div',
+          { class: 'row' },
+          input,
+          el('button', {
+            class: 'btn btn--primary',
+            type: 'button',
+            text: t('forgeStart', lang),
+            onClick: start,
+          }),
+        ),
+        readout,
+        output,
+        el('p', { class: 'hint-text', text: t('forgeHelp', lang) }),
+      ),
+    );
+    paintEstimate();
+    return { node, api: { run: start, stop: stopAll } };
+  }
+
+  /** The struck stamp, as an item card. */
+  showStamp(output, stamp, data, attempts, seconds) {
+    const lang = this.lang;
+    const wallet = deriveWallet(data.mnemonic);
+    this.wallet = wallet;
+    // Its own tool rather than the randomiser's: this phrase was searched for,
+    // not drawn, and the journal should say which. Storable in full for the
+    // same reason a generated phrase is — this page made it.
+    this.log('forge', data.address, {
+      status: 'ok',
+      detail: `1${stamp} · ${nfEstimate(stamp, 1).tier} · ${attempts.toLocaleString('en-US').replace(/,/g, ' ')} attempts`,
+      payload: { mnemonic: data.mnemonic, stamp },
+    });
+    const words = data.mnemonic.split(' ');
+    const guess = nfEstimate(stamp, 1);
+
+    let shown = false;
+    const wif = el('span', {
+      class: 'break',
+      text: '••••••••••••••••••••••••',
+    });
+    const reveal = el('button', {
+      class: 'btn',
+      type: 'button',
+      style: 'padding:1px 7px;font-size:10px',
+      text: t('forgeShow', lang),
+      onClick: (event) => {
+        shown = !shown;
+        wif.textContent = shown
+          ? wallet.primary.wif
+          : '••••••••••••••••••••••••';
+        event.currentTarget.textContent = t(
+          shown ? 'forgeHide' : 'forgeShow',
+          lang,
+        );
+      },
+    });
+
+    replace(
+      output,
+      notice('ok', t('forgeStruck', lang), nfPreview(data.address, stamp)),
+      kv([
+        [t('forgeAddress', lang), data.address],
+        [t('forgePath', lang), data.path],
+        [t('forgeRarity', lang), guess.tier],
+        [
+          t('forgeAttemptsTaken', lang),
+          `${attempts.toLocaleString('en-US').replace(/,/g, ' ')} · ${seconds.toFixed(1)}s`,
+        ],
+        [t('forgeSearched', lang), `${guess.bits.toFixed(1)} bits`],
+      ]),
+      el(
+        'div',
+        { class: 'row', style: 'margin:8px 0 4px' },
+        el('span', { class: 'section__meta', text: 'WIF' }),
+        reveal,
+        this.copyButton(wallet.primary.wif),
+      ),
+      el('div', { class: 'row', style: 'margin-bottom:10px' }, wif),
+      el(
+        'div',
+        { class: 'row', style: 'margin-bottom:8px' },
+        this.copyButton(data.mnemonic),
+        el('span', { class: 'section__meta', text: `${words.length} words` }),
+      ),
+      el(
+        'div',
+        { class: 'word-grid' },
+        ...words.map((word, index) =>
+          el(
+            'div',
+            { class: 'word' },
+            el('span', { class: 'word__n', text: String(index + 1) }),
+            el('span', { text: word }),
+          ),
+        ),
+      ),
+      notice('warn', t('realWalletTitle', lang), t('realWalletBody', lang)),
+    );
   }
 
   // ---- about ------------------------------------------------------------

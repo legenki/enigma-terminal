@@ -1,4 +1,4 @@
-// Fourteen icons from Feather (https://feathericons.com), MIT, © Cole Bemis.
+// Fifteen icons from Feather (https://feathericons.com), MIT, © Cole Bemis.
 // See LICENSE-feather beside this file.
 //
 // Only the paths are vendored, not the library: the interface needs a fixed
@@ -75,6 +75,13 @@ const ICONS = {
 	],
 	chevronDown: [["polyline", { points: "6 9 12 15 18 9" }]],
 	check: [["polyline", { points: "20 6 9 17 4 12" }]],
+	award: [
+		["circle", { cx: "12", cy: "8", r: "7" }],
+		[
+			"polyline",
+			{ points: "8.21 13.89 7 23 12 20 17 23 15.79 13.88" },
+		],
+	],
 	globe: [
 		["circle", { cx: 12, cy: 12, r: 10 }],
 		["line", { x1: 2, y1: 12, x2: 22, y2: 12 }],

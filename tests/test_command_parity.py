@@ -35,7 +35,7 @@ ROOT = Path(__file__).resolve().parent.parent
 LANGS = ("en", "ru", "es", "pt")
 
 #: Short forms and synonyms. Every other command has to be in HELP.
-ALIASES = {"?", "LS", "ROLL", "FIND", "SYNC", "QUIT", "EVIDENCE", "CLUES", "LOG"}
+ALIASES = {"?", "LS", "ROLL", "FIND", "SYNC", "QUIT", "EVIDENCE", "CLUES", "LOG", "FORGE"}
 
 
 @pytest.fixture(scope="module")
@@ -210,12 +210,27 @@ def test_every_builder_the_map_names_is_defined(web):
     )
 
 
-def test_the_digit_shortcuts_cover_the_sidebar(web):
-    """One digit per row, in order. The tenth row takes 0, the way a tenth tab
-    always does — there is no key between 9 and 10."""
+def test_the_sidebar_shortcuts_are_reachable_and_unique(web):
+    """Digits 1-9 then 0, in that order — the tenth row takes 0 the way a tenth
+    tab always does, because there is no key between 9 and 10.
+
+    There are eleven rows now and only ten digits, so one row carries a letter.
+    It may sit anywhere: what must hold is that the digits keep their order, so
+    a row added in the middle never renumbers the rows a player already knows.
+    A lettered key has to be a single character, because `openByKey` is handed
+    one `event.key` and compares the whole of it, and every key has to be
+    unique once folded or two rows answer the same press.
+    """
     keys = web["panelKeys"]
-    assert len(keys) <= 10, f"{len(keys)} panels, and only ten digits to reach them"
-    expected = [str(n) for n in range(1, min(len(keys), 9) + 1)]
-    if len(keys) == 10:
+    digits = [k for k in keys if k.isdigit()]
+    expected = [str(n) for n in range(1, min(len(digits), 9) + 1)]
+    if len(digits) == 10:
         expected.append("0")
-    assert keys == expected, f"the sidebar digits are not in order: {keys}"
+    assert digits == expected, f"the sidebar digits are not in order: {digits}"
+
+    for key in keys:
+        assert len(key) == 1, f"a shortcut must be one character, got {key!r}"
+        assert key.isdigit() or key.isalpha(), f"odd shortcut: {key!r}"
+
+    folded = [k.lower() for k in keys]
+    assert len(set(folded)) == len(folded), f"two rows answer the same key: {keys}"

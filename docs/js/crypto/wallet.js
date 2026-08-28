@@ -25,13 +25,7 @@ const uint32 = (value) => {
 const HARDENED = 0x80000000;
 
 export class ExtendedKey {
-  constructor(
-    key,
-    chainCode,
-    depth = 0,
-    parent = null,
-    childNumber = 0,
-  ) {
+  constructor(key, chainCode, depth = 0, parent = null, childNumber = 0) {
     this.key = key;
     this.chainCode = chainCode;
     this.depth = depth;
@@ -54,7 +48,8 @@ export class ExtendedKey {
   }
 
   get fingerprint() {
-    if (!this._fingerprint) this._fingerprint = hash160(this.publicKey).subarray(0, 4);
+    if (!this._fingerprint)
+      this._fingerprint = hash160(this.publicKey).subarray(0, 4);
     return this._fingerprint;
   }
 

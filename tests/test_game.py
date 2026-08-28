@@ -370,6 +370,14 @@ def test_every_tool_writes_to_the_journal(session, capsys, monkeypatch):
     )
     session.chain.offline = False
 
+    # Nameforge really searches, and a real search is seconds of arithmetic
+    # even for the cheapest stamp. The command's own behaviour is what is
+    # under test here, not the loop it drives, so the first candidate hits.
+    from enigma_terminal import nameforge
+    struck = "1An" + "z" * 31
+    monkeypatch.setattr(nameforge, "candidate", lambda: (SOLUTIONS[5], struck))
+    monkeypatch.setattr(nameforge, "measure_rate", lambda seconds=1.0: 100.0)
+
     missing_word = " ".join(SOLUTIONS[5].split()[:-1] + ["?"])
     run(session,
         "SEARCH ozo",
@@ -381,7 +389,8 @@ def test_every_tool_writes_to_the_journal(session, capsys, monkeypatch):
         "SWEEP",
         "TXLOG",
         "OPEN 1",
-        "HINT")
+        "HINT",
+        "NAMEFORGE An")
     capsys.readouterr()
 
     tools = {entry.tool for entry in session.journal}

@@ -67,6 +67,15 @@ export const TOOLS = {
     },
     glyph: '⚄',
   },
+  forge: {
+    label: {
+      en: 'Nameforge',
+      ru: 'Nameforge',
+      es: 'Nameforge',
+      pt: 'Nameforge',
+    },
+    glyph: '✦',
+  },
   case: {
     label: { en: 'Case', ru: 'Дело', es: 'Caso', pt: 'Caso' },
     glyph: '★',

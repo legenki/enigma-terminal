@@ -85,6 +85,7 @@ its digit:
 | **6** | Explorer | the live chain: blocks, transactions, addresses, mempool |
 | **7** | Archive | full-text search across the case files |
 | **8** | Randomizer | a fresh phrase from real entropy |
+| **F** | Nameforge | strike a stamp: an address that starts with your name |
 | **9** | Journal | every move you have made, filterable and replayable |
 | **0** | About | what the program actually does |
 
@@ -162,6 +163,7 @@ a second design living inside the first.
 | `DECRYPT <12 words>` | validate a phrase and derive its addresses |
 | `DERIVE` | re-print the derivation grid |
 | `COMPLETE <phrase ?>` | recover the one missing word by checksum |
+| `NAMEFORGE <name>` | strike a stamp: an address beginning `1` + your name |
 | `RANDOM [12..24]` | generate a fresh phrase from secure randomness |
 | `SYNC_LEDGER [addr]` | live balance from the Bitcoin network |
 | `SWEEP` | check all three derived addresses at once |
@@ -178,7 +180,8 @@ a second design living inside the first.
 | `CLEAR` / `RESET` / `EXIT` | wipe the screen / erase progress / close |
 
 Short forms exist where they help: `?` for `HELP`, `LS` for `CASES`, `ROLL` for `RANDOM`,
-`FIND` for `COMPLETE`, `SYNC` for `SYNC_LEDGER`, `LOG` for `JOURNAL`, `QUIT` for `EXIT`.
+`FIND` for `COMPLETE`, `SYNC` for `SYNC_LEDGER`, `LOG` for `JOURNAL`, `QUIT` for `EXIT`,
+`FORGE` for `NAMEFORGE`.
 
 Progress persists: `~/.enigma_terminal/progress.json` in the terminal build (override the
 directory with `ENIGMA_TERMINAL_HOME`), `localStorage` in the browser.
@@ -325,6 +328,14 @@ fingerprint and checks what the player typed against it.
   from a phrase you already know and reads public blockchain data.
 * The web build computes everything in your browser. The only thing that leaves the page
   is an address lookup, and it contains nothing but the address.
+* **Nameforge** strikes a named stamp: a real twelve-word phrase whose first legacy
+  address begins `1` and then your name. Difficulty is never `58^n`, because the character
+  straight after the `1` is nowhere near uniform — twenty-two of them land about 4.3% of
+  the time and the other thirty-four about 0.075%. `1Rob` therefore costs about what
+  `1Andy` costs. The distribution is measured rather than assumed
+  (`data/nameforge.json`, 2 million samples), and every estimate the tool shows is
+  computed from it for the actual name. Long names are allowed and the wait is stated
+  before the search starts, never after.
 * `COMPLETE` recovers exactly one unknown word, and that limit is deliberate rather than
   unfinished: with two gaps, hundreds of thousands of phrases remain valid and the list
   stops meaning anything. The tool helps you recover a phrase you almost have; it does not
@@ -338,6 +349,7 @@ fingerprint and checks what the player typed against it.
 data/                      one source of truth for both builds
   cases.json               the eight hand-written campaign cases
   openings.json            sixteen openings and the live figures they are written around
+  nameforge.json           the measured leading-character distribution Nameforge prices by
   clients.json             eight employers: voice, district, handwriting, name pools
   contracts.json           256 generated contracts (+ their solution specs)
   english.txt              the official BIP-39 wordlist (sha256 2f5eed53…)
@@ -371,19 +383,22 @@ docs/                      the web build; GitHub Pages publishes from here
   js/pow.js                subsidy, halving and retarget, derived from the height
   js/storage.js            the one place that talks to localStorage
   js/opening.js            picks an opening the live figures can actually fill
+  js/nameforge.js          what a stamp costs, measured rather than assumed
+  js/nameforge-worker.js   one searcher, off the main thread, native PBKDF2
   js/vendor/               minidenticons and Feather (MIT), with their licences
 tools/generate_cases.py    builds the 256-contract board
 tools/build_web_data.py    generates the web build's data from data/
+tools/measure_leading.mjs  re-measures the distribution behind nameforge.json
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
-tests/                     418 tests, including the Python ↔ JavaScript diff
+tests/                     460 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
 pip install -e ".[dev]"
-python -m pytest tests -v          # 418 tests
+python -m pytest tests -v          # 460 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 

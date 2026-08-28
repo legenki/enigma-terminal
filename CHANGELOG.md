@@ -13,6 +13,58 @@ Cutting a release is: bump those three, write the entry below, then push a tag
 refuses a tag that does not match the declared version and takes the published
 notes from the entry, so the tag, the code and these notes cannot drift apart.
 
+## 2.1.0
+
+**Nameforge** — a new tool on the desk and a new terminal command. Pick a short
+name and it searches for a real twelve-word phrase whose first legacy address
+begins `1` and then that name. The phrase is real and the address is real; the
+resemblance to a name is the only cosmetic part.
+
+### Difficulty is measured, not assumed
+
+The obvious model for this is `58^n` and it is wrong. The character straight
+after the leading `1` is nowhere near uniform: twenty-two of them land about
+4.3% of the time and the other thirty-four about 0.075%, a spread of roughly
+sixty. Measured over two million addresses, kept in `data/nameforge.json`.
+
+What follows from it:
+
+- `1Rob` costs about what `1Andy` costs — one character shorter, one much rarer
+  letter — so rarity is computed per name and never from its length.
+- Every figure the tool shows is derived from that measurement and from a speed
+  it measures on the device in front of it, not from a table.
+- The wait is stated before the search starts, never after. Long names are
+  allowed to run; they are simply never a surprise.
+
+### How it runs
+
+- A worker pool off the main thread, one per core less one, with a progress
+  bar, a live estimate of what is left, the closest near-miss so far and a stop
+  button.
+- PBKDF2 goes through WebCrypto in the worker: the same 2048 rounds and
+  byte-for-byte the same seed, about forty times faster because it is native.
+- Entropy comes from `crypto.getRandomValues`, never `Math.random`, and there is
+  a test that reads the worker with its comments stripped to make sure.
+- Matching is case-sensitive, because Base58 is. Base58 also has no `0`, `O`,
+  `I` or `l`, so a name carrying one is refused rather than searched for
+  forever — though normalising rescues `lex` and `AnO`, whose only problem was
+  their case.
+
+### Faster derivation, everywhere
+
+`child()` computed a BIP-32 fingerprint at every level, and a fingerprint is a
+point multiplication. Only xprv serialisation ever reads one, so the address
+path was doing six multiplications where three suffice — on every DECRYPT, in
+both builds. Nodes now hold their parent and resolve it on demand: 85 to 149
+candidates a second in the browser, 19 to 50 in the terminal.
+
+### Also
+
+- The sidebar has eleven rows and there are ten digits, so Nameforge answers
+  **F**. The digits keep their order, so nothing a player already knew moved.
+- Case completeness in `tests/test_cases.py` was checked in two of the four
+  shipped languages; the tuple driving it still read `("ru", "en")`.
+
 ## 2.0.0
 
 The world moves to the present, and the game opens differently every time.
