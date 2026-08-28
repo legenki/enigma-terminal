@@ -1405,16 +1405,54 @@ export class GuiApp {
           style: 'cursor:pointer;margin:8px 0',
           text: t('keysAndSeed', this.lang),
         }),
-        kv([
-          ['BIP39 SEED', wallet.seed],
-          ['MASTER XPRV', wallet.masterXprv],
-          ...wallet.addresses.map((e) => [
-            `PUBKEY m/${e.purpose}'`,
-            e.publicKey,
-          ]),
-        ]),
+        // The seed and the master xprv each derive every key this wallet will
+        // ever have, so they are the two lines worth the extra press. The
+        // public keys below them give nothing away and stay as they were.
+        el(
+          'dl',
+          { class: 'kv' },
+          ...this.secretRow('BIP39 SEED', wallet.seed),
+          ...this.secretRow('MASTER XPRV', wallet.masterXprv),
+        ),
+        kv(
+          wallet.addresses.map((e) => [`PUBKEY m/${e.purpose}'`, e.publicKey]),
+        ),
+        el('p', { class: 'hint-text', text: t('rootKeyWarning', this.lang) }),
       ),
     );
+  }
+
+  /**
+   * One key that is worth hiding until it is asked for.
+   *
+   * The game says never to type a real phrase into it, and players do anyway.
+   * A root key sitting open in the panel is one screenshot away from being
+   * somebody else's, so it is dotted out like Nameforge's WIF and revealed on
+   * request — by the person who already knows what they typed.
+   */
+  secretRow(label, value) {
+    const lang = this.lang;
+    const hidden = '•'.repeat(48);
+    let shown = false;
+    const field = el('span', { class: 'break', text: hidden });
+    const toggle = el('button', {
+      class: 'btn',
+      type: 'button',
+      style: 'padding:1px 7px;font-size:10px;margin-left:6px',
+      text: t('revealKey', lang),
+      onClick: (event) => {
+        shown = !shown;
+        field.textContent = shown ? value : hidden;
+        event.currentTarget.textContent = t(
+          shown ? 'hideKey' : 'revealKey',
+          lang,
+        );
+      },
+    });
+    return [
+      el('dt', { text: label }),
+      el('dd', { class: 'break' }, field, toggle),
+    ];
   }
 
   copyButton(value) {

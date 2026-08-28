@@ -76,6 +76,24 @@ export const T = {
     pt: 'Mesmo sem importar maiúsculas, nenhum endereço pode levar: {chars}. Só o 0 não existe de forma alguma — o, i e L servem.',
     ru: 'Даже при свободном регистре ни один адрес не несёт: {chars}. Совсем нет только 0 — o, i и L вполне годятся.',
   },
+  revealKey: {
+    en: 'Reveal',
+    es: 'Mostrar',
+    pt: 'Mostrar',
+    ru: 'Показать',
+  },
+  hideKey: {
+    en: 'Hide',
+    es: 'Ocultar',
+    pt: 'Ocultar',
+    ru: 'Скрыть',
+  },
+  rootKeyWarning: {
+    en: 'The seed and the master key derive every address this wallet will ever have. Anyone who reads them owns the wallet — including whoever is looking at your screen.',
+    es: 'La semilla y la clave maestra derivan todas las direcciones que esta cartera tendrá. Quien las lea es dueño de la cartera — incluido quien esté mirando tu pantalla.',
+    pt: 'A semente e a chave mestra derivam todos os endereços que esta carteira terá. Quem as ler é dono da carteira — inclusive quem estiver olhando a sua tela.',
+    ru: 'Сид и мастер-ключ выводят все адреса, какие у этого кошелька когда-либо будут. Кто их прочитал — владеет кошельком, включая того, кто смотрит вам в экран.',
+  },
   forgeCase: {
     en: 'Case',
     es: 'Mayúsculas',

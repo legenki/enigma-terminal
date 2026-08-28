@@ -15,6 +15,22 @@ notes from the entry, so the tag, the code and these notes cannot drift apart.
 
 ## 3.0.0
 
+### A root key is no longer printed in full
+
+The seed and the master xprv each derive every key a wallet will ever have. The
+panel laid both out in plain text, and the terminal printed the xprv whole
+while truncating the seed beside it — the wrong way round, if either.
+
+The game tells players never to type a real phrase into it, and players do it
+anyway. A root key sitting open on screen is one screenshot away from being
+somebody else's. Both are dotted out behind a **reveal** in the panel now, the
+way Nameforge already treats a WIF, and truncated in the terminal, where there
+is no button to press and the scrollback is the hazard. A line under them says
+plainly what they are.
+
+Removing the Python build closed the same hole on that side by deleting the
+code that printed it; this closes it where it still matters.
+
 The Python terminal is gone. The game is the browser build, and nothing else.
 
 **Major, because a way of playing was removed.** `pip install enigma-terminal`

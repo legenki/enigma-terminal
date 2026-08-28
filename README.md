@@ -384,7 +384,7 @@ tools/measure_leading.mjs  re-measures the distribution behind nameforge.json
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
 tools/smoke_web.mjs        opens the page in a browser and presses the buttons
-tests/                     362 tests, including the Python ↔ JavaScript diff
+tests/                     363 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
@@ -394,7 +394,7 @@ generator and the reference implementation; it is not a runtime.
 
 ```bash
 pip install -e ".[dev]"            # pytest, ruff, mypy and the reference libraries
-python -m pytest tests -v          # 362 tests
+python -m pytest tests -v          # 363 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 

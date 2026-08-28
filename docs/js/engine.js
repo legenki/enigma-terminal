@@ -339,6 +339,12 @@ const ABOUT = {
 };
 
 const TEXT = {
+  rootKeyTruncated: {
+    en: '                  ^ both truncated on purpose: either one derives the whole wallet',
+    ru: '                  ^ оба обрезаны намеренно: любой из них выводит весь кошелёк',
+    es: '                  ^ ambos truncados a propósito: cualquiera deriva toda la cartera',
+    pt: '                  ^ ambos truncados de propósito: qualquer um deriva a carteira toda',
+  },
   noCase: {
     en: 'NO ACTIVE CASE. RUN: CASES, THEN OPEN <id>',
     ru: 'НЕТ АКТИВНОГО ДЕЛА. ВЫПОЛНИ: CASES, ЗАТЕМ OPEN <id>',
@@ -1234,13 +1240,18 @@ export class Engine {
   printDerivation(wallet) {
     const term = this.term;
     term.rule('=');
+    // Both of these derive every key the wallet will ever have. The seed was
+    // already cut in half; the master xprv was not, and printing a root key in
+    // full into scrollback that gets screenshotted is the worse of the two.
+    // Enough of each to show the shape of the chain, and no more.
+    term.keyValue('BIP39 SEED', `${wallet.seed.slice(0, 32)}…`, 'grey', 'dim');
     term.keyValue(
-      'BIP39 SEED',
-      `${wallet.seed.slice(0, 64)}...`,
+      'MASTER XPRV',
+      `${wallet.masterXprv.slice(0, 20)}…`,
       'grey',
       'dim',
     );
-    term.keyValue('MASTER XPRV', wallet.masterXprv, 'grey', 'dim');
+    term.print([{ text: this.t('rootKeyTruncated'), style: 'grey' }]);
     term.rule('-');
     for (const entry of wallet.addresses) {
       term.print([

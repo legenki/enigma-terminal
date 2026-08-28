@@ -164,6 +164,30 @@ def test_page_makes_no_third_party_requests():
 
 # --- identicons ------------------------------------------------------------
 
+def test_a_root_key_is_never_printed_in_full():
+    """The seed and the master xprv each derive every key the wallet will have.
+
+    The panel used to lay both out in plain text, and the terminal printed the
+    xprv in full while truncating the seed beside it — the wrong way round, if
+    either. The game tells players never to type a real phrase into it and they
+    do anyway, so a root key on screen is one screenshot from being somebody
+    else's. Both are dotted out behind a reveal in the panel and truncated in
+    the terminal.
+    """
+    app = strip_js_comments((DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8"))
+    for line in app.splitlines():
+        if "wallet.seed" in line or "wallet.masterXprv" in line:
+            # It may reach the page only through the row that hides it.
+            assert "secretRow" in line or "slice(" in line, \
+                f"a root key reaches the panel unguarded: {line.strip()}"
+    assert "secretRow(label, value)" in app, "the row that hides a root key is gone"
+
+    engine = strip_js_comments((DOCS / "js" / "engine.js").read_text(encoding="utf-8"))
+    for line in engine.splitlines():
+        if "wallet.masterXprv" in line or "wallet.seed" in line:
+            assert "slice(" in line, f"a root key is printed whole: {line.strip()}"
+
+
 def test_sigils_are_keyed_by_fingerprint_not_by_words():
     """A phrase must never be used as an identicon seed — that is a leak path."""
     source = strip_js_comments((DOCS / "js" / "identicon.js").read_text())
