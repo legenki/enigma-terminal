@@ -11,6 +11,8 @@ from __future__ import annotations
 import json
 import random
 import re
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -109,48 +111,46 @@ def test_grouping_matches_how_the_game_prints_numbers():
     assert op.group("not a number") == ""
 
 
-def test_figures_are_never_read_in_offline_mode():
-    """--offline promises no network call; the opening must not be the leak."""
+def _js_figures(stub: str) -> dict:
+    """Run the browser's own figure reader against a stubbed explorer.
 
-    class Exploding:
-        offline = True
+    This used to drive a Python mirror of the same function. The mirror served
+    a client that no longer exists, so the rules below are checked against the
+    implementation that actually opens the game.
+    """
+    if shutil.which("node") is None:
+        pytest.skip("node is required to run the browser's opening")
+    script = """
+      const { figuresFromChain } = await import('./docs/js/opening.js');
+      const explorer = STUB;
+      console.log(JSON.stringify(await figuresFromChain(explorer)));
+    """.replace("STUB", stub)
+    done = subprocess.run(
+        ["node", "--input-type=module", "-e", script],
+        cwd=ROOT, capture_output=True, text=True, timeout=120,
+    )
+    assert done.returncode == 0, done.stderr
+    return json.loads(done.stdout)
 
-        def __getattr__(self, name):
-            raise AssertionError(f"offline session called {name}")
 
-    assert op.figures_from_chain(Exploding()) == {}
-    assert op.figures_from_chain(None) == {}
+def test_no_explorer_means_no_figures_and_no_calls():
+    """An opening must never be the thing that reaches the network anyway."""
+    assert _js_figures("null") == {}
 
 
 def test_one_failing_endpoint_does_not_cost_the_others():
     """Each figure is fetched on its own so a rate limit narrows, not empties."""
-
-    class HalfDown:
-        offline = False
-
-        def price_usd(self):
-            raise TimeoutError("rate limited")
-
-        def chain_tip(self):
-            return {"height": 964268, "extras": {"pool": {"name": "Braiins Pool"}}}
-
-        def best_fee(self):
-            raise ConnectionError("down")
-
-        def mempool_count(self):
-            return 86587
-
-        def top_pool(self):
-            raise ValueError("malformed")
-
-        def days_to_halving(self):
-            return 595
-
-    figures = op.figures_from_chain(HalfDown())
+    figures = _js_figures("""{
+      tip: async () => ({ height: 964268, extras: { pool: { name: 'Braiins Pool' } } }),
+      prices: async () => { throw new Error('rate limited'); },
+      fees: async () => { throw new Error('down'); },
+      mempool: async () => ({ count: 86587 }),
+      pools: async () => { throw new Error('malformed'); },
+    }""")
     assert figures["height"] == "964 268"
     assert figures["pool"] == "Braiins Pool"
     assert figures["mempool"] == "86 587"
-    assert figures["halvingDays"] == "595"
+    assert figures["halvingDays"]
     assert "price" not in figures and "fee" not in figures
     assert op.available(figures), "a half-down chain left no opening standing"
 

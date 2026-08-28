@@ -13,6 +13,73 @@ Cutting a release is: bump those three, write the entry below, then push a tag
 refuses a tag that does not match the declared version and takes the published
 notes from the entry, so the tag, the code and these notes cannot drift apart.
 
+## 3.0.0
+
+The Python terminal is gone. The game is the browser build, and nothing else.
+
+**Major, because a way of playing was removed.** `pip install enigma-terminal`
+and `python -m enigma_terminal` no longer exist. Saves kept by the terminal in
+`~/.enigma_terminal/` are not read by anything any more; the browser has always
+kept its own, in `localStorage`, and that one is untouched.
+
+### Why
+
+Two builds had to stay at parity on commands, state and network behaviour, and
+the terminal lost on all three: no canvas, no caching, no proof-of-work check.
+The parity itself was most of the cost, and it was being paid to keep the
+weaker of the two alive.
+
+Removed: `game.py`, `ui.py`, `chain.py`, `journal.py`, `store.py`,
+`__main__.py`, the `enigma-terminal` console script, the packaged `data/`, the
+`requests` dependency, and the CI step that played a game through the console.
+
+### Python stays, as the two things it is better at
+
+- **The generator.** `data/` is still the source of truth, and `tools/` still
+  builds the web build's data from it, including the 256-contract board whose
+  answers are derived rather than written down.
+- **The reference.** `crypto_engine.py` is a second, independent
+  implementation of BIP-39/32/44/49/84, and the parity test still runs the
+  JavaScript under Node and diffs every field against it. "Bit-for-bit
+  identical" remains a test result rather than a claim.
+
+`cases.py` keeps `Case` and `Campaign` and loses `Progress`, which was on-disk
+session state for a client that no longer exists. `nameforge.py` loses
+`measure_rate`, which timed the Python machine for the Python interface.
+`openings.py` loses `figures_from_chain`, which took a chain client.
+
+### What the deletion was not allowed to take with it
+
+Dropping a file is easy; dropping the checks inside it is the part that goes
+unnoticed. Three of them were about the browser all along and have been kept,
+pointed at the build that ships:
+
+- `test_command_parity.py` is now `test_web_commands.py`. Ten of its checks
+  were browser-only — and all three bugs its docstring names were browser bugs:
+  `OPEN` unable to reach a contract `CASES` listed, three commands in `HELP`
+  wired to methods nobody wrote, and `this.log(...)` on an `Engine` that had no
+  `log`. Deleting the file would have deleted those.
+- The journal's vocabulary is read off `docs/js/journal.js` instead of a Python
+  copy, and the README's command table is checked against what the browser
+  actually dispatches. Both were comparisons against Python lists that only
+  existed to be compared against.
+- The openings' "one failing endpoint must not cost the others" rule now runs
+  the browser's own `figuresFromChain` against a half-down explorer, rather
+  than a Python mirror of it.
+
+### And one bug it uncovered
+
+`Progress.load` in Python had a guard against a save that is valid JSON of the
+wrong *shape* — `{"solved": 5}` — and a test for it. The browser's
+`ProgressStore.read` did not: `parsed.solved || []` passes a number straight
+through, and the first `solved.includes(...)` takes the whole interface down.
+Broken JSON was handled; JSON that parsed into the wrong type was not.
+
+Every field is now checked for the shape it is used as, and the test moved to
+`core.js` rather than being deleted with the Python one. A hand-edited save is
+a fresh save, never a stack trace — which is what the Python side had said all
+along.
+
 ## 2.3.0
 
 ### Nameforge asks which case you meant

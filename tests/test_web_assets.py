@@ -7,12 +7,16 @@ That happened once during development, so it is guarded here.
 
 from __future__ import annotations
 
+import json
 import re
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
 
-DOCS = Path(__file__).resolve().parent.parent / "docs"
+ROOT = Path(__file__).resolve().parent.parent
+DOCS = ROOT / "docs"
 
 CSS_FILES = sorted(DOCS.glob("css/*.css"))
 JS_FILES = sorted(DOCS.rglob("js/**/*.js"))
@@ -90,6 +94,21 @@ def journal_tools_written_by(path):
     return tools
 
 
+def journal_tools_declared():
+    """The vocabulary the shipped journal defines.
+
+    Read off `docs/js/journal.js` rather than a Python copy of the same list.
+    There used to be a copy, in a module that served the Python terminal; with
+    that gone, a second list would only be a second thing to forget to update.
+    """
+    source = (DOCS / "js" / "journal.js").read_text(encoding="utf-8")
+    start = source.index("export const TOOLS = {")
+    block = source[start:source.index("\n};", start)]
+    tools = set(re.findall(r"^  (\w+): \{", block, re.MULTILINE))
+    assert len(tools) > 5, f"only found {sorted(tools)} — the parser drifted"
+    return tools
+
+
 @pytest.mark.parametrize("module", ["js/engine.js", "js/gui/app.js"],
                          ids=["command-line", "gui"])
 def test_every_journal_tool_is_recorded(module):
@@ -99,10 +118,8 @@ def test_every_journal_tool_is_recorded(module):
     silently failed to log wordlist searches because a patch matched nothing,
     and nothing in the suite noticed.
     """
-    from enigma_terminal.journal import TOOLS
-
     recorded = journal_tools_written_by(DOCS / module)
-    missing = set(TOOLS) - recorded
+    missing = journal_tools_declared() - recorded
     assert not missing, f"{module} never journals: {sorted(missing)}"
 
 
@@ -303,6 +320,49 @@ def test_the_language_switcher_offers_every_shipped_language():
     # needs to pick it.
     for endonym in ("Русский", "English", "Español", "Português"):
         assert endonym in core, f"core.js has no endonym for {endonym}"
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node runs the store")
+@pytest.mark.parametrize(
+    "body",
+    ["[]", "null", '"hello"', "42", "{}", '{"solved": 5}', '{"taken": 5}',
+     '{"hints": [1, 2]}', '{"solved": ["x", 3], "taken": [9]}'],
+)
+def test_a_hand_edited_save_is_a_fresh_save_not_a_stack_trace(body):
+    """Broken JSON was always handled; JSON that parses into the wrong *type*
+    was not. `{"solved": 5}` survived the guard and reached `.includes(...)` on
+    the first render, which takes the whole interface down.
+
+    The Python build had this guard and a test for it. That build is gone, and
+    the rule belongs to whatever actually reads the save — so it is checked
+    here, against the store the browser ships.
+    """
+    script = """
+      const { ProgressStore } = await import('./docs/js/core.js');
+      globalThis.localStorage = {
+        _v: BODY,
+        getItem(k) { return this._v; },
+        setItem() {}, removeItem() {},
+      };
+      const data = ProgressStore.read();
+      // Every field has to survive the use it is actually put to.
+      data.solved.includes(1);
+      data.taken.includes(1);
+      Object.keys(data.hints);
+      console.log(JSON.stringify(data));
+    """.replace("BODY", json.dumps(body))
+    done = subprocess.run(
+        ["node", "--input-type=module", "-e", script],
+        cwd=ROOT, capture_output=True, text=True, timeout=120,
+    )
+    assert done.returncode == 0, f"a save of {body} broke the store:\n{done.stderr}"
+    data = json.loads(done.stdout)
+    assert isinstance(data["solved"], list)
+    assert isinstance(data["taken"], list)
+    assert isinstance(data["hints"], dict)
+    # One unreadable id is not a reason to throw the whole save away.
+    if body == '{"solved": ["x", 3], "taken": [9]}':
+        assert data["solved"] == [3] and data["taken"] == [9]
 
 
 def test_gui_text_dictionary_is_complete():
@@ -520,19 +580,19 @@ def test_the_title_no_longer_carries_the_specification_it_implements():
     assert not named, f"these still title the game with the spec: {named}"
 
 
-def test_both_builds_encode_an_address_before_it_reaches_a_url():
-    """The web build puts the explorer URL in an href, so an unencoded address
-    misdirects a link as well as a request. Python and JavaScript have to make
-    the same decision, as they do everywhere else."""
-    web = strip_js_comments((DOCS / "js" / "chain.js").read_text(encoding="utf-8"))
-    python = (DOCS.parent / "enigma_terminal" / "chain.py").read_text(encoding="utf-8")
+def test_an_address_is_encoded_before_it_reaches_a_url():
+    """The explorer URL goes into an href as well as a request, so an unencoded
+    address misdirects a link the player clicks, not just a fetch.
 
-    for source, raw, encoder in ((web, "${a}", "pathSafe"), (python, "{a}", "_path_safe")):
-        builders = re.findall(r"(?:address_?[Pp]ath|txs_?[Pp]ath|explorer(?:_url)?)[:=].*", source)
-        assert builders, "the URL builders moved"
-        for line in builders:
-            if raw in line or "{addr}" in line:
-                assert encoder in line, f"an address reaches a URL unencoded: {line.strip()}"
+    This used to check the same rule in two builds. There is one now, and the
+    rule is the browser's — where it matters more, because only the browser
+    renders the result as something clickable."""
+    web = strip_js_comments((DOCS / "js" / "chain.js").read_text(encoding="utf-8"))
+    builders = re.findall(r"(?:address_?[Pp]ath|txs_?[Pp]ath|explorer(?:_url)?)[:=].*", web)
+    assert builders, "the URL builders moved"
+    for line in builders:
+        if "${a}" in line or "{addr}" in line:
+            assert "pathSafe" in line, f"an address reaches a URL unencoded: {line.strip()}"
 
 
 def test_only_storage_js_touches_local_storage():

@@ -79,14 +79,18 @@ def test_single_word_recovery_matches_between_builds(js_results):
         assert js_results["completions"][label]["words"] == matches
 
 
-def test_journal_surface_matches_between_builds(js_results):
-    """Both front-ends write the same journal, so the vocabulary must match."""
-    from enigma_terminal.journal import TOOLS, mask_mnemonic
+def test_the_journal_masks_a_phrase_it_does_not_recognise(js_results):
+    """The one line standing between a pasted wallet and a file on disk.
 
-    assert js_results["journal"]["tools"] == list(TOOLS)
-    assert js_results["journal"]["masked"] == mask_mnemonic(
-        "absurd avoid scissors anxiety gather lottery category door army half long camera"
-    )
+    This used to compare the browser's masking against a Python implementation
+    of the same rule. There is one implementation now, so the expected form is
+    written out here instead — which is the stricter check of the two: a change
+    to the rule can no longer be waved through by changing both sides at once.
+    """
+    assert js_results["journal"]["masked"] == "absurd … camera (12 words)"
+    words = "absurd avoid scissors anxiety gather lottery category door army half long camera"
+    for word in words.split()[1:-1]:
+        assert word not in js_results["journal"]["masked"], f"{word} survived masking"
 
 
 def test_sigils_are_stable_and_distinct(js_results):

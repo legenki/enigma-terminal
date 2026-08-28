@@ -4,24 +4,26 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "enigma-terminal"
-version = "2.3.0"
-description = "ENIGMA TERMINAL — a cyberpunk detective quest over the live Bitcoin network"
+version = "3.0.0"
+description = "Build tooling and reference cryptography for ENIGMA TERMINAL, a browser game"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 keywords = ["bitcoin", "bip39", "bip32", "game", "terminal", "cyberpunk"]
 classifiers = [
-  "Development Status :: 4 - Beta",
-  "Environment :: Console",
-  "Intended Audience :: End Users/Desktop",
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
-  "Topic :: Games/Entertainment :: Puzzle Games",
+  "Topic :: Software Development :: Build Tools",
 ]
 dependencies = []
 
+# Not a package anyone installs. The game is the browser build in `docs/`;
+# this file exists so `uv` can put the generator's and the test suite's
+# dependencies on a contributor's machine. There is no console script and no
+# packaged data, because there is nothing to install.
 [project.optional-dependencies]
-net = ["requests>=2.31"]
 # The linters carry upper bounds and the rest do not, on purpose. A new pytest
 # or reference implementation failing is a real signal; a new ruff or mypy
 # failing is usually just a new rule, and an unpinned linter turns any upstream
@@ -29,16 +31,11 @@ net = ["requests>=2.31"]
 # RUF100 broke this one.
 dev = [
   "pytest>=8.0",
-  "requests>=2.31",
   "mnemonic>=0.20",
   "bip-utils>=2.9",
   "ruff>=0.15.8,<0.16",
   "mypy>=1.18,<2.4",
-  "types-requests",
 ]
-
-[project.scripts]
-enigma-terminal = "enigma_terminal.game:main"
 
 [project.urls]
 Homepage = "https://legenki.github.io/enigma-terminal/"
@@ -46,9 +43,6 @@ Source = "https://github.com/legenki/enigma-terminal"
 
 [tool.setuptools]
 packages = ["enigma_terminal"]
-
-[tool.setuptools.package-data]
-enigma_terminal = ["../data/*.json", "../data/*.txt"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

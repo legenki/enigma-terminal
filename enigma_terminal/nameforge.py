@@ -24,9 +24,12 @@ different searches, and each is priced as itself.
 
 **A candidate is expensive.** Each one is a fresh 128 bits of entropy, a BIP-39
 phrase, PBKDF2-HMAC-SHA512 over 2048 rounds, five levels of BIP-32 and a
-hash160. The Python build manages a couple of hundred a second on one core, so
-the estimate this module returns is what the interface must show before the
-player commits to waiting — not after.
+hash160, and there may be millions of them.
+
+Nothing here draws anything. The searching a player sees happens in the
+browser, in `docs/js/nameforge.js` and its worker; this module is the reference
+the tests hold that one against — the same arithmetic and the same derivation,
+checked to agree to nine significant figures in both case modes.
 """
 
 from __future__ import annotations
@@ -295,17 +298,6 @@ def forge(
         if on_progress and attempts % progress_every == 0:
             if on_progress(attempts, closest) is False:
                 return None
-
-
-def measure_rate(seconds: float = 1.0) -> float:
-    """Candidates a second on this machine, measured rather than assumed."""
-    started = time.monotonic()
-    count = 0
-    while time.monotonic() - started < seconds:
-        candidate()
-        count += 1
-    elapsed = time.monotonic() - started
-    return count / elapsed if elapsed > 0 else 0.0
 
 
 def humanise(seconds: float) -> str:

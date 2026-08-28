@@ -1,4 +1,4 @@
-"""The two builds must offer the same terminal, and offer only what exists.
+"""The browser terminal must offer only what exists, in every language.
 
 Three separate bugs sat behind this file, all of the same shape: something the
 terminal claimed to do had no code behind it, and nothing compared the claim
@@ -13,6 +13,11 @@ with the code.
     method, which is why the journal stayed empty however much work was done.
 
 Every check here is a comparison between two lists that were allowed to drift.
+
+This began as a parity file, comparing the browser against a Python terminal
+that no longer exists. The comparisons that survive are the ones that were
+always about the browser alone — and all three bugs above were browser bugs, so
+the file kept the coverage that earned it and lost only its other half.
 """
 
 from __future__ import annotations
@@ -24,12 +29,6 @@ import subprocess
 from pathlib import Path
 
 import pytest
-
-from enigma_terminal.cases import Campaign, Progress
-from enigma_terminal.chain import ChainClient
-from enigma_terminal.game import COMMANDS, HELP_TEXT, TEXT, Session, dispatch
-from enigma_terminal.journal import Journal
-from enigma_terminal.ui import Screen
 
 ROOT = Path(__file__).resolve().parent.parent
 LANGS = ("en", "ru", "es", "pt")
@@ -48,18 +47,6 @@ def web():
     )
     assert done.returncode == 0, done.stderr
     return json.loads(done.stdout)
-
-
-@pytest.fixture
-def session(tmp_path):
-    return Session(
-        campaign=Campaign(),
-        progress=Progress.load(tmp_path / "progress.json"),
-        screen=Screen(colour=False, speed=0),
-        chain=ChainClient(offline=True),
-        journal=Journal(tmp_path / "journal.json"),
-        lang="en",
-    )
 
 
 # --- nothing is advertised that does not exist -----------------------------
@@ -92,24 +79,6 @@ def test_help_and_the_dispatch_table_agree_in_the_browser(web, lang):
     assert listed - real == set(), f"HELP invents: {sorted(listed - real)}"
 
 
-@pytest.mark.parametrize("lang", LANGS)
-def test_help_and_the_dispatch_table_agree_in_the_terminal(lang):
-    listed = {row[0].split()[0] for row in HELP_TEXT[lang]}
-    real = {name for name in COMMANDS if name not in ALIASES}
-    assert real - listed == set(), f"not in HELP: {sorted(real - listed)}"
-    assert listed - real == set(), f"HELP invents: {sorted(listed - real)}"
-
-
-def test_the_two_builds_offer_the_same_commands(web):
-    """COPY is the one command only a browser can honour."""
-    web_only = {"COPY"}
-    js = set(web["commands"]) - web_only
-    py = set(COMMANDS) - {"EXIT", "QUIT"} | {"EXIT", "QUIT"}
-    assert js == py, (
-        f"only in the browser: {sorted(js - py)}; only in the terminal: {sorted(py - js)}"
-    )
-
-
 # --- every language is actually playable ------------------------------------
 
 @pytest.mark.parametrize("lang", LANGS)
@@ -119,12 +88,6 @@ def test_the_browser_speaks_every_language_it_accepts(web, lang):
     assert lang in web["langs"]
     assert len(web["helpRows"][lang]) == len(web["helpRows"]["en"])
     assert web["aboutLines"][lang], f"ABOUT is empty in {lang}"
-
-
-@pytest.mark.parametrize("lang", LANGS)
-def test_no_narrative_string_is_missing_a_language(lang):
-    for key, bundle in TEXT.items():
-        assert bundle.get(lang), f"TEXT[{key!r}] has nothing in {lang}"
 
 
 def test_the_browsers_narrative_strings_cover_the_same_languages():
@@ -145,39 +108,7 @@ def test_open_reaches_every_case_the_desk_lists_in_the_browser(web):
     )
 
 
-def test_open_reaches_every_case_the_desk_lists_in_the_terminal(session):
-    campaign = session.campaign
-    contract = campaign.contracts[0]
-    session.progress.take(contract.id)
-    desk = campaign.caseload(session.progress)
-    assert len(desk) > len(campaign.cases)
-    for entry in desk:
-        assert campaign.get(entry.id) is not None, f"CASES lists {entry.id}, OPEN cannot find it"
-
-
-def test_a_taken_contract_can_actually_be_opened(session, capsys):
-    contract = session.campaign.contracts[0]
-    dispatch(session, f"OPEN {contract.id}")
-    out = capsys.readouterr().out
-    assert "NOT FOUND IN ARCHIVE" not in out
-    assert session.active is not None and session.active.id == contract.id
-
-
 # --- progress is counted against the desk, not the campaign -----------------
-
-def test_status_counts_closed_cases_against_the_desk(session, capsys):
-    """Closing a contract used to read 9/8: the numerator counted every solved
-    case and the denominator only the campaign."""
-    contract = session.campaign.contracts[0]
-    session.progress.take(contract.id)
-    session.progress.mark_solved(contract.id)
-    dispatch(session, "STATUS")
-    out = capsys.readouterr().out
-    line = next(row for row in out.splitlines() if "CASES CLOSED" in row)
-    closed, total = (int(part) for part in re.search(r"(\d+)/(\d+)", line).groups())
-    assert closed <= total, f"more cases closed than exist: {line.strip()}"
-    assert total == len(session.campaign.caseload(session.progress))
-
 
 def test_the_browser_counts_closed_cases_against_the_desk():
     source = (ROOT / "docs" / "js" / "engine.js").read_text(encoding="utf-8")

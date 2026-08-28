@@ -18,13 +18,8 @@ from pathlib import Path
 
 import pytest
 
-from enigma_terminal.game import COMMANDS
-
 ROOT = Path(__file__).resolve().parent.parent
 README = ROOT / "README.md"
-
-#: Only the browser has a clipboard.
-WEB_ONLY = {"COPY"}
 #: Short forms, called out in one line rather than given rows of their own.
 ALIASES = {"?", "LS", "ROLL", "FIND", "SYNC", "LOG", "QUIT", "EVIDENCE", "CLUES", "FORGE"}
 
@@ -34,6 +29,24 @@ def readme() -> str:
     return README.read_text(encoding="utf-8")
 
 
+@pytest.fixture(scope="module")
+def web_commands() -> set[str]:
+    """What the shipped terminal actually dispatches.
+
+    This used to read a Python dispatch table. The commands the README
+    documents were never Python's, though — they are the terminal's, and the
+    terminal is a panel in the browser build, so that is where the list lives.
+    """
+    if shutil.which("node") is None:
+        pytest.skip("node is required to read the browser build's command set")
+    done = subprocess.run(
+        ["node", "tools/js_commands.mjs"],
+        cwd=ROOT, capture_output=True, text=True, timeout=120,
+    )
+    assert done.returncode == 0, done.stderr
+    return set(json.loads(done.stdout)["commands"])
+
+
 def test_there_is_one_readme_and_it_is_english(readme):
     assert not (ROOT / "README.en.md").exists(), \
         "the translated copy is back; there is meant to be one README"
@@ -41,16 +54,16 @@ def test_there_is_one_readme_and_it_is_english(readme):
     assert not cyrillic, f"the README is meant to be English only: {cyrillic[:5]}"
 
 
-def test_the_command_table_matches_the_commands_that_exist(readme):
+def test_the_command_table_matches_the_commands_that_exist(readme, web_commands):
     block = readme[readme.index("| Command | What it does |"):readme.index("Short forms exist")]
     listed = set()
     for line in block.splitlines():
         if line.startswith("| `"):
             listed |= set(re.findall(r"`([A-Z_]+)", line.split("|")[1]))
 
-    invented = listed - set(COMMANDS) - WEB_ONLY
+    invented = listed - web_commands
     assert not invented, f"the README documents commands that do not exist: {sorted(invented)}"
-    missing = set(COMMANDS) - listed - ALIASES
+    missing = web_commands - listed - ALIASES
     assert not missing, f"commands the README never mentions: {sorted(missing)}"
 
 

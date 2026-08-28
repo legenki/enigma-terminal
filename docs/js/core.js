@@ -51,19 +51,34 @@ export class ProgressStore {
   }
 
   static read() {
+    const empty = () => ({ solved: [], hints: {}, taken: [] });
+    // A hand-edited save is a fresh save, never a stack trace. Broken JSON was
+    // always handled; JSON that parses into the wrong *type* was not, and
+    // `{"solved": 5}` reached `solved.includes(...)` and took the game down on
+    // the first render. Each field is checked for the shape it is used as.
+    const ids = (value) =>
+      Array.isArray(value)
+        ? value.filter((n) => Number.isFinite(Number(n))).map(Number)
+        : [];
     try {
       const raw = read(STORAGE_KEY);
-      if (!raw) return { solved: [], hints: {}, taken: [] };
+      if (!raw) return empty();
       const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return empty();
       return {
-        solved: parsed.solved || [],
-        hints: parsed.hints || {},
+        solved: ids(parsed.solved),
+        hints:
+          parsed.hints &&
+          typeof parsed.hints === 'object' &&
+          !Array.isArray(parsed.hints)
+            ? parsed.hints
+            : {},
         // Contracts the player has picked up off the board. Saves from before
         // the board existed simply have none.
-        taken: parsed.taken || [],
+        taken: ids(parsed.taken),
       };
     } catch {
-      return { solved: [], hints: {}, taken: [] };
+      return empty();
     }
   }
 

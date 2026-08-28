@@ -5,7 +5,7 @@ import re
 import pytest
 
 from enigma_terminal import crypto_engine as ce
-from enigma_terminal.cases import Campaign, Progress
+from enigma_terminal.cases import Campaign
 
 from .answers import LEGACY_ADDRESSES, SOLUTIONS, UNRELATED_MNEMONIC
 
@@ -95,62 +95,3 @@ def test_answer_words_are_all_in_the_dictionary():
             assert 1 <= ce.index_of(word) <= 2048
 
 
-# --- progress -------------------------------------------------------------
-
-def test_progress_round_trips(tmp_path):
-    path = tmp_path / "progress.json"
-    progress = Progress.load(path)
-    assert progress.solved == set()
-
-    progress.mark_solved(3)
-    progress.use_hint(3)
-    progress.use_hint(3)
-
-    reloaded = Progress.load(path)
-    assert reloaded.solved == {3}
-    assert reloaded.hints_used == {3: 2}
-
-    reloaded.reset()
-    assert Progress.load(path).solved == set()
-
-
-def test_progress_survives_a_corrupt_file(tmp_path):
-    path = tmp_path / "progress.json"
-    path.write_text("{ this is not json", encoding="utf-8")
-    assert Progress.load(path).solved == set()
-
-
-@pytest.mark.parametrize(
-    "body",
-    ["[]", "null", '"hello"', "42", '{"solved": 5}', '{"hints_used": [1, 2]}'],
-)
-def test_progress_survives_valid_json_of_the_wrong_shape(tmp_path, body):
-    """Broken JSON was handled; JSON that parses into the wrong type was not.
-
-    `[]` reached `data.get` and took the game down with an AttributeError at
-    startup — while the journal, reading the file beside it, came back empty.
-    """
-    path = tmp_path / "progress.json"
-    path.write_text(body, encoding="utf-8")
-    progress = Progress.load(path)
-    assert progress.solved == set()
-    assert progress.hints_used == {}
-    assert progress.taken == set()
-
-
-def test_progress_keeps_the_entries_it_can_read(tmp_path):
-    """One unreadable id is not a reason to throw the whole save away."""
-    path = tmp_path / "progress.json"
-    path.write_text('{"solved": ["x", 3], "taken": [9]}', encoding="utf-8")
-    progress = Progress.load(path)
-    assert progress.solved == {3}
-    assert progress.taken == {9}
-
-
-def test_unlocking_depends_on_solved_cases(campaign, tmp_path):
-    progress = Progress.load(tmp_path / "p.json")
-    finale = campaign.get(8)
-    assert not campaign.is_unlocked(finale, progress)
-    for case_id in range(1, 8):
-        progress.mark_solved(case_id)
-    assert campaign.is_unlocked(finale, progress)

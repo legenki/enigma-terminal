@@ -21,53 +21,43 @@ HTTP calls to public block explorers.
 
 ---
 
-## Two builds, one game
+## One build
 
-| | Terminal (Python) | Web (GitHub Pages) |
-|---|---|---|
-| Run it | `python -m enigma_terminal` | open the page, nothing to install |
-| Cryptography | pure Python, standard library only | pure JavaScript, no dependencies |
-| Network | `requests`, or `urllib` as a fallback | `fetch`, straight from the browser |
-| Screen | ANSI colour, character-by-character output | canvas terminal inside a windowed interface |
+The game is a static page. There is nothing to install and nothing to run: open
+the URL. Every derivation happens in your browser, and the only thing that
+leaves it is an address lookup, which carries nothing but the address.
 
-Both read the same data out of `data/` and derive **bit-for-bit identical** addresses.
-That is not a claim, it is a test: `tests/test_web_parity.py` runs the JavaScript under
-Node and diffs every field against Python.
+| | Web (GitHub Pages) |
+|---|---|
+| Run it | open the page, nothing to install |
+| Cryptography | pure JavaScript, no dependencies |
+| Network | `fetch`, straight from the browser |
+| Screen | canvas terminal inside a windowed interface |
 
-The command set is held to the same standard. `tests/test_command_parity.py` compares
-what each build advertises in `HELP` against what it can actually dispatch, in all four
-languages — after a stretch where the web build listed three commands that answered
-`UNKNOWN COMMAND`.
+There used to be a second build — a Python terminal that played the same game
+from a console. Keeping the two at parity cost more than the second one was
+worth: it needed the same commands, the same state and the same network
+behaviour as the browser, and it lost on every one of them, having no canvas,
+no cache and no proof-of-work check. It was removed in 3.0.0.
+
+Python stays in the repository, and does two jobs it is better at than the
+browser:
+
+- **The generator.** `data/` is the source of truth and `tools/` builds the web
+  build's data from it — including the 256-contract board, whose answers are
+  derived rather than written down.
+- **The reference.** `enigma_terminal/crypto_engine.py` is a second,
+  independent implementation of BIP-39/32/44/49/84. `tests/test_web_parity.py`
+  runs the JavaScript under Node and diffs every field against it, which is why
+  "bit-for-bit identical" is a test result and not a claim.
 
 ## Quick start
-
-### Web
 
 Open <https://legenki.github.io/enigma-terminal/>, or serve it locally:
 
 ```bash
 python3 -m http.server 8000 --directory docs
 # http://localhost:8000
-```
-
-### Terminal
-
-```bash
-git clone https://github.com/legenki/enigma-terminal
-cd enigma-terminal
-python -m enigma_terminal          # no dependencies required
-```
-
-Optional: `pip install -e ".[net]"` — `requests` handles timeouts more
-gracefully. `mnemonic` and `bip-utils` are needed only by the tests, as reference
-implementations to check ours against.
-
-```bash
-python -m enigma_terminal --lang en           # ru | en | es | pt
-python -m enigma_terminal --offline           # no network; the crypto still runs for real
-python -m enigma_terminal --speed 0           # no animation
-python -m enigma_terminal --provider mempool  # blockstream | mempool | blockchain
-python -m enigma_terminal -c "DECRYPT ..." -c "SYNC_LEDGER"   # run and exit
 ```
 
 ## The interface
@@ -77,7 +67,7 @@ its digit:
 
 | | Panel | |
 |---|---|---|
-| **1** | Terminal | the full command line, the same one the Python build runs — and where the game opens |
+| **1** | Terminal | the full command line, and where the game opens |
 | **2** | Case files | the desk: the campaign plus every contract you have taken |
 | **3** | Contracts | the board, by employer |
 | **4** | Decrypt | a phrase in, a derivation grid out |
@@ -183,8 +173,8 @@ Short forms exist where they help: `?` for `HELP`, `LS` for `CASES`, `ROLL` for 
 `FIND` for `COMPLETE`, `SYNC` for `SYNC_LEDGER`, `LOG` for `JOURNAL`, `QUIT` for `EXIT`,
 `FORGE` for `NAMEFORGE`.
 
-Progress persists: `~/.enigma_terminal/progress.json` in the terminal build (override the
-directory with `ENIGMA_TERMINAL_HOME`), `localStorage` in the browser.
+Progress persists in `localStorage`, and a hand-edited save is read as a fresh
+save rather than a crash.
 
 ## The board: 8 employers × 32 contracts
 
@@ -241,8 +231,8 @@ player their evening.
 
 Every move — a derivation, a balance lookup, a sweep, a wordlist or archive search, a
 recovered word, a generated phrase, a spent hint, a closed case — lands in the journal.
-It is shared between the terminal and the rest of the interface, survives a reload, and
-lives in `localStorage` (or `~/.enigma_terminal/journal.json` in the terminal build).
+It is shared between the terminal panel and the rest of the interface, survives a
+reload, and lives in `localStorage`.
 
 **Recall** replays an entry in the tool that produced it, with the same address, query or
 phrase. `RECALL <n>` does the same from the command line.
@@ -340,7 +330,7 @@ fingerprint and checks what the player typed against it.
   (`1cHAncE` counts). The second is cheaper by exactly the alphabet it opens up — 32.5×
   for `Chance` — and it also strikes names Base58 seems to forbid, since an address has
   no `O`, `I` or `l` but does have `o`, `i` and `L`. When the mode you are not in would
-  be ten times cheaper, both builds say so before the search rather than after.
+  be ten times cheaper, the tool says so before the search rather than after.
 * `COMPLETE` recovers exactly one unknown word, and that limit is deliberate rather than
   unfinished: with two gaps, hundreds of thousands of phrases remain valid and the list
   stops meaning anything. The tool helps you recover a phrase you almost have; it does not
@@ -351,7 +341,7 @@ fingerprint and checks what the player typed against it.
 ## Repository layout
 
 ```
-data/                      one source of truth for both builds
+data/                      the source the web build is generated from
   cases.json               the eight hand-written campaign cases
   openings.json            sixteen openings and the live figures they are written around
   nameforge.json           the measured leading-character distribution Nameforge prices by
@@ -359,15 +349,12 @@ data/                      one source of truth for both builds
   contracts.json           256 generated contracts (+ their solution specs)
   english.txt              the official BIP-39 wordlist (sha256 2f5eed53…)
   test_vectors.json        reference vectors from mnemonic + bip-utils
-enigma_terminal/           the terminal build
+enigma_terminal/           reference cryptography and content loading; not a game
   crypto_engine.py         BIP-39/32/44/49/84, secp256k1, base58check, bech32
   _ripemd160.py            fallback RIPEMD-160 for OpenSSL 3 without the legacy provider
-  chain.py                 three explorers with automatic failover
-  journal.py               the investigation journal, on disk
-  cases.py                 case and progress loading
-  store.py                 the one atomic writer both save files go through
-  ui.py                    ANSI output, pseudo-logs over a real request
-  game.py                  command dispatch and the game loop
+  cases.py                 reads data/ the way the generator and the tests need it
+  nameforge.py             what a stamp costs; the reference the browser is checked against
+  openings.py              the sixteen openings and the rule that keeps one printable
 docs/                      the web build; GitHub Pages publishes from here
   index.html               the shell
   css/                     terminal.css (shell and screen), gui.css (the interface)
@@ -375,7 +362,7 @@ docs/                      the web build; GitHub Pages publishes from here
   js/crypto/               hash.js, secp256k1.js, encoding.js, bip39.js, wallet.js
   js/daylight.js           the palette that follows the hour
   js/term.js               the canvas terminal
-  js/engine.js             the command line: the same commands as the Python build
+  js/engine.js             the command line and everything it dispatches
   js/gui/                  the windowed interface over the same core (app.js, dom.js, text.js)
   js/journal.js            the journal, shared by both halves of the page
   js/identicon.js          generative sigils for cases, phrases and addresses
@@ -397,14 +384,17 @@ tools/measure_leading.mjs  re-measures the distribution behind nameforge.json
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
 tools/smoke_web.mjs        opens the page in a browser and presses the buttons
-tests/                     482 tests, including the Python ↔ JavaScript diff
+tests/                     362 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
+Nothing here is needed to play — only to change the game. Python is the
+generator and the reference implementation; it is not a runtime.
+
 ```bash
-pip install -e ".[dev]"
-python -m pytest tests -v          # 482 tests
+pip install -e ".[dev]"            # pytest, ruff, mypy and the reference libraries
+python -m pytest tests -v          # 362 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 
