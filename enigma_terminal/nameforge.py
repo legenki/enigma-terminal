@@ -15,6 +15,13 @@ about as much as `1Andy` — one character shorter, one much rarer letter. The
 distribution is measured rather than assumed, and lives in
 ``data/nameforge.json``; every estimate here is computed from it, per name.
 
+**Case is a choice, not a detail.** Base58 tells `A` from `a`, so a name can be
+struck two ways: exactly as the player spelled it, or in whatever case turns up
+first. The second is cheaper — a name of six letters that each exist in both
+cases is 32 times cheaper — and it also strikes names the first cannot, because
+Base58 keeps `o` but not `O`, and `L` but not `l`. Both are honest; they are
+different searches, and each is priced as itself.
+
 **A candidate is expensive.** Each one is a fresh 128 bits of entropy, a BIP-39
 phrase, PBKDF2-HMAC-SHA512 over 2048 rounds, five levels of BIP-32 and a
 hash160. The Python build manages a couple of hundred a second on one core, so
@@ -68,47 +75,80 @@ class NameError_(ValueError):
         self.kind = kind
 
 
-def normalise(name: str) -> str:
-    """`andy` and `ANDY` both become `Andy`.
+def variants(char: str, any_case: bool = False) -> str:
+    """The address characters that would satisfy this position of a name.
 
-    One spelling per name, so two players asking for the same stamp are asking
-    for the same work — and so the estimate shown matches the search run.
+    Everything else here is built on this. In exact mode a character stands
+    for itself and for nothing else. In any-case mode it stands for both of
+    its cases — but only for those Base58 actually has, and Base58 is not
+    symmetric: it keeps `o` but not `O`, `i` but not `I`, `L` but not `l`. So
+    twenty-three letters have two forms, three have one, and `0` has none in
+    either mode.
     """
-    cleaned = name.strip()
-    return cleaned[:1].upper() + cleaned[1:].lower()
+    if not any_case:
+        return char if char in BASE58 else ""
+    both = (char.lower(), char.upper())
+    return "".join(dict.fromkeys(c for c in both if c in BASE58))
 
 
-def validate(name: str) -> str:
-    """Normalise and check; raises :class:`NameError_` with a reason."""
+def normalise(name: str) -> str:
+    """Trim, and nothing else.
+
+    This used to force `andy` and `ANDY` both to `Andy`, one spelling per name.
+    That rule was a stand-in for a decision the player was never offered; now
+    that they choose the case themselves, taking it away from them would be
+    the surprising thing. What they typed is what gets struck.
+    """
+    return name.strip()
+
+
+def validate(name: str, any_case: bool = False) -> str:
+    """Trim and check; raises :class:`NameError_` with a reason."""
     stamp = normalise(name)
     if not (MIN_LENGTH <= len(stamp) <= MAX_LENGTH):
         raise NameError_(
             f"NAME MUST BE {MIN_LENGTH}..{MAX_LENGTH} CHARACTERS. GOT {len(stamp)}.",
             kind="length",
         )
-    bad = sorted({c for c in stamp if c not in BASE58})
+    bad = sorted({c for c in stamp if not variants(c, any_case)})
     if bad:
+        reason = (
+            ". NO ADDRESS CARRIES THESE IN EITHER CASE."
+            if any_case
+            else ". THERE IS NO 0, O, I OR l IN AN ADDRESS —"
+            " ANY-CASE MODE STRIKES o, i AND L INSTEAD."
+        )
         raise NameError_(
-            "NOT IN THE BASE58 ALPHABET: " + ", ".join(bad)
-            + ". THERE IS NO 0, O, I OR l IN AN ADDRESS.",
+            "NOT IN THE BASE58 ALPHABET: " + ", ".join(bad) + reason,
             kind="alphabet",
         )
     return stamp
 
 
-def probability(stamp: str) -> float:
+def matches(address: str, stamp: str, any_case: bool = False) -> bool:
+    """Does this address carry the stamp straight after its leading `1`?"""
+    carried = address[1 : 1 + len(stamp)]
+    return carried.lower() == stamp.lower() if any_case else carried == stamp
+
+
+def probability(stamp: str, any_case: bool = False) -> float:
     """The chance one candidate carries this stamp.
 
-    The first character uses the measured distribution; the rest are uniform
-    over the alphabet, which is what they are that deep into the encoding.
+    Each position contributes the share of addresses whose character there is
+    one this name accepts. The first uses the measured distribution; the rest
+    are uniform over the alphabet, which is what they are that deep into the
+    encoding. Any-case mode simply accepts more characters per position, so
+    the same arithmetic prices both modes.
     """
-    first = LEADING.get(stamp[0], 0.0)
-    return first * (1.0 / len(BASE58)) ** (len(stamp) - 1)
+    chance = sum(LEADING.get(c, 0.0) for c in variants(stamp[0], any_case))
+    for char in stamp[1:]:
+        chance *= len(variants(char, any_case)) / len(BASE58)
+    return chance
 
 
-def expected_attempts(stamp: str) -> float:
+def expected_attempts(stamp: str, any_case: bool = False) -> float:
     """Candidates needed on average. The median is about 0.69 of this."""
-    chance = probability(stamp)
+    chance = probability(stamp, any_case)
     return math.inf if chance <= 0 else 1.0 / chance
 
 
@@ -123,8 +163,8 @@ TIERS = (
 )
 
 
-def tier(stamp: str) -> str:
-    attempts = expected_attempts(stamp)
+def tier(stamp: str, any_case: bool = False) -> str:
+    attempts = expected_attempts(stamp, any_case)
     for ceiling, name in TIERS:
         if attempts < ceiling:
             return name
@@ -140,6 +180,7 @@ class Estimate:
     attempts: float
     bits: float
     seconds: float
+    any_case: bool = False
 
     @property
     def is_long(self) -> bool:
@@ -147,12 +188,13 @@ class Estimate:
         return self.seconds > 900
 
 
-def estimate(stamp: str, rate: float) -> Estimate:
+def estimate(stamp: str, rate: float, any_case: bool = False) -> Estimate:
     """Expected work for ``stamp`` at ``rate`` candidates a second."""
-    attempts = expected_attempts(stamp)
+    attempts = expected_attempts(stamp, any_case)
     return Estimate(
         stamp=stamp,
-        tier=tier(stamp),
+        any_case=any_case,
+        tier=tier(stamp, any_case),
         attempts=attempts,
         # The entropy actually searched, which is log2 of the odds — not the
         # 128 bits of the phrase, which is a different number entirely.
@@ -173,10 +215,15 @@ class Stamp:
     seconds: float
     tier: str
     bits: float
+    any_case: bool = False
 
     @property
     def preview(self) -> str:
-        """`1Andy` and then the part nobody reads."""
+        """`1Andy` and then the part nobody reads.
+
+        Sliced off the address, never off the name, so an any-case strike shows
+        the case it actually landed in rather than the one that was asked for.
+        """
         kept = 1 + len(self.stamp)
         return self.address[:kept] + "•" * (len(self.address) - kept)
 
@@ -195,6 +242,7 @@ def candidate() -> tuple[str, str]:
 def forge(
     name: str,
     *,
+    any_case: bool = False,
     limit: int | None = None,
     deadline: float | None = None,
     on_progress: Callable[[int, str], bool | None] | None = None,
@@ -206,8 +254,7 @@ def forge(
     far; returning False stops the search. Returns None when it stopped without
     a hit, so the caller can tell "not found yet" from "found".
     """
-    stamp = validate(name)
-    target = "1" + stamp
+    stamp = validate(name, any_case)
     started = time.monotonic()
     attempts = 0
     closest = ""
@@ -217,23 +264,25 @@ def forge(
         mnemonic, address = candidate()
         attempts += 1
 
-        if address.startswith(target):
+        if matches(address, stamp, any_case):
             return Stamp(
                 stamp=stamp,
+                any_case=any_case,
                 mnemonic=mnemonic,
                 address=address,
                 path=PATH,
                 attempts=attempts,
                 seconds=time.monotonic() - started,
-                tier=tier(stamp),
-                bits=math.log2(expected_attempts(stamp)),
+                tier=tier(stamp, any_case),
+                bits=math.log2(expected_attempts(stamp, any_case)),
             )
 
         # How much of the stamp this one did carry — the near miss the
-        # interface shows so a long search has something to report.
+        # interface shows so a long search has something to report. Scored by
+        # the same rule the hit is, or a near miss could outrank a hit.
         score = 0
         for a, b in zip(address[1:], stamp):
-            if a != b:
+            if (a.lower() != b.lower()) if any_case else (a != b):
                 break
             score += 1
         if score > closest_score:

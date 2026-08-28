@@ -8,6 +8,9 @@ An estimate off by a factor of sixty is a promise of minutes that costs hours.
 The second is the phrase. A stamp is only worth anything if the address really
 is the address of that phrase at the path the card names — which is what most
 of this file checks, against the same derivation the rest of the game uses.
+
+Both lies get a second way to be told once case is a choice, so most of what
+is here is checked in both modes.
 """
 
 from __future__ import annotations
@@ -15,6 +18,7 @@ from __future__ import annotations
 import json
 import math
 import re
+import string
 from pathlib import Path
 
 import pytest
@@ -34,14 +38,24 @@ def measured():
 # The name
 # --------------------------------------------------------------------------- #
 
-@pytest.mark.parametrize(
-    ("typed", "stamp"),
-    [("andy", "Andy"), ("ANDY", "Andy"), ("Andy", "Andy"), ("aN", "An"), (" bob ", "Bob")],
-)
-def test_one_spelling_per_name(typed, stamp):
-    """Two players asking for the same stamp must be asking for the same work."""
-    assert nf.normalise(typed) == stamp
-    assert nf.validate(typed) == stamp
+@pytest.mark.parametrize("typed", ["andy", "ANDY", "Andy", "aN", "cHAncE"])
+def test_the_case_typed_is_the_case_struck(typed):
+    """This used to fold every spelling to `Andy`, one spelling per name. That
+    was standing in for a decision the player was never offered; now that they
+    make it, silently restyling their name would be the surprising thing."""
+    assert nf.validate(typed) == typed
+    assert nf.normalise(f"  {typed}  ") == typed
+
+
+@pytest.mark.parametrize(("typed", "address"), [
+    ("Chance", "1Chance" + "z" * 27),
+    ("chance", "1chance" + "z" * 27),
+    ("cHAncE", "1cHAncE" + "z" * 27),
+])
+def test_any_case_accepts_every_spelling_exact_accepts_one(typed, address):
+    """The whole point of the switch, stated as plainly as it can be."""
+    assert nf.matches(address, "Chance", any_case=True)
+    assert nf.matches(address, "Chance") == (typed == "Chance")
 
 
 @pytest.mark.parametrize("typed", ["A", "", "Abcdefg"])
@@ -60,14 +74,33 @@ def test_a_name_no_address_can_carry_is_refused(typed):
     assert caught.value.kind == "alphabet"
 
 
-@pytest.mark.parametrize(("typed", "stamp"), [("lex", "Lex"), ("AnO", "Ano")])
-def test_normalising_rescues_a_name_whose_case_was_the_problem(typed, stamp):
-    """Base58 drops capital O and lowercase l, but keeps lowercase o and
-    capital L. So `lex` and `AnO` are refusable as typed and perfectly
-    strikeable once normalised — worth pinning, because the obvious reading of
-    "no O, I or l" would have turned both away for nothing."""
-    assert nf.validate(typed) == stamp
-    assert all(c in nf.BASE58 for c in stamp)
+@pytest.mark.parametrize("typed", ["IAn", "Oslo", "Bell", "oOo"])
+def test_any_case_strikes_names_the_alphabet_only_seemed_to_forbid(typed):
+    """Base58 drops `O`, `I` and `l` but keeps `o`, `i` and `L`. Exact mode has
+    to refuse these; any-case mode can strike every one of them, which is worth
+    as much as the speed and is far easier to miss."""
+    assert nf.validate(typed, any_case=True) == typed
+    for char in typed:
+        assert nf.variants(char, any_case=True), f"{char} has no form at all"
+
+
+def test_a_zero_is_refused_in_both_modes():
+    """`0` is the one character with no case to fall back on."""
+    for any_case in (False, True):
+        with pytest.raises(nf.NameError_) as caught:
+            nf.validate("B0b", any_case=any_case)
+        assert caught.value.kind == "alphabet"
+
+
+def test_the_alphabet_is_not_symmetric():
+    """The asymmetry is the reason any-case mode rescues anything at all, and
+    a flattened BASE58 would make this file quietly meaningless."""
+    both = [c for c in string.ascii_lowercase if len(nf.variants(c, True)) == 2]
+    one = [c for c in string.ascii_lowercase if len(nf.variants(c, True)) == 1]
+    assert len(both) == 23
+    assert sorted(one) == ["i", "l", "o"]
+
+
 
 
 def test_every_letter_of_a_valid_name_is_in_the_alphabet():
@@ -154,6 +187,54 @@ def test_durations_read_the_way_a_person_says_them(seconds, reads):
 
 
 # --------------------------------------------------------------------------- #
+# The two modes, priced against each other
+# --------------------------------------------------------------------------- #
+
+@pytest.mark.parametrize("stamp", ["Chance", "Andy", "Bob", "zoe", "Rob"])
+def test_any_case_is_never_dearer_and_usually_much_cheaper(stamp):
+    exact = nf.expected_attempts(stamp)
+    loose = nf.expected_attempts(stamp, any_case=True)
+    assert loose <= exact * 1.000001, "widening what counts cannot cost more"
+
+
+def test_the_saving_is_exactly_the_alphabet_it_opens_up():
+    """Not a fudge factor: each position after the first doubles when both of
+    its cases exist, and the first grows by whatever the measurement says the
+    other case is worth."""
+    stamp = "Chance"
+    tail = 1.0
+    for char in stamp[1:]:
+        tail *= len(nf.variants(char, True)) / len(nf.variants(char, False))
+    first = sum(nf.LEADING[c] for c in nf.variants(stamp[0], True))
+    first /= nf.LEADING[stamp[0]]
+    predicted = first * tail
+    measured = nf.expected_attempts(stamp) / nf.expected_attempts(stamp, True)
+    assert math.isclose(measured, predicted, rel_tol=1e-9)
+    # Five of Chance's six letters have both cases, and so does the C.
+    assert 30 < measured < 35
+
+
+def test_a_lowercase_first_letter_is_the_expensive_mistake():
+    """`chance` exact is not `Chance` exact with a different look: it is sixty
+    times the work, because `c` lands sixty times less often than `C`. This is
+    the case the interface has to warn about, so it is pinned here."""
+    assert nf.expected_attempts("chance") / nf.expected_attempts("Chance") > 50
+    # And any-case mode collapses the difference to nothing at all.
+    assert math.isclose(
+        nf.expected_attempts("chance", True),
+        nf.expected_attempts("Chance", True),
+        rel_tol=1e-9,
+    )
+
+
+def test_the_mode_travels_with_the_estimate():
+    """A card that says EPIC must say which search it priced."""
+    assert nf.estimate("Chance", rate=150).any_case is False
+    assert nf.estimate("Chance", rate=150, any_case=True).any_case is True
+    assert nf.tier("Chance") != nf.tier("Chance", any_case=True)
+
+
+# --------------------------------------------------------------------------- #
 # The phrase — a stamp is worthless if the address is not really its address
 # --------------------------------------------------------------------------- #
 
@@ -174,12 +255,26 @@ def test_two_candidates_are_not_the_same_candidate():
 def test_a_struck_stamp_carries_the_name_and_verifies(monkeypatch):
     hit = "1An" + "z" * 31
     monkeypatch.setattr(nf, "candidate", lambda: ("phrase words here", hit))
-    struck = nf.forge("an")
+    struck = nf.forge("An", limit=5)
     assert struck is not None
     assert struck.stamp == "An"
     assert struck.address.startswith("1An")
     assert struck.path == nf.PATH
     assert struck.attempts == 1
+
+
+def test_an_any_case_search_accepts_the_case_it_finds(monkeypatch):
+    """`aN` asked for; `1An…` struck. The stamp records what was asked for and
+    the address carries what was found, and the preview must show the second —
+    it is the address the player actually holds."""
+    monkeypatch.setattr(nf, "candidate", lambda: ("phrase", "1An" + "z" * 31))
+    struck = nf.forge("aN", any_case=True, limit=5)
+    assert struck is not None
+    assert struck.stamp == "aN"
+    assert struck.any_case is True
+    assert struck.preview.startswith("1An")
+    # And the same search in exact mode never accepts it.
+    assert nf.forge("aN", limit=20) is None
 
 
 def test_the_preview_hides_everything_after_the_name():
@@ -205,7 +300,7 @@ def test_matching_is_case_sensitive_because_base58_is():
     original = module.candidate
     module.candidate = wrong_case
     try:
-        struck = module.forge("An")
+        struck = module.forge("An", limit=20)
     finally:
         module.candidate = original
     assert struck is not None
@@ -239,6 +334,48 @@ def test_both_builds_price_a_name_the_same(measured):
         "docs/js/leading.js is stale — run tools/build_web_data.py"
 
 
+def test_both_builds_price_both_modes_identically():
+    """The panel and the terminal must quote the same wait for the same name in
+    the same mode. Checked by running the JavaScript, not by reading it: the
+    two implementations of this arithmetic are the thing most likely to drift."""
+    import shutil
+    import subprocess
+
+    if shutil.which("node") is None:
+        pytest.skip("node is required for the parity check")
+
+    names = ["Chance", "chance", "Andy", "Bob", "Rob", "zoe", "Oslo", "Bell"]
+    script = """
+      const nf = await import('./docs/js/nameforge.js');
+      const names = NAMES;
+      const out = {};
+      for (const n of names)
+        for (const any of [false, true]) {
+          const v = nf.validate(n, any);
+          out[n + '|' + any] = v.error ? v.error : nf.expectedAttempts(v.stamp, any);
+        }
+      console.log(JSON.stringify(out));
+    """.replace("NAMES", json.dumps(names))
+    completed = subprocess.run(
+        ["node", "--input-type=module", "-e", script],
+        cwd=ROOT, capture_output=True, text=True, timeout=120,
+    )
+    assert completed.returncode == 0, completed.stderr
+    web = json.loads(completed.stdout)
+
+    for name in names:
+        for any_case in (False, True):
+            key = f"{name}|{str(any_case).lower()}"
+            try:
+                stamp = nf.validate(name, any_case)
+            except nf.NameError_ as refused:
+                assert web[key] == refused.kind, f"{key}: builds disagree on refusal"
+                continue
+            assert not isinstance(web[key], str), f"{key}: the web build refused it"
+            assert math.isclose(web[key], nf.expected_attempts(stamp, any_case), rel_tol=1e-9), \
+                f"{key}: {web[key]} vs {nf.expected_attempts(stamp, any_case)}"
+
+
 def test_both_builds_agree_on_the_rules():
     web = (ROOT / "docs" / "js" / "nameforge.js").read_text(encoding="utf-8")
     assert f"'{nf.PATH}'" in web or f'"{nf.PATH}"' in web, "the derivation paths differ"
@@ -246,6 +383,11 @@ def test_both_builds_agree_on_the_rules():
     assert f"MAX_LENGTH = {nf.MAX_LENGTH}" in web
     for _, name in nf.TIERS:
         assert f"'{name}'" in web, f"the web build has no {name} tier"
+    # The mode has to reach the worker, or the page prices one search and the
+    # workers run the other.
+    worker = (ROOT / "docs" / "js" / "nameforge-worker.js").read_text(encoding="utf-8")
+    assert "anyCase" in worker, "the worker never hears which case rule to use"
+    assert "matches(" in worker, "the worker decides for itself what counts as a hit"
 
 
 def test_the_worker_draws_from_the_cryptographic_source():

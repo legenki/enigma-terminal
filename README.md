@@ -163,7 +163,7 @@ a second design living inside the first.
 | `DECRYPT <12 words>` | validate a phrase and derive its addresses |
 | `DERIVE` | re-print the derivation grid |
 | `COMPLETE <phrase ?>` | recover the one missing word by checksum |
-| `NAMEFORGE <name>` | strike a stamp: an address beginning `1` + your name |
+| `NAMEFORGE <name> [ANY]` | strike a stamp: an address beginning `1` + your name; `ANY` ignores case |
 | `RANDOM [12..24]` | generate a fresh phrase from secure randomness |
 | `SYNC_LEDGER [addr]` | live balance from the Bitcoin network |
 | `SWEEP` | check all three derived addresses at once |
@@ -335,7 +335,12 @@ fingerprint and checks what the player typed against it.
   `1Andy` costs. The distribution is measured rather than assumed
   (`data/nameforge.json`, 2 million samples), and every estimate the tool shows is
   computed from it for the actual name. Long names are allowed and the wait is stated
-  before the search starts, never after.
+  before the search starts, never after. A switch decides whether the case you typed is
+  the case that gets struck (`1Chance` and nothing else) or whichever turns up first
+  (`1cHAncE` counts). The second is cheaper by exactly the alphabet it opens up — 32.5×
+  for `Chance` — and it also strikes names Base58 seems to forbid, since an address has
+  no `O`, `I` or `l` but does have `o`, `i` and `L`. When the mode you are not in would
+  be ten times cheaper, both builds say so before the search rather than after.
 * `COMPLETE` recovers exactly one unknown word, and that limit is deliberate rather than
   unfinished: with two gaps, hundreds of thousands of phrases remain valid and the list
   stops meaning anything. The tool helps you recover a phrase you almost have; it does not
@@ -392,14 +397,14 @@ tools/measure_leading.mjs  re-measures the distribution behind nameforge.json
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
 tools/smoke_web.mjs        opens the page in a browser and presses the buttons
-tests/                     465 tests, including the Python ↔ JavaScript diff
+tests/                     482 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
 pip install -e ".[dev]"
-python -m pytest tests -v          # 465 tests
+python -m pytest tests -v          # 482 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 

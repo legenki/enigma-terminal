@@ -48,7 +48,7 @@ HELP_TEXT = {
         ("ARCHIVE <text>", "full-text search across the case files"),
         ("RANDOM [12..24]", "generate a fresh seed phrase from secure randomness"),
         ("COMPLETE <phrase ?>", "find the missing word of a phrase (one ? marks it)"),
-        ("NAMEFORGE <name>", "strike a stamp: an address that starts with your name"),
+        ("NAMEFORGE <name> [ANY]", "strike a stamp: an address that starts with your name"),
         ("ENTROPY <hex>", "rebuild a mnemonic from raw entropy (32 hex chars)"),
         ("DECRYPT <12 words>", "validate a seed phrase and derive its addresses"),
         ("DERIVE", "re-print the derivation grid of the loaded seed"),
@@ -84,7 +84,7 @@ HELP_TEXT = {
         ("ARCHIVE <текст>", "полнотекстовый поиск по делам"),
         ("RANDOM [12..24]", "сгенерировать новую сид-фразу"),
         ("COMPLETE <фраза ?>", "найти недостающее слово фразы (его место — ?)"),
-        ("NAMEFORGE <имя>", "отчеканить штамп: адрес, начинающийся с вашего имени"),
+        ("NAMEFORGE <имя> [ANY]", "отчеканить штамп: адрес, начинающийся с вашего имени"),
         ("ENTROPY <hex>", "собрать мнемонику из энтропии (32 hex-символа)"),
         ("DECRYPT <12 слов>", "проверить фразу и вывести адреса"),
         ("DERIVE", "повторить сетку деривации загруженного сида"),
@@ -120,7 +120,7 @@ HELP_TEXT = {
         ("ARCHIVE <texto>", "búsqueda de texto completo"),
         ("RANDOM [12..24]", "generar frase semilla aleatoria segura"),
         ("COMPLETE <frase ?>", "encontrar la palabra faltante (?)"),
-        ("NAMEFORGE <nombre>", "acuñar un sello: una dirección que empieza con tu nombre"),
+        ("NAMEFORGE <nombre> [ANY]", "acuñar un sello: una dirección que empieza con tu nombre"),
         ("ENTROPY <hex>", "reconstruir mnemotécnica desde entropía"),
         ("DECRYPT <12 palabras>", "validar frase y derivar direcciones"),
         ("DERIVE", "imprimir cuadrícula de derivación"),
@@ -156,7 +156,7 @@ HELP_TEXT = {
         ("ARCHIVE <texto>", "busca de texto completo"),
         ("RANDOM [12..24]", "gerar frase semente aleatória segura"),
         ("COMPLETE <frase ?>", "encontrar a palavra que falta (?)"),
-        ("NAMEFORGE <nome>", "cunhar um selo: um endereço que começa com o seu nome"),
+        ("NAMEFORGE <nome> [ANY]", "cunhar um selo: um endereço que começa com o seu nome"),
         ("ENTROPY <hex>", "reconstruir mnemônica a partir da entropia"),
         ("DECRYPT <12 palavras>", "validar frase e derivar endereços"),
         ("DERIVE", "imprimir grade de derivação"),
@@ -649,10 +649,14 @@ def cmd_nameforge(s: Session, arg: str) -> None:
     """Strike a named stamp: a real phrase whose first address carries a name."""
     parts = arg.split()
     if not parts:
-        s.screen.warn("USAGE: NAMEFORGE <name>  (2-6 base58 characters)")
+        s.screen.warn("USAGE: NAMEFORGE <name> [ANY]  (2-6 base58 characters)")
+        s.screen.write("        ANY takes whichever case turns up first.", "grey")
         return
+    # The case the player typed is the case that gets struck, unless they say
+    # otherwise — so the flag is the loosening, never the default.
+    any_case = len(parts) > 1 and parts[1].upper() in ("ANY", "ANYCASE", "FREE")
     try:
-        stamp = nameforge.validate(parts[0])
+        stamp = nameforge.validate(parts[0], any_case)
     except nameforge.NameError_ as exc:
         s.screen.error(str(exc))
         return
@@ -660,9 +664,10 @@ def cmd_nameforge(s: Session, arg: str) -> None:
     s.screen.write()
     s.screen.write("[FORGE] MEASURING THIS MACHINE...", "cyan")
     rate = nameforge.measure_rate(1.0)
-    guess = nameforge.estimate(stamp, rate)
+    guess = nameforge.estimate(stamp, rate, any_case)
 
-    s.screen.kv("STAMP", "1" + stamp, value_styles=("green", "bold"))
+    s.screen.kv("STAMP", "1" + stamp + ("  (ANY CASE)" if any_case else ""),
+                value_styles=("green", "bold"))
     s.screen.kv("RARITY", guess.tier, value_styles=("amber",))
     s.screen.kv("EXPECTED", f"{guess.attempts:,.0f} candidates", value_styles=("cyan",))
     s.screen.kv("SEARCHING", f"{guess.bits:.1f} bits", value_styles=("cyan",))
@@ -680,9 +685,19 @@ def cmd_nameforge(s: Session, arg: str) -> None:
         first = "1" + stamp[0]
         s.screen.write(
             f"        A SHORTER STAMP IS CHEAPER: {first}... IS "
-            f"{nameforge.humanise(nameforge.estimate(stamp[:2], rate).seconds).upper()}.",
+            f"{nameforge.humanise(nameforge.estimate(stamp[:2], rate, any_case).seconds).upper()}.",
             "grey",
         )
+        # A spelling that is expensive only because of its case should say so
+        # while there is still time to retype it.
+        other = nameforge.estimate(stamp, rate, not any_case)
+        if other.attempts > 0 and guess.attempts / other.attempts >= 10:
+            word = "EXACT CASE" if any_case else "ANY CASE"
+            s.screen.write(
+                f"        {word} WOULD BE {guess.attempts / other.attempts:,.0f}x CHEAPER: "
+                f"{nameforge.humanise(other.seconds).upper()}.",
+                "grey",
+            )
     s.screen.write()
 
     def tick(attempts: int, closest: str) -> None:
@@ -693,7 +708,8 @@ def cmd_nameforge(s: Session, arg: str) -> None:
         )
 
     try:
-        struck = nameforge.forge(stamp, on_progress=tick, progress_every=max(200, int(rate) * 5))
+        struck = nameforge.forge(stamp, any_case=any_case, on_progress=tick,
+                                 progress_every=max(200, int(rate) * 5))
     except KeyboardInterrupt:
         s.screen.write()
         s.screen.warn("FORGE STOPPED. NOTHING WAS STRUCK.")

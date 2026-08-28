@@ -2939,6 +2939,9 @@ export class GuiApp {
     let started = 0;
     let ticker = null;
     let rate = this.forgeRate || 120;
+    //: Exact by default: the player typed a case, and honouring it is the
+    //: least surprising reading of what they asked for.
+    let anyCase = false;
 
     const input = el('input', {
       class: 'field',
@@ -2948,6 +2951,34 @@ export class GuiApp {
       spellcheck: 'false',
       autocomplete: 'off',
     });
+
+    // Two searches, not two speeds. Exact strikes the spelling as typed; any
+    // case takes whichever turns up first, which is cheaper and also reaches
+    // names Base58 refuses outright — it has `o` but no `O`, `L` but no `l`.
+    const modeRow = el('div', { class: 'row row--tight' });
+    const paintMode = () => {
+      replace(
+        modeRow,
+        el('span', { class: 'section__meta', text: t('forgeCase', lang) }),
+        ...[
+          [false, 'forgeCaseExact'],
+          [true, 'forgeCaseAny'],
+        ].map(([value, key]) =>
+          el('button', {
+            class: 'btn',
+            type: 'button',
+            'aria-pressed': anyCase === value ? 'true' : 'false',
+            text: t(key, lang),
+            title: t(value ? 'forgeCaseAnyHelp' : 'forgeCaseExactHelp', lang),
+            onClick: () => {
+              anyCase = value;
+              paintMode();
+              paintEstimate();
+            },
+          }),
+        ),
+      );
+    };
 
     const stopAll = () => {
       for (const w of workers) {
@@ -2961,7 +2992,7 @@ export class GuiApp {
     this.stopForge = stopAll;
 
     const paintEstimate = () => {
-      const checked = nfValidate(input.value);
+      const checked = nfValidate(input.value, anyCase);
       if (checked.error === 'length') {
         replace(
           readout,
@@ -2975,16 +3006,27 @@ export class GuiApp {
           notice(
             'warn',
             t('forgeAlphabetTitle', lang),
-            tf('forgeAlphabetBody', lang, { chars: checked.bad.join(' ') }),
+            tf(anyCase ? 'forgeAlphabetAnyBody' : 'forgeAlphabetBody', lang, {
+              chars: checked.bad.join(' '),
+            }),
           ),
         );
         return null;
       }
-      const guess = nfEstimate(checked.stamp, rate);
+      const guess = nfEstimate(checked.stamp, rate, anyCase);
+      // What the other mode would cost, so a spelling that is expensive only
+      // because of its case says so before the search rather than after.
+      const other = nfEstimate(checked.stamp, rate, !anyCase);
+      const ratio = other.attempts > 0 ? guess.attempts / other.attempts : 1;
       replace(
         readout,
         kv([
-          [t('forgeStamp', lang), `1${checked.stamp}…`],
+          [
+            t('forgeStamp', lang),
+            anyCase
+              ? `1${checked.stamp}… (${t('forgeCaseAny', lang)})`
+              : `1${checked.stamp}…`,
+          ],
           [t('forgeRarity', lang), guess.tier],
           [
             t('forgeExpected', lang),
@@ -2993,6 +3035,21 @@ export class GuiApp {
           [t('forgeSearched', lang), `${guess.bits.toFixed(1)} bits`],
           [t('forgeOnThis', lang), nfHumanise(guess.seconds)],
         ]),
+        ratio >= 10
+          ? el('p', {
+              class: 'hint-text',
+              text: tf(
+                anyCase ? 'forgeCheaperExact' : 'forgeCheaperAny',
+                lang,
+                {
+                  times: Math.round(ratio)
+                    .toLocaleString('en-US')
+                    .replace(/,/g, ' '),
+                  time: nfHumanise(other.seconds),
+                },
+              ),
+            })
+          : null,
         guess.seconds > 900
           ? notice(
               'warn',
@@ -3010,8 +3067,11 @@ export class GuiApp {
       stopAll();
       attempts = 0;
       started = performance.now();
-      const guess = nfEstimate(stamp, rate);
+      const guess = nfEstimate(stamp, rate, anyCase);
       const count = nfWorkerCount();
+      //: Read once, so a toggle pressed mid-search cannot rename the thing
+      //: being searched for underneath the workers.
+      const searching = anyCase;
 
       const bar = el('div', { class: 'meter' }, el('i', { style: 'width:0%' }));
       const line = el('p', { class: 'hint-text', text: '' });
@@ -3057,10 +3117,11 @@ export class GuiApp {
               data,
               attempts,
               (performance.now() - started) / 1000,
+              searching,
             );
           }
         };
-        worker.postMessage({ type: 'search', stamp });
+        worker.postMessage({ type: 'search', stamp, anyCase: searching });
         workers.push(worker);
       }
 
@@ -3103,17 +3164,19 @@ export class GuiApp {
             onClick: start,
           }),
         ),
+        modeRow,
         readout,
         output,
         el('p', { class: 'hint-text', text: t('forgeHelp', lang) }),
       ),
     );
+    paintMode();
     paintEstimate();
     return { node, api: { run: start, stop: stopAll } };
   }
 
   /** The struck stamp, as an item card. */
-  showStamp(output, stamp, data, attempts, seconds) {
+  showStamp(output, stamp, data, attempts, seconds, anyCase = false) {
     const lang = this.lang;
     const wallet = deriveWallet(data.mnemonic);
     this.wallet = wallet;
@@ -3122,11 +3185,11 @@ export class GuiApp {
     // same reason a generated phrase is — this page made it.
     this.log('forge', data.address, {
       status: 'ok',
-      detail: `1${stamp} · ${nfEstimate(stamp, 1).tier} · ${attempts.toLocaleString('en-US').replace(/,/g, ' ')} attempts`,
+      detail: `1${stamp} · ${nfEstimate(stamp, 1, anyCase).tier} · ${attempts.toLocaleString('en-US').replace(/,/g, ' ')} attempts`,
       payload: { mnemonic: data.mnemonic, stamp },
     });
     const words = data.mnemonic.split(' ');
-    const guess = nfEstimate(stamp, 1);
+    const guess = nfEstimate(stamp, 1, anyCase);
 
     let shown = false;
     const wif = el('span', {
@@ -3153,6 +3216,9 @@ export class GuiApp {
     replace(
       output,
       notice('ok', t('forgeStruck', lang), nfPreview(data.address, stamp)),
+      anyCase
+        ? el('p', { class: 'hint-text', text: t('forgeCaseStruck', lang) })
+        : null,
       kv([
         [t('forgeAddress', lang), data.address],
         [t('forgePath', lang), data.path],

@@ -16,6 +16,7 @@ import { entropyToMnemonic } from './crypto/bip39.js';
 import { base58CheckEncode } from './crypto/encoding.js';
 import { hash160, utf8 } from './crypto/hash.js';
 import { ExtendedKey } from './crypto/wallet.js';
+import { matches } from './nameforge.js';
 
 const PATH = "m/44'/0'/0'/0/0";
 const SALT = utf8('mnemonic');
@@ -57,7 +58,7 @@ async function candidate() {
 let running = false;
 
 self.onmessage = async (event) => {
-  const { type, stamp, reportEvery = 250 } = event.data || {};
+  const { type, stamp, anyCase = false, reportEvery = 250 } = event.data || {};
 
   if (type === 'stop') {
     running = false;
@@ -79,16 +80,21 @@ self.onmessage = async (event) => {
   if (type !== 'search') return;
 
   running = true;
-  const target = `1${stamp}`;
   let attempts = 0;
   let closest = '';
   let closestScore = -1;
+  // Matching is the page's rule, imported rather than repeated: a worker that
+  // decided for itself what counts as a hit could hand back a stamp the page
+  // never priced.
+  const same = anyCase
+    ? (a, b) => a.toLowerCase() === b.toLowerCase()
+    : (a, b) => a === b;
 
   while (running) {
     const { mnemonic, address } = await candidate();
     attempts += 1;
 
-    if (address.startsWith(target)) {
+    if (matches(address, stamp, anyCase)) {
       self.postMessage({
         type: 'hit',
         mnemonic,
@@ -101,9 +107,10 @@ self.onmessage = async (event) => {
     }
 
     // How much of the stamp this one did carry, so a long search has
-    // something to show for itself.
+    // something to show for itself. Scored by the same rule the hit is, or a
+    // near miss could outrank a hit.
     let score = 0;
-    while (score < stamp.length && address[1 + score] === stamp[score])
+    while (score < stamp.length && same(address[1 + score], stamp[score]))
       score += 1;
     if (score > closestScore) {
       closestScore = score;

@@ -265,7 +265,83 @@ await step('page the history', async () => {
   if (await more.count()) throw new Error('a short page still offered more');
 });
 
-// And the chain refusing to answer: a notice, not a dead panel.
+// Nameforge's case switch. Both modes must price the same name differently
+// and neither may throw — the estimate is repainted on every keystroke and on
+// every press of the toggle.
+await step('price a name in both cases', async () => {
+  const forge = await openPanel('NAMEFORGE');
+  await forge.locator('input.field').first().fill('Chance');
+  await page.waitForTimeout(400);
+  const readOut = async () => (await forge.innerText()).replace(/\s+/g, ' ');
+
+  const exact = await readOut();
+  await forge
+    .getByRole('button', { name: /^Any case$/i })
+    .click({ timeout: 3000 });
+  await page.waitForTimeout(400);
+  const loose = await readOut();
+
+  if (exact === loose) throw new Error('the toggle changed nothing');
+  if (!/LEGENDARY/.test(exact))
+    throw new Error(
+      `exact Chance should be LEGENDARY, read: ${exact.slice(0, 120)}`,
+    );
+  if (!/EPIC/.test(loose))
+    throw new Error(
+      `any-case Chance should be EPIC, read: ${loose.slice(0, 120)}`,
+    );
+  console.log('     exact→LEGENDARY, any case→EPIC');
+
+  // A name Base58 forbids outright: refused as typed, struck when case is free.
+  await forge.locator('input.field').first().fill('Oslo');
+  await page.waitForTimeout(400);
+  if (!/EPIC|RARE|LEGENDARY/.test(await readOut()))
+    throw new Error('any-case mode should accept Oslo');
+  await forge
+    .getByRole('button', { name: /^Exact$/i })
+    .click({ timeout: 3000 });
+  await page.waitForTimeout(400);
+  const refused = await readOut();
+  if (!/O/.test(refused) || /RARITY/i.test(refused))
+    throw new Error(
+      `exact mode should refuse Oslo, read: ${refused.slice(0, 140)}`,
+    );
+  console.log('     Oslo: refused exact, priced in any case');
+});
+
+// Actually strike one. `An` in any case is about 658 candidates, so this
+// finishes in seconds — and it is the only check that the workers honour the
+// mode the page priced, rather than searching for something else entirely.
+await step('strike a stamp in any case', async () => {
+  const forge = await openPanel('NAMEFORGE');
+  await forge.locator('input.field').first().fill('An');
+  await forge
+    .getByRole('button', { name: /^Any case$/i })
+    .click({ timeout: 3000 });
+  await forge
+    .getByRole('button', { name: /^Strike$/i })
+    .click({ timeout: 3000 });
+
+  const struck = forge.locator('.notice--ok');
+  await struck.first().waitFor({ timeout: 90000 });
+  const body = (await forge.innerText()).replace(/\s+/g, ' ');
+
+  const address = body.match(/\b(1[123456789A-HJ-NP-Za-km-z]{25,34})\b/)?.[1];
+  if (!address)
+    throw new Error(`no address on the card: ${body.slice(0, 200)}`);
+  // The point of the mode: the strike counts whatever case turned up.
+  if (address.slice(1, 3).toLowerCase() !== 'an')
+    throw new Error(`struck ${address}, which does not carry An in any case`);
+  // The phrase is a numbered grid, not a sentence, so count the cells.
+  const words = await forge.locator('.word-grid .word').count();
+  if (words !== 12)
+    throw new Error(`the card shows ${words} words, expected 12`);
+  console.log(`     struck ${address.slice(0, 8)}… in any case`);
+});
+
+// And the chain refusing to answer: a notice, not a dead panel. Back to the
+// ledger first — the panels above swapped it off screen.
+await openPanel('LEDGER');
 expectNetworkErrors = true;
 for (const host of ['blockstream.info', 'mempool.space', 'blockchain.info']) {
   await page.unroute(`**://${host}/**`);

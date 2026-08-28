@@ -13,6 +13,59 @@ Cutting a release is: bump those three, write the entry below, then push a tag
 refuses a tag that does not match the declared version and takes the published
 notes from the entry, so the tag, the code and these notes cannot drift apart.
 
+## 2.3.0
+
+### Nameforge asks which case you meant
+
+A switch on the panel, and a word on the command line:
+
+```
+NAMEFORGE Chance        strike 1Chance and nothing else
+NAMEFORGE Chance ANY    take whichever case turns up first — 1cHAncE counts
+```
+
+They are two different searches, and each is priced as itself.
+
+**Any case is cheaper, by exactly the alphabet it opens up.** Every position
+after the first doubles when both of its cases exist, and the first grows by
+whatever the measurement says the other case is worth — so `Chance` goes from
+15.0 billion candidates to 462 million, a factor of 32.5. Nothing about that
+figure is a fudge; it falls out of the same arithmetic that prices exact mode,
+which now simply counts how many characters each position accepts.
+
+**And it strikes names the alphabet only seemed to forbid.** Base58 drops `O`,
+`I` and `l` but keeps `o`, `i` and `L`, so `Oslo`, `Bell` and `IAn` were being
+turned away over a case rather than a letter. In any-case mode all three are
+strikeable. `0` is the one character with no way back — it has no case to fall
+to, and is refused in both modes.
+
+### What you type is what gets struck
+
+`andy`, `ANDY` and `Andy` used to be folded to `Andy` — one spelling per name.
+That rule was standing in for a decision the player was never offered; now that
+the switch offers it, restyling their name behind their back would be the
+surprising thing. Exact mode strikes the spelling as typed.
+
+The catch is that `chance` really is about sixty times the work of `Chance`,
+because `c` lands sixty times less often than `C` after the leading `1`. So
+whenever the other mode would be ten times cheaper or better, both builds say
+so — with the figure and the wait — while there is still time to retype it.
+
+### Also
+
+- The worker is told which rule to match by, and imports the rule rather than
+  keeping its own copy. A worker that decided for itself what counts as a hit
+  could hand back a stamp the page never priced.
+- The near-miss counter scores by the same rule the hit does, so a near miss
+  can no longer outrank a hit in any-case mode.
+- The two builds are now checked against each other by *running* the
+  JavaScript and diffing the numbers for eight names in both modes, rather
+  than by reading the source for the right constants.
+- `tools/smoke_web.mjs` presses the switch and then actually strikes a stamp:
+  `An` in any case is about 658 candidates, so an end-to-end forge finishes in
+  seconds. It caught a real one — the panel was validating against the strict
+  alphabet whatever the switch said, so any-case mode still refused `Oslo`.
+
 ## 2.2.1
 
 ### The ledger would not open
