@@ -13,6 +13,42 @@ Cutting a release is: bump those three, write the entry below, then push a tag
 refuses a tag that does not match the declared version and takes the published
 notes from the entry, so the tag, the code and these notes cannot drift apart.
 
+## 2.2.1
+
+### The ledger would not open
+
+Pressing LEDGER threw `T[key] is undefined` and the panel never appeared. The
+redesign in 2.2.0 asked the dictionary for six strings that were never added to
+it — `source`, `path`, `address`, `netDown`, and `used`/`unused` for the badges
+on the paths table. `t` is `T[key][lang] || T[key].en`, so a key that does not
+exist does not fall back to anything: it throws, and it throws while the panel
+is being built, which loses the whole panel rather than one label.
+
+The six are in, in all four languages.
+
+### Two tests that would have caught it
+
+The existing dictionary test checked that every key it *found* carried all four
+languages. It could not know about a key nobody had written. There is now one
+reading it from the other end: every `t('…')` and `tf('…')` in the panels must
+resolve, both branches of a ternary included — which is where `used` and
+`unused` were hiding.
+
+`tools/smoke_web.mjs` opens the built page in a real browser, stubs the chain
+and presses the buttons: every panel in turn, a seed derived, an address read,
+the history paged to its end, and the same read with the explorer refusing to
+answer. Both of the last two bugs — the Explorer's missing method and this one —
+were invisible to every static check in the suite, because nothing had ever
+executed a panel. It needs a browser, so it is opt-in rather than part of CI.
+
+### Also
+
+- `secondsUnit` is `seconds`, the name the rest of the unit words use. It had
+  been renamed around a collision that no longer exists, and the remapping it
+  needed was the one place a string reaching `t` was not a key.
+- `.badge--muted` had no rule, so the `unused` badge would have drawn with no
+  colour of its own.
+
 ## 2.2.0
 
 ### The Explorer's address view was broken

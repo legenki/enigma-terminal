@@ -579,6 +579,56 @@ def test_the_panels_only_call_methods_their_clients_actually_have():
     assert not missing, "the panels call methods that do not exist:\n  " + "\n  ".join(missing)
 
 
+def test_every_translated_string_the_panels_ask_for_exists():
+    """`t('source')` in the rebuilt ledger, and the panel would not open.
+
+    `t` is `T[key][lang] || T[key].en`, so a key that was never added throws
+    on the missing `[lang]` rather than falling back to anything — and it
+    throws while the panel is being *built*, which takes the whole panel with
+    it. Six keys went in that way: the four the ledger's header and paths
+    table wanted, plus `used` and `unused`, which hid inside a ternary.
+
+    Keys reached through a plain variable (`t(state, lang)`) cannot be checked
+    from here and are not; every literal one is, including both branches of a
+    ternary. A string compared against rather than looked up would be read as
+    a key and reported — there are none, and one arriving is worth a look.
+    """
+    dictionary = (DOCS / "js" / "gui" / "text.js").read_text(encoding="utf-8")
+    block = dictionary[dictionary.index("export const T = {"):]
+    defined = set(re.findall(r"^  (\w+):", block, re.MULTILINE))
+    assert len(defined) > 50, f"only found {len(defined)} keys — parser drifted"
+
+    missing = []
+    for path in JS_FILES:
+        source = path.read_text(encoding="utf-8")
+        if path.name == "text.js" or "text.js'" not in source:
+            continue
+        code = strip_js_comments(source)
+        for call in re.finditer(r"(?<![\w.])(t|tf)\(", code):
+            # The key is the first argument: scan to the comma that ends it,
+            # ignoring commas nested inside parentheses or brackets.
+            depth, cut = 0, None
+            for i in range(call.end(), len(code)):
+                char = code[i]
+                if char in "([{":
+                    depth += 1
+                elif char in ")]}":
+                    if depth == 0:
+                        cut = i
+                        break
+                    depth -= 1
+                elif char == "," and depth == 0:
+                    cut = i
+                    break
+            key_expression = code[call.end():cut if cut else call.end()]
+            for key in re.findall(r"'([A-Za-z0-9_]+)'", key_expression):
+                if key not in defined:
+                    line = code[: call.start()].count("\n") + 1
+                    missing.append(f"{path.name}:{line} — {call.group(1)}('{key}')")
+
+    assert not missing, "the panels ask for strings the dictionary has not got:\n  " + "\n  ".join(missing)
+
+
 def test_the_ledger_reads_everything_in_one_action():
     """It was three buttons — a balance, a sweep of the paths, a truncated
     history — and reading an address meant pressing all three and assembling

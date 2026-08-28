@@ -341,6 +341,7 @@ textarea.field { resize: vertical; min-height: 74px; line-height: 1.55; }
 .badge--open { color: var(--info); }
 .badge--solved { color: var(--ok); }
 .badge--locked { color: var(--muted); }
+.badge--muted { color: var(--muted); }
 .badge--warn { color: var(--warn); }
 .badge--danger { color: var(--danger); }
 

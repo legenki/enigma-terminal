@@ -391,14 +391,14 @@ tools/build_web_data.py    generates the web build's data from data/
 tools/measure_leading.mjs  re-measures the distribution behind nameforge.json
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
-tests/                     464 tests, including the Python ↔ JavaScript diff
+tests/                     465 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
 
 ```bash
 pip install -e ".[dev]"
-python -m pytest tests -v          # 464 tests
+python -m pytest tests -v          # 465 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 

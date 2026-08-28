@@ -2015,7 +2015,7 @@ export class GuiApp {
   explorerPulse() {
     const lang = this.lang;
     const height = el('div', { class: 'pulse__height', text: '—' });
-    const digits = ['hours', 'minutes', 'secondsUnit'].map((unit) => {
+    const digits = ['hours', 'minutes', 'seconds'].map((unit) => {
       const value = el('span', { class: 'pulse__n', text: '00' });
       return {
         value,
@@ -2287,7 +2287,7 @@ export class GuiApp {
 
     const span = (seconds) => {
       const parts = formatSpan(seconds);
-      const unit = (name) => t(name === 'seconds' ? 'secondsUnit' : name, lang);
+      const unit = (name) => t(name, lang);
       return `${parts.major} ${unit(parts.majorUnit)} ${parts.minor} ${unit(parts.minorUnit)}`;
     };
     const top = pools?.pools ? pools.pools.slice(0, 8) : [];

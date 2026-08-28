@@ -59,6 +59,17 @@ export const T = {
     es: 'Transacciones',
     pt: 'Transações',
   },
+  source: { en: 'Source', ru: 'Источник', es: 'Fuente', pt: 'Fonte' },
+  path: { en: 'Path', ru: 'Путь', es: 'Ruta', pt: 'Caminho' },
+  address: { en: 'Address', ru: 'Адрес', es: 'Dirección', pt: 'Endereço' },
+  used: { en: 'used', ru: 'использован', es: 'usado', pt: 'usado' },
+  unused: { en: 'unused', ru: 'чистый', es: 'sin usar', pt: 'sem uso' },
+  netDown: {
+    en: 'The chain did not answer',
+    ru: 'Сеть не ответила',
+    es: 'La cadena no respondió',
+    pt: 'A cadeia não respondeu',
+  },
   forgeTitle: {
     en: 'Nameforge',
     ru: 'Nameforge',
@@ -275,7 +286,7 @@ export const T = {
     es: 'minutos',
     pt: 'minutos',
   },
-  secondsUnit: {
+  seconds: {
     en: 'seconds',
     ru: 'секунд',
     es: 'segundos',
