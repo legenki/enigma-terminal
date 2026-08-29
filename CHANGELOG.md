@@ -13,6 +13,50 @@ Cutting a release is: bump those three, write the entry below, then push a tag
 refuses a tag that does not match the declared version and takes the published
 notes from the entry, so the tag, the code and these notes cannot drift apart.
 
+## 3.0.1
+
+Housekeeping from a read-through, and one type bug it turned up.
+
+### The worker kept one counter doing two jobs
+
+Nameforge's worker counted attempts into a single variable and reset it to zero
+at every progress report, so the number it sent was a delta while the name said
+total — and no number described the whole search. There are two now: `batch`,
+which the page adds up, and `attempts`, which is what that worker has done
+altogether. The page adds the delta explicitly, because several workers are
+summed into one figure and adding totals would count everything again on every
+message.
+
+### Solved and taken are Sets
+
+They are membership questions and nothing else. As arrays they carried a real
+asymmetry: `isTaken` and `take` coerced the id with `Number()` and `isSolved`
+and `markSolved` did not, so a string id could be marked solved and then never
+look solved again. The coercion is in one place now.
+
+Storage is unchanged — arrays in, arrays out — and the getters still hand out
+arrays, so nothing outside the store can tell. `tools/js_commands.mjs` was
+reaching into `progress.data` to set up its fixture and now goes through
+`take()` and `markSolved()`, which is what it should have been doing.
+
+### Also
+
+- `mnemonic_to_entropy` normalised and split the phrase, then called `validate`,
+  which normalised and split it again. `validate` returns the words it checked,
+  so taking them makes it impossible for the words measured to differ from the
+  words validated.
+- `complete_mnemonic` returns `(position, [word, ...])` in Python and
+  `{ position, candidates }` with `{ word, mnemonic, case }` in the browser.
+  That is deliberate — the panel marks the candidate that closes a case, and a
+  reference implementation that assembled the phrase and looked up the case
+  would be checking those against itself — so both docstrings now say so, and
+  say that the words are the part the parity test compares.
+- `import warnings` moved to the top of `cases.py`.
+- The explorer's request queue is advanced by `run.catch(...)` while callers
+  get the unswallowed `run`, so one 404 cannot stop every later request. That
+  was already right; there is a test for it now, because it is invisible and a
+  one-character edit away from being wrong.
+
 ## 3.0.0
 
 ### A root key is no longer printed in full

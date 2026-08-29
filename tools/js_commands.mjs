@@ -72,8 +72,11 @@ const term = new Proxy(
   },
 );
 const player = new Engine(term, { lang: 'en' });
-player.progress.data.taken = [169, 170];
-player.progress.data.solved = [171];
+// Through the store's own surface, not its `data`: the ids are a Set in
+// memory and an array in storage, and a tool that assumed either one broke
+// the moment that changed.
+for (const id of [169, 170]) player.progress.take(id);
+player.progress.markSolved(171);
 const desk = core.caseload(player.progress);
 
 const unreachable = [];

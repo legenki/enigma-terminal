@@ -14,6 +14,7 @@ no runtime behind it would only be a second thing to get wrong.
 from __future__ import annotations
 
 import json
+import warnings
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -129,7 +130,6 @@ class Campaign:
             except FileNotFoundError:
                 self.contracts = []   # the campaign stands on its own
             except (ValueError, KeyError) as e:
-                import warnings
                 warnings.warn(f"Failed to load contracts: {e}")
                 self.contracts = []
             try:
@@ -138,7 +138,6 @@ class Campaign:
             except FileNotFoundError:
                 self.clients = []
             except (ValueError, KeyError) as e:
-                import warnings
                 warnings.warn(f"Failed to load clients: {e}")
                 self.clients = []
 

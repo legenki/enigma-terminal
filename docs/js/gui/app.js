@@ -3142,12 +3142,15 @@ export class GuiApp {
         const worker = new Worker('js/nameforge-worker.js', { type: 'module' });
         worker.onmessage = (event) => {
           const data = event.data;
+          // The delta since this worker last reported, never its running
+          // total — several workers are summed into one number here, and
+          // adding totals would count everything again on every message.
           if (data.type === 'progress') {
-            attempts += data.attempts;
+            attempts += data.batchAttempts;
             if (data.closestScore > best.score)
               best = { score: data.closestScore, address: data.closest };
           } else if (data.type === 'hit') {
-            attempts += data.attempts;
+            attempts += data.batchAttempts;
             stopAll();
             this.showStamp(
               output,

@@ -110,8 +110,10 @@ def entropy_to_mnemonic(entropy: bytes) -> str:
 
 def mnemonic_to_entropy(mnemonic: str) -> bytes:
     """Reverse of :func:`entropy_to_mnemonic`; validates the checksum on the way."""
-    words = normalize(mnemonic).split()
-    validate(mnemonic)
+    # `validate` normalises and splits to do its own work and hands the result
+    # back, so taking it here is one normalise rather than two — and makes it
+    # impossible for the words measured to differ from the words checked.
+    words = validate(mnemonic)
     bits = "".join(f"{_WORD_INDEX[w]:011b}" for w in words)
     entropy_bits = len(bits) * 32 // 33
     entropy = bytes(
@@ -490,6 +492,15 @@ def complete_mnemonic(pattern: str) -> tuple[int, list[str]]:
     refused rather than enumerated.
 
     Returns the 0-based blank position and the words that satisfy the checksum.
+
+    **This deliberately returns less than the browser's `completeMnemonic`,**
+    which answers `{ position, candidates }` with each candidate carrying the
+    word, the whole phrase it completes and the campaign case that phrase
+    solves. The panel needs all three to mark the answer that closes a case;
+    nothing here does, and a reference implementation that assembled a phrase
+    and looked up a case would be checking those two things against itself.
+    The words are the part both builds must agree on, so the words are what
+    `tests/test_web_parity.py` compares.
     """
     words = normalize(pattern).split()
     if len(words) not in _WORD_COUNT_TO_ENTROPY_BYTES:

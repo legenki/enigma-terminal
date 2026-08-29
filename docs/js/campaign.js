@@ -9,7 +9,7 @@ export const CAMPAIGN = {
       "es": "SIMULADOR DE DETECTIVE DIGITAL // CONSTRUCCIÓN DE RED REAL",
       "pt": "SIMULADOR DE DETETIVE DIGITAL // CONSTRUÇÃO DE REDE REAL"
     },
-    "version": "3.0.0",
+    "version": "3.0.1",
     "operator": "NULLSEC",
     "client": "ESCRIBANÍA CERO"
   },

@@ -51,15 +51,22 @@ export class ProgressStore {
   }
 
   static read() {
-    const empty = () => ({ solved: [], hints: {}, taken: [] });
+    // Sets in memory, arrays in storage. `solved` and `taken` are membership
+    // questions and nothing else — every use is has/add/remove — so a Set says
+    // what they are, keeps ids unique without checking, and puts the coercion
+    // in one place. `isSolved` used to skip the Number() that `isTaken` did,
+    // so a string id could be marked solved and then never look solved.
+    const empty = () => ({ solved: new Set(), hints: {}, taken: new Set() });
     // A hand-edited save is a fresh save, never a stack trace. Broken JSON was
     // always handled; JSON that parses into the wrong *type* was not, and
     // `{"solved": 5}` reached `solved.includes(...)` and took the game down on
     // the first render. Each field is checked for the shape it is used as.
     const ids = (value) =>
-      Array.isArray(value)
-        ? value.filter((n) => Number.isFinite(Number(n))).map(Number)
-        : [];
+      new Set(
+        Array.isArray(value)
+          ? value.filter((n) => Number.isFinite(Number(n))).map(Number)
+          : [],
+      );
     try {
       const raw = read(STORAGE_KEY);
       if (!raw) return empty();
@@ -89,11 +96,20 @@ export class ProgressStore {
   }
 
   save() {
-    write(STORAGE_KEY, JSON.stringify(this.data));
+    // JSON has no Set, and the stored shape is the one every earlier save
+    // already used — this change is invisible from outside the object.
+    write(
+      STORAGE_KEY,
+      JSON.stringify({
+        solved: [...this.data.solved],
+        hints: this.data.hints,
+        taken: [...this.data.taken],
+      }),
+    );
   }
 
   get solved() {
-    return this.data.solved;
+    return [...this.data.solved];
   }
 
   get hints() {
@@ -101,18 +117,18 @@ export class ProgressStore {
   }
 
   get taken() {
-    return this.data.taken;
+    return [...this.data.taken];
   }
 
   isTaken(id) {
-    return this.data.taken.includes(Number(id));
+    return this.data.taken.has(Number(id));
   }
 
   /** Pick a contract up off the board. Returns true the first time. */
   take(id) {
     const key = Number(id);
-    if (this.data.taken.includes(key)) return false;
-    this.data.taken.push(key);
+    if (this.data.taken.has(key)) return false;
+    this.data.taken.add(key);
     this.save();
     return true;
   }
@@ -121,20 +137,19 @@ export class ProgressStore {
   drop(id) {
     const key = Number(id);
     if (this.isSolved(key)) return false;
-    const before = this.data.taken.length;
-    this.data.taken = this.data.taken.filter((entry) => entry !== key);
-    if (this.data.taken.length === before) return false;
+    if (!this.data.taken.delete(key)) return false;
     this.save();
     return true;
   }
 
   isSolved(id) {
-    return this.data.solved.includes(id);
+    return this.data.solved.has(Number(id));
   }
 
   markSolved(id) {
-    if (this.isSolved(id)) return false;
-    this.data.solved.push(id);
+    const key = Number(id);
+    if (this.data.solved.has(key)) return false;
+    this.data.solved.add(key);
     this.save();
     return true;
   }
@@ -150,7 +165,7 @@ export class ProgressStore {
   }
 
   reset() {
-    this.data = { solved: [], hints: {}, taken: [] };
+    this.data = { solved: new Set(), hints: {}, taken: new Set() };
     this.save();
   }
 }
@@ -270,6 +285,15 @@ export const UNKNOWN_TOKENS = new Set(['?', '*', '_', '...', '??', '???']);
  * aid for a phrase you already almost have, not a search over unknown wallets:
  * two unknown positions would leave hundreds of thousands of answers, which is
  * why the tool deliberately refuses them.
+ *
+ * Answers `{ position, candidates }`, each candidate `{ word, mnemonic, case }`
+ * — the panel marks the one that closes a case, so it needs the phrase and the
+ * lookup, not just the word. **Python's `complete_mnemonic` returns less on
+ * purpose:** `(position, [word, ...])`, because it is the reference the parity
+ * test holds this against, and the words are the part the two builds have to
+ * agree on. The extra fields here are this build's presentation, not shared
+ * arithmetic; if they ever start deciding which words survive, the divergence
+ * has become a bug.
  */
 export function completeMnemonic(pattern) {
   const words = normalize(String(pattern)).split(' ').filter(Boolean);

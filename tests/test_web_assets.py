@@ -363,17 +363,32 @@ def test_a_hand_edited_save_is_a_fresh_save_not_a_stack_trace(body):
     """
     script = """
       const { ProgressStore } = await import('./docs/js/core.js');
+      let written = null;
       globalThis.localStorage = {
         _v: BODY,
-        getItem(k) { return this._v; },
-        setItem() {}, removeItem() {},
+        getItem() { return this._v; },
+        setItem(k, v) { written = v; },
+        removeItem() {},
       };
-      const data = ProgressStore.read();
-      // Every field has to survive the use it is actually put to.
-      data.solved.includes(1);
-      data.taken.includes(1);
-      Object.keys(data.hints);
-      console.log(JSON.stringify(data));
+      // Driven through the store's own surface rather than its internals: the
+      // ids are a Set in memory and an array in storage, and neither of those
+      // is the thing being promised here.
+      const store = new ProgressStore();
+      store.isSolved(1);
+      store.isTaken(1);
+      store.hintsUsed(1);
+      const before = [store.solved.length, store.taken.length];
+      // Ids no save in the list above already carries, so the write always
+      // happens and `stored` is never null.
+      store.markSolved(77);
+      store.take(88);
+      console.log(JSON.stringify({
+        solved: store.solved,
+        taken: store.taken,
+        hints: store.hints,
+        before,
+        stored: JSON.parse(written),
+      }));
     """.replace("BODY", json.dumps(body))
     done = subprocess.run(
         ["node", "--input-type=module", "-e", script],
@@ -381,12 +396,17 @@ def test_a_hand_edited_save_is_a_fresh_save_not_a_stack_trace(body):
     )
     assert done.returncode == 0, f"a save of {body} broke the store:\n{done.stderr}"
     data = json.loads(done.stdout)
-    assert isinstance(data["solved"], list)
-    assert isinstance(data["taken"], list)
+    for field in ("solved", "taken"):
+        assert isinstance(data[field], list), f"{field} does not read back as a list"
+        assert isinstance(data["stored"][field], list), \
+            f"{field} must be written to storage as an array, not a Set"
     assert isinstance(data["hints"], dict)
+    # Writing an id and then asking about it has to agree, whatever the file said.
+    assert 77 in data["solved"] and 88 in data["taken"]
+    assert 77 in data["stored"]["solved"] and 88 in data["stored"]["taken"]
     # One unreadable id is not a reason to throw the whole save away.
     if body == '{"solved": ["x", 3], "taken": [9]}':
-        assert data["solved"] == [3] and data["taken"] == [9]
+        assert data["before"] == [1, 1], f"a readable id was dropped: {data['before']}"
 
 
 def test_gui_text_dictionary_is_complete():
@@ -617,6 +637,25 @@ def test_an_address_is_encoded_before_it_reaches_a_url():
     for line in builders:
         if "${a}" in line or "{addr}" in line:
             assert "pathSafe" in line, f"an address reaches a URL unencoded: {line.strip()}"
+
+
+def test_the_explorer_queue_survives_a_failed_call():
+    """Every explorer call is chained behind the last one, so the tail of that
+    chain must never be a rejected promise: one 404 would stop every request
+    after it, for the life of the page, with no error anywhere.
+
+    The queue is advanced by `run.catch(...)` while callers still receive the
+    unswallowed `run`. Both halves matter — catching for the queue and not for
+    the caller — so both are pinned.
+    """
+    source = strip_js_comments((DOCS / "js" / "mempool.js").read_text(encoding="utf-8"))
+    assignments = re.findall(r"this\.chain\s*=\s*([^;]+);", source)
+    assert assignments, "the queue moved"
+    for value in assignments:
+        assert "catch(" in value or "Promise.resolve()" in value, \
+            f"a rejection can reach the queue: this.chain = {value.strip()}"
+    assert re.search(r"\breturn run;", source), \
+        "the caller must get the promise that can still reject"
 
 
 def test_only_storage_js_touches_local_storage():

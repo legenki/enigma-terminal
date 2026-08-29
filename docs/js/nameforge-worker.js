@@ -80,7 +80,13 @@ self.onmessage = async (event) => {
   if (type !== 'search') return;
 
   running = true;
-  let attempts = 0;
+  // Two counts, because they answer different questions and used to be one
+  // variable doing both badly: `batch` is what has happened since the last
+  // report and is what the page adds up, `total` is what this worker has done
+  // altogether. Resetting the running total to zero at every report meant the
+  // only number that could describe the whole search was never kept.
+  let batch = 0;
+  let total = 0;
   let closest = '';
   let closestScore = -1;
   // Matching is the page's rule, imported rather than repeated: a worker that
@@ -92,14 +98,16 @@ self.onmessage = async (event) => {
 
   while (running) {
     const { mnemonic, address } = await candidate();
-    attempts += 1;
+    batch += 1;
+    total += 1;
 
     if (matches(address, stamp, anyCase)) {
       self.postMessage({
         type: 'hit',
         mnemonic,
         address,
-        attempts,
+        batchAttempts: batch,
+        attempts: total,
         path: PATH,
       });
       running = false;
@@ -117,13 +125,19 @@ self.onmessage = async (event) => {
       closest = address;
     }
 
-    if (attempts % reportEvery === 0) {
-      self.postMessage({ type: 'progress', attempts, closest, closestScore });
-      attempts = 0;
+    if (batch >= reportEvery) {
+      self.postMessage({
+        type: 'progress',
+        batchAttempts: batch,
+        attempts: total,
+        closest,
+        closestScore,
+      });
+      batch = 0;
       // Yield so a 'stop' message can actually be delivered.
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
   }
 
-  self.postMessage({ type: 'stopped', attempts });
+  self.postMessage({ type: 'stopped', batchAttempts: batch, attempts: total });
 };
