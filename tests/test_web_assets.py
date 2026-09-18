@@ -791,3 +791,13 @@ def test_a_transaction_row_carries_what_a_ledger_row_should():
     chain = (DOCS / "js" / "chain.js").read_text(encoding="utf-8")
     for field in ("feeSats", "inputs", "outputs", "blockHeight", "blockTime"):
         assert field in chain, f"a transaction no longer carries {field}"
+
+
+def test_security_meta_tags_present():
+    """index.html must declare strict CSP and no-referrer policy."""
+    html = (DOCS / "index.html").read_text(encoding="utf-8")
+    assert 'http-equiv="Content-Security-Policy"' in html, "missing CSP meta tag"
+    assert 'name="referrer" content="no-referrer"' in html, "missing no-referrer meta tag"
+    assert "default-src 'self'" in html, "CSP missing default-src 'self'"
+    assert "https://fonts.googleapis.com" in html, "CSP must allow google fonts"
+    assert "https://mempool.space" in html, "CSP must allow mempool.space connect-src"
