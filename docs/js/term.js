@@ -142,6 +142,11 @@ export class Terminal {
     this._lastBlink = 0;
     //: Its own copy, so a terminal rendered without a clock still has one.
     this.palette = { ground: GROUND, ...PALETTE };
+    this.liveRegion =
+      options.liveRegion ??
+      (typeof document !== 'undefined'
+        ? document.getElementById('term-live')
+        : null);
 
     this.resize();
   }
@@ -219,6 +224,13 @@ export class Terminal {
     for (const row of this.wrap(segments)) this.lines.push(row);
     if (this.lines.length > this.maxScrollback) {
       this.lines.splice(0, this.lines.length - this.maxScrollback);
+    }
+    if (this.liveRegion) {
+      const text = segments
+        .map((s) => s.text)
+        .join('')
+        .trim();
+      if (text) this.liveRegion.textContent = text;
     }
     this.dirty = true;
   }

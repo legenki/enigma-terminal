@@ -321,7 +321,7 @@ export class GuiApp {
 
   mount() {
     this.nav = el('nav', { class: 'win__body' });
-    this.content = el('div', { class: 'win__body' });
+    this.content = el('div', { class: 'win__body content-pane' });
     this.navWindow = win(t('navTitle', this.lang), this.nav);
     this.contentWindow = win('—', this.content);
 

@@ -127,6 +127,19 @@
   padding: 12px 14px;
 }
 
+@keyframes panel-in {
+  from { opacity: 0.88; }
+  to { opacity: 1; }
+}
+
+.content-pane > * {
+  animation: panel-in 100ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content-pane > * { animation: none; }
+}
+
 .win__collapse {
   flex: none;
   width: 17px;
@@ -204,7 +217,15 @@
 .nav__bar span {
   display: block;
   height: 100%;
-  background: var(--accent);
+  background-color: var(--accent);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 3px,
+    var(--sunken) 3px,
+    var(--sunken) 4px
+  );
+  transition: width 160ms ease;
 }
 
 /* ---------- controls ----------------------------------------------------- */
@@ -585,16 +606,74 @@ a { color: var(--info); }
 
 @media (max-width: 1080px) {
   #gui-root,
-  #gui-root.rail-closed { grid-template-columns: 210px minmax(0, 1fr); }
-  .rail, .rail-tab { display: none; }
+  #gui-root.rail-closed {
+    grid-template-columns: 210px minmax(0, 1fr);
+  }
+  .rail-tab {
+    display: block;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 20;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 8px rgba(20, 20, 19, 0.12);
+  }
+  .rail {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: min(336px, calc(100vw - 230px));
+    z-index: 30;
+    box-shadow: 0 4px 24px rgba(20, 20, 19, 0.2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .rail.is-hidden { display: none; }
 }
 
 @media (max-width: 760px) {
   #gui-root,
-  #gui-root.rail-closed { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-  .nav__list { display: flex; flex-wrap: wrap; gap: 4px; }
-  .nav__item { width: auto; margin: 0; border-left-width: 2px; }
+  #gui-root.rail-closed {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    padding: 6px;
+    gap: 6px;
+  }
+  .nav {
+    max-height: 44px;
+    overflow: hidden;
+  }
+  .nav__list {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 4px;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav__list::-webkit-scrollbar { display: none; }
+  .nav__item {
+    flex: none;
+    width: auto;
+    margin: 0;
+    padding: 6px 10px;
+    border-left-width: 2px;
+    white-space: nowrap;
+  }
   .nav__sep, .nav__meter { display: none; }
+  .rail {
+    width: min(336px, calc(100vw - 16px));
+    right: 6px;
+    top: 6px;
+    bottom: 6px;
+  }
+  .rail-tab {
+    top: 6px;
+    right: 6px;
+  }
 }
 
 /* ---------- contract board ----------------------------------------------- */
@@ -994,5 +1073,23 @@ a { color: var(--info); }
   .led-tx__id {
     grid-column: 2;
     justify-self: start;
+  }
+}
+
+/* ---------- high contrast / forced colors -------------------------------- */
+
+@media (forced-colors: active) {
+  .win, .card, .btn, .seg, .drop__btn, .drop__menu, #glitch-bar, #screen-frame {
+    border: 1px solid ButtonText;
+  }
+  .btn--accent, .seg__btn[aria-pressed="true"] {
+    background: Highlight;
+    color: HighlightText;
+  }
+  .badge {
+    border: 1px solid CanvasText;
+  }
+  #power-led {
+    border: 1px solid CanvasText;
   }
 }
