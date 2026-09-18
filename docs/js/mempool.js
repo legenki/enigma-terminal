@@ -41,10 +41,16 @@ export function btc(sats, { places = 8 } = {}) {
 }
 
 export class ExplorerClient {
-  constructor({ fetcher = null, now = () => Date.now(), base = BASE } = {}) {
+  constructor({
+    fetcher = null,
+    now = () => Date.now(),
+    base = BASE,
+    timeout = 12000,
+  } = {}) {
     this.base = base;
-    this.fetcher = fetcher || ((url) => fetch(url));
+    this.fetcher = fetcher || ((url, options) => fetch(url, options));
     this.now = now;
+    this.timeout = timeout;
     this.cache = new Map();
     this.spent = [];
     this.chain = Promise.resolve();
@@ -76,10 +82,39 @@ export class ExplorerClient {
       this.spent.push(this.now());
 
       let response;
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), this.timeout);
       try {
-        response = await this.fetcher(this.base + path);
+        const fetchPromise = this.fetcher(this.base + path, {
+          signal: controller.signal,
+        });
+        const abortPromise = new Promise((_, reject) => {
+          if (controller.signal.aborted) {
+            const err = new Error('The operation was aborted.');
+            err.name = 'AbortError';
+            reject(err);
+            return;
+          }
+          controller.signal.addEventListener(
+            'abort',
+            () => {
+              const err = new Error('The operation was aborted.');
+              err.name = 'AbortError';
+              reject(err);
+            },
+            { once: true },
+          );
+        });
+        response = await Promise.race([fetchPromise, abortPromise]);
       } catch (error) {
+        if (error.name === 'AbortError') {
+          throw new ExplorerError(
+            `NETWORK TIMEOUT — NO RESPONSE AFTER ${this.timeout}ms`,
+          );
+        }
         throw new ExplorerError(`NETWORK UNREACHABLE — ${error.message}`);
+      } finally {
+        clearTimeout(timer);
       }
       if (response.status === 404) {
         throw new ExplorerError('NOT FOUND ON CHAIN', { status: 404 });

@@ -444,3 +444,21 @@ def test_the_hashrate_follows_the_spacing_it_is_given():
     assert result["measured"].startswith("963"), result["measured"]
     assert result["tiny"].endswith("MH/s")
     assert result["none"] == "—"
+
+
+def test_explorer_client_aborts_on_hanging_request():
+    result = node("""
+    import { ExplorerClient, ExplorerError } from './docs/js/mempool.js';
+    const hangingFetcher = () => new Promise(() => {}); // never settles
+    const client = new ExplorerClient({ fetcher: hangingFetcher, timeout: 40 });
+    let timedOut = false;
+    try {
+      await client.get('v1/blocks');
+    } catch (err) {
+      if (err instanceof ExplorerError && err.message.includes('TIMEOUT')) {
+        timedOut = true;
+      }
+    }
+    process.stdout.write(JSON.stringify({ timedOut }));
+    """)
+    assert result["timedOut"] is True, "ExplorerClient failed to timeout on hung request"
