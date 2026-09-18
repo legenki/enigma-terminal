@@ -1339,12 +1339,12 @@ export class GuiApp {
    * knows it (a case answer — all published test vectors) or when this page
    * generated it. Anything else the player typed stays masked.
    */
-  recordDecrypt(wallet, owner, { generated = false } = {}) {
-    const storable = Boolean(owner) || generated;
+  recordDecrypt(wallet, owner) {
+    const storable = Boolean(owner);
     const title = storable
       ? wallet.primary.address
       : maskAddress(wallet.primary.address);
-    this.log(generated ? 'random' : 'decrypt', title, {
+    this.log('decrypt', title, {
       status: owner ? 'ok' : 'info',
       detail: storable
         ? wallet.mnemonic
@@ -2898,7 +2898,14 @@ export class GuiApp {
       const words = mnemonic.split(' ');
       const wallet = deriveWallet(mnemonic);
       this.wallet = wallet;
-      this.recordDecrypt(wallet, null, { generated: true });
+      this.log(
+        'random',
+        `${words.length * 11 - Math.floor(words.length / 3)}-bit phrase`,
+        {
+          detail: `${maskMnemonic(mnemonic)} — ${t('maskedNote', lang)}`,
+          payload: { masked: true },
+        },
+      );
       replace(
         output,
         el(
@@ -3227,7 +3234,7 @@ export class GuiApp {
     this.log('forge', data.address, {
       status: 'ok',
       detail: `1${stamp} · ${nfEstimate(stamp, 1, anyCase).tier} · ${attempts.toLocaleString('en-US').replace(/,/g, ' ')} attempts`,
-      payload: { mnemonic: data.mnemonic, stamp },
+      payload: { address: data.address, stamp },
     });
     const words = data.mnemonic.split(' ');
     const guess = nfEstimate(stamp, 1, anyCase);

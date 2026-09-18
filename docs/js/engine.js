@@ -446,12 +446,12 @@ export class Engine {
    * a phrase is kept in full only when the game already knows it (a case
    * answer, all published test vectors) or when this page generated it.
    */
-  recordDecrypt(wallet, owner, { generated = false } = {}) {
-    const storable = Boolean(owner) || generated;
+  recordDecrypt(wallet, owner) {
+    const storable = Boolean(owner);
     const title = storable
       ? wallet.primary.address
       : maskAddress(wallet.primary.address);
-    this.log(generated ? 'random' : 'decrypt', title, {
+    this.log('decrypt', title, {
       status: owner ? 'ok' : 'info',
       detail: storable
         ? wallet.mnemonic
@@ -1068,7 +1068,7 @@ export class Engine {
     this.log('forge', struck.address, {
       status: 'ok',
       detail: `1${stamp} · ${guess.tier} · ${struck.attempts.toLocaleString('en-US')} attempts`,
-      payload: { mnemonic: struck.mnemonic, stamp },
+      payload: { address: struck.address, stamp },
     });
   }
 
@@ -1107,8 +1107,8 @@ export class Engine {
       'amber',
     );
     this.log('random', `${entropy.length * 8}-bit phrase`, {
-      detail: mnemonic,
-      payload: { mnemonic },
+      detail: `${maskMnemonic(mnemonic)} — NOT STORED`,
+      payload: { masked: true },
     });
     this.term.print(`[INFO] RUN: DECRYPT ${mnemonic}`, 'cyan');
   }

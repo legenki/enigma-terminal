@@ -801,3 +801,37 @@ def test_security_meta_tags_present():
     assert "default-src 'self'" in html, "CSP missing default-src 'self'"
     assert "https://fonts.googleapis.com" in html, "CSP must allow google fonts"
     assert "https://mempool.space" in html, "CSP must allow mempool.space connect-src"
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node runs the check")
+def test_generated_phrases_are_not_persisted_unmasked_in_journal():
+    """Generated mnemonics must not be stored plaintext in localStorage."""
+    script = """
+    import { Engine } from './docs/js/engine.js';
+    import { Journal } from './docs/js/journal.js';
+    let written = null;
+    globalThis.localStorage = {
+      getItem() { return written; },
+      setItem(k, v) { written = v; },
+      removeItem() {},
+    };
+    const term = {
+      blank() { return this; },
+      print() { return this; },
+      keyValue() { return this; },
+      type() { return this; },
+      rule() { return this; },
+    };
+    const engine = new Engine(term, { lang: 'en' });
+    await engine.cmdRandom('12');
+    const saved = JSON.parse(written || '[]');
+    if (saved.length && saved[0].payload && saved[0].payload.mnemonic) {
+      process.exit(1);
+    }
+    process.stdout.write(JSON.stringify({ ok: true }));
+    """
+    done = subprocess.run(
+        ["node", "--input-type=module", "-e", script],
+        cwd=ROOT, capture_output=True, text=True, timeout=30,
+    )
+    assert done.returncode == 0, f"raw mnemonic leaked into journal:\n{done.stderr}"
