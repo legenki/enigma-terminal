@@ -176,3 +176,11 @@ def test_nameforge_command_accepts_any_flag():
     assert "anyCase" in block, "cmdNameforge does not have anyCase logic"
     assert "worker.postMessage({ type: 'search', stamp, anyCase })" in block, \
         "worker does not receive anyCase flag"
+
+
+def test_recall_handles_forge_entries():
+    """cmdRecall in engine.js and recall in gui/app.js must handle tool === 'forge'."""
+    engine_source = (DOCS / "js" / "engine.js").read_text(encoding="utf-8")
+    assert "entry.tool === 'forge'" in engine_source, "engine.js does not handle forge recall"
+    gui_source = (DOCS / "js" / "gui" / "app.js").read_text(encoding="utf-8")
+    assert "tool === 'forge'" in gui_source, "gui/app.js does not handle forge recall"

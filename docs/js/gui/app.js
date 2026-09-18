@@ -640,6 +640,13 @@ export class GuiApp {
       this.ensurePanel('archive').api.run(payload.query || '');
       return;
     }
+    if (tool === 'forge') {
+      this.go('forge');
+      if (payload.stamp) {
+        this.ensurePanel('forge').api.setStamp(payload.stamp);
+      }
+      return;
+    }
     if (tool === 'search' || tool === 'complete') {
       // These live in the rail, so open it rather than changing panel.
       if (!this.railOpen) this.toggleRail();
@@ -3220,7 +3227,18 @@ export class GuiApp {
     );
     paintMode();
     paintEstimate();
-    return { node, api: { run: start, stop: stopAll } };
+    return {
+      node,
+      api: {
+        run: start,
+        stop: stopAll,
+        setStamp: (val) => {
+          input.value = val;
+          paintMode();
+          paintEstimate();
+        },
+      },
+    };
   }
 
   /** The struck stamp, as an item card. */

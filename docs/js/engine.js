@@ -1726,6 +1726,14 @@ export class Engine {
       this.cmdArchive(payload.query || '');
     } else if (entry.tool === 'complete') {
       this.cmdComplete(payload.pattern || '');
+    } else if (entry.tool === 'forge') {
+      if (payload.address) {
+        this.term.keyValue('STAMP ADDRESS', payload.address, 'grey', 'green');
+        if (payload.stamp)
+          this.term.keyValue('STAMP', `1${payload.stamp}`, 'grey', 'cyan');
+      } else {
+        this.term.print('[WARN] THIS ENTRY HAS NO SAVED ADDRESS.', 'amber');
+      }
     } else if (entry.tool === 'case' || entry.tool === 'hint') {
       this.cmdOpen(String(payload.caseId ?? ''));
     } else {
