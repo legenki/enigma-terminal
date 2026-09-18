@@ -31,6 +31,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
+DOCS = ROOT / "docs"
 LANGS = ("en", "ru", "es", "pt")
 
 #: Short forms and synonyms. Every other command has to be in HELP.
@@ -165,3 +166,13 @@ def test_the_sidebar_shortcuts_are_reachable_and_unique(web):
 
     folded = [k.lower() for k in keys]
     assert len(set(folded)) == len(folded), f"two rows answer the same key: {keys}"
+
+
+def test_nameforge_command_accepts_any_flag():
+    """NAMEFORGE must parse the ANY modifier and enable case-insensitivity."""
+    engine = (DOCS / "js" / "engine.js").read_text(encoding="utf-8")
+    block = engine[engine.index("async cmdNameforge(argument) {") :]
+    block = block[: block.index("\n  }\n")]
+    assert "anyCase" in block, "cmdNameforge does not have anyCase logic"
+    assert "worker.postMessage({ type: 'search', stamp, anyCase })" in block, \
+        "worker does not receive anyCase flag"

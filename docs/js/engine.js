@@ -963,10 +963,13 @@ export class Engine {
    * ends it.
    */
   async cmdNameforge(argument) {
-    const checked = nfValidate(argument.trim().split(/\s+/)[0] || '');
+    const parts = argument.trim().split(/\s+/);
+    const namePart = parts[0] || '';
+    const anyCase = parts.length > 1 && parts[1].toUpperCase() === 'ANY';
+    const checked = nfValidate(namePart, anyCase);
     if (checked.error === 'length') {
       this.term.print(
-        '[WARN] USAGE: NAMEFORGE <name>  (2-6 base58 characters)',
+        '[WARN] USAGE: NAMEFORGE <name> [ANY]  (2-6 base58 characters)',
         'amber',
       );
       return;
@@ -991,8 +994,13 @@ export class Engine {
     this.term.blank();
     this.term.print('[FORGE] MEASURING THIS DEVICE...', 'cyan');
     const rate = await this.measureForgeRate();
-    const guess = nfEstimate(stamp, rate);
-    this.term.keyValue('STAMP', `1${stamp}`, 'grey', 'green');
+    const guess = nfEstimate(stamp, rate, anyCase);
+    this.term.keyValue(
+      'STAMP',
+      anyCase ? `1${stamp} (ANY CASE)` : `1${stamp}`,
+      'grey',
+      'green',
+    );
     this.term.keyValue('RARITY', guess.tier, 'grey', 'amber');
     this.term.keyValue(
       'EXPECTED',
@@ -1042,7 +1050,7 @@ export class Engine {
             });
           }
         };
-        worker.postMessage({ type: 'search', stamp });
+        worker.postMessage({ type: 'search', stamp, anyCase });
         workers.push(worker);
       }
     });
