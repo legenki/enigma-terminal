@@ -71,11 +71,14 @@ export async function figuresFromChain(explorer) {
   await Promise.all([
     attempt(async () => {
       const tip = await explorer.tip();
-      figures.height = group(tip.height);
+      const heightNum = Number(tip.height);
+      if (Number.isFinite(heightNum)) {
+        figures.height = group(heightNum);
+        const remaining = 210000 - (heightNum % 210000);
+        figures.halvingDays = String(Math.floor((remaining * 10) / (60 * 24)));
+      }
       const pool = tip.extras?.pool?.name;
       if (pool) figures.pool = pool;
-      const remaining = 210000 - (Number(tip.height) % 210000);
-      figures.halvingDays = String(Math.floor((remaining * 10) / (60 * 24)));
     }),
     attempt(async () => {
       const prices = await explorer.prices();

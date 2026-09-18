@@ -835,3 +835,10 @@ def test_generated_phrases_are_not_persisted_unmasked_in_journal():
         cwd=ROOT, capture_output=True, text=True, timeout=30,
     )
     assert done.returncode == 0, f"raw mnemonic leaked into journal:\n{done.stderr}"
+
+
+def test_no_module_uses_deprecated_substr():
+    """Modules must use standard .slice() instead of deprecated .substr()."""
+    for path in JS_FILES:
+        code = strip_js_comments(path.read_text())
+        assert ".substr(" not in code, f"{path.name} uses deprecated String.prototype.substr"

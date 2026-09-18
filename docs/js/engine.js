@@ -30,6 +30,7 @@ import {
 } from './crypto/bip39.js';
 import { fromHex, toHex } from './crypto/hash.js';
 import { deriveWallet } from './crypto/wallet.js';
+import { KINDS } from './mempool.js';
 import { WORDLIST_SHA256 } from './wordlist.js';
 
 //: The one warning in the game that must never fall back to a language the
@@ -1383,7 +1384,17 @@ export class Engine {
   }
 
   targetAddress(argument) {
-    if (argument.trim()) return argument.trim();
+    const raw = argument.trim();
+    if (raw) {
+      if (!KINDS.address.test(raw)) {
+        this.term.print(
+          `[WARN] INVALID BITCOIN ADDRESS FORMAT: ${raw}`,
+          'amber',
+        );
+        return null;
+      }
+      return raw;
+    }
     if (this.wallet) return this.wallet.primary.address;
     this.term.print(`[WARN] ${this.t('noWallet')}`, 'amber');
     return null;
