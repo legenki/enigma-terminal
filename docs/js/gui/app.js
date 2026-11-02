@@ -57,6 +57,24 @@ import {
   untilRetarget,
 } from '../pow.js';
 import { read, write } from '../storage.js';
+import {
+  ACTA_WALLETS,
+  actaFiled,
+  bookLookup,
+  chainTip,
+  closeCase,
+  debt,
+  draft,
+  fileActa,
+  filingLine,
+  paperById,
+  papers,
+  STORY,
+  say,
+  setRow,
+  shownActaHints,
+  useActaHint,
+} from '../story.js';
 import { icon } from '../vendor/feather.js';
 import {
   badge,
@@ -97,6 +115,12 @@ export const PANELS = [
       pt: 'Contratos',
     },
     key: '3',
+  },
+  {
+    id: 'acta',
+    glyph: 'folder',
+    label: { en: 'Acta', ru: 'Акт', es: 'Acta', pt: 'Ata' },
+    key: 'A',
   },
   {
     id: 'decrypt',
@@ -313,6 +337,7 @@ export class GuiApp {
     this.progress.refresh();
     this.journal.refresh();
     this.panels.delete('cases');
+    this.panels.delete('acta');
     this.panels.delete('journal');
     if (this.mounted) this.render();
   }
@@ -480,6 +505,7 @@ export class GuiApp {
     const build = {
       cases: () => this.buildCaseList(),
       board: () => this.buildBoard(),
+      acta: () => this.buildActa(),
       decrypt: () => this.buildDecrypt(),
       ledger: () => this.buildLedger(),
       terminal: () => this.buildTerminal(),
@@ -618,6 +644,10 @@ export class GuiApp {
     const { tool, payload = {} } = entry;
     if (tool === 'case' || tool === 'hint') {
       if (payload.caseId) this.go('cases', payload.caseId);
+      return;
+    }
+    if (tool === 'book' || tool === 'acta') {
+      this.go('acta');
       return;
     }
     if (tool === 'decrypt' || tool === 'random') {
@@ -1244,43 +1274,7 @@ export class GuiApp {
             notice('ok', t('checksumOk', lang), wallet.primary.address),
           ];
           if (owner && owner.id === caseFile.id) {
-            const first = this.progress.markSolved(caseFile.id);
-            this.panels.delete('cases');
-            this.paintNav();
-            if (first) {
-              this.log(
-                'case',
-                `${t('caseWord', lang)} ${caseFile.id} — ${pick(caseFile.codename, lang)}`,
-                {
-                  detail: wallet.primary.address,
-                  status: 'ok',
-                  payload: { caseId: caseFile.id, mnemonic: wallet.mnemonic },
-                },
-              );
-            }
-            const employer = caseFile.client
-              ? clientBySlug(caseFile.client)
-              : null;
-            out.push(
-              notice(
-                'ok',
-                tf('caseClosed', lang, { id: caseFile.id }),
-                ...(employer
-                  ? [
-                      tf('filedWith', lang, {
-                        client: pick(employer.name, lang),
-                      }),
-                    ]
-                  : []),
-                ...pick(caseFile.epilogue, lang),
-              ),
-            );
-            const campaignDone = CAMPAIGN_CASES.every((entry) =>
-              this.progress.isSolved(entry.id),
-            );
-            if (first && campaignDone) {
-              out.push(notice('ok', t('allEightClosed', lang)));
-            }
+            out.push(...this.closeAndReport(caseFile, wallet));
           } else if (owner) {
             out.push(
               notice('warn', tf('keyToOtherCase', lang, { id: owner.id })),
@@ -1346,6 +1340,288 @@ export class GuiApp {
    * knows it (a case answer — all published test vectors) or when this page
    * generated it. Anything else the player typed stays masked.
    */
+  /**
+   * Close a case and say so, for every place a phrase can be typed. Answers the
+   * notices to show; the caller decides where they go.
+   */
+  closeAndReport(caseFile, wallet) {
+    const lang = this.lang;
+    const closed = closeCase(this.progress, caseFile, { height: chainTip() });
+    this.panels.delete('cases');
+    this.panels.delete('acta');
+    this.paintNav();
+    if (closed.first) {
+      this.log(
+        'case',
+        `${t('caseWord', lang)} ${caseFile.id} — ${pick(caseFile.codename, lang)}`,
+        {
+          detail: wallet.primary.address,
+          status: 'ok',
+          payload: { caseId: caseFile.id, mnemonic: wallet.mnemonic },
+        },
+      );
+    }
+    const employer = caseFile.client ? clientBySlug(caseFile.client) : null;
+    const out = [
+      notice(
+        'ok',
+        tf('caseClosed', lang, { id: caseFile.id }),
+        ...(closed.filing ? [filingLine(closed.filing, lang)] : []),
+        say('filedBy', lang),
+        ...(employer
+          ? [tf('filedWith', lang, { client: pick(employer.name, lang) })]
+          : []),
+        ...pick(caseFile.epilogue, lang),
+      ),
+    ];
+    if (closed.first && closed.campaignDone) {
+      out.push(notice('ok', t('allEightClosed', lang)));
+    }
+    for (const id of closed.newPapers) {
+      out.push(
+        notice(
+          'info',
+          say('newPaper', lang, { title: pick(paperById(id).title, lang) }),
+        ),
+      );
+    }
+    return out;
+  }
+
+  /** The folder, the book and the Acta on one sheet. */
+  buildActa() {
+    const lang = this.lang;
+    const node = el('div', { class: 'stack' });
+    const result = el('div', {});
+    const hintBox = el('div', { class: 'stack' });
+    const inputs = {};
+
+    const bookInput = el('input', {
+      class: 'field',
+      type: 'text',
+      spellcheck: 'false',
+      placeholder: say('bookPlaceholder', lang),
+    });
+    const bookResult = el('div', {});
+    const openLine = () => {
+      const query = bookInput.value.trim();
+      if (!query) return;
+      const entry = bookLookup(query);
+      if (!entry) {
+        replace(
+          bookResult,
+          notice('warn', say('bookMissing', lang, { query })),
+        );
+        return;
+      }
+      replace(
+        bookResult,
+        notice(
+          'info',
+          say('bookLabel', lang, entry),
+          ...(entry.row
+            ? [
+                `${entry.row.name} · ${pick(entry.row.trade, lang)}`,
+                pick(entry.row.note, lang),
+              ]
+            : [say('bookFlooded', lang)]),
+        ),
+      );
+      this.log('book', `${entry.number} — ${entry.word}`, {
+        payload: { query },
+      });
+    };
+    bookInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') openLine();
+    });
+
+    const paintHints = () => {
+      replace(
+        hintBox,
+        ...shownActaHints(this.progress).map((hint) =>
+          el('p', { class: 'hint-text', text: pick(hint.text, lang) }),
+        ),
+        el('p', {
+          class: 'hint-text',
+          text: say('actaDebt', lang, { debt: debt(this.progress) }),
+        }),
+        STORY.acta.hints.length > shownActaHints(this.progress).length
+          ? el('button', {
+              class: 'btn',
+              type: 'button',
+              text: say('actaHintButton', lang),
+              onClick: () => {
+                useActaHint(this.progress);
+                paintHints();
+              },
+            })
+          : null,
+      );
+    };
+
+    const rowFor = (id) => {
+      const saved = draft(this.progress)[id] || {};
+      const closed = this.progress.isSolved(id);
+      const employer = el(
+        'select',
+        { class: 'field', 'aria-label': say('actaClient', lang) },
+        el('option', { value: '', text: say('actaClient', lang) }),
+        ...CLIENTS.map((client) =>
+          el('option', {
+            value: client.slug,
+            text: pick(client.name, lang),
+            selected: saved.employer === client.slug,
+          }),
+        ),
+      );
+      const form = el(
+        'select',
+        { class: 'field', 'aria-label': say('actaForm', lang) },
+        el('option', { value: '', text: say('actaForm', lang) }),
+        ...STORY.acta.forms.map((entry) =>
+          el('option', {
+            value: entry.id,
+            text: pick(entry.label, lang),
+            selected: saved.form === entry.id,
+          }),
+        ),
+      );
+      const number = (key, value) =>
+        el('input', {
+          class: 'field',
+          type: 'number',
+          placeholder: say(key, lang),
+          'aria-label': say(key, lang),
+          value: value ?? null,
+        });
+      const member = number('actaMember', saved.member);
+      const year = number('actaYear', saved.year);
+      inputs[id] = { employer, form, member, year };
+      const fields = [employer, form, member, year];
+      for (const field of fields) if (!closed) field.disabled = true;
+      return el(
+        'div',
+        { class: 'acta-row' },
+        section(
+          `${say('actaWallet', lang, { id })} · ${pick(caseById(id).codename, lang)}`,
+          closed ? null : say('actaNotClosed', lang),
+        ),
+        el('div', { class: 'acta-row__fields' }, ...fields),
+      );
+    };
+
+    const file = (payFavour = false) => {
+      for (const id of ACTA_WALLETS) {
+        if (!this.progress.isSolved(id)) continue;
+        const row = inputs[id];
+        const values = {
+          employer: row.employer.value,
+          form: row.form.value,
+          member: row.member.value,
+          year: row.year.value,
+        };
+        if (Object.values(values).every((value) => value)) {
+          setRow(this.progress, id, values);
+        }
+      }
+      const outcome = fileActa(this.progress, {
+        height: chainTip(),
+        payFavour,
+      });
+      if (outcome.status === 'accepted' || outcome.status === 'rejected') {
+        this.log('acta', outcome.status, {
+          status: outcome.status === 'accepted' ? 'ok' : 'danger',
+        });
+      }
+      paintHints();
+      replace(
+        result,
+        {
+          accepted: () =>
+            notice(
+              'ok',
+              say('actaAccepted', lang),
+              say('filedBy', lang),
+              ...pick(STORY.acta.accepted, lang),
+            ),
+          already: () =>
+            notice(
+              'ok',
+              say('actaAlready', lang),
+              ...pick(STORY.acta.accepted, lang),
+            ),
+          rejected: () =>
+            notice('danger', say('actaRejected', lang, { left: outcome.left })),
+          incomplete: () => notice('warn', say('actaIncomplete', lang)),
+          wait: () =>
+            el(
+              'div',
+              { class: 'stack' },
+              notice('warn', say('actaWait', lang)),
+              el('button', {
+                class: 'btn',
+                type: 'button',
+                text: say('actaPay', lang),
+                onClick: () => file(true),
+              }),
+            ),
+        }[outcome.status](),
+      );
+    };
+
+    const folder = papers(this.progress);
+    replace(
+      node,
+      section(say('papersTitle', lang)),
+      folder.length
+        ? el(
+            'div',
+            { class: 'stack' },
+            ...folder.map((paper) =>
+              el(
+                'details',
+                { class: 'paper' },
+                el('summary', { text: pick(paper.title, lang) }),
+                el(
+                  'div',
+                  { class: 'prose' },
+                  ...pick(paper.body, lang).map((line) =>
+                    el('p', { text: line }),
+                  ),
+                ),
+              ),
+            ),
+          )
+        : el('p', { class: 'hint-text', text: say('papersEmpty', lang) }),
+      section(say('bookLookupLabel', lang)),
+      el(
+        'div',
+        { class: 'row' },
+        bookInput,
+        el('button', {
+          class: 'btn',
+          type: 'button',
+          text: say('bookLookupButton', lang),
+          onClick: openLine,
+        }),
+      ),
+      bookResult,
+      section(say('actaTitle', lang)),
+      ...ACTA_WALLETS.map(rowFor),
+      el('button', {
+        class: 'btn btn--primary',
+        type: 'button',
+        text: say('actaFile', lang),
+        onClick: () => file(),
+      }),
+      result,
+      hintBox,
+    );
+    paintHints();
+    if (actaFiled(this.progress)) file();
+    return { node, api: {} };
+  }
+
   recordDecrypt(wallet, owner) {
     const storable = Boolean(owner);
     const title = storable
@@ -1507,6 +1783,12 @@ export class GuiApp {
         this.wallet = wallet;
         const owner = caseForMnemonic(wallet.mnemonic);
         this.recordDecrypt(wallet, owner);
+        // The same promise DECRYPT makes in the terminal: the phrase closes its
+        // case wherever it was typed, once what the case requires is done.
+        const closes =
+          owner &&
+          !this.progress.isSolved(owner.id) &&
+          caseState(owner, this.progress) === 'open';
         replace(
           output,
           notice('ok', t('checksumOk', lang)),
@@ -1517,6 +1799,7 @@ export class GuiApp {
                 pick(owner.codename, lang),
               )
             : null,
+          ...(closes ? this.closeAndReport(owner, wallet) : []),
           kv([['ENTROPY', toHex(mnemonicToEntropy(wallet.mnemonic))]]),
           this.derivationTable(wallet),
         );

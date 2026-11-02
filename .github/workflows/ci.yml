@@ -63,4 +63,5 @@ jobs:
           python tools/build_web_data.py
           git diff --exit-code -- docs/js/wordlist.js docs/js/campaign.js \
                                   docs/js/clients.js docs/js/openings.js \
+                                  docs/js/story-data.js \
                                   docs/data/contracts.json

@@ -118,6 +118,20 @@ def build_nameforge() -> int:
     return len(payload["leading"])
 
 
+def build_story() -> int:
+    """The case file: the papers, the book, and a digest of the Acta's answer."""
+    payload = json.loads((DATA / "story.json").read_text(encoding="utf-8"))
+    payload.pop("_comment", None)
+    body = (
+        HEADER.format(source="data/story.json")
+        + "\nexport const STORY = "
+        + json.dumps(payload, ensure_ascii=False, indent=2)
+        + ";\n"
+    )
+    (OUT / "story-data.js").write_text(body, encoding="utf-8")
+    return len(payload["papers"])
+
+
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     words = build_wordlist()
@@ -126,12 +140,14 @@ def main() -> int:
     contracts, size = build_contracts()
     openings = build_openings()
     leading = build_nameforge()
+    papers = build_story()
     print(f"docs/js/wordlist.js       : {words} words")
     print(f"docs/js/campaign.js       : {cases} campaign cases")
     print(f"docs/js/clients.js        : {clients} clients")
     print(f"docs/data/contracts.json  : {contracts} contracts ({size / 1024:.0f} KB)")
     print(f"docs/js/openings.js       : {openings} openings")
     print(f"docs/js/leading.js        : {leading} base58 characters")
+    print(f"docs/js/story-data.js     : {papers} papers")
     return 0
 
 

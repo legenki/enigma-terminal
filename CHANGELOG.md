@@ -13,6 +13,23 @@ Cutting a release is: bump those three, write the entry below, then push a tag
 refuses a tag that does not match the declared version and takes the published
 notes from the entry, so the tag, the code and these notes cannot drift apart.
 
+## Unreleased
+
+A vertical slice of the case file, for playtesting. Wallets 4 to 8 keep their
+old text.
+
+- The first three wallets now lead somewhere. `BOOK`, `PAPERS` and `ACTA`, and an
+  Acta panel, ask the player to work out who ordered what, in whose name and
+  when, and to file it. Filing answers yes or no for all three rows together, at
+  most twice a block; the rest of the time it waits for the chain or a favour.
+- Hints on these wallets count as favours owed to the informant.
+- Every close is numbered, carries the height of the chain, and is filed.
+- `story.js` is the one place that closes a case, and the Decrypt panel now does
+  what the terminal always did and closes it.
+- `TXLOG` prints dates, and `TXLOG <addr> ALL` lists up to 25 transactions.
+- The boot prints a seal and says what to type. Case 3 no longer says "three of
+  eight", which it could not know.
+
 ## 3.0.1
 
 Housekeeping from a read-through, and one type bug it turned up.

@@ -45,6 +45,39 @@ export const pick = (bundle, lang) =>
 // Progress — one store, shared by both modes through localStorage
 // --------------------------------------------------------------------------
 
+/**
+ * The case file's state, read field by field for the same reason the rest of
+ * the save is: a hand-edited value becomes an empty one, never a crash.
+ */
+const readStory = (value) => {
+  const source =
+    value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+  const count = (n) => (Number.isInteger(n) && n >= 0 ? n : 0);
+  const entries = (object, keep) =>
+    Object.fromEntries(
+      Object.entries(
+        object && typeof object === 'object' && !Array.isArray(object)
+          ? object
+          : {},
+      ).filter(([, entry]) => keep(entry)),
+    );
+  const isRecord = (entry) =>
+    entry && typeof entry === 'object' && !Array.isArray(entry);
+  const window = isRecord(source.window) ? source.window : {};
+  return {
+    filings: entries(source.filings, isRecord),
+    draft: entries(source.draft, isRecord),
+    favours: count(source.favours),
+    actaHints: count(source.actaHints),
+    window: {
+      key: typeof window.key === 'string' ? window.key : null,
+      at: Number.isFinite(window.at) ? window.at : 0,
+      count: count(window.count),
+    },
+    filed: source.filed === true,
+  };
+};
+
 export class ProgressStore {
   constructor() {
     this.data = ProgressStore.read();
@@ -56,7 +89,12 @@ export class ProgressStore {
     // what they are, keeps ids unique without checking, and puts the coercion
     // in one place. `isSolved` used to skip the Number() that `isTaken` did,
     // so a string id could be marked solved and then never look solved.
-    const empty = () => ({ solved: new Set(), hints: {}, taken: new Set() });
+    const empty = () => ({
+      solved: new Set(),
+      hints: {},
+      taken: new Set(),
+      story: readStory(null),
+    });
     // A hand-edited save is a fresh save, never a stack trace. Broken JSON was
     // always handled; JSON that parses into the wrong *type* was not, and
     // `{"solved": 5}` reached `solved.includes(...)` and took the game down on
@@ -83,6 +121,7 @@ export class ProgressStore {
         // Contracts the player has picked up off the board. Saves from before
         // the board existed simply have none.
         taken: ids(parsed.taken),
+        story: readStory(parsed.story),
       };
     } catch {
       return empty();
@@ -104,8 +143,13 @@ export class ProgressStore {
         solved: [...this.data.solved],
         hints: this.data.hints,
         taken: [...this.data.taken],
+        story: this.data.story,
       }),
     );
+  }
+
+  get story() {
+    return this.data.story;
   }
 
   get solved() {
@@ -165,7 +209,12 @@ export class ProgressStore {
   }
 
   reset() {
-    this.data = { solved: new Set(), hints: {}, taken: new Set() };
+    this.data = {
+      solved: new Set(),
+      hints: {},
+      taken: new Set(),
+      story: readStory(null),
+    };
     this.save();
   }
 }

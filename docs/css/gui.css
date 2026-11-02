@@ -1046,3 +1046,9 @@ a { color: var(--info); }
     border: 1px solid CanvasText;
   }
 }
+
+/* The Acta: the folder's papers and three rows of what the player thinks happened. */
+.paper > summary { cursor: pointer; font-size: 12.5px; color: var(--ink); padding: 4px 0; }
+.paper > .prose { margin-top: 8px; }
+.acta-row__fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+.acta-row__fields .field { width: 100%; }

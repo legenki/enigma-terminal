@@ -15,6 +15,14 @@ const STORAGE_KEY = 'enigma-terminal/journal/v1';
 const MAX_ENTRIES = 400;
 
 export const TOOLS = {
+  book: {
+    label: { en: 'Book', ru: 'Книга', es: 'Libro', pt: 'Livro' },
+    glyph: '#',
+  },
+  acta: {
+    label: { en: 'Acta', ru: 'Акт', es: 'Acta', pt: 'Ata' },
+    glyph: '§',
+  },
   decrypt: {
     label: {
       en: 'Decrypt',

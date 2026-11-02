@@ -31,6 +31,23 @@ import {
 import { fromHex, toHex } from './crypto/hash.js';
 import { deriveWallet } from './crypto/wallet.js';
 import { KINDS } from './mempool.js';
+import {
+  ACTA_WALLETS,
+  actaFiled,
+  bookLookup,
+  chainTip,
+  closeCase,
+  debt,
+  draft,
+  fileActa,
+  filingLine,
+  paperById,
+  papers,
+  STORY,
+  say,
+  setRow,
+  useActaHint,
+} from './story.js';
 import { WORDLIST_SHA256 } from './wordlist.js';
 
 //: The one warning in the game that must never fall back to a language the
@@ -93,6 +110,9 @@ const HELP = {
     ['OPEN <id>', 'open a case file and make it active'],
     ['BRIEF / EVIDENCE / CLUES', 're-read the active case'],
     ['HINT', 'spend a hint on the active case'],
+    ['BOOK <n|page:line|word>', 'a line of the book of the Caja'],
+    ['PAPERS [n]', 'the wet papers in your folder'],
+    ['ACTA', 'write and file what you think happened'],
     ['WORD <1..2048>', 'read one entry of the BIP-39 wordlist'],
     ['INDEX <word>', "find a word's position in the wordlist"],
     ['SEARCH <prefix>', 'list wordlist entries by prefix'],
@@ -111,7 +131,7 @@ const HELP = {
     ['DERIVE', 're-print the derivation grid of the loaded seed'],
     ['SYNC_LEDGER [addr]', 'query the live Bitcoin network for a balance'],
     ['SWEEP', 'check all three derived addresses at once'],
-    ['TXLOG [addr]', 'pull the most recent on-chain transactions'],
+    ['TXLOG [addr] [ALL]', 'on-chain transactions with dates; ALL lists more'],
     ['PROVIDER [name]', 'choose the explorer: blockstream|mempool|blockchain'],
     ['EXPLORER', 'open the loaded address in a block explorer'],
     ['NETINFO', 'probe all explorer nodes and show latency'],
@@ -136,6 +156,9 @@ const HELP = {
     ['OPEN <id>', 'открыть дело и сделать его активным'],
     ['BRIEF / EVIDENCE / CLUES', 'перечитать активное дело'],
     ['HINT', 'потратить подсказку по активному делу'],
+    ['BOOK <n|стр:строка|слово>', 'строка из книги Caja'],
+    ['PAPERS [n]', 'мокрые листы в вашей папке'],
+    ['ACTA', 'записать и подать вашу версию событий'],
     ['WORD <1..2048>', 'показать слово словаря BIP-39'],
     ['INDEX <слово>', 'найти позицию слова в словаре'],
     ['SEARCH <префикс>', 'искать слова словаря по началу'],
@@ -148,7 +171,7 @@ const HELP = {
     ['DERIVE', 'повторить сетку деривации загруженного сида'],
     ['SYNC_LEDGER [адрес]', 'запрос баланса в живой сети Bitcoin'],
     ['SWEEP', 'проверить сразу все три выведенных адреса'],
-    ['TXLOG [адрес]', 'последние транзакции адреса'],
+    ['TXLOG [адрес] [ALL]', 'транзакции адреса с датами; ALL покажет больше'],
     ['PROVIDER [имя]', 'выбрать эксплорер: blockstream|mempool|blockchain'],
     ['EXPLORER', 'открыть адрес в блокчейн-эксплорере'],
     ['NETINFO', 'проверить все узлы-эксплореры и показать задержку'],
@@ -173,6 +196,9 @@ const HELP = {
     ['OPEN <id>', 'abrir un archivo de caso y activarlo'],
     ['BRIEF / EVIDENCE / CLUES', 'releer el caso activo'],
     ['HINT', 'gastar una pista en el caso activo'],
+    ['BOOK <n|pág:línea|palabra>', 'una línea del libro de la Caja'],
+    ['PAPERS [n]', 'los papeles mojados de tu carpeta'],
+    ['ACTA', 'escribir y presentar lo que crees que pasó'],
     ['WORD <1..2048>', 'leer una entrada de la lista BIP-39'],
     ['INDEX <palabra>', 'encontrar la posición de una palabra'],
     ['SEARCH <prefijo>', 'buscar palabras por prefijo'],
@@ -188,7 +214,10 @@ const HELP = {
     ['DERIVE', 'imprimir cuadrícula de derivación'],
     ['SYNC_LEDGER [addr]', 'consultar saldo en red Bitcoin'],
     ['SWEEP', 'comprobar tres direcciones a la vez'],
-    ['TXLOG [addr]', 'obtener transacciones on-chain recientes'],
+    [
+      'TXLOG [addr] [ALL]',
+      'transacciones on-chain con fechas; ALL muestra más',
+    ],
     ['PROVIDER [nombre]', 'elegir explorador: blockstream|mempool|blockchain'],
     ['EXPLORER', 'abrir la dirección en un explorador de bloques'],
     ['NETINFO', 'sondear todos los nodos y mostrar latencia'],
@@ -213,6 +242,9 @@ const HELP = {
     ['OPEN <id>', 'abrir um arquivo de caso e ativá-lo'],
     ['BRIEF / EVIDENCE / CLUES', 'reler o caso ativo'],
     ['HINT', 'gastar uma dica no caso ativo'],
+    ['BOOK <n|pág:linha|palavra>', 'uma linha do livro da Caja'],
+    ['PAPERS [n]', 'os papéis molhados da sua pasta'],
+    ['ACTA', 'escrever e apresentar o que você acha que aconteceu'],
     ['WORD <1..2048>', 'ler uma entrada da lista BIP-39'],
     ['INDEX <palavra>', 'encontrar a posição de uma palavra'],
     ['SEARCH <prefixo>', 'buscar palavras por prefixo'],
@@ -228,7 +260,7 @@ const HELP = {
     ['DERIVE', 'imprimir grade de derivação'],
     ['SYNC_LEDGER [addr]', 'consultar saldo na rede Bitcoin'],
     ['SWEEP', 'verificar três endereços de uma vez'],
-    ['TXLOG [addr]', 'obter transações on-chain recentes'],
+    ['TXLOG [addr] [ALL]', 'transações on-chain com datas; ALL mostra mais'],
     ['PROVIDER [nome]', 'escolher explorador: blockstream|mempool|blockchain'],
     ['EXPLORER', 'abrir o endereço em um explorador de blocos'],
     ['NETINFO', 'testar todos os nós e mostrar latência'],
@@ -495,7 +527,7 @@ export class Engine {
       '[BOOT] secp256k1 curve parameters ... LOADED',
       '[BOOT] hd derivation engine (BIP-32/44/49/84) ... ARMED',
       `[BOOT] chain provider: ${this.chain.nodeName}`,
-      `[BOOT] operator: ${this.campaign.meta.operator} // client: ${this.campaign.meta.client}`,
+      `[BOOT] operator: ${this.campaign.meta.operator} // seal ${this.campaign.meta.seal} // client: ${this.campaign.meta.client}`,
     ];
     for (const line of lines) {
       term.print(line, 'dark');
@@ -513,6 +545,8 @@ export class Engine {
     );
     while (term.animating) await sleep(30);
     term.blank();
+    term.print(say('deskHint', this.lang), 'cyan');
+    term.blank();
     term.locked = false;
   }
 
@@ -524,6 +558,10 @@ export class Engine {
     const [head, ...rest] = trimmed.split(/\s+/);
     const argument = rest.join(' ');
     const handler = this.commands()[head.toUpperCase()];
+    // Each front-end holds its own copy of the save, and a command can write.
+    // Read first, so the panel's work is not undone by a copy older than it.
+    this.progress.refresh();
+    this.journal.refresh();
     if (!handler) {
       this.term.print(`[FATAL] UNKNOWN COMMAND: ${head.toUpperCase()}`, 'red');
       this.term.print('        TYPE HELP FOR THE COMMAND LIST.', 'grey');
@@ -552,6 +590,9 @@ export class Engine {
       EVIDENCE: this.cmdEvidence,
       CLUES: this.cmdClues,
       HINT: this.cmdHint,
+      BOOK: this.cmdBook,
+      PAPERS: this.cmdPapers,
+      ACTA: this.cmdActa,
       WORD: this.cmdWord,
       INDEX: this.cmdIndex,
       SEARCH: this.cmdSearch,
@@ -851,6 +892,196 @@ export class Engine {
       `[HINT ${used + 1}/${hints.length}] ${hints[used]}`,
       'amber',
     );
+    if (ACTA_WALLETS.includes(caseFile.id)) {
+      this.term.print(
+        say('actaDebt', this.lang, { debt: debt(this.progress) }),
+        'grey',
+      );
+    }
+  }
+
+  // -- the case file -------------------------------------------------------
+
+  cmdBook(argument) {
+    const query = argument.trim();
+    if (!query) {
+      this.term.print(`[WARN] ${say('bookUsage', this.lang)}`, 'amber');
+      return;
+    }
+    const entry = bookLookup(query);
+    if (!entry) {
+      this.term.print(
+        `[WARN] ${say('bookMissing', this.lang, { query: query.toUpperCase() })}`,
+        'amber',
+      );
+      return;
+    }
+    const { term } = this;
+    term.blank();
+    term.print(`  ${say('bookLabel', this.lang, entry)}`, 'cyan');
+    if (entry.row) {
+      term.print(
+        `  ${entry.row.name} · ${pick(entry.row.trade, this.lang)}`,
+        'white',
+      );
+      term.print(`  ${pick(entry.row.note, this.lang)}`, 'grey');
+    } else {
+      term.print(`  ${say('bookFlooded', this.lang)}`, 'grey');
+    }
+    term.blank();
+    this.log('book', `${entry.number} — ${entry.word}`, {
+      payload: { query },
+    });
+  }
+
+  cmdPapers(argument) {
+    const { term, lang } = this;
+    const folder = papers(this.progress);
+    const wanted = argument.trim();
+    if (wanted) {
+      const paper = folder[Number(wanted) - 1];
+      if (!paper) {
+        term.print(
+          `[WARN] ${say('paperMissing', lang, { n: wanted })}`,
+          'amber',
+        );
+        return;
+      }
+      term.blank();
+      term.print(`  ${pick(paper.title, lang).toUpperCase()}`, 'cyan');
+      term.rule('-');
+      term.printLines(pick(paper.body, lang), 'white');
+      term.rule('-');
+      term.blank();
+      return;
+    }
+    term.blank();
+    term.print(`  ${say('papersTitle', lang)}`, 'cyan');
+    term.rule();
+    if (!folder.length) term.print(`  ${say('papersEmpty', lang)}`, 'grey');
+    folder.forEach((paper, i) => {
+      term.print(`  ${String(i + 1).padStart(2)}  ${pick(paper.title, lang)}`);
+    });
+    term.rule();
+    if (folder.length) term.print(`  ${say('papersUsage', lang)}`, 'grey');
+    term.blank();
+  }
+
+  printActa() {
+    const { term, lang } = this;
+    const rows = draft(this.progress);
+    term.blank();
+    term.print(`  ${say('actaTitle', lang)}`, 'cyan');
+    term.rule();
+    for (const id of ACTA_WALLETS) {
+      const row = rows[id];
+      const name = pick(caseById(id).codename, lang).padEnd(20);
+      term.print(
+        `  ${id}  ${name} ${
+          row
+            ? `${row.employer}  ${row.form}  ${row.member}  ${row.year}`
+            : say('actaRowOpen', lang)
+        }`,
+        row ? 'white' : 'grey',
+      );
+    }
+    term.rule();
+    term.print(`  ${say('actaUsage', lang)}`, 'grey');
+    term.print(
+      `  ${say('actaForms', lang, {
+        forms: STORY.acta.forms
+          .map((form) => `${form.id} (${pick(form.label, lang)})`)
+          .join(', '),
+      })}`,
+      'grey',
+    );
+    term.print(
+      `  ${say('actaDebt', lang, { debt: debt(this.progress) })}`,
+      'grey',
+    );
+    term.blank();
+  }
+
+  fileTheActa(payFavour) {
+    const { term, lang } = this;
+    const result = fileActa(this.progress, {
+      height: chainTip(),
+      payFavour,
+    });
+    const line = {
+      already: () => term.print(`[INFO] ${say('actaAlready', lang)}`, 'cyan'),
+      incomplete: () =>
+        term.print(`[WARN] ${say('actaIncomplete', lang)}`, 'amber'),
+      wait: () => term.print(`[WARN] ${say('actaWait', lang)}`, 'amber'),
+      rejected: () =>
+        term.print(
+          `[FATAL] ${say('actaRejected', lang, { left: result.left })}`,
+          'red',
+        ),
+      accepted: () => {
+        term.print(`[ OK ] ${say('actaAccepted', lang)}`, 'green');
+        term.print(`  ${say('filedBy', lang)}`, 'grey');
+        term.rule('=');
+        term.typeLines(pick(STORY.acta.accepted, lang), 'white', 320);
+        term.rule('=');
+      },
+    };
+    line[result.status]();
+    if (result.status === 'accepted' || result.status === 'rejected') {
+      this.log('acta', result.status, {
+        status: result.status === 'accepted' ? 'ok' : 'danger',
+      });
+    }
+  }
+
+  cmdActa(argument) {
+    const { term, lang } = this;
+    const [head = '', ...rest] = argument.trim().split(/\s+/);
+    const verb = head.toUpperCase();
+    if (!verb) {
+      this.printActa();
+      return;
+    }
+    if (verb === 'FILE') {
+      this.fileTheActa(rest[0]?.toUpperCase() === 'NOW');
+      return;
+    }
+    if (verb === 'HINT') {
+      const hint = useActaHint(this.progress);
+      if (!hint) {
+        term.print(`[WARN] ${say('actaNoHints', lang)}`, 'amber');
+        return;
+      }
+      term.print(pick(hint.text, lang), 'amber');
+      term.print(say('actaDebt', lang, { debt: debt(this.progress) }), 'grey');
+      return;
+    }
+    if (actaFiled(this.progress)) {
+      term.print(`[INFO] ${say('actaAlready', lang)}`, 'cyan');
+      return;
+    }
+    const [employer, form, member, year] = rest;
+    const result = setRow(this.progress, head, {
+      employer,
+      form,
+      member,
+      year,
+    });
+    if (result.status === 'saved') {
+      term.print(`[ OK ] ${say('actaSaved', lang, { wallet: head })}`, 'green');
+    } else if (result.status === 'closed-first') {
+      term.print(`[WARN] ${say('actaClosedFirst', lang)}`, 'amber');
+    } else {
+      const values = { wallet: head, employer, form, member, year };
+      term.print(
+        `[WARN] ${say('actaInvalid', lang, {
+          field: result.field.toUpperCase(),
+          value: String(values[result.field] ?? '—').toUpperCase(),
+        })}`,
+        'amber',
+      );
+      term.print(`       ${say('actaUsage', lang)}`, 'grey');
+    }
   }
 
   // -- wordlist tools ------------------------------------------------------
@@ -1338,7 +1569,8 @@ export class Engine {
   }
 
   closeCase(caseFile) {
-    const firstTime = this.progress.markSolved(caseFile.id);
+    const closed = closeCase(this.progress, caseFile, { height: chainTip() });
+    const firstTime = closed.first;
     if (firstTime) {
       this.log(
         'case',
@@ -1352,6 +1584,10 @@ export class Engine {
     const term = this.term;
     term.blank();
     term.print(`  ${this.t('solved', { id: caseFile.id })}`, 'magenta');
+    if (closed.filing) {
+      term.print(`  ${filingLine(closed.filing, this.lang)}`, 'grey');
+    }
+    term.print(`  ${say('filedBy', this.lang)}`, 'grey');
     const client = caseFile.client ? clientBySlug(caseFile.client) : null;
     if (client) {
       term.print(
@@ -1366,11 +1602,17 @@ export class Engine {
     term.rule('=');
     // Eight *campaign* cases, not eight solved cases of any kind: a player who
     // closes eight contracts has not finished ORACLE's archive.
-    if (
-      this.campaign.cases.every((entry) => this.progress.isSolved(entry.id))
-    ) {
+    if (closed.campaignDone) {
       term.blank();
       term.print(`  ${this.t('allDone')}`, 'amber');
+    }
+    for (const id of closed.newPapers) {
+      term.print(
+        `  ${say('newPaper', this.lang, {
+          title: pick(paperById(id).title, this.lang),
+        })}`,
+        'cyan',
+      );
     }
     term.blank();
   }
@@ -1526,7 +1768,13 @@ export class Engine {
   }
 
   async cmdTxlog(argument) {
-    const address = this.targetAddress(argument);
+    // ALL is as much as one answer holds, which reaches the first movement of
+    // any address with no more than twenty-five transactions.
+    const words = argument.trim().split(/\s+/).filter(Boolean);
+    const all = words.some((word) => word.toUpperCase() === 'ALL');
+    const address = this.targetAddress(
+      words.filter((word) => word.toUpperCase() !== 'ALL').join(' '),
+    );
     if (!address) return;
     const term = this.term;
     term.blank();
@@ -1534,7 +1782,7 @@ export class Engine {
     let txs;
     try {
       txs = await this.withLogs(NET_LOGS.slice(0, 3), () =>
-        this.chain.transactions(address, 8),
+        this.chain.transactions(address, all ? 25 : 8),
       );
     } catch (error) {
       term.print('[FATAL] TX HISTORY UNAVAILABLE.', 'red');
@@ -1556,8 +1804,11 @@ export class Engine {
         );
         deltaStr = `  ${sign}  ${delta.padStart(16)} BTC`;
       }
+      const date = tx.blockTime
+        ? new Date(tx.blockTime * 1000).toISOString().slice(0, 10)
+        : '----------';
       term.print(
-        `  ${tx.confirmed ? 'CONFIRMED' : 'PENDING  '}  BLOCK ${height.padStart(9)}  ${tx.txid}${deltaStr}`,
+        `  ${tx.confirmed ? 'CONFIRMED' : 'PENDING  '}  ${date}  BLOCK ${height.padStart(9)}  ${tx.txid}${deltaStr}`,
         'green',
       );
     }
@@ -1566,7 +1817,12 @@ export class Engine {
       detail: `${txs.length} transaction(s)`,
       payload: { address },
     });
-    term.print(`  ${txs.length} MOST RECENT TX(s)`, 'grey');
+    term.print(
+      all
+        ? `  ${say('txlogAll', this.lang, { count: txs.length })}`
+        : `  ${txs.length} MOST RECENT TX(s)`,
+      'grey',
+    );
     term.blank();
   }
 
@@ -1747,6 +2003,10 @@ export class Engine {
       }
     } else if (entry.tool === 'case' || entry.tool === 'hint') {
       this.cmdOpen(String(payload.caseId ?? ''));
+    } else if (entry.tool === 'book') {
+      this.cmdBook(payload.query || '');
+    } else if (entry.tool === 'acta') {
+      this.printActa();
     } else {
       this.term.print('[WARN] THIS ENTRY HAS NOTHING TO REPLAY.', 'amber');
     }

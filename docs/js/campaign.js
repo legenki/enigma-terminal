@@ -11,7 +11,8 @@ export const CAMPAIGN = {
     },
     "version": "3.0.1",
     "operator": "NULLSEC",
-    "client": "ESCRIBANÍA CERO"
+    "client": "ESCRIBANÍA CERO",
+    "seal": "e8ee3d8a"
   },
   "cases": [
     {
@@ -105,14 +106,14 @@ export const CAMPAIGN = {
       },
       "hints": {
         "ru": [
-          "Энтропия этого кошелька — 128 нулевых битов. Попробуй ENTROPY 00000000000000000000000000000000",
-          "Первое слово словаря — abandon. Оно повторяется одиннадцать раз.",
-          "Двенадцатое слово: about."
+          "энтропия этого кошелька — 128 нулевых битов. попробуй ENTROPY 00000000000000000000000000000000",
+          "первое слово словаря — abandon. оно повторяется одиннадцать раз.",
+          "двенадцатое слово: about."
         ],
         "en": [
-          "This wallet's entropy is 128 zero bits. Try ENTROPY 00000000000000000000000000000000",
-          "The first word of the list is abandon. It repeats eleven times.",
-          "The twelfth word is: about."
+          "this wallet's entropy is 128 zero bits. try ENTROPY 00000000000000000000000000000000",
+          "the first word of the list is abandon. it repeats eleven times.",
+          "the twelfth word is: about."
         ],
         "es": [
           "La entropía de esta billetera es de 128 bits cero. Prueba ENTROPY 00000000000000000000000000000000",
@@ -240,12 +241,12 @@ export const CAMPAIGN = {
       "hints": {
         "ru": [
           "127 в шестнадцатеричной системе — это 0x7f.",
-          "Шестнадцать байт 0x7f подряд дают 32 символа.",
+          "шестнадцать байт 0x7f подряд дают 32 символа.",
           "ENTROPY 7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f"
         ],
         "en": [
           "127 in hexadecimal is 0x7f.",
-          "Sixteen 0x7f bytes in a row give you 32 characters.",
+          "sixteen 0x7f bytes in a row give you 32 characters.",
           "ENTROPY 7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f"
         ],
         "es": [
@@ -374,12 +375,12 @@ export const CAMPAIGN = {
       "hints": {
         "ru": [
           "1000 0000 = 0x80.",
-          "Нужно шестнадцать байт: 80, повторённый 16 раз.",
+          "нужно шестнадцать байт: 80, повторённый 16 раз.",
           "ENTROPY 80808080808080808080808080808080"
         ],
         "en": [
           "1000 0000 = 0x80.",
-          "You need sixteen bytes: 80 repeated 16 times.",
+          "you need sixteen bytes: 80 repeated 16 times.",
           "ENTROPY 80808080808080808080808080808080"
         ],
         "es": [
@@ -395,19 +396,19 @@ export const CAMPAIGN = {
       },
       "epilogue": {
         "ru": [
-          "Три из восьми. В логах ORACLE появляется новое имя — «КУРАТОР».",
+          "В логах ORACLE появляется новое имя — «КУРАТОР».",
           "Кто-то платил ему за то, чтобы кошельки оставались нетронутыми."
         ],
         "en": [
-          "Three of eight. A new name shows up in ORACLE's logs — 'THE CURATOR'.",
+          "A new name shows up in ORACLE's logs — 'THE CURATOR'.",
           "Someone was paying him to keep these wallets untouched."
         ],
         "es": [
-          "Tres de ocho. Un nombre nuevo aparece en los registros de ORACLE: 'THE CURATOR'.",
+          "Un nombre nuevo aparece en los registros de ORACLE: 'THE CURATOR'.",
           "Alguien le pagaba para mantener estas carteras intactas."
         ],
         "pt": [
-          "Três de oito. Um novo nome aparece nos registros da ORACLE — 'THE CURATOR'.",
+          "Um novo nome aparece nos registros da ORACLE — 'THE CURATOR'.",
           "Alguém estava pagando a ele para manter essas carteiras intocadas."
         ]
       }

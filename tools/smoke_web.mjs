@@ -200,7 +200,7 @@ const openPanel = async (name) => {
 // being built, which takes the whole panel with it.
 const items = page.locator('.nav__item');
 const count = await items.count();
-if (count < 11) problems.push(`sidebar has ${count} rows, expected 11`);
+if (count < 12) problems.push(`sidebar has ${count} rows, expected 12`);
 for (let i = 0; i < count; i++) {
   const label = (await items.nth(i).innerText()).trim();
   await step(`open ${label}`, () => items.nth(i).click({ timeout: 3000 }));
@@ -337,6 +337,47 @@ await step('strike a stamp in any case', async () => {
   if (words !== 12)
     throw new Error(`the card shows ${words} words, expected 12`);
   console.log(`     struck ${address.slice(0, 8)}… in any case`);
+});
+
+// The case file: the Decrypt panel closes a case, the paper lands in the folder,
+// the book answers, and a wrong Acta is refused rather than crashing anything.
+await step('a phrase in the Decrypt panel closes its case', async () => {
+  await page.evaluate(() => localStorage.clear());
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(2000);
+  await openPanel('DECRYPT');
+  const decrypt = panel('DECRYPT');
+  await decrypt.locator('textarea').fill(SEED);
+  await decrypt
+    .getByRole('button', { name: /derive/i })
+    .first()
+    .click({ timeout: 3000 });
+  await decrypt.locator('.notice--ok').nth(1).waitFor({ timeout: 8000 });
+  const body = await decrypt.innerText();
+  if (!body.includes('Filed. — T.')) throw new Error('the close was not filed');
+  if (!/OPINION No\. 0001/.test(body))
+    throw new Error('the close has no opinion number');
+  await page.waitForTimeout(100);
+  const strip = await page.locator('#bar-status').innerText();
+  if (!/1\/8/.test(strip) || /LOG 0\b/.test(strip))
+    throw new Error(`the strip did not move: ${strip}`);
+});
+
+await step('the Acta panel: folder, book and a refused filing', async () => {
+  await openPanel('ACTA');
+  const acta = panel('ACTA');
+  if ((await acta.locator('details.paper').count()) !== 2)
+    throw new Error('expected two papers after one closed wallet');
+  await acta.locator('details.paper summary').nth(1).click();
+  await acta.locator('input[type=text]').fill('33:3');
+  await acta.getByRole('button', { name: /open the line/i }).click();
+  if (!(await acta.innerText()).includes('Ramiro Olmos'))
+    throw new Error('the book did not answer page 33, line 3');
+  await acta.getByRole('button', { name: /file the acta/i }).click();
+  await acta.locator('.notice--warn').first().waitFor({ timeout: 3000 });
+  await acta.getByRole('button', { name: /ask the informant/i }).click();
+  if (!(await acta.innerText()).includes('FAVOURS OWED: 1'))
+    throw new Error('the favour was not counted');
 });
 
 // And the chain refusing to answer: a notice, not a dead panel. Back to the

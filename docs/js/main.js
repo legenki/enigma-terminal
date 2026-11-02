@@ -18,6 +18,7 @@ import { Heartbeat, pad2, splitAge } from './heartbeat.js';
 import { ExplorerClient } from './mempool.js';
 import { dropdown } from './select.js';
 import { read, write } from './storage.js';
+import { setChainTip } from './story.js';
 import { Terminal, terminalPalette } from './term.js';
 import { icon } from './vendor/feather.js';
 
@@ -252,6 +253,7 @@ for (const event of ['pointerdown', 'keydown']) {
 const pulseHost = document.getElementById('bar-pulse');
 const heartbeat = new Heartbeat(explorer, {
   onBlock: (block, { changed }) => {
+    setChainTip(block.height);
     gui.setPulse(0, block);
     if (changed) chime.play();
   },
@@ -361,6 +363,7 @@ function frame(now) {
   lastFrame = now;
 
   glitch.render(now);
+  paintStatus();
 
   if (atTerminal()) {
     terminal.tick(delta);

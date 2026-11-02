@@ -62,7 +62,7 @@ python3 -m http.server 8000 --directory docs
 
 ## The interface
 
-The web build is one interface with nine panels, reachable by clicking or by pressing
+The web build is one interface with twelve panels, reachable by clicking or by pressing
 its digit:
 
 | | Panel | |
@@ -70,6 +70,7 @@ its digit:
 | **1** | Terminal | the full command line, and where the game opens |
 | **2** | Case files | the desk: the campaign plus every contract you have taken |
 | **3** | Contracts | the board, by employer |
+| **A** | Acta | the wet papers, the book of the Caja, and what you think happened |
 | **4** | Decrypt | a phrase in, a derivation grid out |
 | **5** | Ledger | live balance and transaction lookups |
 | **6** | Explorer | the live chain: blocks, transactions, addresses, mempool |
@@ -147,6 +148,9 @@ a second design living inside the first.
 | `DROP <id>` | return an unsolved contract to the board |
 | `BRIEF` / `EVIDENCE` / `CLUES` | re-read the active case |
 | `HINT` | spend a hint (three per case) |
+| `BOOK <n\|page:line\|word>` | a line of the book of the Caja: every wordlist number is a member |
+| `PAPERS [n]` | the wet papers in your folder |
+| `ACTA [row\|FILE [NOW]\|HINT]` | write what you think happened to the first three wallets, and file it |
 | `WORD <n>` / `INDEX <word>` / `SEARCH <prefix>` | BIP-39 wordlist tools |
 | `ARCHIVE <text>` | full-text search across the case files |
 | `ENTROPY <hex>` | rebuild a mnemonic from 128 bits of entropy |
@@ -157,7 +161,7 @@ a second design living inside the first.
 | `RANDOM [12..24]` | generate a fresh phrase from secure randomness |
 | `SYNC_LEDGER [addr]` | live balance from the Bitcoin network |
 | `SWEEP` | check all three derived addresses at once |
-| `TXLOG [addr]` | the most recent on-chain transactions |
+| `TXLOG [addr] [ALL]` | on-chain transactions with their dates; `ALL` lists up to 25 |
 | `PROVIDER [name]` | `blockstream` \| `mempool` \| `blockchain` |
 | `NETINFO` | probe every explorer node and report its latency |
 | `EXPLORER` | the loaded address in a block explorer |
@@ -344,6 +348,7 @@ fingerprint and checks what the player typed against it.
 data/                      the source the web build is generated from
   cases.json               the eight hand-written campaign cases
   openings.json            sixteen openings and the live figures they are written around
+  story.json               the case file's first act; its answer is kept only as a digest
   nameforge.json           the measured leading-character distribution Nameforge prices by
   clients.json             eight employers: voice, district, handwriting, name pools
   contracts.json           256 generated contracts (+ their solution specs)
@@ -365,6 +370,7 @@ docs/                      the web build; GitHub Pages publishes from here
   js/engine.js             the command line and everything it dispatches
   js/gui/                  the windowed interface over the same core (app.js, dom.js, text.js)
   js/journal.js            the journal, shared by both halves of the page
+  js/story.js              the case file: closing a case, the book, the papers, the Acta
   js/identicon.js          generative sigils for cases, phrases and addresses
   js/glitch.js             the mark in the strip
   js/select.js             the language dropdown the shell builds for itself
@@ -384,7 +390,7 @@ tools/measure_leading.mjs  re-measures the distribution behind nameforge.json
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
 tools/smoke_web.mjs        opens the page in a browser and presses the buttons
-tests/                     370 tests, including the Python ↔ JavaScript diff
+tests/                     413 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
@@ -394,7 +400,7 @@ generator and the reference implementation; it is not a runtime.
 
 ```bash
 pip install -e ".[dev]"            # pytest, ruff, mypy and the reference libraries
-python -m pytest tests -v          # 370 tests
+python -m pytest tests -v          # 413 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 
@@ -410,7 +416,7 @@ node tools/smoke_web.mjs
 ```
 
 `data/` is the single source of truth. `docs/js/wordlist.js`, `docs/js/campaign.js`,
-`docs/js/clients.js` and `docs/data/contracts.json` are generated from it, and CI fails
+`docs/js/clients.js`, `docs/js/story-data.js` and `docs/data/contracts.json` are generated from it, and CI fails
 if any of them has drifted.
 
 ## Publishing to GitHub Pages
