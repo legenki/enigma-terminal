@@ -15,8 +15,17 @@ notes from the entry, so the tag, the code and these notes cannot drift apart.
 
 ## Unreleased
 
-A vertical slice of the case file, for playtesting. Wallets 4 to 8 keep their
+A vertical slice of the case file, for playtesting. Wallets 7 and 8 keep their
 old text.
+
+- The second act: wallets 4 to 6, a second Acta, and a courier. `ASK` questions
+  a witness with a word from the papers, `CITE` shows them a paper, `SEND` sends
+  the courier on one errand at a time, one or two blocks each, and `NOTE` keeps a
+  line. `PAPERS NEW` reads whatever has not been seen.
+- A rejected filing now stays on file: every client it names hears about it, and
+  enough of them bring the special folder down on the player's copies.
+- The filing mark is an incoming number rather than a signature, and the Acta
+  states its rules. Both came from watching simulated players trip on them.
 
 - The first three wallets now lead somewhere. `BOOK`, `PAPERS` and `ACTA`, and an
   Acta panel, ask the player to work out who ordered what, in whose name and

@@ -23,6 +23,18 @@ export const TOOLS = {
     label: { en: 'Acta', ru: 'Акт', es: 'Acta', pt: 'Ata' },
     glyph: '§',
   },
+  ask: {
+    label: { en: 'Witness', ru: 'Свидетель', es: 'Testigo', pt: 'Testemunha' },
+    glyph: '»',
+  },
+  send: {
+    label: { en: 'Errand', ru: 'Поручение', es: 'Recado', pt: 'Recado' },
+    glyph: '→',
+  },
+  note: {
+    label: { en: 'Note', ru: 'Заметка', es: 'Nota', pt: 'Nota' },
+    glyph: '✎',
+  },
   decrypt: {
     label: {
       en: 'Decrypt',

@@ -150,7 +150,11 @@ a second design living inside the first.
 | `HINT` | spend a hint (three per case) |
 | `BOOK <n\|page:line\|word>` | a line of the book of the Caja: every wordlist number is a member |
 | `PAPERS [n]` | the wet papers in your folder |
-| `ACTA [row\|FILE [NOW]\|HINT]` | write what you think happened to the first three wallets, and file it |
+| `ACTA [row\|FILE [NOW]\|HINT]` | write what you think happened to an act's wallets, and file it |
+| `ASK <who> <word>` | question a witness with a word from the papers |
+| `CITE <who> <n>` | show a witness a paper from your folder |
+| `SEND [errand\|NOW]` | send the courier: one errand at a time, one or two blocks each |
+| `NOTE [text]` | keep a line for yourself |
 | `WORD <n>` / `INDEX <word>` / `SEARCH <prefix>` | BIP-39 wordlist tools |
 | `ARCHIVE <text>` | full-text search across the case files |
 | `ENTROPY <hex>` | rebuild a mnemonic from 128 bits of entropy |
@@ -390,7 +394,7 @@ tools/measure_leading.mjs  re-measures the distribution behind nameforge.json
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
 tools/smoke_web.mjs        opens the page in a browser and presses the buttons
-tests/                     413 tests, including the Python ↔ JavaScript diff
+tests/                     457 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
@@ -400,7 +404,7 @@ generator and the reference implementation; it is not a runtime.
 
 ```bash
 pip install -e ".[dev]"            # pytest, ruff, mypy and the reference libraries
-python -m pytest tests -v          # 413 tests
+python -m pytest tests -v          # 457 tests
 python tools/build_web_data.py     # required after editing data/
 ```
 

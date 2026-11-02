@@ -354,7 +354,8 @@ await step('a phrase in the Decrypt panel closes its case', async () => {
     .click({ timeout: 3000 });
   await decrypt.locator('.notice--ok').nth(1).waitFor({ timeout: 8000 });
   const body = await decrypt.innerText();
-  if (!body.includes('Filed. — T.')) throw new Error('the close was not filed');
+  if (!/Filed: in\. \d{4}\/T/.test(body))
+    throw new Error('the close was not filed');
   if (!/OPINION No\. 0001/.test(body))
     throw new Error('the close has no opinion number');
   await page.waitForTimeout(100);
@@ -369,7 +370,7 @@ await step('the Acta panel: folder, book and a refused filing', async () => {
   if ((await acta.locator('details.paper').count()) !== 2)
     throw new Error('expected two papers after one closed wallet');
   await acta.locator('details.paper summary').nth(1).click();
-  await acta.locator('input[type=text]').fill('33:3');
+  await acta.locator('input[placeholder*="page:line"]').fill('33:3');
   await acta.getByRole('button', { name: /open the line/i }).click();
   if (!(await acta.innerText()).includes('Ramiro Olmos'))
     throw new Error('the book did not answer page 33, line 3');
@@ -397,6 +398,43 @@ await step('read with the chain down', async () => {
   const notice = await ledger.locator('.notice').first().innerText();
   if (!notice.trim()) throw new Error('the outage produced no notice');
   console.log(`     outage reads: ${JSON.stringify(notice.slice(0, 60))}`);
+});
+
+// The second act: a save with the first filed, so nothing here needs an answer.
+await step('the second act: witness, errand and note', async () => {
+  await page.evaluate(() =>
+    localStorage.setItem(
+      'enigma-terminal/progress/v1',
+      JSON.stringify({ solved: [1, 2, 3], story: { filedActs: [1] } }),
+    ),
+  );
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(2000);
+  await openPanel('ACTA');
+  const acta = panel('ACTA');
+  const body = () => acta.innerText();
+  if (
+    !(await body()).includes('Lot 40') &&
+    (await acta.locator('details.paper').count()) < 6
+  )
+    throw new Error('the second act did not fill the folder');
+  await acta.locator('input[placeholder*="word from the papers"]').fill('lot');
+  await acta.getByRole('button', { name: /^ask$/i }).click();
+  if (!(await body()).includes('NEW IN YOUR FOLDER'))
+    throw new Error('the witness handed nothing over');
+  await acta
+    .getByRole('button', { name: /send lalo/i })
+    .first()
+    .click();
+  await acta
+    .getByRole('button', { name: /bring him back now/i })
+    .click({ timeout: 3000 });
+  if (!(await body()).includes('LALO IS BACK'))
+    throw new Error('the courier did not come back');
+  await acta.locator('input[placeholder*="a line for yourself"]').fill('shoes');
+  await acta.getByRole('button', { name: /^keep$/i }).click();
+  if (!(await body()).includes('shoes'))
+    throw new Error('the note was not kept');
 });
 
 await browser.close();

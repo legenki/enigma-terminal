@@ -33,12 +33,14 @@ UNRELATED_MNEMONIC = (
     "absurd avoid scissors anxiety gather lottery category door army half long camera"
 )
 
-#: The first three rows of the Acta, which is the deduction the case papers ask
-#: for. `data/story.json` keeps only a salted digest of these.
+#: The rows of the Acta, which is the deduction the case papers ask for. `data/story.json` keeps only a salted digest of these.
 ACTA_SOLUTION = {
     1: {"employer": "mesa-entradas", "form": "renunciation", "member": 1, "year": 2021},
     2: {"employer": "escribania", "form": "attestation", "member": 1791, "year": 2018},
     3: {"employer": "sanatorio", "form": "death", "member": 515, "year": 2022},
+    4: {"employer": "martillero", "form": "acceptance", "member": 2048, "year": 2019},
+    5: {"employer": "salar", "form": "energy-contract", "member": 1791, "year": 2019},
+    6: {"employer": "cruz-del-sur", "form": "custody-release", "member": 327, "year": 2023},
 }
 
 #: The BIP-39 passphrase behind the seal printed at boot, applied to case 8.

@@ -524,12 +524,20 @@
       },
       "epilogue": {
         "ru": [
-          "«Потолок» вскрыт. Последнее слово — wrong. ORACLE явно шутил над собой.",
-          "Дальше в архиве начинаются настоящие загадки: энтропии больше нет, есть только слова."
+          "«Потолок» вскрыт. Одиннадцать раз последнее слово словаря",
+          "и двенадцатое, которое словарь выбрал сам: wrong. Дневник был не согласен. Сумма согласна.",
+          "Если читать строками книги, эта фраза состоит из одного человека и ночного сторожа.",
+          "Положи её рядом с фразой первого кошелька. SWEEP: её Native и Legacy двигались, оба.",
+          "Никто в этом деле этих движений не делал. Цепь здесь только показывает время."
         ],
         "en": [
-          "The 'ceiling' is open. The last word is 'wrong'. ORACLE was clearly mocking himself.",
-          "From here the archive turns to real riddles: no more entropy, only words."
+          "The 'ceiling' is open. Eleven times the last word on the list,",
+          "and a twelfth that the list chose for itself: 'wrong'. The diary disagreed.",
+          "The sum did not.",
+          "Read as lines of the book, this phrase is one person and a night watchman.",
+          "Put it beside the first wallet's phrase.",
+          "SWEEP: its Native and Legacy addresses have both moved.",
+          "Nobody in this file made those movements. Here the chain only tells the time."
         ],
         "es": [
           "El 'techo' está abierto. La última palabra es 'wrong'. ORACLE claramente se estaba burlando de sí mismo.",
@@ -686,12 +694,18 @@
       },
       "epilogue": {
         "ru": [
-          "Пятый сид восстановлен. В блокноте — адрес встречи и дата, которая уже прошла.",
-          "ORACLE ждал кого-то. Кто-то пришёл раньше."
+          "Двенадцать определений отдали свои слова. В блокноте адрес встречи",
+          "и дата, которая уже прошла. ORACLE кого-то ждал. Кто-то пришёл раньше.",
+          "Запусти SWEEP и запомни высоту: до неё этот сид ни разу не двигался.",
+          "Открой в BOOK каждое слово. Правила между номерами нет.",
+          "Одно слово есть ещё в одном кошельке."
         ],
         "en": [
-          "Fifth seed recovered. The notebook holds a meeting address and a date already past.",
-          "ORACLE was waiting for someone. Someone arrived early."
+          "The twelve definitions give up their words. The notebook holds a meeting address",
+          "and a date already past. ORACLE was waiting for someone. Someone arrived early.",
+          "Run SWEEP and note the height: up to there, this seed has never moved.",
+          "BOOK each word. There is no rule between the numbers.",
+          "One word here is in one other wallet."
         ],
         "es": [
           "Quinta semilla recuperada. El cuaderno contiene una dirección de reunión y una fecha ya pasada.",
@@ -840,14 +854,17 @@
       },
       "epilogue": {
         "ru": [
-          "Ячейка пуста, кошелёк — нет. Legacy-адрес чист, но по ветке Native SegWit",
-          "прошли настоящие переводы: запусти SWEEP и сравни все три пути сразу.",
-          "Кто-то методично перегонял мелкие суммы. ORACLE называл это «оттоком»."
+          "Ячейка пуста, кошелёк нет. Legacy-адрес чист, но по ветке Native SegWit",
+          "прошли настоящие переводы: запусти SWEEP и сравни все три пути.",
+          "Кто-то перегоняет через него мелкие суммы. Кто именно, в этом деле не знает никто.",
+          "«Для тех, кто уходит». В отчёте отток это клиенты за дверью. В книге это строка."
         ],
         "en": [
           "The box is empty, the wallet is not. The legacy address is clean, but the",
           "Native SegWit branch carries genuine transfers: run SWEEP to compare all three paths.",
-          "Someone kept moving small amounts through. ORACLE called it 'churn'."
+          "Someone keeps moving small amounts through. Nobody in this file knows who.",
+          "'For those who leave.' In a report, churn is customers walking out.",
+          "In a book, it is a line."
         ],
         "es": [
           "La caja está vacía, la billetera no. La dirección legacy está limpia, pero la",

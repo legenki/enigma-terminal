@@ -34,19 +34,35 @@ import { KINDS } from './mempool.js';
 import {
   ACTA_WALLETS,
   actaFiled,
+  addNote,
+  ask,
   bookLookup,
   chainTip,
+  cite,
   closeCase,
+  collectErrand,
+  collectNow,
+  currentAct,
   debt,
   draft,
+  errandOut,
+  errandStatus,
   fileActa,
+  filedLine,
   filingLine,
+  isUnread,
+  markRead,
+  notes,
   paperById,
+  paperLines,
   papers,
   STORY,
   say,
+  sendErrand,
   setRow,
+  sheetAct,
   useActaHint,
+  witnessIds,
 } from './story.js';
 import { WORDLIST_SHA256 } from './wordlist.js';
 
@@ -113,6 +129,10 @@ const HELP = {
     ['BOOK <n|page:line|word>', 'a line of the book of the Caja'],
     ['PAPERS [n]', 'the wet papers in your folder'],
     ['ACTA', 'write and file what you think happened'],
+    ['ASK <who> <word>', 'question a witness with a word from the papers'],
+    ['CITE <who> <n>', 'show a witness a paper from your folder'],
+    ['SEND [errand|NOW]', 'send the courier; one errand at a time'],
+    ['NOTE [text]', 'keep a line for yourself'],
     ['WORD <1..2048>', 'read one entry of the BIP-39 wordlist'],
     ['INDEX <word>', "find a word's position in the wordlist"],
     ['SEARCH <prefix>', 'list wordlist entries by prefix'],
@@ -159,6 +179,10 @@ const HELP = {
     ['BOOK <n|стр:строка|слово>', 'строка из книги Caja'],
     ['PAPERS [n]', 'мокрые листы в вашей папке'],
     ['ACTA', 'записать и подать вашу версию событий'],
+    ['ASK <кто> <слово>', 'спросить свидетеля словом с листа'],
+    ['CITE <кто> <n>', 'показать свидетелю лист из папки'],
+    ['SEND [поручение|NOW]', 'послать курьера; по одному поручению за раз'],
+    ['NOTE [текст]', 'записать строку для себя'],
     ['WORD <1..2048>', 'показать слово словаря BIP-39'],
     ['INDEX <слово>', 'найти позицию слова в словаре'],
     ['SEARCH <префикс>', 'искать слова словаря по началу'],
@@ -199,6 +223,13 @@ const HELP = {
     ['BOOK <n|pág:línea|palabra>', 'una línea del libro de la Caja'],
     ['PAPERS [n]', 'los papeles mojados de tu carpeta'],
     ['ACTA', 'escribir y presentar lo que crees que pasó'],
+    [
+      'ASK <quién> <palabra>',
+      'preguntar a un testigo con una palabra de los papeles',
+    ],
+    ['CITE <quién> <n>', 'mostrar a un testigo un papel de tu carpeta'],
+    ['SEND [recado|NOW]', 'enviar al mensajero; un recado a la vez'],
+    ['NOTE [texto]', 'guardar una línea para ti'],
     ['WORD <1..2048>', 'leer una entrada de la lista BIP-39'],
     ['INDEX <palabra>', 'encontrar la posición de una palabra'],
     ['SEARCH <prefijo>', 'buscar palabras por prefijo'],
@@ -245,6 +276,13 @@ const HELP = {
     ['BOOK <n|pág:linha|palavra>', 'uma linha do livro da Caja'],
     ['PAPERS [n]', 'os papéis molhados da sua pasta'],
     ['ACTA', 'escrever e apresentar o que você acha que aconteceu'],
+    [
+      'ASK <quem> <palavra>',
+      'perguntar a uma testemunha com uma palavra dos papéis',
+    ],
+    ['CITE <quem> <n>', 'mostrar a uma testemunha um papel da sua pasta'],
+    ['SEND [recado|NOW]', 'enviar o mensageiro; um recado de cada vez'],
+    ['NOTE [texto]', 'guardar uma linha para você'],
     ['WORD <1..2048>', 'ler uma entrada da lista BIP-39'],
     ['INDEX <palavra>', 'encontrar a posição de uma palavra'],
     ['SEARCH <prefixo>', 'buscar palavras por prefixo'],
@@ -539,7 +577,14 @@ export class Engine {
     // so a blocked or rate-limited request still opens on prose, not a gap.
     const figures = await figuresFromChain(this.explorer);
     term.typeLines(
-      renderOpening(chooseOpening(figures), this.lang, figures),
+      renderOpening(
+        chooseOpening(figures, Math.random, {
+          // Someone new has to learn what the job is before who else is hiring.
+          mention: this.progress.solved.length ? null : 'ORACLE',
+        }),
+        this.lang,
+        figures,
+      ),
       'white',
       260,
     );
@@ -562,6 +607,9 @@ export class Engine {
     // Read first, so the panel's work is not undone by a copy older than it.
     this.progress.refresh();
     this.journal.refresh();
+    this.reportReturn(
+      collectErrand(this.progress, { height: chainTip(), lang: this.lang }),
+    );
     if (!handler) {
       this.term.print(`[FATAL] UNKNOWN COMMAND: ${head.toUpperCase()}`, 'red');
       this.term.print('        TYPE HELP FOR THE COMMAND LIST.', 'grey');
@@ -593,6 +641,10 @@ export class Engine {
       BOOK: this.cmdBook,
       PAPERS: this.cmdPapers,
       ACTA: this.cmdActa,
+      ASK: this.cmdAsk,
+      CITE: this.cmdCite,
+      SEND: this.cmdSend,
+      NOTE: this.cmdNote,
       WORD: this.cmdWord,
       INDEX: this.cmdIndex,
       SEARCH: this.cmdSearch,
@@ -938,6 +990,15 @@ export class Engine {
     const { term, lang } = this;
     const folder = papers(this.progress);
     const wanted = argument.trim();
+    if (wanted.toUpperCase() === 'NEW') {
+      const unread = folder.filter((paper) => isUnread(this.progress, paper));
+      if (!unread.length) {
+        term.print(`[INFO] ${say('papersNone', lang)}`, 'cyan');
+        return;
+      }
+      for (const paper of unread) this.printPaper(paper);
+      return;
+    }
     if (wanted) {
       const paper = folder[Number(wanted) - 1];
       if (!paper) {
@@ -947,12 +1008,7 @@ export class Engine {
         );
         return;
       }
-      term.blank();
-      term.print(`  ${pick(paper.title, lang).toUpperCase()}`, 'cyan');
-      term.rule('-');
-      term.printLines(pick(paper.body, lang), 'white');
-      term.rule('-');
-      term.blank();
+      this.printPaper(paper);
       return;
     }
     term.blank();
@@ -960,20 +1016,80 @@ export class Engine {
     term.rule();
     if (!folder.length) term.print(`  ${say('papersEmpty', lang)}`, 'grey');
     folder.forEach((paper, i) => {
-      term.print(`  ${String(i + 1).padStart(2)}  ${pick(paper.title, lang)}`);
+      const mark = isUnread(this.progress, paper) ? '*' : ' ';
+      term.print(
+        `  ${String(i + 1).padStart(2)} ${mark} ${pick(paper.title, lang)}`,
+      );
     });
     term.rule();
     if (folder.length) term.print(`  ${say('papersUsage', lang)}`, 'grey');
     term.blank();
   }
 
+  printPaper(paper) {
+    const { term, lang } = this;
+    term.blank();
+    term.print(`  ${pick(paper.title, lang).toUpperCase()}`, 'cyan');
+    term.rule('-');
+    term.printLines(paperLines(this.progress, paper, lang), 'white');
+    term.rule('-');
+    term.blank();
+    markRead(this.progress, paper);
+  }
+
+  printNewPapers(ids) {
+    for (const id of ids || []) {
+      this.term.print(
+        `  ${say('newPaper', this.lang, {
+          title: pick(paperById(id).title, this.lang),
+        })}`,
+        'cyan',
+      );
+    }
+  }
+
+  /** A turn of the story, set apart from whatever command brought it on. */
+  printEvent(event) {
+    if (!event) return;
+    const { term } = this;
+    term.blank();
+    term.rule('=');
+    term.typeLines(event.lines, 'white', 320);
+    term.rule('=');
+  }
+
+  /** What a witness or an errand handed over. */
+  printHandover(result) {
+    this.printNewPapers(result.newPapers);
+    if (result.reveal) this.printEvent({ lines: result.reveal });
+    this.printEvent(result.event);
+    if (result.word) {
+      this.term.print(
+        `  ${say('newWord', this.lang, { word: result.word })}`,
+        'cyan',
+      );
+    }
+  }
+
+  reportReturn(result) {
+    if (!result) return;
+    const { term } = this;
+    term.blank();
+    term.print(`  ${say('sendBack', this.lang)}`, 'cyan');
+    term.printLines(result.lines, 'white');
+    this.printHandover(result);
+    term.blank();
+    this.log('send', result.id, { status: 'ok', payload: { id: result.id } });
+  }
+
   printActa() {
     const { term, lang } = this;
     const rows = draft(this.progress);
+    const act = sheetAct(this.progress);
     term.blank();
     term.print(`  ${say('actaTitle', lang)}`, 'cyan');
     term.rule();
-    for (const id of ACTA_WALLETS) {
+    for (const id of act.wallets) {
       const row = rows[id];
       const name = pick(caseById(id).codename, lang).padEnd(20);
       term.print(
@@ -987,9 +1103,11 @@ export class Engine {
     }
     term.rule();
     term.print(`  ${say('actaUsage', lang)}`, 'grey');
+    term.print(`  ${say('actaRule', lang)}`, 'grey');
+    term.print(`  ${say('actaLimit', lang)}`, 'grey');
     term.print(
       `  ${say('actaForms', lang, {
-        forms: STORY.acta.forms
+        forms: act.forms
           .map((form) => `${form.id} (${pick(form.label, lang)})`)
           .join(', '),
       })}`,
@@ -1004,26 +1122,48 @@ export class Engine {
 
   fileTheActa(payFavour) {
     const { term, lang } = this;
+    const act = currentAct(this.progress);
     const result = fileActa(this.progress, {
       height: chainTip(),
       payFavour,
+      lang,
     });
     const line = {
       already: () => term.print(`[INFO] ${say('actaAlready', lang)}`, 'cyan'),
       incomplete: () =>
         term.print(`[WARN] ${say('actaIncomplete', lang)}`, 'amber'),
       wait: () => term.print(`[WARN] ${say('actaWait', lang)}`, 'amber'),
-      rejected: () =>
+      'needs-statute': () =>
+        term.print(`[WARN] ${say('actaNeedsStatute', lang)}`, 'amber'),
+      rejected: () => {
         term.print(
           `[FATAL] ${say('actaRejected', lang, { left: result.left })}`,
           'red',
-        ),
+        );
+        if (result.reactions.length) {
+          term.print(`  ${say('reactionsHead', lang)}`, 'grey');
+        }
+        for (const reaction of result.reactions) {
+          term.printLines(reaction.lines, 'grey');
+        }
+        if (result.noiseHigh) this.printEvent({ lines: result.noiseHigh });
+      },
       accepted: () => {
         term.print(`[ OK ] ${say('actaAccepted', lang)}`, 'green');
-        term.print(`  ${say('filedBy', lang)}`, 'grey');
+        term.print(`  ${filedLine(act.id * 500, lang)}`, 'grey');
         term.rule('=');
-        term.typeLines(pick(STORY.acta.accepted, lang), 'white', 320);
+        term.typeLines(pick(act.accepted, lang), 'white', 320);
         term.rule('=');
+        if (act.id === 1) {
+          term.blank();
+          term.typeLines(pick(STORY.cold_open, lang), 'white', 320);
+          term.blank();
+        }
+        this.printNewPapers(result.newPapers);
+        this.printEvent(result.event);
+        if (result.actaReady) term.print(`  ${say('actaReady', lang)}`, 'cyan');
+        if (result.knewIt) term.printLines([say('knewIt', lang)], 'white');
+        if (result.last) term.print(`  ${say('actEnd', lang)}`, 'amber');
       },
     };
     line[result.status]();
@@ -1052,11 +1192,11 @@ export class Engine {
         term.print(`[WARN] ${say('actaNoHints', lang)}`, 'amber');
         return;
       }
-      term.print(pick(hint.text, lang), 'amber');
+      term.printLines(pick(hint.text, lang), 'amber');
       term.print(say('actaDebt', lang, { debt: debt(this.progress) }), 'grey');
       return;
     }
-    if (actaFiled(this.progress)) {
+    if (!currentAct(this.progress)) {
       term.print(`[INFO] ${say('actaAlready', lang)}`, 'cyan');
       return;
     }
@@ -1082,6 +1222,189 @@ export class Engine {
       );
       term.print(`       ${say('actaUsage', lang)}`, 'grey');
     }
+  }
+
+  /** The failures a witness can give, shared by ASK and CITE. */
+  witnessFailure(result, who) {
+    const { term, lang } = this;
+    if (result.status === 'closed') {
+      term.print(`[WARN] ${say('askClosed', lang)}`, 'amber');
+      return true;
+    }
+    if (result.status === 'unknown') {
+      term.print(
+        `[WARN] ${say('askUnknown', lang, { who: String(who).toUpperCase() })}`,
+        'amber',
+      );
+      term.print(
+        `       ${say('askUsage', lang, { who: witnessIds().join(', ') })}`,
+        'grey',
+      );
+      return true;
+    }
+    if (result.status === 'dead') {
+      term.printLines(result.lines, 'grey');
+      return true;
+    }
+    return false;
+  }
+
+  cmdAsk(argument) {
+    const { term, lang } = this;
+    const [who = '', ...words] = argument.trim().split(/\s+/);
+    if (!who) {
+      term.print(
+        `[WARN] ${say('askUsage', lang, { who: witnessIds().join(', ') })}`,
+        'amber',
+      );
+      return;
+    }
+    const word = words.join(' ');
+    const result = ask(this.progress, who, word, { lang });
+    if (this.witnessFailure(result, who)) return;
+    term.blank();
+    term.printLines(
+      result.lines,
+      result.status === 'answer' ? 'white' : 'grey',
+    );
+    this.printHandover(result);
+    term.blank();
+    this.log('ask', `${who} — ${word}`, {
+      status: result.status === 'answer' ? 'ok' : 'info',
+      payload: { who, word },
+    });
+  }
+
+  cmdCite(argument) {
+    const { term, lang } = this;
+    const [who = '', paper = ''] = argument.trim().split(/\s+/);
+    if (!who || !paper) {
+      term.print(`[WARN] ${say('citeUsage', lang)}`, 'amber');
+      return;
+    }
+    const result = cite(this.progress, who, paper, { lang });
+    if (this.witnessFailure(result, who)) return;
+    if (result.status === 'no-paper') {
+      term.print(`[WARN] ${say('paperMissing', lang, { n: paper })}`, 'amber');
+      return;
+    }
+    if (result.status === 'nothing') {
+      term.print(say('citeNothing', lang, { who: result.name }), 'grey');
+      return;
+    }
+    term.blank();
+    term.printLines(result.lines, 'white');
+    this.printHandover(result);
+    term.blank();
+  }
+
+  printErrands() {
+    const { term, lang } = this;
+    const out = errandOut(this.progress);
+    term.blank();
+    term.print(`  ${say('sendTitle', lang)}`, 'cyan');
+    term.rule();
+    for (const errand of STORY.errands) {
+      const status = errandStatus(this.progress, errand, {
+        height: chainTip(),
+      });
+      const label = {
+        open: 'statusOpen',
+        done: 'statusDone',
+        out: 'statusOut',
+        flooded: 'statusFlooded',
+      }[status];
+      term.print(
+        `  ${errand.id.padEnd(10)} ${pick(errand.district, lang)} · ${pick(errand.label, lang)} · ${say(label, lang)}`,
+        status === 'open' ? 'white' : 'grey',
+      );
+    }
+    term.rule();
+    if (out) {
+      term.print(
+        `  ${say('sendBusy', lang, { label: pick(out.label, lang), blocks: out.blocks })}`,
+        'grey',
+      );
+    }
+    term.print(`  ${say('sendUsage', lang)}`, 'grey');
+    term.blank();
+  }
+
+  cmdSend(argument) {
+    const { term, lang } = this;
+    const wanted = argument.trim();
+    if (!wanted) {
+      if (!actaFiled(this.progress)) {
+        term.print(`[WARN] ${say('askClosed', lang)}`, 'amber');
+        return;
+      }
+      this.printErrands();
+      return;
+    }
+    if (wanted.toUpperCase() === 'NOW') {
+      const result = collectNow(this.progress, { lang });
+      if (result.status === 'idle') {
+        term.print(`[INFO] ${say('sendIdle', lang)}`, 'cyan');
+        return;
+      }
+      this.reportReturn(result);
+      return;
+    }
+    const result = sendErrand(this.progress, wanted, {
+      height: chainTip(),
+      lang,
+    });
+    const line = {
+      closed: () => term.print(`[WARN] ${say('askClosed', lang)}`, 'amber'),
+      unknown: () =>
+        term.print(
+          `[WARN] ${say('sendUnknown', lang, { id: wanted.toUpperCase() })}`,
+          'amber',
+        ),
+      busy: () =>
+        term.print(
+          `[WARN] ${say('sendBusy', lang, {
+            label: pick(result.errand.label, lang),
+            blocks: result.errand.blocks,
+          })}`,
+          'amber',
+        ),
+      done: () =>
+        term.print(
+          `[INFO] ${say('sendDone', lang, { label: pick(result.errand.label, lang) })}`,
+          'cyan',
+        ),
+      flooded: () =>
+        term.print(
+          `[WARN] ${say('sendFlooded', lang, { label: pick(result.errand.label, lang) })}`,
+          'amber',
+        ),
+      sent: () => {
+        term.printLines(result.lines, 'white');
+        this.log('send', wanted, { payload: { id: wanted } });
+      },
+    };
+    line[result.status]();
+  }
+
+  cmdNote(argument) {
+    const { term, lang } = this;
+    const text = argument.trim();
+    if (text) {
+      const count = addNote(this.progress, text);
+      term.print(`[ OK ] ${say('noteSaved', lang, { count })}`, 'green');
+      this.log('note', text.slice(0, 60), { payload: {} });
+      return;
+    }
+    const lines = notes(this.progress);
+    if (!lines.length) {
+      term.print(`[INFO] ${say('noteEmpty', lang)}`, 'cyan');
+      term.print(`       ${say('noteUsage', lang)}`, 'grey');
+      return;
+    }
+    lines.forEach((line, i) => {
+      term.print(`  ${String(i + 1).padStart(2)}  ${line}`, 'white');
+    });
   }
 
   // -- wordlist tools ------------------------------------------------------
@@ -1553,7 +1876,7 @@ export class Engine {
     } else if (owner && !this.isSolved(owner.id)) {
       if (this.isUnlocked(owner)) {
         this.active = owner;
-        this.closeCase(owner);
+        this.closeCase(owner, { blind: true });
       } else {
         this.term.print(
           `[WARN] ${this.t('wrongCase', { id: owner.id, name: pick(owner.codename, this.lang) })}`,
@@ -1568,8 +1891,12 @@ export class Engine {
     }
   }
 
-  closeCase(caseFile) {
-    const closed = closeCase(this.progress, caseFile, { height: chainTip() });
+  closeCase(caseFile, { blind = false } = {}) {
+    const closed = closeCase(this.progress, caseFile, {
+      height: chainTip(),
+      lang: this.lang,
+      blind,
+    });
     const firstTime = closed.first;
     if (firstTime) {
       this.log(
@@ -1587,7 +1914,9 @@ export class Engine {
     if (closed.filing) {
       term.print(`  ${filingLine(closed.filing, this.lang)}`, 'grey');
     }
-    term.print(`  ${say('filedBy', this.lang)}`, 'grey');
+    if (closed.incoming) {
+      term.print(`  ${filedLine(closed.incoming, this.lang)}`, 'grey');
+    }
     const client = caseFile.client ? clientBySlug(caseFile.client) : null;
     if (client) {
       term.print(
@@ -1614,6 +1943,12 @@ export class Engine {
         'cyan',
       );
     }
+    if (closed.actaReady)
+      term.print(`  ${say('actaReady', this.lang)}`, 'cyan');
+    if (closed.leveneCalls) {
+      term.print(`  ${say('leveneRings', this.lang)}`, 'cyan');
+    }
+    this.printEvent(closed.event);
     term.blank();
   }
 
@@ -1819,7 +2154,7 @@ export class Engine {
     });
     term.print(
       all
-        ? `  ${say('txlogAll', this.lang, { count: txs.length })}`
+        ? `  ${say(txs.length < 25 ? 'txlogWhole' : 'txlogPartial', this.lang, { count: txs.length })}`
         : `  ${txs.length} MOST RECENT TX(s)`,
       'grey',
     );
@@ -2007,6 +2342,12 @@ export class Engine {
       this.cmdBook(payload.query || '');
     } else if (entry.tool === 'acta') {
       this.printActa();
+    } else if (entry.tool === 'ask') {
+      this.cmdAsk(`${payload.who || ''} ${payload.word || ''}`);
+    } else if (entry.tool === 'send') {
+      this.printErrands();
+    } else if (entry.tool === 'note') {
+      this.cmdNote('');
     } else {
       this.term.print('[WARN] THIS ENTRY HAS NOTHING TO REPLAY.', 'amber');
     }

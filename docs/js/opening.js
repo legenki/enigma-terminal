@@ -30,11 +30,15 @@ export const available = (figures) =>
  * Never throws: the four that ask for nothing are always in the running, so an
  * empty `figures` still returns something printable.
  */
-export function choose(figures, random = Math.random) {
+export function choose(figures, random = Math.random, { mention = null } = {}) {
   const pool = available(figures);
-  const usable = pool.length
+  const fallback = pool.length
     ? pool
     : OPENINGS.filter((o) => !(o.needs || []).length);
+  const about = mention
+    ? fallback.filter((o) => (o.lines.en || []).join(' ').includes(mention))
+    : [];
+  const usable = about.length ? about : fallback;
   return usable[Math.floor(random() * usable.length)] || OPENINGS[0];
 }
 

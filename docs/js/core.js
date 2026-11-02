@@ -50,31 +50,77 @@ export const pick = (bundle, lang) =>
  * the save is: a hand-edited value becomes an empty one, never a crash.
  */
 const readStory = (value) => {
-  const source =
-    value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+  const isRecord = (entry) =>
+    Boolean(entry) && typeof entry === 'object' && !Array.isArray(entry);
+  const source = isRecord(value) ? value : {};
   const count = (n) => (Number.isInteger(n) && n >= 0 ? n : 0);
   const entries = (object, keep) =>
     Object.fromEntries(
-      Object.entries(
-        object && typeof object === 'object' && !Array.isArray(object)
-          ? object
-          : {},
-      ).filter(([, entry]) => keep(entry)),
+      Object.entries(isRecord(object) ? object : {}).filter(([, entry]) =>
+        keep(entry),
+      ),
     );
-  const isRecord = (entry) =>
-    entry && typeof entry === 'object' && !Array.isArray(entry);
+  const strings = (list) =>
+    Array.isArray(list)
+      ? list.filter((entry) => typeof entry === 'string')
+      : [];
   const window = isRecord(source.window) ? source.window : {};
+  const clock = (entry) =>
+    isRecord(entry) && Number.isFinite(entry.at)
+      ? {
+          height: Number.isInteger(entry.height) ? entry.height : null,
+          at: entry.at,
+        }
+      : null;
+  const errand =
+    isRecord(source.errand) &&
+    typeof source.errand.id === 'string' &&
+    clock(source.errand)
+      ? { id: source.errand.id, ...clock(source.errand) }
+      : null;
+  // A single count and a yes-or-no flag were enough while there was one act.
+  const actaHints = isRecord(source.actaHints)
+    ? entries(source.actaHints, (n) => Number.isInteger(n) && n >= 0)
+    : count(source.actaHints)
+      ? { 1: source.actaHints }
+      : {};
+  const filedActs = Array.isArray(source.filedActs)
+    ? source.filedActs.filter(Number.isInteger)
+    : source.filed === true
+      ? [1]
+      : [];
   return {
     filings: entries(source.filings, isRecord),
     draft: entries(source.draft, isRecord),
     favours: count(source.favours),
-    actaHints: count(source.actaHints),
+    actaHints,
     window: {
       key: typeof window.key === 'string' ? window.key : null,
       at: Number.isFinite(window.at) ? window.at : 0,
       count: count(window.count),
     },
-    filed: source.filed === true,
+    filedActs,
+    arrived: strings(source.arrived),
+    granted: strings(source.granted),
+    rejected: Array.isArray(source.rejected)
+      ? source.rejected.filter(isRecord)
+      : [],
+    reacted: strings(source.reacted),
+    noiseWarned: source.noiseWarned === true,
+    cleanAt: count(source.cleanAt),
+    notes: strings(source.notes),
+    errand,
+    errandsDone: strings(source.errandsDone),
+    actTwoStart: clock(source.actTwoStart),
+    leveneFound:
+      source.leveneFound === 'a' || source.leveneFound === 'b'
+        ? source.leveneFound
+        : null,
+    tontineShown: source.tontineShown === true,
+    askCount: count(source.askCount),
+    leveneSpoke: count(source.leveneSpoke),
+    blindCloses: count(source.blindCloses),
+    read: strings(source.read),
   };
 };
 

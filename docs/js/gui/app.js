@@ -58,22 +58,36 @@ import {
 } from '../pow.js';
 import { read, write } from '../storage.js';
 import {
-  ACTA_WALLETS,
   actaFiled,
+  addNote,
+  ask,
   bookLookup,
   chainTip,
+  cite,
   closeCase,
+  collectErrand,
+  collectNow,
+  currentAct,
   debt,
   draft,
+  errandOut,
+  errandStatus,
   fileActa,
+  filedLine,
   filingLine,
+  moreActaHints,
+  notes,
   paperById,
+  paperLines,
   papers,
   STORY,
   say,
+  sendErrand,
   setRow,
+  sheetAct,
   shownActaHints,
   useActaHint,
+  witnessIds,
 } from '../story.js';
 import { icon } from '../vendor/feather.js';
 import {
@@ -646,7 +660,7 @@ export class GuiApp {
       if (payload.caseId) this.go('cases', payload.caseId);
       return;
     }
-    if (tool === 'book' || tool === 'acta') {
+    if (['book', 'acta', 'ask', 'send', 'note'].includes(tool)) {
       this.go('acta');
       return;
     }
@@ -1344,9 +1358,13 @@ export class GuiApp {
    * Close a case and say so, for every place a phrase can be typed. Answers the
    * notices to show; the caller decides where they go.
    */
-  closeAndReport(caseFile, wallet) {
+  closeAndReport(caseFile, wallet, { blind = false } = {}) {
     const lang = this.lang;
-    const closed = closeCase(this.progress, caseFile, { height: chainTip() });
+    const closed = closeCase(this.progress, caseFile, {
+      height: chainTip(),
+      lang,
+      blind,
+    });
     this.panels.delete('cases');
     this.panels.delete('acta');
     this.paintNav();
@@ -1367,7 +1385,7 @@ export class GuiApp {
         'ok',
         tf('caseClosed', lang, { id: caseFile.id }),
         ...(closed.filing ? [filingLine(closed.filing, lang)] : []),
-        say('filedBy', lang),
+        ...(closed.incoming ? [filedLine(closed.incoming, lang)] : []),
         ...(employer
           ? [tf('filedWith', lang, { client: pick(employer.name, lang) })]
           : []),
@@ -1385,16 +1403,74 @@ export class GuiApp {
         ),
       );
     }
+    if (closed.actaReady) out.push(notice('info', say('actaReady', lang)));
+    if (closed.leveneCalls) out.push(notice('info', say('leveneRings', lang)));
+    if (closed.event) out.push(notice('warn', '', ...closed.event.lines));
     return out;
   }
 
-  /** The folder, the book and the Acta on one sheet. */
+  /** The folder, the book, the witnesses, the errands and the Acta on one sheet. */
   buildActa() {
     const lang = this.lang;
     const node = el('div', { class: 'stack' });
-    const result = el('div', {});
+    const folderBox = el('div', { class: 'stack' });
+    const rowsBox = el('div', { class: 'stack' });
+    const result = el('div', { class: 'stack' });
     const hintBox = el('div', { class: 'stack' });
+    const witnessBox = el('div', { class: 'stack' });
+    const errandBox = el('div', { class: 'stack' });
+    const noteBox = el('div', { class: 'stack' });
     const inputs = {};
+    let citeSelect = null;
+
+    const paintFolder = () => {
+      const folder = papers(this.progress);
+      replace(
+        folderBox,
+        ...(folder.length
+          ? folder.map((paper) =>
+              el(
+                'details',
+                { class: 'paper' },
+                el('summary', { text: pick(paper.title, lang) }),
+                el(
+                  'div',
+                  { class: 'prose' },
+                  ...paperLines(this.progress, paper, lang).map((line) =>
+                    el('p', { text: line }),
+                  ),
+                ),
+              ),
+            )
+          : [el('p', { class: 'hint-text', text: say('papersEmpty', lang) })]),
+      );
+      // The paper you can show a witness is any paper you hold, as of now.
+      if (citeSelect) {
+        replace(
+          citeSelect,
+          ...papers(this.progress).map((entry) =>
+            el('option', { value: entry.id, text: pick(entry.title, lang) }),
+          ),
+        );
+      }
+    };
+
+    /** What a witness or an errand handed over, as notices above the answer. */
+    const handover = (outcome) => {
+      const out = (outcome.newPapers || []).map((id) =>
+        notice(
+          'info',
+          say('newPaper', lang, { title: pick(paperById(id).title, lang) }),
+        ),
+      );
+      if (outcome.reveal) out.push(notice('warn', '', ...outcome.reveal));
+      if (outcome.event) out.push(notice('warn', '', ...outcome.event.lines));
+      if (outcome.word) {
+        out.push(notice('info', say('newWord', lang, { word: outcome.word })));
+      }
+      paintFolder();
+      return out;
+    };
 
     const bookInput = el('input', {
       class: 'field',
@@ -1438,14 +1514,16 @@ export class GuiApp {
     const paintHints = () => {
       replace(
         hintBox,
-        ...shownActaHints(this.progress).map((hint) =>
-          el('p', { class: 'hint-text', text: pick(hint.text, lang) }),
+        ...shownActaHints(this.progress).flatMap((hint) =>
+          pick(hint.text, lang).map((line) =>
+            el('p', { class: 'hint-text', text: line }),
+          ),
         ),
         el('p', {
           class: 'hint-text',
           text: say('actaDebt', lang, { debt: debt(this.progress) }),
         }),
-        STORY.acta.hints.length > shownActaHints(this.progress).length
+        moreActaHints(this.progress)
           ? el('button', {
               class: 'btn',
               type: 'button',
@@ -1459,7 +1537,7 @@ export class GuiApp {
       );
     };
 
-    const rowFor = (id) => {
+    const rowFor = (id, act) => {
       const saved = draft(this.progress)[id] || {};
       const closed = this.progress.isSolved(id);
       const employer = el(
@@ -1478,7 +1556,7 @@ export class GuiApp {
         'select',
         { class: 'field', 'aria-label': say('actaForm', lang) },
         el('option', { value: '', text: say('actaForm', lang) }),
-        ...STORY.acta.forms.map((entry) =>
+        ...act.forms.map((entry) =>
           el('option', {
             value: entry.id,
             text: pick(entry.label, lang),
@@ -1510,23 +1588,32 @@ export class GuiApp {
       );
     };
 
+    const paintRows = () => {
+      const act = sheetAct(this.progress);
+      replace(rowsBox, ...act.wallets.map((id) => rowFor(id, act)));
+    };
+
     const file = (payFavour = false) => {
-      for (const id of ACTA_WALLETS) {
-        if (!this.progress.isSolved(id)) continue;
-        const row = inputs[id];
-        const values = {
-          employer: row.employer.value,
-          form: row.form.value,
-          member: row.member.value,
-          year: row.year.value,
-        };
-        if (Object.values(values).every((value) => value)) {
-          setRow(this.progress, id, values);
+      const act = currentAct(this.progress);
+      if (act) {
+        for (const id of act.wallets) {
+          if (!this.progress.isSolved(id)) continue;
+          const row = inputs[id];
+          const values = {
+            employer: row.employer.value,
+            form: row.form.value,
+            member: row.member.value,
+            year: row.year.value,
+          };
+          if (Object.values(values).every((value) => value)) {
+            setRow(this.progress, id, values);
+          }
         }
       }
       const outcome = fileActa(this.progress, {
         height: chainTip(),
         payFavour,
+        lang,
       });
       if (outcome.status === 'accepted' || outcome.status === 'rejected') {
         this.log('acta', outcome.status, {
@@ -1534,65 +1621,264 @@ export class GuiApp {
         });
       }
       paintHints();
+      paintWitnesses();
+      paintErrands();
+      paintFolder();
+      const views = {
+        accepted: () => [
+          notice(
+            'ok',
+            say('actaAccepted', lang),
+            filedLine(act.id * 500, lang),
+            ...pick(act.accepted, lang),
+          ),
+          ...(act.id === 1
+            ? [notice('info', '', ...pick(STORY.cold_open, lang))]
+            : []),
+          ...handover(outcome),
+          ...(outcome.event
+            ? [notice('warn', '', ...outcome.event.lines)]
+            : []),
+          ...(outcome.actaReady
+            ? [notice('info', say('actaReady', lang))]
+            : []),
+          ...(outcome.knewIt ? [notice('info', say('knewIt', lang))] : []),
+          ...(outcome.last ? [notice('info', say('actEnd', lang))] : []),
+        ],
+        already: () => [notice('ok', say('actaAlready', lang))],
+        rejected: () => [
+          notice('danger', say('actaRejected', lang, { left: outcome.left })),
+          ...(outcome.reactions.length
+            ? [notice('info', say('reactionsHead', lang))]
+            : []),
+          ...outcome.reactions.map((item) =>
+            notice(
+              'info',
+              pick(CLIENTS.find((c) => c.slug === item.employer).name, lang),
+              ...item.lines,
+            ),
+          ),
+          ...(outcome.noiseHigh
+            ? [notice('warn', '', ...outcome.noiseHigh)]
+            : []),
+        ],
+        incomplete: () => [notice('warn', say('actaIncomplete', lang))],
+        'needs-statute': () => [notice('warn', say('actaNeedsStatute', lang))],
+        wait: () => [
+          notice('warn', say('actaWait', lang)),
+          el('button', {
+            class: 'btn',
+            type: 'button',
+            text: say('actaPay', lang),
+            onClick: () => file(true),
+          }),
+        ],
+      };
+      replace(result, ...views[outcome.status]());
+      paintRows();
+    };
+
+    const paintWitnesses = () => {
+      if (!actaFiled(this.progress)) {
+        replace(
+          witnessBox,
+          el('p', { class: 'hint-text', text: say('askClosed', lang) }),
+        );
+        return;
+      }
+      const who = el(
+        'select',
+        { class: 'field', 'aria-label': say('panelWitness', lang) },
+        ...witnessIds().map((id) =>
+          el('option', {
+            value: id,
+            text: pick(STORY.witnesses[id].name, lang),
+          }),
+        ),
+      );
+      const word = el('input', {
+        class: 'field',
+        type: 'text',
+        spellcheck: 'false',
+        placeholder: say('panelWord', lang),
+      });
+      const paper = el(
+        'select',
+        { class: 'field', 'aria-label': say('panelCite', lang) },
+        ...papers(this.progress).map((entry) =>
+          el('option', { value: entry.id, text: pick(entry.title, lang) }),
+        ),
+      );
+      citeSelect = paper;
+      const answer = el('div', { class: 'stack' });
+      const show = (outcome) => {
+        if (outcome.status === 'no-paper') return;
+        if (outcome.status === 'nothing') {
+          replace(
+            answer,
+            notice('info', say('citeNothing', lang, { who: outcome.name })),
+          );
+          return;
+        }
+        replace(
+          answer,
+          notice(
+            outcome.status === 'answer' ? 'ok' : 'info',
+            '',
+            ...outcome.lines,
+          ),
+          ...handover(outcome),
+        );
+        // A witness can hand over what an errand was for.
+        paintErrands();
+      };
+      const askNow = () => {
+        const outcome = ask(this.progress, who.value, word.value, { lang });
+        this.log('ask', `${who.value} — ${word.value}`, {
+          status: outcome.status === 'answer' ? 'ok' : 'info',
+          payload: { who: who.value, word: word.value },
+        });
+        show(outcome);
+      };
+      word.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') askNow();
+      });
       replace(
-        result,
-        {
-          accepted: () =>
-            notice(
-              'ok',
-              say('actaAccepted', lang),
-              say('filedBy', lang),
-              ...pick(STORY.acta.accepted, lang),
-            ),
-          already: () =>
-            notice(
-              'ok',
-              say('actaAlready', lang),
-              ...pick(STORY.acta.accepted, lang),
-            ),
-          rejected: () =>
-            notice('danger', say('actaRejected', lang, { left: outcome.left })),
-          incomplete: () => notice('warn', say('actaIncomplete', lang)),
-          wait: () =>
-            el(
-              'div',
-              { class: 'stack' },
-              notice('warn', say('actaWait', lang)),
-              el('button', {
-                class: 'btn',
-                type: 'button',
-                text: say('actaPay', lang),
-                onClick: () => file(true),
-              }),
-            ),
-        }[outcome.status](),
+        witnessBox,
+        el('div', { class: 'acta-row__fields' }, who, word),
+        el('button', {
+          class: 'btn',
+          type: 'button',
+          text: say('panelAsk', lang),
+          onClick: askNow,
+        }),
+        el('div', { class: 'acta-row__fields' }, paper),
+        el('button', {
+          class: 'btn',
+          type: 'button',
+          text: say('panelCite', lang),
+          onClick: () =>
+            show(cite(this.progress, who.value, paper.value, { lang })),
+        }),
+        answer,
       );
     };
 
-    const folder = papers(this.progress);
+    const errandNotice = el('div', { class: 'stack' });
+    const reportReturn = (outcome) => {
+      if (!outcome?.id) return;
+      this.log('send', outcome.id, {
+        status: 'ok',
+        payload: { id: outcome.id },
+      });
+      replace(
+        errandNotice,
+        notice('ok', say('sendBack', lang), ...outcome.lines),
+        ...handover(outcome),
+      );
+    };
+
+    const paintErrands = () => {
+      if (!actaFiled(this.progress)) {
+        replace(
+          errandBox,
+          el('p', { class: 'hint-text', text: say('askClosed', lang) }),
+        );
+        return;
+      }
+      const height = chainTip();
+      reportReturn(collectErrand(this.progress, { height, lang }));
+      const out = errandOut(this.progress);
+      replace(
+        errandBox,
+        ...STORY.errands.map((errand) => {
+          const status = errandStatus(this.progress, errand, { height });
+          const label = {
+            open: 'statusOpen',
+            done: 'statusDone',
+            out: 'statusOut',
+            flooded: 'statusFlooded',
+          }[status];
+          return el(
+            'div',
+            { class: 'row' },
+            status === 'open' && !out
+              ? el('button', {
+                  class: 'btn',
+                  type: 'button',
+                  text: say('panelSend', lang),
+                  onClick: () => {
+                    const sent = sendErrand(this.progress, errand.id, {
+                      height: chainTip(),
+                      lang,
+                    });
+                    if (sent.status === 'sent') {
+                      this.log('send', errand.id, {
+                        payload: { id: errand.id },
+                      });
+                      replace(errandNotice, notice('info', '', ...sent.lines));
+                    }
+                    paintErrands();
+                  },
+                })
+              : null,
+            el('span', {
+              class: 'hint-text',
+              text: `${pick(errand.district, lang)} · ${pick(errand.label, lang)} · ${say(label, lang)}`,
+            }),
+          );
+        }),
+        out
+          ? el(
+              'div',
+              { class: 'row' },
+              el('button', {
+                class: 'btn',
+                type: 'button',
+                text: say('panelCheck', lang),
+                onClick: paintErrands,
+              }),
+              el('button', {
+                class: 'btn',
+                type: 'button',
+                text: say('panelPayNow', lang),
+                onClick: () => {
+                  reportReturn(collectNow(this.progress, { lang }));
+                  paintHints();
+                  paintErrands();
+                },
+              }),
+            )
+          : null,
+        errandNotice,
+      );
+    };
+
+    const noteInput = el('input', {
+      class: 'field',
+      type: 'text',
+      placeholder: say('panelNote', lang),
+    });
+    const paintNotes = () => {
+      replace(
+        noteBox,
+        ...notes(this.progress).map((line) =>
+          el('p', { class: 'hint-text', text: line }),
+        ),
+      );
+    };
+    const keepNote = () => {
+      const text = noteInput.value.trim();
+      if (!addNote(this.progress, text)) return;
+      this.log('note', text.slice(0, 60), { payload: {} });
+      noteInput.value = '';
+      paintNotes();
+    };
+
     replace(
       node,
       section(say('papersTitle', lang)),
-      folder.length
-        ? el(
-            'div',
-            { class: 'stack' },
-            ...folder.map((paper) =>
-              el(
-                'details',
-                { class: 'paper' },
-                el('summary', { text: pick(paper.title, lang) }),
-                el(
-                  'div',
-                  { class: 'prose' },
-                  ...pick(paper.body, lang).map((line) =>
-                    el('p', { text: line }),
-                  ),
-                ),
-              ),
-            ),
-          )
-        : el('p', { class: 'hint-text', text: say('papersEmpty', lang) }),
+      folderBox,
       section(say('bookLookupLabel', lang)),
       el(
         'div',
@@ -1607,7 +1893,9 @@ export class GuiApp {
       ),
       bookResult,
       section(say('actaTitle', lang)),
-      ...ACTA_WALLETS.map(rowFor),
+      el('p', { class: 'hint-text', text: say('actaRule', lang) }),
+      el('p', { class: 'hint-text', text: say('actaLimit', lang) }),
+      rowsBox,
       el('button', {
         class: 'btn btn--primary',
         type: 'button',
@@ -1616,9 +1904,30 @@ export class GuiApp {
       }),
       result,
       hintBox,
+      section(say('panelWitness', lang)),
+      witnessBox,
+      section(say('panelErrands', lang)),
+      errandBox,
+      section(say('panelNotes', lang)),
+      el(
+        'div',
+        { class: 'row' },
+        noteInput,
+        el('button', {
+          class: 'btn',
+          type: 'button',
+          text: say('panelSave', lang),
+          onClick: keepNote,
+        }),
+      ),
+      noteBox,
     );
+    paintFolder();
+    paintRows();
     paintHints();
-    if (actaFiled(this.progress)) file();
+    paintWitnesses();
+    paintErrands();
+    paintNotes();
     return { node, api: {} };
   }
 
@@ -1799,7 +2108,9 @@ export class GuiApp {
                 pick(owner.codename, lang),
               )
             : null,
-          ...(closes ? this.closeAndReport(owner, wallet) : []),
+          ...(closes
+            ? this.closeAndReport(owner, wallet, { blind: true })
+            : []),
           kv([['ENTROPY', toHex(mnemonicToEntropy(wallet.mnemonic))]]),
           this.derivationTable(wallet),
         );
