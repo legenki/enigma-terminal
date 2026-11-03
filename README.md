@@ -10,7 +10,10 @@ story is told against — the game opens on one of sixteen scenes written around
 figures it reads a second earlier: what a coin costs, which pool took the last
 block, how deep the mempool is tonight.
 
-You recover seed phrases from detective riddles and type them into the terminal.
+You recover seed phrases from detective riddles and type them into the terminal,
+and then the real work starts: wet papers, a ledger of 2048 people, witnesses who
+lie, and a finding you have to write down and file yourself.
+
 Nothing underneath the story is simulated: a phrase is checked against the official
 BIP-39 English wordlist including the checksum carried by its final word, stretched
 into a seed with PBKDF2-HMAC-SHA512, and walked through BIP-32 over secp256k1 to
@@ -19,13 +22,38 @@ HTTP calls to public block explorers.
 
 ▶ **Play in the browser: <https://legenki.github.io/enigma-terminal/>**
 
+In Russian, English, Argentine Spanish and Brazilian Portuguese. The first two acts
+are written, covering wallets 1 to 6; wallets 7 and 8 still carry their older text.
+
 ---
+
+## How an investigation works
+
+This section gives nothing away about who did what.
+
+1. **Open a wallet.** Solve a case and `DECRYPT` the phrase. Each closed wallet puts
+   new papers in your folder.
+2. **Read the folder.** `PAPERS` lists it, and `PAPERS NEW` reads what you have not
+   seen. Papers point at people by page and line, not by wallet.
+3. **Look people up.** `BOOK` opens a ledger of 2048 members. Every word on the
+   BIP-39 list is a person, so every phrase is a list of names.
+4. **Check the dates.** Papers are dated by movements on public addresses, so the
+   year is on the real chain: `TXLOG <address> ALL` or the Explorer.
+5. **Question people.** `ASK <who> <word>` takes a word you found in the papers, and
+   `CITE <who> <n>` shows them a paper. `SEND` sends the courier for what they
+   will not give you. He does one errand at a time, one or two blocks each.
+6. **File your finding.** `ACTA` asks who ordered what, in whose name and when. It
+   answers yes or no for all the rows together, at most twice a block.
+
+Nothing here runs on a timer except guessing. Hints are favours, somebody keeps
+count, and a rejected filing does not go away. Real transactions on these addresses
+were made by strangers; the story only uses them as a clock.
 
 ## One build
 
 The game is a static page. There is nothing to install and nothing to run: open
-the URL. Every derivation happens in your browser, and the only thing that
-leaves it is an address lookup, which carries nothing but the address.
+the URL. Every derivation happens in your browser. What leaves it is an address lookup,
+which carries nothing but the address, and the request for the page's web font.
 
 | | Web (GitHub Pages) |
 |---|---|
@@ -190,7 +218,7 @@ Beyond the eight hand-written campaign cases there is a board of **256 contracts
 across eight employers, thirty-two each, in four phases.
 
 An employer is not a skin. It decides the **handwriting**: the way words are hidden in its
-cases. Each one draws on three of the seven schemes.
+cases. Each one draws on three of the eight schemes.
 
 | Employer | District | Who they are |
 |---|---|---|
@@ -203,7 +231,7 @@ cases. Each one draws on three of the seven schemes.
 | SALAR | Catalinas Norte | mineral and energy conglomerate |
 | ALEPH | San Telmo, if the rumours are true | archivist collective, does not pay in money |
 
-The seven schemes:
+The eight schemes:
 
 | Scheme | The trick |
 |---|---|
@@ -247,9 +275,8 @@ phrase. `RECALL <n>` does the same from the command line.
 
 **What the journal will not remember.** A seed phrase the game does not recognise is never
 written to disk in full — only a masked trace like `absurd … camera (12 words) — NOT STORED`,
-and `RECALL` on such an entry says plainly that there is nothing to replay. Only the eight
-case answers (published test vectors) and phrases this page generated itself are kept
-whole. Pasting a working seed into the terminal does not leave it sitting on disk.
+and `RECALL` on such an entry says plainly that there is nothing to replay. Only the case
+answers (published test vectors) are kept whole; a phrase this page generated is masked too. Pasting a working seed into the terminal does not leave it sitting on disk.
 
 ## Generative sigils
 
@@ -304,7 +331,7 @@ The eight campaign cases are built on **published BIP-39 test vectors** — the 
 Trezor specification — rather than on wallets made for the game. Three reasons:
 
 * they are real mainnet addresses with real history. The first has carried
-  transactions since 2013, so `SYNC_LEDGER` shows genuine data rather than an invention;
+  transactions since 2014, so `SYNC_LEDGER` shows genuine data rather than an invention;
 * their private keys are known to the entire world, so there is provably nothing in them
   worth taking. The game cannot accidentally become a leak;
 * they are reproducible: anyone can check every address in any explorer.
@@ -324,8 +351,8 @@ fingerprint and checks what the player typed against it.
 
 * This program **cannot and will not** crack anyone's seed phrase. It derives addresses
   from a phrase you already know and reads public blockchain data.
-* The web build computes everything in your browser. The only thing that leaves the page
-  is an address lookup, and it contains nothing but the address.
+* The web build computes everything in your browser. What leaves the page is an address
+  lookup, which contains nothing but the address, and the request for the web font.
 * **Nameforge** strikes a named stamp: a real twelve-word phrase whose first legacy
   address begins `1` and then your name. Difficulty is never `58^n`, because the character
   straight after the `1` is nowhere near uniform — twenty-two of them land about 4.3% of

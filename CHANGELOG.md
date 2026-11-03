@@ -13,31 +13,54 @@ Cutting a release is: bump those three, write the entry below, then push a tag
 refuses a tag that does not match the declared version and takes the published
 notes from the entry, so the tag, the code and these notes cannot drift apart.
 
-## Unreleased
+## 3.1.0
 
-A vertical slice of the case file, for playtesting. Wallets 7 and 8 keep their
-old text.
+The game becomes an investigation. A riddle used to be the whole job: type the
+phrase, read the epilogue. Now a closed wallet opens onto papers, people and a
+question the player has to answer themselves. The first two acts of the campaign
+are rewritten, covering wallets 1 to 6. Wallets 7 and 8 keep their old text until
+the next act is written. Saves from 3.0 still load.
 
-- The second act: wallets 4 to 6, a second Acta, and a courier. `ASK` questions
-  a witness with a word from the papers, `CITE` shows them a paper, `SEND` sends
-  the courier on one errand at a time, one or two blocks each, and `NOTE` keeps a
-  line. `PAPERS NEW` reads whatever has not been seen.
-- A rejected filing now stays on file: every client it names hears about it, and
-  enough of them bring the special folder down on the player's copies.
-- The filing mark is an incoming number rather than a signature, and the Acta
-  states its rules. Both came from watching simulated players trip on them.
+### The case file
 
-- The first three wallets now lead somewhere. `BOOK`, `PAPERS` and `ACTA`, and an
-  Acta panel, ask the player to work out who ordered what, in whose name and
-  when, and to file it. Filing answers yes or no for all three rows together, at
-  most twice a block; the rest of the time it waits for the chain or a favour.
-- Hints on these wallets count as favours owed to the informant.
-- Every close is numbered, carries the height of the chain, and is filed.
-- `story.js` is the one place that closes a case, and the Decrypt panel now does
-  what the terminal always did and closes it.
-- `TXLOG` prints dates, and `TXLOG <addr> ALL` lists up to 25 transactions.
-- The boot prints a seal and says what to type. Case 3 no longer says "three of
-  eight", which it could not know.
+- `BOOK` reads a ledger of 2048 members: every word on the BIP-39 list is a person.
+- `PAPERS` holds the documents that arrive as wallets close. `PAPERS NEW` reads
+  whatever has not been seen.
+- `ACTA`, with its own panel, is where the player writes down who ordered what, in
+  whose name and when, and files it. Filing answers yes or no for all the rows
+  together, at most twice a block. Years are found on the real chain.
+- `ASK` questions a witness with a word from the papers, and `CITE` shows them a
+  paper. `SEND` sends a courier on one errand at a time, one or two blocks each.
+  `NOTE` keeps a line for yourself.
+
+### Choices now cost something
+
+- Hints count as favours, and the third comes due.
+- Rushing the courier raises the water on the one errand that can be lost.
+- A rejected filing stays on file, and the clients it names hear about it.
+
+### Riddles
+
+The definitions in cases 5 and 6 show each word's first letter and length, and the
+worst of them are rewritten.
+
+### Languages
+
+The new story is written for Russian and English and translated into Argentine
+Spanish and Brazilian Portuguese. No native editor has reviewed the translations
+yet, and some terminal labels in those two languages are still in English.
+
+### Fixes
+
+- The terminal kept an old copy of the save and could overwrite progress made in
+  the panels. It now reads the save before each command.
+- The Decrypt panel recognised a phrase without closing its case. `story.js` is now
+  the one place that closes a case.
+- The counter in the top strip never moved.
+- `TXLOG` prints dates, says when a list is the whole history, and `TXLOG <addr> ALL`
+  lists up to 25 transactions.
+- A first boot opens on the case, prints a seal and says what to type.
+- Corrected untranslated and wrong strings in the older Spanish and Portuguese.
 
 ## 3.0.1
 
