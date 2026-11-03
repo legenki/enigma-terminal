@@ -4,8 +4,8 @@
     "subtitle": {
       "ru": "СИМУЛЯТОР ЦИФРОВОГО ДЕТЕКТИВА // REAL NET BUILD",
       "en": "DIGITAL DETECTIVE SIMULATOR // REAL NET BUILD",
-      "es": "SIMULADOR DE DETECTIVE DIGITAL // CONSTRUCCIÓN DE RED REAL",
-      "pt": "SIMULADOR DE DETETIVE DIGITAL // CONSTRUÇÃO DE REDE REAL"
+      "es": "SIMULADOR DE DETECTIVE DIGITAL // RED REAL",
+      "pt": "SIMULADOR DE DETETIVE DIGITAL // REDE REAL"
     },
     "version": "3.0.1",
     "operator": "NULLSEC",
@@ -114,14 +114,14 @@
           "the twelfth word is: about."
         ],
         "es": [
-          "La entropía de esta billetera es de 128 bits cero. Prueba ENTROPY 00000000000000000000000000000000",
-          "La primera palabra de la lista es abandon. Se repite once veces.",
-          "La duodécima palabra es: about."
+          "la entropía de esta billetera es de 128 bits cero. prueba ENTROPY 00000000000000000000000000000000",
+          "la primera palabra de la lista es abandon. se repite once veces.",
+          "la duodécima palabra es: about."
         ],
         "pt": [
-          "A entropia desta carteira é de 128 bits zero. Tente ENTROPY 00000000000000000000000000000000",
-          "A primeira palavra da lista é abandon. Ela se repete onze vezes.",
-          "A décima segunda palavra é: about."
+          "a entropia desta carteira é de 128 bits zero. tente ENTROPY 00000000000000000000000000000000",
+          "a primeira palavra da lista é abandon. ela se repete onze vezes.",
+          "a décima segunda palavra é: about."
         ]
       },
       "epilogue": {
@@ -143,7 +143,7 @@
         "pt": [
           "O cofre está aberto. O endereço vive na mainnet do Bitcoin desde novembro de 2014",
           "e carrega dezenas de transações genuínas — execute SYNC_LEDGER e veja por si mesmo.",
-          "O saldo é zero. O ORACLE o esvaziou muito antes de você se sentar neste terminal."
+          "O saldo é zero. ORACLE o esvaziou muito antes de você se sentar neste terminal."
         ]
       }
     },
@@ -172,7 +172,7 @@
           "Nunca escribió la semilla; escribió la entropía. Dieciséis bytes, todos idénticos."
         ],
         "pt": [
-          "A ORACLE mantinha a segunda carteira num laptop velho com um adesivo '7F'.",
+          "ORACLE mantinha a segunda carteira num laptop velho com um adesivo '7F'.",
           "Ele nunca anotou a seed — ele anotou a entropia. Dezesseis bytes, todos idênticos."
         ]
       },
@@ -249,12 +249,12 @@
         ],
         "es": [
           "127 en hexadecimal es 0x7f.",
-          "Dieciséis bytes 0x7f seguidos te dan 32 caracteres.",
+          "dieciséis bytes 0x7f seguidos te dan 32 caracteres.",
           "ENTROPY 7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f"
         ],
         "pt": [
           "127 em hexadecimal é 0x7f.",
-          "Dezesseis bytes 0x7f em sequência te dão 32 caracteres.",
+          "dezesseis bytes 0x7f em sequência te dão 32 caracteres.",
           "ENTROPY 7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f"
         ]
       },
@@ -306,7 +306,7 @@
           "'La última vez mantuve el bit alto abajo', escribió, 'ahora solo levanto ese'."
         ],
         "pt": [
-          "A terceira carteira espelha a segunda. O ORACLE inverteu sua própria regra.",
+          "A terceira carteira espelha a segunda. ORACLE inverteu sua própria regra.",
           "'Da última vez mantive o bit alto baixo', ele escreveu, 'agora levanto apenas esse'."
         ]
       },
@@ -383,12 +383,12 @@
         ],
         "es": [
           "1000 0000 = 0x80.",
-          "Necesitas dieciséis bytes: 80 repetido 16 veces.",
+          "necesitas dieciséis bytes: 80 repetido 16 veces.",
           "ENTROPY 80808080808080808080808080808080"
         ],
         "pt": [
           "1000 0000 = 0x80.",
-          "Você precisa de dezesseis bytes: 80 repetido 16 vezes.",
+          "você precisa de dezesseis bytes: 80 repetido 16 vezes.",
           "ENTROPY 80808080808080808080808080808080"
         ]
       },
@@ -402,12 +402,12 @@
           "Someone was paying him to keep these wallets untouched."
         ],
         "es": [
-          "Un nombre nuevo aparece en los registros de ORACLE: 'THE CURATOR'.",
-          "Alguien le pagaba para mantener estas carteras intactas."
+          "Un nombre nuevo aparece en los registros de ORACLE: EL CURADOR.",
+          "Alguien le pagaba para mantener estas billeteras intactas."
         ],
         "pt": [
-          "Um novo nome aparece nos registros da ORACLE — 'THE CURATOR'.",
-          "Alguém estava pagando a ele para manter essas carteiras intocadas."
+          "Um novo nome aparece nos registros de ORACLE: 'O CURADOR'.",
+          "Alguém pagava a ele para manter estas carteiras intocadas."
         ]
       }
     },
@@ -417,7 +417,7 @@
         "ru": "ВСЕ ЕДИНИЦЫ",
         "en": "ALL ONES",
         "es": "TODO UNOS",
-        "pt": "TUDO EM UM"
+        "pt": "TODOS UNS"
       },
       "difficulty": 2,
       "fingerprint": "3c0949435a7e4277fac2fbe27975cdd9f5b5abf94d282112eaf4cebbb8560984",
@@ -436,7 +436,7 @@
           "Entropía más allá de la cual nada existe: todos los 128 bits elevados."
         ],
         "pt": [
-          "O ORÁCULO chamou a quarta carteira de 'o teto'.",
+          "ORACLE chamou a quarta carteira de 'o teto'.",
           "Entropia além da qual nada existe: todos os 128 bits elevados."
         ]
       },
@@ -540,12 +540,22 @@
           "Nobody in this file made those movements. Here the chain only tells the time."
         ],
         "es": [
-          "El 'techo' está abierto. La última palabra es 'wrong'. ORACLE claramente se estaba burlando de sí mismo.",
-          "A partir de aquí, el archivo se convierte en acertijos reales: se acabó la entropía, solo quedan palabras."
+          "El 'techo' está abierto. Once veces la última palabra de la lista,",
+          "y una duodécima que la lista eligió sola: 'wrong'. El diario no estaba de acuerdo.",
+          "La suma, sí.",
+          "Leída como líneas del libro, esta frase es una persona y un sereno.",
+          "Ponela al lado de la frase de la primera billetera.",
+          "SWEEP: sus direcciones Native y Legacy se movieron las dos.",
+          "Nadie en este expediente hizo esos movimientos. Acá la cadena solo da la hora."
         ],
         "pt": [
-          "O 'teto' está aberto. A última palavra é 'wrong'. O ORACLE estava claramente zombando de si mesmo.",
-          "A partir daqui, o arquivo se transforma em enigmas reais: chega de entropia, apenas palavras."
+          "O 'teto' está aberto. Onze vezes a última palavra da lista,",
+          "e uma décima segunda que a lista escolheu sozinha: 'wrong'. O diário discordou.",
+          "A soma não.",
+          "Lida como linhas do livro, esta frase é uma pessoa e um vigia noturno.",
+          "Ponha ao lado da frase da primeira carteira.",
+          "SWEEP: os endereços Native e Legacy dela se moveram, os dois.",
+          "Ninguém neste arquivo fez esses movimentos. Aqui a cadeia só marca a hora."
         ]
       }
     },
@@ -614,60 +624,68 @@
       },
       "clues": {
         "ru": [
-          " 1. Слой, что держит ультрафиолет за дверью.",
-          " 2. Инструмент, делающий дыру в стене — и в дисциплине солдата.",
-          " 3. Резкое движение руки, когда времени нет.",
-          " 4. Стеклянная нить, по которой свет несёт деньги.",
-          " 5. То, что падает в конце спектакля.",
-          " 6. Плавность движения и милость свыше в одном слове.",
-          " 7. Английский десерт, в котором ищут доказательство.",
-          " 8. Первое слово вежливого человека после услуги.",
-          " 9. Неспешный ход корабля — и ракета с тем же именем.",
-          "10. Старший в общине; и куст, чьи ягоды идут в вино.",
-          "11. Бесконечность, поставленная на ноги.",
-          "12. Обед на траве; на сленге — «пустяковое дело»."
+          " 1. o____  Слой, что держит ультрафиолет за дверью.",
+          " 2. d____  Инструмент, делающий дыру в стене — и в дисциплине солдата.",
+          " 3. g___  Схватить рукой, быстро и без спроса.",
+          " 4. f____  Стеклянная нить, по которой свет несёт деньги.",
+          " 5. c______  То, что падает в конце спектакля.",
+          " 6. g____  Плавность движения и милость свыше в одном слове.",
+          " 7. p______  Английский десерт, в котором ищут доказательство.",
+          " 8. t____  Первое слово вежливого человека после услуги.",
+          " 9. c_____  Неспешный ход корабля — и ракета с тем же именем.",
+          "10. e____  Старший в общине; и куст, чьи ягоды идут в вино.",
+          "11. e____  Бесконечность, поставленная на ноги.",
+          "12. p_____  Обед на траве; на сленге — «пустяковое дело».",
+          "",
+          "Рядом с каждой строкой: первая буква и длина слова. SEARCH <буква> покажет варианты."
         ],
         "en": [
-          " 1. The layer that keeps ultraviolet outside.",
-          " 2. A tool that bores through a wall — and through a soldier's discipline.",
-          " 3. A sharp motion of the hand when there is no time.",
-          " 4. A glass thread where light carries money.",
-          " 5. The thing that falls at the end of the play.",
-          " 6. Smoothness of motion and mercy from above, in one word.",
-          " 7. The English dessert where the proof is said to be.",
-          " 8. A polite person's first word after a favour.",
-          " 9. A ship's unhurried voyage — and a missile of the same name.",
-          "10. The senior of a community; also the shrub whose berries make wine.",
-          "11. Infinity standing on its feet.",
-          "12. Lunch on the grass; slang for 'an easy job'."
+          " 1. o____  The layer that keeps ultraviolet outside.",
+          " 2. d____  A tool that bores through a wall — and through a soldier's discipline.",
+          " 3. g___  To seize with the hand, fast and without asking.",
+          " 4. f____  A glass thread where light carries money.",
+          " 5. c______  The thing that falls at the end of the play.",
+          " 6. g____  Smoothness of motion and mercy from above, in one word.",
+          " 7. p______  The English dessert where the proof is said to be.",
+          " 8. t____  A polite person's first word after a favour.",
+          " 9. c_____  A ship's unhurried voyage — and a missile of the same name.",
+          "10. e____  The senior of a community; also the shrub whose berries make wine.",
+          "11. e____  Infinity standing on its feet.",
+          "12. p_____  Lunch on the grass; slang for 'an easy job'.",
+          "",
+          "Beside each line: the word's first letter and length. SEARCH <letter> lists the options."
         ],
         "es": [
-          " 1. La capa que mantiene los rayos ultravioleta fuera.",
-          " 2. Una herramienta que perfora un muro, y la disciplina de un soldado.",
-          " 3. Un movimiento rápido de mano cuando no hay tiempo.",
-          " 4. Un hilo de vidrio donde la luz transporta dinero.",
-          " 5. Lo que cae al final de la función.",
-          " 6. Fluidez de movimiento y misericordia desde arriba, en una sola palabra.",
-          " 7. El postre inglés donde dicen que está la prueba.",
-          " 8. La primera palabra de alguien educado tras un favor.",
-          " 9. El viaje pausado de un barco, y un misil del mismo nombre.",
-          "10. El mayor de una comunidad; también el arbusto cuyas bayas hacen vino.",
-          "11. El infinito puesto en pie.",
-          "12. Almuerzo sobre la hierba; jerga para 'un trabajo fácil'."
+          " 1. o____  La capa que mantiene los rayos ultravioleta fuera.",
+          " 2. d____  Una herramienta que perfora un muro, y la disciplina de un soldado.",
+          " 3. g___  Agarrar con la mano, rápido y sin pedir permiso.",
+          " 4. f____  Un hilo de vidrio donde la luz transporta dinero.",
+          " 5. c______  Lo que cae al final de la función.",
+          " 6. g____  Fluidez de movimiento y misericordia desde arriba, en una sola palabra.",
+          " 7. p______  El postre inglés donde dicen que está la prueba.",
+          " 8. t____  La primera palabra de alguien educado tras un favor.",
+          " 9. c_____  El viaje pausado de un barco, y un misil del mismo nombre.",
+          "10. e____  El mayor de una comunidad; también el arbusto cuyas bayas hacen vino.",
+          "11. e____  El infinito puesto en pie.",
+          "12. p_____  Almuerzo sobre la hierba; jerga para 'un trabajo fácil'.",
+          "",
+          "Junto a cada línea: la primera letra y el largo de la palabra. SEARCH <letra> lista las opciones."
         ],
         "pt": [
-          " 1. A camada que mantém o ultravioleta do lado de fora.",
-          " 2. Uma ferramenta que perfura uma parede — e a disciplina de um soldado.",
-          " 3. Um movimento rápido da mão quando não há tempo.",
-          " 4. Um fio de vidro onde a luz transporta dinheiro.",
-          " 5. A coisa que cai ao final da peça.",
-          " 6. Suavidade de movimento e misericórdia do alto, em uma palavra.",
-          " 7. A sobremesa inglesa onde dizem estar a prova.",
-          " 8. A primeira palavra de uma pessoa educada após um favor.",
-          " 9. A viagem sem pressa de um navio — e um míssil de mesmo nome.",
-          "10. O ancião de uma comunidade; também o arbusto cujas bagas fazem vinho.",
-          "11. O infinito em pé sobre seus próprios pés.",
-          "12. Almoço na grama; gíria para 'um trabalho fácil'."
+          " 1. o____  A camada que mantém o ultravioleta do lado de fora.",
+          " 2. d____  Uma ferramenta que perfura uma parede — e a disciplina de um soldado.",
+          " 3. g___  Agarrar com a mão, rápido e sem pedir licença.",
+          " 4. f____  Um fio de vidro onde a luz transporta dinheiro.",
+          " 5. c______  A coisa que cai ao final da peça.",
+          " 6. g____  Suavidade de movimento e misericórdia do alto, em uma palavra.",
+          " 7. p______  A sobremesa inglesa onde dizem estar a prova.",
+          " 8. t____  A primeira palavra de uma pessoa educada após um favor.",
+          " 9. c_____  A viagem sem pressa de um navio — e um míssil de mesmo nome.",
+          "10. e____  O ancião de uma comunidade; também o arbusto cujas bagas fazem vinho.",
+          "11. e____  O infinito em pé sobre seus próprios pés.",
+          "12. p_____  Almoço na grama; gíria para 'um trabalho fácil'.",
+          "",
+          "Ao lado de cada linha: a primeira letra e o tamanho da palavra. SEARCH <letra> lista as opções."
         ]
       },
       "hints": {
@@ -708,12 +726,18 @@
           "One word here is in one other wallet."
         ],
         "es": [
-          "Quinta semilla recuperada. El cuaderno contiene una dirección de reunión y una fecha ya pasada.",
-          "ORACLE estaba esperando a alguien. Alguien llegó antes de tiempo."
+          "Las doce definiciones entregan sus palabras. La libreta guarda una dirección de encuentro",
+          "y una fecha ya pasada. ORACLE estaba esperando a alguien. Alguien llegó antes de tiempo.",
+          "Corré SWEEP y anotá la altura: hasta ahí, esta semilla no se movió nunca.",
+          "BOOK con cada palabra. No hay regla entre los números.",
+          "Una palabra de acá está en otra billetera, una sola."
         ],
         "pt": [
-          "Quinta semente recuperada. O caderno contém um endereço de encontro e uma data que já passou.",
-          "ORACLE estava esperando por alguém. Alguém chegou mais cedo."
+          "As doze definições entregam suas palavras. O caderno guarda um endereço de encontro",
+          "e uma data já passada. ORACLE esperava alguém. Alguém chegou antes.",
+          "Rode SWEEP e anote a altura: até ali, esta semente nunca se moveu.",
+          "BOOK em cada palavra. Não há regra entre os números.",
+          "Uma palavra daqui está em uma outra carteira."
         ]
       }
     },
@@ -774,60 +798,68 @@
       },
       "clues": {
         "ru": [
-          " 1. Хищник, который выбрал диван.",
-          " 2. Качели во дворе — и джаз в подвале.",
-          " 3. Ткань на мачте; и признак, который либо 0, либо 1.",
-          " 4. Наука о нехватке; и самый дешёвый класс в самолёте.",
-          " 5. Бетонная чаша, полная крика по субботам.",
-          " 6. Состояние узла, у которого не осталось пиров.",
-          " 7. Взбивать масло — и уходить клиентами из отчёта.",
-          " 8. Расстояние, делённое на время.",
-          " 9. Такой, какого во множестве ровно один.",
-          "10. Заплата на джинсах — и на ядре системы.",
-          "11. Документ, который никто не дочитывает до конца.",
-          "12. Состав на рельсах; и то, что делают с нейросетью."
+          " 1. c__  Домашний хищник, который выбрал диван.",
+          " 2. s____  Качели во дворе — и джаз в подвале.",
+          " 3. f___  Ткань на мачте; и признак, который либо 0, либо 1.",
+          " 4. e______  Наука о нехватке; и самый дешёвый класс в самолёте.",
+          " 5. s______  Бетонная чаша, где по субботам кричат болельщики.",
+          " 6. a____  Без никого: так остаётся узел без пиров.",
+          " 7. c____  Взбивать масло — и уходить клиентами из отчёта.",
+          " 8. s____  Расстояние, делённое на время.",
+          " 9. u_____  Такой, какого во множестве ровно один.",
+          "10. p____  Заплата на джинсах — и на ядре системы.",
+          "11. r_____  Бумага на столе начальника, которую никто не дочитывает.",
+          "12. t____  Состав на рельсах; и то, что делают с нейросетью.",
+          "",
+          "Рядом с каждой строкой: первая буква и длина слова. SEARCH <буква> покажет варианты."
         ],
         "en": [
-          " 1. The predator that chose the couch.",
-          " 2. A seat in the playground — and jazz in the basement.",
-          " 3. Cloth on a mast; also a marker that is either 0 or 1.",
-          " 4. The science of scarcity; also the cheapest cabin class.",
-          " 5. A concrete bowl full of Saturday shouting.",
-          " 6. The state of a node that has no peers left.",
-          " 7. To beat butter — and to lose customers in a report.",
-          " 8. Distance divided by time.",
-          " 9. Such that the set contains exactly one.",
-          "10. A mend on jeans — and on the system kernel.",
-          "11. The document nobody reads to the end.",
-          "12. Cars on rails; also what you do to a neural network."
+          " 1. c__  The house predator that chose the couch.",
+          " 2. s____  A seat in the playground — and jazz in the basement.",
+          " 3. f___  Cloth on a mast; also a marker that is either 0 or 1.",
+          " 4. e______  The science of scarcity; also the cheapest cabin class.",
+          " 5. s______  A concrete bowl where the fans shout on Saturdays.",
+          " 6. a____  With nobody else: how a node ends up with no peers.",
+          " 7. c____  To beat butter — and to lose customers in a report.",
+          " 8. s____  Distance divided by time.",
+          " 9. u_____  Such that the set contains exactly one.",
+          "10. p____  A mend on jeans — and on the system kernel.",
+          "11. r_____  The paper on the boss's desk that nobody reads to the end.",
+          "12. t____  Cars on rails; also what you do to a neural network.",
+          "",
+          "Beside each line: the word's first letter and length. SEARCH <letter> lists the options."
         ],
         "es": [
-          " 1. El depredador que eligió el sofá.",
-          " 2. Un asiento en el patio de recreo — y jazz en el sótano.",
-          " 3. Tela en un mástil; también un marcador que es 0 o 1.",
-          " 4. La ciencia de la escasez; también la clase más barata en cabina.",
-          " 5. Un cuenco de hormigón lleno de gritos de sábado.",
-          " 6. El estado de un nodo que ya no tiene pares.",
-          " 7. Batir mantequilla — y perder clientes en un informe.",
-          " 8. Distancia dividida por tiempo.",
-          " 9. Tal que el conjunto contiene exactamente uno.",
-          "10. Un remiendo en los vaqueros — y en el núcleo del sistema.",
-          "11. El documento que nadie lee hasta el final.",
-          "12. Coches sobre raíles; también lo que le haces a una red neuronal."
+          " 1. c__  El depredador doméstico que eligió el sofá.",
+          " 2. s____  Un asiento en el patio de recreo — y jazz en el sótano.",
+          " 3. f___  Tela en un mástil; también un marcador que es 0 o 1.",
+          " 4. e______  La ciencia de la escasez; también la clase más barata en cabina.",
+          " 5. s______  Un cuenco de hormigón donde la hinchada grita los sábados.",
+          " 6. a____  Sin nadie más: así queda un nodo sin pares.",
+          " 7. c____  Batir mantequilla — y perder clientes en un informe.",
+          " 8. s____  Distancia dividida por tiempo.",
+          " 9. u_____  Tal que el conjunto contiene exactamente uno.",
+          "10. p____  Un remiendo en los vaqueros — y en el núcleo del sistema.",
+          "11. r_____  El papel en el escritorio del jefe que nadie lee hasta el final.",
+          "12. t____  Coches sobre raíles; también lo que le haces a una red neuronal.",
+          "",
+          "Junto a cada línea: la primera letra y el largo de la palabra. SEARCH <letra> lista las opciones."
         ],
         "pt": [
-          " 1. O predador que escolheu o sofá.",
-          " 2. Um assento no parquinho — e jazz no porão.",
-          " 3. Pano em um mastro; também um marcador que é 0 ou 1.",
-          " 4. A ciência da escassez; também a classe de cabine mais barata.",
-          " 5. Uma tigela de concreto cheia de gritaria de sábado.",
-          " 6. O estado de um nó que não tem mais pares.",
-          " 7. Bater manteiga — e perder clientes em um relatório.",
-          " 8. Distância dividida pelo tempo.",
-          " 9. Tal que o conjunto contém exatamente um.",
-          "10. Um remendo em jeans — e no kernel do sistema.",
-          "11. O documento que ninguém lê até o fim.",
-          "12. Carros sobre trilhos; também o que você faz com uma rede neural."
+          " 1. c__  O predador doméstico que escolheu o sofá.",
+          " 2. s____  Um assento no parquinho — e jazz no porão.",
+          " 3. f___  Pano em um mastro; também um marcador que é 0 ou 1.",
+          " 4. e______  A ciência da escassez; também a classe de cabine mais barata.",
+          " 5. s______  Uma tigela de concreto onde a torcida grita aos sábados.",
+          " 6. a____  Sem mais ninguém: assim fica um nó sem pares.",
+          " 7. c____  Bater manteiga — e perder clientes em um relatório.",
+          " 8. s____  Distância dividida pelo tempo.",
+          " 9. u_____  Tal que o conjunto contém exatamente um.",
+          "10. p____  Um remendo em jeans — e no kernel do sistema.",
+          "11. r_____  O papel na mesa do chefe que ninguém lê até o fim.",
+          "12. t____  Carros sobre trilhos; também o que você faz com uma rede neural.",
+          "",
+          "Ao lado de cada linha: a primeira letra e o tamanho da palavra. SEARCH <letra> lista as opções."
         ]
       },
       "hints": {
@@ -867,14 +899,19 @@
           "In a book, it is a line."
         ],
         "es": [
-          "La caja está vacía, la billetera no. La dirección legacy está limpia, pero la",
-          "rama Native SegWit contiene transferencias genuinas: ejecuta SWEEP para comparar las tres rutas.",
-          "Alguien estuvo moviendo pequeñas cantidades. ORACLE lo llamó 'churn'."
+          "La caja está vacía, la billetera no. La dirección Legacy está limpia, pero la",
+          "rama Native SegWit lleva transferencias genuinas:",
+          "corré SWEEP para comparar las tres rutas.",
+          "Alguien sigue pasando montos chicos por ahí. Nadie en este expediente sabe quién.",
+          "'Para los que se van.' En un informe, churn es la clientela que se va.",
+          "En un libro, es una línea."
         ],
         "pt": [
           "A caixa está vazia, a carteira não. O endereço legacy está limpo, mas o",
-          "ramo Native SegWit carrega transferências genuínas: execute SWEEP para comparar os três caminhos.",
-          "Alguém continuou movendo pequenas quantias. O ORACLE chamou isso de 'churn'."
+          "ramo Native SegWit traz transferências genuínas: rode SWEEP para comparar os três caminhos.",
+          "Alguém segue passando pequenas quantias por ali. Ninguém neste arquivo sabe quem.",
+          "'Para os que partem.' Num relatório, churn é cliente indo embora.",
+          "Num livro, é uma linha."
         ]
       }
     },
@@ -903,7 +940,7 @@
           "Doce definiciones escritas sobre las entradas meteorológicas."
         ],
         "pt": [
-          "A ORACLE escondeu a sétima carteira no diário de bordo do cargueiro 'Cassandra'.",
+          "ORACLE escondeu a sétima carteira no diário de bordo do cargueiro 'Cassandra'.",
           "Doze definições escritas sobre os registros meteorológicos."
         ]
       },
@@ -926,7 +963,7 @@
         "pt": [
           "FRAGMENTO (diário de bordo, uma página arrancada e colada de volta):",
           "   Doze linhas na caligrafia de outra pessoa.",
-          "   Nota do ORACLE acima delas: 'the first word means this ship and my blood at once'."
+          "   Nota de ORACLE acima delas: 'the first word means this ship and my blood at once'."
         ]
       },
       "clues": {
@@ -1086,12 +1123,12 @@
           "   In the lower right corner, a fingerprint matching nobody in the database."
         ],
         "es": [
-          "FRAGMENTO (carta entregada por mensajero dos días después de la desaparición):",
+          "FRAGMENTO (carta entregada por mensajero dos días después de su partida):",
           "   Doce líneas y una firma: ORACLE.",
           "   En la esquina inferior derecha, una huella dactilar que no coincide con nadie en la base de datos."
         ],
         "pt": [
-          "FRAGMENTO (carta entregue por um mensageiro dois dias após o desaparecimento):",
+          "FRAGMENTO (carta entregue por um mensageiro dois dias após a partida):",
           "   Doze linhas e uma assinatura: ORACLE.",
           "   No canto inferior direito, uma impressão digital que não consta em nenhum banco de dados."
         ]

@@ -51,7 +51,9 @@ export const STORY = {
       "after": 1,
       "title": {
         "en": "Unsigned note",
-        "ru": "Записка без подписи"
+        "ru": "Записка без подписи",
+        "es": "Nota sin firma",
+        "pt": "Bilhete sem assinatura"
       },
       "body": {
         "en": [
@@ -69,6 +71,24 @@ export const STORY = {
           "слово из списка это строка в книге caja mutual del puerto, номер тот же. book 1 покажет.",
           "шестнадцать строк на странице, сто двадцать восемь страниц.",
           "если застрянешь, набери acta hint. я это посчитаю, но торопить не стану."
+        ],
+        "es": [
+          "minúsculas. sin firma. estaba en la carpeta antes de que la abrieras.",
+          "",
+          "cerraste uno. ahora mirá lo que cerraste.",
+          "una palabra de la lista es una línea del libro de la caja mutual del puerto: mismo número.",
+          "book 1 te lo va a mostrar.",
+          "dieciséis líneas por página, ciento veintiocho páginas.",
+          "si te trabás, escribí acta hint. lo voy a contar, y no te voy a apurar."
+        ],
+        "pt": [
+          "minúsculas. sem assinatura. já estava na pasta antes de você abrir.",
+          "",
+          "você fechou uma. agora olhe o que você fechou.",
+          "uma palavra da lista é uma linha do livro da caja mutual del puerto: mesmo número.",
+          "book 1 vai mostrar.",
+          "dezesseis linhas por página, cento e vinte e oito páginas.",
+          "se travar, digite acta hint. eu vou contar, e não vou apressar você."
         ]
       },
       "act": 1
@@ -80,7 +100,9 @@ export const STORY = {
       "anchor": "w1_nested",
       "title": {
         "en": "Wet sheet: attestation",
-        "ru": "Мокрый лист: акт заверения"
+        "ru": "Мокрый лист: акт заверения",
+        "es": "Hoja mojada: certificación",
+        "pt": "Folha molhada: atestado"
       },
       "body": {
         "en": [
@@ -102,6 +124,29 @@ export const STORY = {
           "Дата, карандашом: в день первого движения на Nested-адресе НУЛЕВОГО ХРАНИЛИЩА.",
           "",
           "Подшито: вх. 0392/Т"
+        ],
+        "es": [
+          "Sacada con bomba de un sótano cerca de Reconquista y secada en un radiador.",
+          "El membrete se corrió.",
+          "",
+          "POR LA PRESENTE DOY FE de la restauración de acceso legal a una cuenta inactiva.",
+          "La firma del titular fue cotejada y confirmada.",
+          "La palabra 'incautación' no se aplica a este documento.",
+          "Titular: miembro de la Caja Mutual del Puerto, libro, p. 112:15.",
+          "Fecha, a lápiz: el día del primer movimiento en la dirección Nested de BÓVEDA CERO.",
+          "",
+          "Archivado: ent. 0392/T"
+        ],
+        "pt": [
+          "Bombeada de um porão perto da Reconquista e seca num radiador. O timbre escorreu.",
+          "",
+          "ATESTO a restauração de acesso legal a uma conta inativa.",
+          "A assinatura do titular foi comparada e confirmada.",
+          "A palavra 'apreensão' não se aplica a este documento.",
+          "Titular: sócio da Caja Mutual del Puerto, livro, p. 112:15.",
+          "Data, a lápis: o dia do primeiro movimento no endereço Nested de COFRE ZERO.",
+          "",
+          "Arquivado: ent. 0392/T"
         ]
       },
       "act": 1
@@ -113,7 +158,9 @@ export const STORY = {
       "anchor": "w2_native",
       "title": {
         "en": "Wet sheet: certificate",
-        "ru": "Мокрый лист: справка"
+        "ru": "Мокрый лист: справка",
+        "es": "Hoja mojada: certificado",
+        "pt": "Folha molhada: certidão"
       },
       "body": {
         "en": [
@@ -135,6 +182,26 @@ export const STORY = {
           "Дата, карандашом: в день первого движения на Native-адресе СЕМЬ-ЭФ.",
           "",
           "Подшито: вх. 0405/Т"
+        ],
+        "es": [
+          "El dorso de un consentimiento informado. Abrochado, un inventario de pertenencias.",
+          "",
+          "CERTIFICADO. Paciente ingresado, paciente dado de alta. Resultado: fallecido.",
+          "La llave pasa a la institución, como prevé el acuerdo de cuotas.",
+          "Paciente: miembro de la Caja Mutual del Puerto, libro, p. 33:3.",
+          "Fecha, a lápiz: el día del primer movimiento en la dirección Native de SIETE-EFF.",
+          "",
+          "Archivado: ent. 0405/T"
+        ],
+        "pt": [
+          "O verso de um termo de consentimento informado. Preso a ele, um inventário de pertences.",
+          "",
+          "CERTIDÃO. Paciente internado, paciente com alta. Desfecho: óbito.",
+          "Chave passada à instituição, conforme prevê o contrato de parcelas.",
+          "Paciente: sócio da Caja Mutual del Puerto, livro, p. 33:3.",
+          "Data, a lápis: o dia do primeiro movimento no endereço Native de SETE-EFF.",
+          "",
+          "Arquivado: ent. 0405/T"
         ]
       },
       "act": 1
@@ -144,7 +211,9 @@ export const STORY = {
       "after": 2,
       "title": {
         "en": "Memo from I. Rocamora",
-        "ru": "Записка от И. Рокаморы"
+        "ru": "Записка от И. Рокаморы",
+        "es": "Memo de I. Rocamora",
+        "pt": "Memorando de I. Rocamora"
       },
       "body": {
         "en": [
@@ -160,6 +229,25 @@ export const STORY = {
           "Вы спросите, почему в вашей папке появляется мокрая бумага. Её нашли при откачке, а от того, кому я плачу, этого я не скрываю.",
           "Агустин Левене из MARTILLERO покупал такие дела и перепродавал их с торгов. Это правда, и я могу это заверить.",
           "Впишите в Акт заказчиком MARTILLERO, и гонорар придёт до следующего блока."
+        ],
+        "es": [
+          "ESCRIBANÍA CERO. Inés Rocamora, al operador.",
+          "",
+          "Usted preguntará por qué aparece papel mojado en su carpeta.",
+          "Se encontró durante el bombeo, y esto no se lo oculto a quien le estoy pagando.",
+          "Agustín Levene, de MARTILLERO, compró legajos como estos y los revendió en remate.",
+          "Eso es cierto, y puedo dar fe.",
+          "Escriba MARTILLERO en el Acta como cliente y sus honorarios se acreditan antes del",
+          "próximo bloque."
+        ],
+        "pt": [
+          "ESCRIBANÍA CERO. Inés Rocamora, ao operador.",
+          "",
+          "O senhor vai perguntar por que há papel molhado aparecendo na sua pasta.",
+          "Foi encontrado durante o bombeamento, e isso eu não escondo de quem estou pagando.",
+          "Agustín Levene, de MARTILLERO, comprou arquivos como estes e os revendeu em leilão.",
+          "Isso é verdade, e posso atestar.",
+          "Escreva MARTILLERO na Ata como cliente, e seus honorários saem antes do próximo bloco."
         ]
       },
       "act": 1
@@ -171,7 +259,9 @@ export const STORY = {
       "anchor": "w2_legacy",
       "title": {
         "en": "Wet sheet: renunciation",
-        "ru": "Мокрый лист: отказ"
+        "ru": "Мокрый лист: отказ",
+        "es": "Hoja mojada: renuncia",
+        "pt": "Folha molhada: renúncia"
       },
       "body": {
         "en": [
@@ -191,6 +281,27 @@ export const STORY = {
           "Дата, карандашом: в день первого движения на Legacy-адресе СЕМЬ-ЭФ.",
           "",
           "Подшито: вх. 0411/Т"
+        ],
+        "es": [
+          "Una hoja de una carpeta especial.",
+          "Un número de entrada, sin membrete, y una palabra tachada.",
+          "",
+          "RENUNCIA A LA PARTE. Copia once de once.",
+          "Yo, miembro de la Caja Mutual del Puerto, libro, p. 1:1, renuncio a mi ██████",
+          "en favor del sucesor legal.",
+          "Fecha, a lápiz: el día del primer movimiento en la dirección Legacy de SIETE-EFF.",
+          "",
+          "Archivado: ent. 0411/T"
+        ],
+        "pt": [
+          "Uma folha de uma pasta especial. Um número de entrada, sem timbre, e uma palavra riscada.",
+          "",
+          "RENÚNCIA DE COTA. Cópia onze de onze.",
+          "Eu, sócio da Caja Mutual del Puerto, livro, p. 1:1,",
+          "renuncio à minha ██████ em favor do sucessor legal.",
+          "Data, a lápis: o dia do primeiro movimento no endereço Legacy de SETE-EFF.",
+          "",
+          "Arquivado: ent. 0411/T"
         ]
       },
       "act": 1
@@ -200,7 +311,9 @@ export const STORY = {
       "after": 0,
       "title": {
         "en": "Courier's card",
-        "ru": "Визитка посыльного"
+        "ru": "Визитка посыльного",
+        "es": "Tarjeta del cadete",
+        "pt": "Cartão do mensageiro"
       },
       "body": {
         "en": [
@@ -224,6 +337,29 @@ export const STORY = {
           "CITE <лист>, если кто-то врёт. Покажи ему бумагу. Этого никто не любит.",
           "NOTE <текст>, если надо записать. Заметки никто не читает. Кому они нужны.",
           "Расценки: к деду. Жалобы: в реку."
+        ],
+        "es": [
+          "Una tarjeta recortada a mano de un horario de colectivos. Una esquina ya está húmeda.",
+          "",
+          "L. FUNES. Cadete. En bici si está seco, en bote si no.",
+          "SEND <recado> y voy. De a una cosa por vez: ver arriba lo de la bici.",
+          "ASK <quién> <palabra> para que te lo digan ellos: levene, ines, abel, o yo.",
+          "Usá una palabra que hayas encontrado en una hoja.",
+          "La gente contesta a las que le dan miedo.",
+          "CITE <papel> cuando creas que alguien miente. Mostrale la hoja. Lo odian.",
+          "NOTE <texto> si querés dejarlo escrito. Esas no las lee nadie. Quién las va a leer.",
+          "Tarifas: preguntale a mi abuelo. Quejas: al río."
+        ],
+        "pt": [
+          "Um cartão recortado à mão de uma tabela de ônibus. Um canto já está úmido.",
+          "",
+          "L. FUNES. Mensageiro. De bicicleta no seco, de barco no resto.",
+          "SEND <recado> e eu vou. Uma coisa de cada vez: ver acima, sobre a bicicleta.",
+          "ASK <quem> <palavra> pra ouvir da boca deles: levene, ines, abel ou eu.",
+          "Usa uma palavra que você achou numa folha. As pessoas respondem às palavras que temem.",
+          "CITE <papel> quando achar que alguém tá mentindo. Mostra a folha. Eles odeiam isso.",
+          "NOTE <texto> se quiser deixar anotado. Ninguém lê. Quem ia ler?",
+          "Tarifas: pergunta pro meu avô. Reclamações: o rio."
         ]
       },
       "act": 2
@@ -233,7 +369,9 @@ export const STORY = {
       "after": 0,
       "title": {
         "en": "Auction catalogue, copy 7 of 12",
-        "ru": "Каталог торгов, экземпляр 7 из 12"
+        "ru": "Каталог торгов, экземпляр 7 из 12",
+        "es": "Catálogo de remate, copia 7 de 12",
+        "pt": "Catálogo do leilão, cópia 7 de 12"
       },
       "body": {
         "en": [
@@ -261,6 +399,33 @@ export const STORY = {
           "На полях: «Для буквалистов. Приписывается: скорее всего, нет. Круг: был знаком.",
           "Копия с: копия. Просто имя, без оговорок: сама вещь.",
           "За тридцать лет я напечатал такое от силы дважды»."
+        ],
+        "es": [
+          "Una página del catálogo de remate, anotada con letra florida.",
+          "",
+          "Lote 38. Retrato de un armador. Atribuido a alguien que había visto un armador.",
+          "Lote 39. Marina. Círculo de un señor con un bote.",
+          "Lote 40. Estatutos de una sociedad mutual, Dársena Sur. Un tomo, con oxidaciones.",
+          "Devuelto por tres compradores.",
+          "Lote 41. Piano ahogado. Según un piano.",
+          "",
+          "Al margen: 'Para los literales. Atribuido a: probablemente no.",
+          "Círculo de: conocía a un señor.",
+          "Según: una copia. El nombre solo, sin calificativo: la cosa misma.",
+          "En treinta años lo habré impreso dos veces.'"
+        ],
+        "pt": [
+          "Uma página do catálogo do leilão, anotada em letra floreada.",
+          "",
+          "Lote 38. Retrato de um armador. Atribuído a alguém que viu um armador.",
+          "Lote 39. Marinha. Círculo de um homem com barco.",
+          "Lote 40. Estatuto de uma sociedade mútua, Dársena Sur. Um volume, manchado.",
+          "Devolvido por três compradores.",
+          "Lote 41. Piano afogado. À maneira de um piano.",
+          "",
+          "Margem: 'Para os literais. Atribuído a: provavelmente não. Círculo de: ele conhecia um sujeito.",
+          "À maneira de: uma cópia. O nome sozinho, sem ressalva: a coisa em si.",
+          "Em trinta anos imprimi isso talvez duas vezes.'"
         ]
       },
       "act": 2
@@ -270,7 +435,9 @@ export const STORY = {
       "after": 0,
       "title": {
         "en": "Hand-written invoice",
-        "ru": "Счёт, выписанный от руки"
+        "ru": "Счёт, выписанный от руки",
+        "es": "Factura manuscrita",
+        "pt": "Fatura manuscrita"
       },
       "body": {
         "en": [
@@ -296,6 +463,30 @@ export const STORY = {
           "Она права. Она всегда права. Спросите себя, чего она не написала.",
           "Можете спросить и меня: ASK levene <слово>. Отвечаю на всё, что есть в каталоге.",
           "P.S. Юноша перенёс меня через мой собственный двор. Оценка: девять. Я щедр."
+        ],
+        "es": [
+          "En papel de la casa, con la misma letra florida. No se debe nada. Es una tasación.",
+          "",
+          "Al operador, de A. Levene, que se entera de que le han dicho que escriba su nombre.",
+          "Lote: un operador. Atribuido a un escritorio de la City. Estado: sin dormir.",
+          "Procedencia: no se ofrece ninguna, que es la mejor. Estimación a continuación.",
+          "Un memo de escribana dice que compré legajos y los revendí.",
+          "Yo diría adquirí y transferí.",
+          "Está en lo correcto. Siempre está en lo correcto. Pregúntese qué es lo que no escribió.",
+          "Pregúnteme a mí, ya que estamos: ASK levene <palabra>. Contesto a todo lo del catálogo.",
+          "P.D. El muchacho me cruzó en brazos mi propio patio. Estimación: nueve. Soy generoso."
+        ],
+        "pt": [
+          "No papel da casa, na mesma letra floreada. Nada é devido. É uma avaliação.",
+          "",
+          "Ao operador, de A. Levene, que soube que mandaram o senhor escrever o nome dele.",
+          "Lote: um operador. Atribuído a uma mesa na cidade. Estado: sem dormir.",
+          "Procedência: nenhuma declarada, que é a melhor que há. Estimativa a seguir.",
+          "Um memorando de tabeliã diz que comprei arquivos e os revendi.",
+          "Eu diria adquiri e transferi.",
+          "Ela está correta. Está sempre correta. Pergunte-se o que ela não escreveu.",
+          "Pergunte a mim, aliás: ASK levene <palavra>. Respondo a tudo que está no catálogo.",
+          "P.S. O rapaz me levou no colo pelo meu próprio pátio. Estimativa: nove. Estou sendo generoso."
         ]
       },
       "act": 2
@@ -305,22 +496,42 @@ export const STORY = {
       "after": 1,
       "title": {
         "en": "Unsigned note",
-        "ru": "Записка без подписи"
+        "ru": "Записка без подписи",
+        "es": "Nota sin firma",
+        "pt": "Bilhete sem assinatura"
       },
       "body": {
         "en": [
           "lower case. no signature. same folder, same trick.",
           "",
-          "you have read the words copy eleven of eleven before.",
-          "find where. then open the first line of the book and the last one.",
-          "one of them keeps letting go. one of them keeps taking."
+          "put two sheets side by side: the renunciation and the acceptance. both say copy eleven of eleven.",
+          "then book 1 and book 2048. the first line of the book and the last.",
+          "the first line lets go of its share eleven times. the last line takes it eleven times.",
+          "the share travels from one end of the book to the other."
         ],
         "ru": [
           "строчные буквы. без подписи. та же папка, тот же приём.",
           "",
-          "слова экземпляр одиннадцатый из одиннадцати ты уже читал.",
-          "найди где. потом открой первую строку книги и последнюю.",
-          "один всё время отпускает. другой всё время берёт."
+          "положи рядом два листа: отказ и принятие. на обоих: экземпляр одиннадцатый из одиннадцати.",
+          "потом book 1 и book 2048. первая строка книги и последняя.",
+          "первая строка одиннадцать раз отпускает долю. последняя одиннадцать раз её берёт.",
+          "доля идёт от одного конца книги к другому."
+        ],
+        "es": [
+          "minúsculas. sin firma. misma carpeta, misma jugada.",
+          "",
+          "poné dos hojas lado a lado: la renuncia y la aceptación. las dos dicen copia once de once.",
+          "después book 1 y book 2048. la primera línea del libro y la última.",
+          "la primera línea suelta su parte once veces. la última la toma once veces.",
+          "la parte viaja de una punta del libro a la otra."
+        ],
+        "pt": [
+          "minúsculas. sem assinatura. mesma pasta, mesmo truque.",
+          "",
+          "ponha duas folhas lado a lado: a renúncia e o aceite. as duas dizem cópia onze de onze.",
+          "depois book 1 e book 2048. a primeira linha do livro e a última.",
+          "a primeira linha larga a cota onze vezes. a última pega a cota onze vezes.",
+          "a cota viaja de uma ponta do livro à outra."
         ]
       },
       "act": 2
@@ -332,7 +543,9 @@ export const STORY = {
       "anchor": "w4_native",
       "title": {
         "en": "Wet sheet: acceptance",
-        "ru": "Мокрый лист: принятие"
+        "ru": "Мокрый лист: принятие",
+        "es": "Hoja mojada: aceptación",
+        "pt": "Folha molhada: aceite"
       },
       "body": {
         "en": [
@@ -356,6 +569,28 @@ export const STORY = {
           "Дата, карандашом: в день первого движения на Native-адресе ВСЕХ ЕДИНИЦ.",
           "",
           "Подшито: вх. 0398/Т"
+        ],
+        "es": [
+          "Un recibo de transferencia de título, a mano, la tinta pasada a la hoja de abajo.",
+          "",
+          "ACEPTACIÓN. Copia once de once.",
+          "Quien suscribe acepta el lote y la transferencia de título a la tasación asentada.",
+          "Hay una cifra cosida en el precio. Lo que cambia de manos no se nombra en este documento.",
+          "Parte compradora: miembro de la Caja Mutual del Puerto, libro, p. 128:16.",
+          "Fecha, a lápiz: el día del primer movimiento en la dirección Native de TODO UNOS.",
+          "",
+          "Archivado: ent. 0398/T"
+        ],
+        "pt": [
+          "Um recibo de transferência de título, manuscrito, a tinta passada para a página de baixo.",
+          "",
+          "ACEITE. Cópia onze de onze.",
+          "O abaixo assinado aceita o lote e a transferência de título pela avaliação lançada.",
+          "Um número vem costurado no preço. O que troca de mãos não é nomeado neste documento.",
+          "Comprador: sócio da Caja Mutual del Puerto, livro, p. 128:16.",
+          "Data, a lápis: o dia do primeiro movimento no endereço Native de TODOS UNS.",
+          "",
+          "Arquivado: ent. 0398/T"
         ]
       },
       "act": 2
@@ -365,7 +600,9 @@ export const STORY = {
       "after": 1,
       "title": {
         "en": "Courier's expense sheet",
-        "ru": "Расходный лист посыльного"
+        "ru": "Расходный лист посыльного",
+        "es": "Planilla de gastos del cadete",
+        "pt": "Folha de despesas do mensageiro"
       },
       "body": {
         "en": [
@@ -389,6 +626,30 @@ export const STORY = {
           "Вечное пари: в тот день, когда он назовёт простым словом то, что переходит из рук в руки,",
           "я ношу его бесплатно до конца жизни. Пока платит каждый раз. Говорит «вознаграждение».",
           "Текущая оценка посыльного, по версии аукциониста: двенадцать. Было девять."
+        ],
+        "es": [
+          "L. Funes. Se entrega lo hayas pedido o no.",
+          "",
+          "Ítem: un paquete, mojado, de Reconquista a tu escritorio. Cargo: normal.",
+          "Ítem: un martillero, del patio a la puerta de calle, Quintana.",
+          "Cuarenta metros, agua a la rodilla.",
+          "Motivo: zapatos. Dice que son lo último seco de Recoleta. Piensa dejarlo así.",
+          "A su propio sótano tampoco baja. 'El sótano es para la procedencia.'",
+          "Apuesta vigente: el día que diga la palabra simple para lo que cambia de manos,",
+          "lo llevo gratis de por vida. Hasta ahora pagó siempre. Dice 'la contraprestación'.",
+          "Estimación actual del cadete, según el martillero: doce. Venía de nueve."
+        ],
+        "pt": [
+          "L. Funes. Entregue, tenha você pedido ou não.",
+          "",
+          "Item: um pacote, molhado, da Reconquista até a sua mesa. Cobrança: padrão.",
+          "Item: um leiloeiro, do pátio à porta da rua, Quintana. Quarenta metros, água no joelho.",
+          "Motivo: sapatos. Ele diz que são a última coisa seca da Recoleta. E pretende que continuem.",
+          "Também não desce ao próprio porão. 'Lá embaixo é para a procedência.'",
+          "Aposta em aberto: no dia em que ele disser a palavra simples pro que troca de mãos,",
+          "carrego ele de graça pro resto da vida. Até agora pagou todas as vezes.",
+          "Ele diz 'a contrapartida'.",
+          "Estimativa atual do mensageiro, segundo o leiloeiro: doze. Subiu de nove."
         ]
       },
       "act": 2
@@ -398,7 +659,9 @@ export const STORY = {
       "after": 1,
       "title": {
         "en": "Contract board notice",
-        "ru": "Объявление с доски контрактов"
+        "ru": "Объявление с доски контрактов",
+        "es": "Aviso del tablero de contratos",
+        "pt": "Aviso do quadro de contratos"
       },
       "body": {
         "en": [
@@ -420,6 +683,26 @@ export const STORY = {
           "",
           "Ниже карандашом:",
           "быстрый. никому ничего не должен."
+        ],
+        "es": [
+          "Impreso para quien todavía los lea.",
+          "",
+          "CONTRATO REASIGNADO. Cerrado por otro operador antes de que tu terminal lo abriera.",
+          "Honorarios pagados en su totalidad. Tu reserva queda sin efecto. No admite apelación.",
+          "Operador registrado: no se informa.",
+          "",
+          "A lápiz, abajo:",
+          "qué rapidez. no le debe favores a nadie."
+        ],
+        "pt": [
+          "Impresso para quem ainda lê.",
+          "",
+          "CONTRATO REATRIBUÍDO. Fechado por outro operador antes que o seu terminal o abrisse.",
+          "Honorários pagos por inteiro. Sua reserva está anulada. Não cabe recurso.",
+          "Operador responsável: não divulgado.",
+          "",
+          "A lápis, embaixo:",
+          "mão rápida, essa. nenhum favor devido a ninguém."
         ]
       },
       "act": 2
@@ -431,7 +714,9 @@ export const STORY = {
       "anchor": "w4_legacy",
       "title": {
         "en": "Wet sheet: energy contract",
-        "ru": "Мокрый лист: энергетический контракт"
+        "ru": "Мокрый лист: энергетический контракт",
+        "es": "Hoja mojada: contrato de energía",
+        "pt": "Folha molhada: contrato de energia"
       },
       "body": {
         "en": [
@@ -457,6 +742,32 @@ export const STORY = {
           "Дата, карандашом: в день первого движения на Legacy-адресе ВСЕХ ЕДИНИЦ.",
           "",
           "Подшито: вх. 0399/Т"
+        ],
+        "es": [
+          "El dorso de una planilla de carga de una subestación.",
+          "Las notas al margen van de derecha a izquierda.",
+          "",
+          "CONTRATO DE ENERGÍA. Plazo: cuarenta años. Léase desde el extremo opuesto.",
+          "La cláusula uno es la cláusula nueve, en espejo.",
+          "La oferta responde a la demanda, línea por línea, como en el plano.",
+          "Consumidor: miembro de la Caja Mutual del Puerto, libro, p. 112:15.",
+          "El consumidor es un breve episodio. Su conclusión no afecta el contrato.",
+          "Fecha, a lápiz: el día del primer movimiento en la dirección Legacy de TODO UNOS.",
+          "",
+          "Archivado: ent. 0399/T"
+        ],
+        "pt": [
+          "O verso de um quadro de carga de subestação.",
+          "As notas da margem correm da direita para a esquerda.",
+          "",
+          "CONTRATO DE ENERGIA. Prazo: quarenta anos. Ler a partir da extremidade oposta.",
+          "A cláusula um é a cláusula nove, espelhada.",
+          "A oferta responde à demanda, linha por linha, como na planta.",
+          "Consumidor: sócio da Caja Mutual del Puerto, livro, p. 112:15.",
+          "O consumidor é um breve episódio. Sua conclusão não afeta o contrato.",
+          "Data, a lápis: o dia do primeiro movimento no endereço Legacy de TODOS UNS.",
+          "",
+          "Arquivado: ent. 0399/T"
         ]
       },
       "act": 2
@@ -466,7 +777,9 @@ export const STORY = {
       "after": 2,
       "title": {
         "en": "Desk line, last recording",
-        "ru": "Рабочий телефон, последняя запись"
+        "ru": "Рабочий телефон, последняя запись",
+        "es": "Línea del escritorio, última grabación",
+        "pt": "Linha da mesa, última gravação"
       },
       "body": {
         "en": [
@@ -491,6 +804,31 @@ export const STORY = {
           "к одной строке одной книги. Прочтите лот 40, если не читали. Если читали, ещё раз.»",
           "«Всё. Скажите юноше, что он выиграл. Скажите, что меня придётся носить.»",
           "«Кто-то у дверей во двор. Я перезвоню. Ничего не продавайте.»"
+        ],
+        "es": [
+          "Transcripta por el cadete, que pidió hacerlo él.",
+          "",
+          "'Operador. Levene.",
+          "Es tarde, el muchacho se fue a su casa, estoy en el patio, con mis zapatos.'",
+          "'Alguien me mandó una hoja con su número.",
+          "Hace una hora que la miro.'",
+          "'Ahora voy a usar una palabra. Quiero que conste. Hace treinta años que no la uso.'",
+          "'Es por la plata. Cada lote, cada formulario, cada hoja de su carpeta. Plata, camino",
+          "a una sola línea de un libro. Lea el Lote 40 si no lo leyó. Si lo leyó, léalo de nuevo.'",
+          "'Listo. Dígale al muchacho que ganó. Dígale que me va a tener que llevar.'",
+          "'Alguien en la puerta del patio. Lo llamo después. No venda nada.'"
+        ],
+        "pt": [
+          "Transcrito pelo mensageiro, que pediu para fazer isso ele mesmo.",
+          "",
+          "'Operador. Levene. É tarde, o rapaz foi para casa, estou no pátio, de sapatos.'",
+          "'Alguém me mandou uma folha com o seu número.",
+          "Estou olhando para ela há uma hora.'",
+          "'Vou usar uma palavra agora. Quero que fique registrado. Não a uso há trinta anos.'",
+          "'É sobre dinheiro. Cada lote, cada formulário, cada folha da sua pasta. Dinheiro, a caminho",
+          "de uma linha de um livro. Leia o Lote 40, se ainda não leu. Se leu, leia de novo.'",
+          "'Pronto. Diga ao rapaz que ele ganhou. Diga que vou querer colo.'",
+          "'Alguém na porta do pátio. Eu ligo de volta. Não venda nada.'"
         ]
       },
       "act": 2
@@ -500,7 +838,9 @@ export const STORY = {
       "after": 2,
       "title": {
         "en": "List of withdrawn lots",
-        "ru": "Список отозванных лотов"
+        "ru": "Список отозванных лотов",
+        "es": "Lista de lotes retirados",
+        "pt": "Lista de lotes retirados"
       },
       "body": {
         "en": [
@@ -524,6 +864,28 @@ export const STORY = {
           "Последняя запись, свежие чернила:",
           "Л. Фунес, посыльный. Школа никого. Поправляет, как я держу молоток. Прав.",
           "Оценка: отозван. Не продаётся, ни за какую сумму, никому."
+        ],
+        "es": [
+          "Encontrada debajo del legajo abierto. La letra florida, cansándose.",
+          "",
+          "Lote 12. Un obispo, según un obispo. Retirado a pedido del obispo.",
+          "Lote 31. Mis zapatos. No se venden. No vuelva a preguntar.",
+          "Lote 40. Estatutos. Retirado, devuelto, retirado.",
+          "",
+          "Última entrada, tinta fresca:",
+          "L. Funes, cadete. Escuela de nadie. Me corrige cómo agarro el martillo. Tiene razón.",
+          "Estimación: retirada. No se vende, a ninguna cifra, a nadie."
+        ],
+        "pt": [
+          "Achada embaixo do arquivo aberto. A letra floreada, já cansando.",
+          "",
+          "Lote 12. Um bispo, à maneira de um bispo. Retirado a pedido do bispo.",
+          "Lote 31. Meus sapatos. Não estão à venda. Não pergunte de novo.",
+          "Lote 40. Estatuto. Retirado, devolvido, retirado.",
+          "",
+          "Última entrada, tinta fresca:",
+          "L. Funes, mensageiro. Escola de ninguém. Corrige como seguro o martelo. Tem razão.",
+          "Estimativa: retirada. Não está à venda, a preço nenhum, para ninguém."
         ]
       },
       "act": 2
@@ -535,7 +897,9 @@ export const STORY = {
       "anchor": "w6_native",
       "title": {
         "en": "Wet sheet: custody release",
-        "ru": "Мокрый лист: выдача из хранения"
+        "ru": "Мокрый лист: выдача из хранения",
+        "es": "Hoja mojada: liberación de custodia",
+        "pt": "Folha molhada: liberação de custódia"
       },
       "body": {
         "en": [
@@ -562,6 +926,32 @@ export const STORY = {
           "Дата, карандашом: в день первого движения на Native-адресе ОТТОКА.",
           "",
           "Подшито: вх. 0413/Т"
+        ],
+        "es": [
+          "Un registro de estación terrena. Un balístico estuvo trabajando al margen de la impresión.",
+          "",
+          "LIBERACIÓN DE CUSTODIA. La llave se baja a pedido del titular.",
+          "Pedido enviado. Confirmado dos segundos y medio después.",
+          "Ninguna objeción sobrevivió a la demora.",
+          "No cabe reclamo contra el custodio. No interviene seguro alguno.",
+          "Titular: miembro de la Caja Mutual del Puerto, libro, p. 21:7.",
+          "Al margen: páginas antes de esta, por dieciséis, más la línea. Acá todo se calcula.",
+          "Fecha, a lápiz: el día del primer movimiento en la dirección Native de MAQUINARIA.",
+          "",
+          "Archivado: ent. 0413/T"
+        ],
+        "pt": [
+          "Um registro de estação terrestre. Um balístico andou trabalhando na margem da impressão.",
+          "",
+          "LIBERAÇÃO DE CUSTÓDIA. A chave é baixada a pedido do titular.",
+          "Requisição enviada. Confirmada dois segundos e meio depois.",
+          "Nenhuma objeção sobreviveu ao atraso.",
+          "Nenhuma reclamação cabe contra o custodiante. Nenhum seguro é acionado.",
+          "Titular: sócio da Caja Mutual del Puerto, livro, p. 21:7.",
+          "Margem: páginas antes desta, vezes dezesseis, mais a linha. Tudo aqui é computado.",
+          "Data, a lápis: o dia do primeiro movimento no endereço Native de MOAGEM.",
+          "",
+          "Arquivado: ent. 0413/T"
         ]
       },
       "act": 2
@@ -571,24 +961,44 @@ export const STORY = {
       "after": 3,
       "title": {
         "en": "Unsigned note",
-        "ru": "Записка без подписи"
+        "ru": "Записка без подписи",
+        "es": "Nota sin firma",
+        "pt": "Bilhete sem assinatura"
       },
       "body": {
         "en": [
           "lower case. no signature.",
           "",
-          "read the fifth phrase by number. 1269, 536, 811, 686.",
-          "read the sixth. 287, 1761, 706, 562.",
-          "now read the first four again. you know what i mean by rule.",
-          "someone else held the pen for those two."
+          "book gives you the number of any word. in wallet 3 the numbers follow a rule: 5, 9, 17, 33, 65, 129.",
+          "wallet 5 has no rule: 1269, 536, 811, 686. neither has wallet 6: 287, 1761, 706, 562.",
+          "whoever chose the first ones liked numbers. someone else chose the fifth phrase and the sixth."
         ],
         "ru": [
           "строчные буквы. без подписи.",
           "",
-          "прочитай пятую фразу по номерам. 1269, 536, 811, 686.",
-          "прочитай шестую. 287, 1761, 706, 562.",
-          "теперь снова первые четыре. ты понимаешь, что я называю правилом.",
-          "те две писала другая рука."
+          "book даст номер любого слова. в кошельке 3 номера идут по правилу: 5, 9, 17, 33, 65, 129.",
+          "в кошельке 5 правила нет: 1269, 536, 811, 686. в кошельке 6 тоже: 287, 1761, 706, 562.",
+          "кто выбирал первые, любил числа. пятую и шестую фразы выбирал кто-то другой."
+        ],
+        "es": [
+          "minúsculas. sin firma.",
+          "",
+          "book te da el número de cualquier palabra. en la billetera 3 los números siguen una regla:",
+          "5, 9, 17, 33, 65, 129.",
+          "la billetera 5 no tiene regla: 1269, 536, 811, 686.",
+          "la billetera 6 tampoco: 287, 1761, 706, 562.",
+          "a quien eligió las primeras le gustaban los números.",
+          "alguien más eligió la quinta frase y la sexta."
+        ],
+        "pt": [
+          "minúsculas. sem assinatura.",
+          "",
+          "book dá o número de qualquer palavra.",
+          "na carteira 3 os números seguem uma regra: 5, 9, 17, 33, 65, 129.",
+          "a carteira 5 não tem regra: 1269, 536, 811, 686.",
+          "a carteira 6 também não: 287, 1761, 706, 562.",
+          "quem escolheu as primeiras gostava de números.",
+          "outra pessoa escolheu a quinta frase e a sexta."
         ]
       },
       "act": 2
@@ -598,7 +1008,9 @@ export const STORY = {
       "after": 3,
       "title": {
         "en": "Courier's expense sheet",
-        "ru": "Расходный лист посыльного"
+        "ru": "Расходный лист посыльного",
+        "es": "Planilla de gastos del cadete",
+        "pt": "Folha de despesas do mensageiro"
       },
       "body": {
         "en": [
@@ -616,6 +1028,23 @@ export const STORY = {
           "Позиция: один аукционист, от двора до фургона, Кинтана. Сорок метров, по колено.",
           "Туфли: отдельно.",
           "К оплате: ничего. Пари закрыто."
+        ],
+        "es": [
+          "L. Funes. Esta tampoco la pidió nadie.",
+          "",
+          "Ítem: un paquete, mojado, de Reconquista a tu escritorio. Cargo: normal.",
+          "Ítem: un martillero, del patio a la camioneta, Quintana.",
+          "Cuarenta metros, agua a la rodilla.",
+          "Zapatos: llevados aparte.",
+          "Cargo: ninguno. Apuesta saldada."
+        ],
+        "pt": [
+          "L. Funes. Esta também ninguém pediu.",
+          "",
+          "Item: um pacote, molhado, da Reconquista até a sua mesa. Cobrança: padrão.",
+          "Item: um leiloeiro, do pátio até o furgão, Quintana. Quarenta metros, água no joelho.",
+          "Sapatos: transportados à parte.",
+          "Cobrança: nenhuma. Aposta liquidada."
         ]
       },
       "act": 2
@@ -625,7 +1054,9 @@ export const STORY = {
       "after": null,
       "title": {
         "en": "Lot 40: statutes of the Caja",
-        "ru": "Лот 40: устав Caja"
+        "ru": "Лот 40: устав Caja",
+        "es": "Lote 40: estatutos de la Caja",
+        "pt": "Lote 40: estatuto da Caja"
       },
       "body": {
         "en": [
@@ -653,6 +1084,32 @@ export const STORY = {
           "",
           "На полях размашисто: «Тонтина. Очень старый инструмент. Кто пережил всех, тот и выиграл.",
           "Я продавал вещи и похуже. Нечасто»."
+        ],
+        "es": [
+          "Un tomo, con oxidaciones. Tres compradores lo leyeron y lo devolvieron.",
+          "",
+          "ESTATUTOS DE LA CAJA MUTUAL DEL PUERTO. Un libro de 128 páginas, 16 líneas por página.",
+          "Art. 3. Todo socio aporta en vida. Ningún socio retira antes del reparto.",
+          "Art. 7. La parte del socio que muere o renuncia no pasa a su sucesión.",
+          "Pasa por partes iguales a los socios que siguen vivos.",
+          "Art. 8. Un socio está vivo hasta que se certifique lo contrario.",
+          "Art. 11. Cuando quede una sola línea en el libro, esa línea se lleva el total.",
+          "",
+          "Al margen, con letra florida: 'Una tontina. Instrumento muy antiguo. El último vivo gana.",
+          "Vendí cosas peores. No muchas veces.'"
+        ],
+        "pt": [
+          "Um volume, manchado. Três compradores leram e devolveram.",
+          "",
+          "ESTATUTO DA CAJA MUTUAL DEL PUERTO. Um livro de 128 páginas, 16 linhas por página.",
+          "Art. 3. Todo sócio contribui enquanto vive. Nenhum sócio saca antes da distribuição.",
+          "Art. 7. A cota do sócio que morre ou renuncia não passa ao seu espólio.",
+          "Passa em partes iguais aos sócios ainda vivos.",
+          "Art. 8. O sócio está vivo até que se certifique o contrário.",
+          "Art. 11. Quando restar uma só linha no livro, essa linha leva tudo.",
+          "",
+          "Margem, em letra floreada: 'Uma tontina. Instrumento muito antigo. O último vivo ganha.",
+          "Já vendi coisa pior. Não muitas vezes.'"
         ]
       },
       "act": 2
@@ -662,7 +1119,9 @@ export const STORY = {
       "after": null,
       "title": {
         "en": "Carbon of page 128",
-        "ru": "Копирка страницы 128"
+        "ru": "Копирка страницы 128",
+        "es": "Carbónico de la página 128",
+        "pt": "Carbono da página 128"
       },
       "body": {
         "en": [
@@ -684,6 +1143,26 @@ export const STORY = {
           "Строка 16: ничего. Не случайный пропуск. Разлинована и пуста.",
           "",
           "В твоём экземпляре книги на этой строке есть имя."
+        ],
+        "es": [
+          "Un carbónico de la última página del libro. Tiene un círculo de té.",
+          "",
+          "A lápiz arriba, en mayúsculas de sereno: TOMADO A MEDIANOCHE PARA LOS AUDITORES.",
+          "Línea 6: Funes, Abel. Sereno.",
+          "Líneas 7 a 15: todas ahí, todas en el mismo azul negro cansado.",
+          "Línea 16: nada. No en blanco por accidente. Pautada, y vacía.",
+          "",
+          "Tu copia del libro tiene un nombre en esa línea."
+        ],
+        "pt": [
+          "Um carbono da última página do livro. Tem uma marca de chá.",
+          "",
+          "A lápis no alto, em maiúsculas de vigia: TIRADA À MEIA-NOITE PARA OS AUDITORES.",
+          "Linha 6: Funes, Abel. Vigia noturno.",
+          "Linhas 7 a 15: todas lá, todas no mesmo azul-preto cansado.",
+          "Linha 16: nada. Não está em branco por acaso. Pautada e vazia.",
+          "",
+          "O seu exemplar do livro tem um nome nessa linha."
         ]
       },
       "act": 2
@@ -693,7 +1172,9 @@ export const STORY = {
       "after": null,
       "title": {
         "en": "Pumping log, Reconquista",
-        "ru": "Журнал откачки, Реконкиста"
+        "ru": "Журнал откачки, Реконкиста",
+        "es": "Parte de bombeo, Reconquista",
+        "pt": "Registro de bombeamento, Reconquista"
       },
       "body": {
         "en": [
@@ -715,6 +1196,26 @@ export const STORY = {
           "Подвал через переулок, та же бригада, тот же час: 0,30 м.",
           "Откачка: одиннадцать часов. Осадок: лёгкий. Бумага: не восстановима, кроме перечисленной.",
           "Замечания бригадира: нет."
+        ],
+        "es": [
+          "Planilla del contratista, llevada en birome, exacta al centímetro.",
+          "",
+          "Nuestro sótano, primera lectura: 2,40 m.",
+          "Edificio al norte, misma cuadrilla, misma hora: 0,30 m.",
+          "Edificio al sur, misma cuadrilla, misma hora: 0,35 m.",
+          "Sótano cruzando el pasaje, misma cuadrilla, misma hora: 0,30 m.",
+          "Bombeado: once horas. Sedimento: leve. Papel: nada recuperable, salvo lo listado.",
+          "Observación del capataz: ninguna."
+        ],
+        "pt": [
+          "Folha do empreiteiro, a caneta esferográfica, exata até o centímetro.",
+          "",
+          "Nosso porão, primeira leitura: 2,40 m.",
+          "Prédio ao norte, mesma equipe, mesma hora: 0,30 m.",
+          "Prédio ao sul, mesma equipe, mesma hora: 0,35 m.",
+          "Porão do outro lado da viela, mesma equipe, mesma hora: 0,30 m.",
+          "Bombeado: onze horas. Sedimento: leve. Papel: nenhum recuperável, salvo o listado.",
+          "Observação do encarregado: nenhuma."
         ]
       },
       "act": 2
@@ -724,7 +1225,9 @@ export const STORY = {
       "after": null,
       "title": {
         "en": "Copied off a door, Dársena Sur",
-        "ru": "Списано с двери, Дарсена-Сур"
+        "ru": "Списано с двери, Дарсена-Сур",
+        "es": "Copiado de una puerta, Dársena Sur",
+        "pt": "Copiado de uma porta, Dársena Sur"
       },
       "body": {
         "en": [
@@ -744,6 +1247,24 @@ export const STORY = {
           "Аптека через две улицы: чек на имя Р. Ольмоса, этот месяц, оплачено мелочью.",
           "Соседка: «Мёртв? Он мне зимой колено вправил. Только не говорите ему, что я сказала».",
           "Стучал десять минут. Никто не вышел. Чайник за стеной был тёплый."
+        ],
+        "es": [
+          "La letra de Lalo, al dorso de un boleto de colectivo. Dibujó la puerta, mal.",
+          "",
+          "Tarjeta en la puerta: 'R. Olmos. Consultas suspendidas. Vuelvo cuando vuelva.'",
+          "Buzón: vacío. Alguien lo vacía.",
+          "Farmacia a dos cuadras: un ticket a nombre de R. Olmos, de este mes, pagado en monedas.",
+          "Un vecino: '¿Muerto? En invierno me arregló la rodilla. No le digas que te dije.'",
+          "Golpeé diez minutos. No vino nadie. La pava de adentro estaba tibia a través de la pared."
+        ],
+        "pt": [
+          "A letra de Lalo, no verso de uma passagem de ônibus. Ele desenhou a porta, mal.",
+          "",
+          "Cartão na porta: 'R. Olmos. Consultas suspensas. Volto quando voltar.'",
+          "Caixa de correio: vazia. Alguém esvazia.",
+          "Farmácia a duas ruas dali: um recibo em nome de R. Olmos, este mês, pago em moedas.",
+          "Vizinho: 'Morto? Ele consertou meu joelho no inverno. Não conta pra ele que eu falei.'",
+          "Bati dez minutos. Ninguém veio. Dava pra sentir a chaleira quente pela parede."
         ]
       },
       "act": 2
@@ -753,7 +1274,9 @@ export const STORY = {
       "after": null,
       "title": {
         "en": "Page of the incoming register",
-        "ru": "Страница журнала входящих"
+        "ru": "Страница журнала входящих",
+        "es": "Página del registro de entradas",
+        "pt": "Página do livro de entradas"
       },
       "body": {
         "en": [
@@ -773,6 +1296,25 @@ export const STORY = {
           "Итог на хранение не влияет. Все подачи хранятся со всеми строками,",
           "под именами, которые в них названы, и доступны заинтересованным лицам.",
           "Заинтересованные лица не перечислены."
+        ],
+        "es": [
+          "Una página, seca, sellada. Lo más ordenado que viste en todo el mes.",
+          "",
+          "Toda presentación recibe un número de entrada al ser recibida.",
+          "Resultado: ADMITIDA o RECHAZADA, asentado en la columna de la derecha.",
+          "El resultado no afecta la conservación.",
+          "Todas las presentaciones se conservan, con sus filas,",
+          "bajo los nombres que mencionan, para consulta de los interesados.",
+          "Los interesados no figuran."
+        ],
+        "pt": [
+          "Uma página, seca, carimbada. A coisa mais ordenada que você viu este mês.",
+          "",
+          "Toda apresentação recebe um número de entrada ao chegar.",
+          "Resultado: ACEITA ou REJEITADA, lançado na coluna da direita.",
+          "O resultado não afeta a guarda. Todas as apresentações são guardadas, com suas linhas,",
+          "sob os nomes que mencionam, para consulta pelas partes interessadas.",
+          "As partes interessadas não são listadas."
         ]
       },
       "act": 2
@@ -783,495 +1325,675 @@ export const STORY = {
       "name": "Aurelio Cané",
       "trade": {
         "en": "stevedore, founding member",
-        "ru": "стивидор, член-основатель"
+        "ru": "стивидор, член-основатель",
+        "es": "estibador, socio fundador",
+        "pt": "estivador, sócio fundador"
       },
       "note": {
         "en": "Died 1998.",
-        "ru": "Умер в 1998 году."
+        "ru": "Умер в 1998 году.",
+        "es": "Murió en 1998.",
+        "pt": "Morreu em 1998."
       }
     },
     "4": {
       "name": "Mirta Sosa",
       "trade": {
         "en": "cashier",
-        "ru": "кассир"
+        "ru": "кассир",
+        "es": "cajera",
+        "pt": "caixa"
       },
       "note": {
         "en": "Left the Caja in 1999, share paid out.",
-        "ru": "Вышла из Caja в 1999 году, доля выплачена."
+        "ru": "Вышла из Caja в 1999 году, доля выплачена.",
+        "es": "Se fue de la Caja en 1999, con la parte cobrada.",
+        "pt": "Saiu da Caja em 1999, cota paga."
       }
     },
     "5": {
       "name": "Néstor Ibarra",
       "trade": {
         "en": "engine driver",
-        "ru": "машинист"
+        "ru": "машинист",
+        "es": "maquinista",
+        "pt": "maquinista"
       },
       "note": {
         "en": "Died 2011.",
-        "ru": "Умер в 2011 году."
+        "ru": "Умер в 2011 году.",
+        "es": "Murió en 2011.",
+        "pt": "Morreu em 2011."
       }
     },
     "9": {
       "name": "Rosa Lamas",
       "trade": {
         "en": "seamstress, sail loft",
-        "ru": "швея, парусная мастерская"
+        "ru": "швея, парусная мастерская",
+        "es": "costurera, taller de velas",
+        "pt": "costureira, velaria"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "17": {
       "name": "Julio Ferrán",
       "trade": {
         "en": "ship's carpenter",
-        "ru": "судовой плотник"
+        "ru": "судовой плотник",
+        "es": "carpintero de ribera",
+        "pt": "carpinteiro naval"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "33": {
       "name": "Elsa Quiroga",
       "trade": {
         "en": "the board's legal clerk",
-        "ru": "юрист правления"
+        "ru": "юрист правления",
+        "es": "auxiliar legal de la comisión directiva",
+        "pt": "escrevente jurídica da diretoria"
       },
       "note": {
         "en": "Left the Caja in 2000.",
-        "ru": "Вышла из Caja в 2000 году."
+        "ru": "Вышла из Caja в 2000 году.",
+        "es": "Se fue de la Caja en 2000.",
+        "pt": "Saiu da Caja em 2000."
       }
     },
     "65": {
       "name": "Óscar Tello",
       "trade": {
         "en": "tally clerk",
-        "ru": "счётчик грузов"
+        "ru": "счётчик грузов",
+        "es": "apuntador",
+        "pt": "conferente de carga"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "129": {
       "name": "Hugo Paz",
       "trade": {
         "en": "tugboat hand",
-        "ru": "матрос на буксире"
+        "ru": "матрос на буксире",
+        "es": "marinero de remolcador",
+        "pt": "marinheiro de rebocador"
       },
       "note": {
         "en": "Died 2019.",
-        "ru": "Умер в 2019 году."
+        "ru": "Умер в 2019 году.",
+        "es": "Murió en 2019.",
+        "pt": "Morreu em 2019."
       }
     },
     "258": {
       "name": "Alba Ríos",
       "trade": {
         "en": "crane operator",
-        "ru": "крановщица"
+        "ru": "крановщица",
+        "es": "guinchera",
+        "pt": "operadora de guindaste"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "515": {
       "name": "Ramiro Olmos",
       "trade": {
         "en": "port medic",
-        "ru": "портовый фельдшер"
+        "ru": "портовый фельдшер",
+        "es": "médico del puerto",
+        "pt": "médico do porto"
       },
       "note": {
         "en": "Contributions stop in 2001. Pencilled later: seen alive, Dársena Sur, 2024.",
-        "ru": "Взносы обрываются в 2001 году. Позже карандашом: видели живым, Дарсена-Сур, 2024."
+        "ru": "Взносы обрываются в 2001 году. Позже карандашом: видели живым, Дарсена-Сур, 2024.",
+        "es": "Los aportes se cortan en 2001. A lápiz, más tarde: visto vivo, Dársena Sur, 2024.",
+        "pt": "Contribuições param em 2001. Depois, a lápis: visto vivo, Dársena Sur, 2024."
       }
     },
     "1020": {
       "name": "Ignacio Roca",
       "trade": {
         "en": "secretary to the board",
-        "ru": "секретарь правления"
+        "ru": "секретарь правления",
+        "es": "secretario de la comisión directiva",
+        "pt": "secretário da diretoria"
       },
       "note": {
         "en": "Died 2015.",
-        "ru": "Умер в 2015 году."
+        "ru": "Умер в 2015 году.",
+        "es": "Murió en 2015.",
+        "pt": "Morreu em 2015."
       }
     },
     "1029": {
       "name": "Dora Vera",
       "trade": {
         "en": "port postwoman",
-        "ru": "почтальон порта"
+        "ru": "почтальон порта",
+        "es": "cartera del puerto",
+        "pt": "carteira do correio do porto"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "1534": {
       "name": "Beto Almada",
       "trade": {
         "en": "dock cook",
-        "ru": "повар в доках"
+        "ru": "повар в доках",
+        "es": "cocinero del muelle",
+        "pt": "cozinheiro das docas"
       },
       "note": {
         "en": "Died 2008.",
-        "ru": "Умер в 2008 году."
+        "ru": "Умер в 2008 году.",
+        "es": "Murió en 2008.",
+        "pt": "Morreu em 2008."
       }
     },
     "1791": {
       "name": "Héctor Bentancur",
       "trade": {
         "en": "treasurer",
-        "ru": "казначей"
+        "ru": "казначей",
+        "es": "tesorero",
+        "pt": "tesoureiro"
       },
       "note": {
         "en": "Died December 2001, in the port. Remarks struck out.",
-        "ru": "Умер в декабре 2001 года, в порту. Примечания вымараны."
+        "ru": "Умер в декабре 2001 года, в порту. Примечания вымараны.",
+        "es": "Murió en diciembre de 2001, en el puerto. Observaciones tachadas.",
+        "pt": "Morreu em dezembro de 2001, no porto. Observações riscadas."
       }
     },
     "1920": {
       "name": "Teresa Gil",
       "trade": {
         "en": "net mender",
-        "ru": "починка сетей"
+        "ru": "починка сетей",
+        "es": "remendadora de redes",
+        "pt": "remendeira de redes"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "1984": {
       "name": "Lucio Maza",
       "trade": {
         "en": "diver",
-        "ru": "водолаз"
+        "ru": "водолаз",
+        "es": "buzo",
+        "pt": "mergulhador"
       },
       "note": {
         "en": "Died 2003.",
-        "ru": "Умер в 2003 году."
+        "ru": "Умер в 2003 году.",
+        "es": "Murió en 2003.",
+        "pt": "Morreu em 2003."
       }
     },
     "2016": {
       "name": "Pablo Soto",
       "trade": {
         "en": "harbour pilot",
-        "ru": "портовый лоцман"
+        "ru": "портовый лоцман",
+        "es": "práctico del puerto",
+        "pt": "prático do porto"
       },
       "note": {
         "en": "Left the Caja in 1997.",
-        "ru": "Вышел из Caja в 1997 году."
+        "ru": "Вышел из Caja в 1997 году.",
+        "es": "Se fue de la Caja en 1997.",
+        "pt": "Saiu da Caja em 1997."
       }
     },
     "2032": {
       "name": "Inés Duarte",
       "trade": {
         "en": "warehouse keeper",
-        "ru": "кладовщица"
+        "ru": "кладовщица",
+        "es": "encargada de depósito",
+        "pt": "almoxarife"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "2040": {
       "name": "Ciro Vidal",
       "trade": {
         "en": "boilerman",
-        "ru": "кочегар"
+        "ru": "кочегар",
+        "es": "foguista",
+        "pt": "foguista"
       },
       "note": {
         "en": "Died 2020.",
-        "ru": "Умер в 2020 году."
+        "ru": "Умер в 2020 году.",
+        "es": "Murió en 2020.",
+        "pt": "Morreu em 2020."
       }
     },
     "2041": {
       "name": "Marta Luna",
       "trade": {
         "en": "ticket clerk, ferry",
-        "ru": "кассир парома"
+        "ru": "кассир парома",
+        "es": "boletera del ferry",
+        "pt": "bilheteira de balsa"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "2038": {
       "name": "Abel Funes",
       "trade": {
         "en": "night watchman",
-        "ru": "ночной сторож"
+        "ru": "ночной сторож",
+        "es": "sereno",
+        "pt": "vigia noturno"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "2048": {
       "name": "Zulema Roth",
       "trade": {
         "en": "the last member entered",
-        "ru": "последний член в книге"
+        "ru": "последний член в книге",
+        "es": "última socia inscripta",
+        "pt": "a última sócia inscrita"
       },
       "note": {
         "en": "Entered in November 2001, three weeks before the end.",
-        "ru": "Внесена в ноябре 2001 года, за три недели до конца."
+        "ru": "Внесена в ноябре 2001 года, за три недели до конца.",
+        "es": "Inscripta en noviembre de 2001, tres semanas antes del final.",
+        "pt": "Inscrita em novembro de 2001, três semanas antes do fim."
       }
     },
     "56": {
       "name": "Eva Cortés",
       "trade": {
         "en": "buoy tender",
-        "ru": "смотритель буёв"
+        "ru": "смотритель буёв",
+        "es": "encargada de boyas",
+        "pt": "encarregada das boias"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "287": {
       "name": "Felisa Núñez",
       "trade": {
         "en": "ratcatcher, grain sheds",
-        "ru": "крысоловка, зерновые склады"
+        "ru": "крысоловка, зерновые склады",
+        "es": "cazadora de ratas, galpones de granos",
+        "pt": "caçadora de ratos, silos de grãos"
       },
       "note": {
         "en": "Contributions stop in 2001. Claimed eleven cats as dependants. Allowed four.",
-        "ru": "Взносы обрываются в 2001 году. Заявила иждивенцами одиннадцать кошек. Признали четырёх."
+        "ru": "Взносы обрываются в 2001 году. Заявила иждивенцами одиннадцать кошек. Признали четырёх.",
+        "es": "Los aportes se cortan en 2001. Declaró once gatos a cargo. Le aceptaron cuatro.",
+        "pt": "Contribuições param em 2001. Declarou onze gatos como dependentes. Aceitaram quatro."
       }
     },
     "327": {
       "name": "Delia Arce",
       "trade": {
         "en": "left-luggage keeper, Retiro",
-        "ru": "хранительница камеры, Ретиро"
+        "ru": "хранительница камеры, Ретиро",
+        "es": "encargada de guardaequipajes, Retiro",
+        "pt": "encarregada do guarda-volumes, Retiro"
       },
       "note": {
         "en": "Contributions stop in 2001. Forty years of other people's keys. Not one lost.",
-        "ru": "Взносы обрываются в 2001 году. Сорок лет чужих ключей. Ни один не потерян."
+        "ru": "Взносы обрываются в 2001 году. Сорок лет чужих ключей. Ни один не потерян.",
+        "es": "Los aportes se cortan en 2001. Cuarenta años de llaves ajenas. Ni una perdida.",
+        "pt": "Contribuições param em 2001. Quarenta anos de chaves alheias. Nenhuma perdida."
       }
     },
     "422": {
       "name": "Mateo Luque",
       "trade": {
         "en": "ferry purser",
-        "ru": "судовой казначей, паром"
+        "ru": "судовой казначей, паром",
+        "es": "comisario de a bordo, ferry",
+        "pt": "comissário de balsa"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "434": {
       "name": "Hilda Cano",
       "trade": {
         "en": "stage hand, seamen's club",
-        "ru": "рабочая сцены, клуб моряков"
+        "ru": "рабочая сцены, клуб моряков",
+        "es": "tramoyista, club de marineros",
+        "pt": "contrarregra, clube dos marítimos"
       },
       "note": {
         "en": "Left the Caja in 1996, share paid out.",
-        "ru": "Вышла из Caja в 1996 году, доля выплачена."
+        "ru": "Вышла из Caja в 1996 году, доля выплачена.",
+        "es": "Se fue de la Caja en 1996, con la parte cobrada.",
+        "pt": "Saiu da Caja em 1996, cota paga."
       }
     },
     "536": {
       "name": "Raúl Ojeda",
       "trade": {
         "en": "bosun",
-        "ru": "боцман"
+        "ru": "боцман",
+        "es": "contramaestre",
+        "pt": "contramestre"
       },
       "note": {
         "en": "Died 2007.",
-        "ru": "Умер в 2007 году."
+        "ru": "Умер в 2007 году.",
+        "es": "Murió en 2007.",
+        "pt": "Morreu em 2007."
       }
     },
     "562": {
       "name": "Rubén Salas",
       "trade": {
         "en": "third-class steward",
-        "ru": "стюард третьего класса"
+        "ru": "стюард третьего класса",
+        "es": "camarero de tercera",
+        "pt": "comissário da terceira classe"
       },
       "note": {
         "en": "Died 2012.",
-        "ru": "Умер в 2012 году."
+        "ru": "Умер в 2012 году.",
+        "es": "Murió en 2012.",
+        "pt": "Morreu em 2012."
       }
     },
     "568": {
       "name": "Olga Ferrer",
       "trade": {
         "en": "stowage clerk",
-        "ru": "учётчица погрузки"
+        "ru": "учётчица погрузки",
+        "es": "empleada de estiba",
+        "pt": "conferente de estiva"
       },
       "note": {
         "en": "Contributions stop in 2001. Owes A. Funes at truco.",
-        "ru": "Взносы обрываются в 2001 году. Должна А. Фунесу в труко."
+        "ru": "Взносы обрываются в 2001 году. Должна А. Фунесу в труко.",
+        "es": "Los aportes se cortan en 2001. Le debe a A. Funes al truco.",
+        "pt": "Contribuições param em 2001. Deve a A. Funes no truco."
       }
     },
     "571": {
       "name": "Zenón Paredes",
       "trade": {
         "en": "members' delegate",
-        "ru": "делегат от членов"
+        "ru": "делегат от членов",
+        "es": "delegado de los socios",
+        "pt": "delegado dos sócios"
       },
       "note": {
         "en": "Died 2009.",
-        "ru": "Умер в 2009 году."
+        "ru": "Умер в 2009 году.",
+        "es": "Murió en 2009.",
+        "pt": "Morreu em 2009."
       }
     },
     "686": {
       "name": "Susana Pardo",
       "trade": {
         "en": "ropewalk hand",
-        "ru": "канатчица"
+        "ru": "канатчица",
+        "es": "obrera de cordelería",
+        "pt": "cordoeira"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "706": {
       "name": "Norma Giménez",
       "trade": {
         "en": "signal station",
-        "ru": "сигнальная станция"
+        "ru": "сигнальная станция",
+        "es": "estación de señales",
+        "pt": "estação de sinais"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "811": {
       "name": "Ernesto Vega",
       "trade": {
         "en": "grab-crane operator",
-        "ru": "машинист грейфера"
+        "ru": "машинист грейфера",
+        "es": "guinchero de almeja",
+        "pt": "operador de guindaste de garra"
       },
       "note": {
         "en": "Died 2014.",
-        "ru": "Умер в 2014 году."
+        "ru": "Умер в 2014 году.",
+        "es": "Murió en 2014.",
+        "pt": "Morreu em 2014."
       }
     },
     "812": {
       "name": "Ángel Medina",
       "trade": {
         "en": "seamen's chaplain",
-        "ru": "капеллан моряков"
+        "ru": "капеллан моряков",
+        "es": "capellán de marineros",
+        "pt": "capelão dos marítimos"
       },
       "note": {
         "en": "Contributions stop in 2001. Owes A. Funes at truco. Says he will pray about it.",
-        "ru": "Взносы обрываются в 2001 году. Должен А. Фунесу в труко. Обещает за это помолиться."
+        "ru": "Взносы обрываются в 2001 году. Должен А. Фунесу в труко. Обещает за это помолиться.",
+        "es": "Los aportes se cortan en 2001. Le debe a A. Funes al truco. Dice que va a rezar por eso.",
+        "pt": "Contribuições param em 2001. Deve a A. Funes no truco. Diz que vai rezar por isso."
       }
     },
     "1269": {
       "name": "Clara Benítez",
       "trade": {
         "en": "ship's radio operator",
-        "ru": "судовой радист"
+        "ru": "судовой радист",
+        "es": "radiooperadora de a bordo",
+        "pt": "radiotelegrafista de bordo"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "1287": {
       "name": "Aldo Rivas",
       "trade": {
         "en": "sailmaker's mate",
-        "ru": "помощник парусного мастера"
+        "ru": "помощник парусного мастера",
+        "es": "ayudante de velero",
+        "pt": "ajudante de veleiro"
       },
       "note": {
         "en": "Contributions stop in 2001. Owes A. Funes at truco. Offered to pay in trousers.",
-        "ru": "Взносы обрываются в 2001 году. Должен А. Фунесу в труко. Предлагал отдать штанами."
+        "ru": "Взносы обрываются в 2001 году. Должен А. Фунесу в труко. Предлагал отдать штанами.",
+        "es": "Los aportes se cortan en 2001. Le debe a A. Funes al truco. Ofreció pagar en pantalones.",
+        "pt": "Contribuições param em 2001. Deve a A. Funes no truco. Ofereceu pagar em calças."
       }
     },
     "1314": {
       "name": "Carlos Rojo",
       "trade": {
         "en": "secretary, annual outing",
-        "ru": "секретарь ежегодной прогулки"
+        "ru": "секретарь ежегодной прогулки",
+        "es": "secretario, paseo anual",
+        "pt": "secretário do passeio anual"
       },
       "note": {
         "en": "Outing cancelled 1989. Contributions stop in 2001. Still holds the float.",
-        "ru": "Прогулка отменена в 1989 году. Взносы обрываются в 2001 году. Касса до сих пор у него."
+        "ru": "Прогулка отменена в 1989 году. Взносы обрываются в 2001 году. Касса до сих пор у него.",
+        "es": "Paseo suspendido en 1989. Los aportes se cortan en 2001. Todavía tiene la caja chica.",
+        "pt": "Passeio cancelado em 1989. Contribuições param em 2001. Ainda está com o caixa."
       }
     },
     "1386": {
       "name": "Nelly Rey",
       "trade": {
         "en": "canteen cook",
-        "ru": "повар в столовой"
+        "ru": "повар в столовой",
+        "es": "cocinera de cantina",
+        "pt": "cozinheira da cantina"
       },
       "note": {
         "en": "Died 2017. The board minuted her flan twice.",
-        "ru": "Умерла в 2017 году. Её флан дважды внесён в протокол правления."
+        "ru": "Умерла в 2017 году. Её флан дважды внесён в протокол правления.",
+        "es": "Murió en 2017. La comisión dejó constancia de su flan dos veces.",
+        "pt": "Morreu em 2017. A diretoria lançou o flan dela em ata duas vezes."
       }
     },
     "1464": {
       "name": "Graciela Ponce",
       "trade": {
         "en": "copy typist, harbour office",
-        "ru": "машинистка, портовая контора"
+        "ru": "машинистка, портовая контора",
+        "es": "dactilógrafa, oficina del puerto",
+        "pt": "datilógrafa, capitania do porto"
       },
       "note": {
         "en": "Left the Caja in 2000, share paid out.",
-        "ru": "Вышла из Caja в 2000 году, доля выплачена."
+        "ru": "Вышла из Caja в 2000 году, доля выплачена.",
+        "es": "Se fue de la Caja en 2000, con la parte cobrada.",
+        "pt": "Saiu da Caja em 2000, cota paga."
       }
     },
     "1673": {
       "name": "Jorge Bruno",
       "trade": {
         "en": "tug engineer",
-        "ru": "механик на буксире"
+        "ru": "механик на буксире",
+        "es": "maquinista de remolcador",
+        "pt": "maquinista de rebocador"
       },
       "note": {
         "en": "Died 2006.",
-        "ru": "Умер в 2006 году."
+        "ru": "Умер в 2006 году.",
+        "es": "Murió en 2006.",
+        "pt": "Morreu em 2006."
       }
     },
     "1696": {
       "name": "Walter Pineda",
       "trade": {
         "en": "groundsman, port workers' club",
-        "ru": "смотритель поля, клуб портовых"
+        "ru": "смотритель поля, клуб портовых",
+        "es": "cuidador de cancha, club portuario",
+        "pt": "zelador do campo, clube dos portuários"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "1761": {
       "name": "Mario Ledesma",
       "trade": {
         "en": "crane signalman",
-        "ru": "сигнальщик при кране"
+        "ru": "сигнальщик при кране",
+        "es": "señalero de grúa",
+        "pt": "sinaleiro de guindaste"
       },
       "note": {
         "en": "Left the Caja in 1998, share paid out.",
-        "ru": "Вышел из Caja в 1998 году, доля выплачена."
+        "ru": "Вышел из Caja в 1998 году, доля выплачена.",
+        "es": "Se fue de la Caja en 1998, con la parte cobrada.",
+        "pt": "Saiu da Caja em 1998, cota paga."
       }
     },
     "1849": {
       "name": "Luis Torres",
       "trade": {
         "en": "port railway shunter",
-        "ru": "сцепщик портовой дороги"
+        "ru": "сцепщик портовой дороги",
+        "es": "cambista del ferrocarril del puerto",
+        "pt": "manobreiro da ferrovia do porto"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     },
     "1901": {
       "name": "Pilar Soria",
       "trade": {
         "en": "hull sign painter",
-        "ru": "художница по бортам"
+        "ru": "художница по бортам",
+        "es": "rotulista de cascos",
+        "pt": "pintora de cascos"
       },
       "note": {
         "en": "Contributions stop in 2001.",
-        "ru": "Взносы обрываются в 2001 году."
+        "ru": "Взносы обрываются в 2001 году.",
+        "es": "Los aportes se cortan en 2001.",
+        "pt": "Contribuições param em 2001."
       }
     }
   },
@@ -1373,10 +2095,10 @@ export const STORY = {
       "pt": "FORMAS: {forms}"
     },
     "actaDebt": {
-      "en": "FAVOURS OWED: {debt}. A FAVOUR COSTS NOTHING TODAY. WHOEVER WRITES IN LOWER CASE WILL COME TO COLLECT.",
-      "ru": "ДОЛГ ЗА ПОДСКАЗКИ: {debt}. СЕГОДНЯ ЭТО НИЧЕГО НЕ СТОИТ. ТОТ, КТО ПИШЕТ СТРОЧНЫМИ, ПРИДЁТ ЗА НИМ ПОЗЖЕ.",
-      "es": "FAVORES DEBIDOS: {debt}. HOY NO CUESTA NADA. QUIEN ESCRIBE EN MINÚSCULAS VENDRÁ A COBRAR.",
-      "pt": "FAVORES DEVIDOS: {debt}. HOJE NÃO CUSTA NADA. QUEM ESCREVE EM MINÚSCULAS VIRÁ COBRAR."
+      "en": "FAVOURS OWED: {debt}. THE THIRD COMES DUE: A WORD GOES MISSING FROM EVERY PAPER YOU HOLD, UNTIL THE COURIER BRINGS CLEAN COPIES.",
+      "ru": "ДОЛГ ЗА ПОДСКАЗКИ: {debt}. ТРЕТИЙ ДОЛГ ПРИДЁТСЯ ОПЛАТИТЬ: ИЗ КАЖДОГО ВАШЕГО ЛИСТА ПРОПАДЁТ СЛОВО, ПОКА ПОСЫЛЬНЫЙ НЕ ПРИВЕЗЁТ ЧИСТЫЕ КОПИИ.",
+      "es": "FAVORES DEBIDOS: {debt}. EL TERCERO SE COBRA: FALTARÁ UNA PALABRA EN CADA PAPEL, HASTA QUE EL CADETE TRAIGA COPIAS LIMPIAS.",
+      "pt": "FAVORES DEVIDOS: {debt}. O TERCEIRO É COBRADO: FALTARÁ UMA PALAVRA EM CADA PAPEL, ATÉ O MENSAGEIRO TRAZER CÓPIAS LIMPAS."
     },
     "actaSaved": {
       "en": "ROW {wallet} WRITTEN, NOT CHECKED. ACTA FILE WHEN ALL ROWS ARE DONE.",
@@ -1447,8 +2169,8 @@ export const STORY = {
     "actaHintButton": {
       "en": "Ask the informant",
       "ru": "Спросить информатора",
-      "es": "Preguntar a la informante",
-      "pt": "Perguntar à informante"
+      "es": "Preguntar a quien escribe",
+      "pt": "Perguntar a quem escreve"
     },
     "actaClient": {
       "en": "client",
@@ -1565,16 +2287,16 @@ export const STORY = {
       "pt": "NOVA PALAVRA PARA PERGUNTAR: {word}"
     },
     "citeUsage": {
-      "en": "USAGE: CITE <who> <paper number>",
-      "ru": "ФОРМАТ: CITE <кто> <номер листа>",
-      "es": "USO: CITE <quién> <número de papel>",
-      "pt": "USO: CITE <quem> <número do papel>"
+      "en": "USAGE: CITE <who> <paper number>. CITE <who> ASKS WHAT THEY WOULD ANSWER TO.",
+      "ru": "ФОРМАТ: CITE <кто> <номер листа>. CITE <кто> СПРОСИТ, НА ЧТО СВИДЕТЕЛЬ ОТВЕТИТ.",
+      "es": "USO: CITE <quién> <número de papel>. CITE <quién> PREGUNTA A QUÉ RESPONDERÍA.",
+      "pt": "USO: CITE <quem> <número do papel>. CITE <quem> PERGUNTA A QUE RESPONDERIA."
     },
     "citeNothing": {
-      "en": "{who} READS IT AND HANDS IT BACK. A WITNESS ONLY CHANGES THEIR STORY FOR A PAPER THAT TOUCHES THEM.",
-      "ru": "{who}: ЧИТАЕТ И ВОЗВРАЩАЕТ. ПОКАЗАНИЯ МЕНЯЕТ ТОЛЬКО ЛИСТ, КОТОРЫЙ КАСАЕТСЯ САМОГО СВИДЕТЕЛЯ.",
-      "es": "{who} LO LEE Y LO DEVUELVE. UN TESTIGO SOLO CAMBIA SU VERSIÓN ANTE UN PAPEL QUE LE AFECTA.",
-      "pt": "{who} LÊ E DEVOLVE. UMA TESTEMUNHA SÓ MUDA A VERSÃO DIANTE DE UM PAPEL QUE A AFETA."
+      "en": "{who} READS IT AND HANDS IT BACK.",
+      "ru": "{who}: ЧИТАЕТ И ВОЗВРАЩАЕТ.",
+      "es": "{who} LO LEE Y LO DEVUELVE.",
+      "pt": "{who} LÊ E DEVOLVE."
     },
     "sendTitle": {
       "en": "ERRANDS // ONE AT A TIME",
@@ -1583,16 +2305,16 @@ export const STORY = {
       "pt": "RECADOS // UM DE CADA VEZ"
     },
     "sendUsage": {
-      "en": "SEND <errand> · SEND NOW spends one favour to bring him back at once",
-      "ru": "SEND <поручение> · SEND NOW за один долг вернёт его сразу",
-      "es": "SEND <recado> · SEND NOW gasta un favor y lo trae de inmediato",
-      "pt": "SEND <recado> · SEND NOW gasta um favor e o traz de imediato"
+      "en": "SEND <errand> · SEND NOW brings him back at once: one favour, and the sluice it opens raises the water by {blocks} blocks",
+      "ru": "SEND <поручение> · SEND NOW вернёт его сразу: один долг, а открытый шлюз поднимет воду на блоков: {blocks}",
+      "es": "SEND <recado> · SEND NOW lo trae de inmediato: un favor, y la esclusa que abre sube el agua {blocks} bloques",
+      "pt": "SEND <recado> · SEND NOW o traz de imediato: um favor, e a eclusa que abre sobe a água {blocks} blocos"
     },
     "sendBusy": {
-      "en": "LALO IS OUT: {label}. BACK IN ABOUT {blocks} BLOCK(S). SEND NOW COSTS ONE FAVOUR.",
-      "ru": "ЛАЛО В ПУТИ: {label}. ВЕРНЁТСЯ ПРИМЕРНО ЧЕРЕЗ БЛОКОВ: {blocks}. SEND NOW СТОИТ ОДНОГО ДОЛГА.",
-      "es": "LALO ESTÁ FUERA: {label}. VUELVE EN UNOS {blocks} BLOQUES. SEND NOW CUESTA UN FAVOR.",
-      "pt": "LALO ESTÁ FORA: {label}. VOLTA EM CERCA DE {blocks} BLOCOS. SEND NOW CUSTA UM FAVOR."
+      "en": "LALO IS OUT: {label}. BACK IN ABOUT {blocks} BLOCK(S). SEND NOW COSTS A FAVOUR AND RAISES THE WATER.",
+      "ru": "ЛАЛО В ПУТИ: {label}. ВЕРНЁТСЯ ПРИМЕРНО ЧЕРЕЗ БЛОКОВ: {blocks}. SEND NOW СТОИТ ДОЛГА И ПОДНИМАЕТ ВОДУ.",
+      "es": "LALO ESTÁ FUERA: {label}. VUELVE EN UNOS {blocks} BLOQUES. SEND NOW CUESTA UN FAVOR Y SUBE EL AGUA.",
+      "pt": "LALO ESTÁ FORA: {label}. VOLTA EM CERCA DE {blocks} BLOCOS. SEND NOW CUSTA UM FAVOR E SOBE A ÁGUA."
     },
     "sendIdle": {
       "en": "LALO IS NOT OUT.",
@@ -1709,10 +2431,10 @@ export const STORY = {
       "pt": "Ele voltou?"
     },
     "panelPayNow": {
-      "en": "Bring him back now (one favour)",
-      "ru": "Вернуть сейчас (один долг)",
-      "es": "Traerlo ahora (un favor)",
-      "pt": "Trazê-lo agora (um favor)"
+      "en": "Bring him back now (one favour, and the water rises)",
+      "ru": "Вернуть сейчас (один долг, и вода поднимется)",
+      "es": "Traerlo ahora (un favor, y sube el agua)",
+      "pt": "Trazê-lo agora (um favor, e a água sobe)"
     },
     "panelNotes": {
       "en": "Notes",
@@ -1761,6 +2483,24 @@ export const STORY = {
       "ru": "строчные буквы, без подписи: ты закрыл кошелёк, не открывая его дела. значит, ты уже знал, что есть в этом списке. и всё равно подписал. мне было интересно, кто так сделает.",
       "es": "minúsculas, sin firma: cerraste una cartera sin abrir su caso. entonces ya sabías lo que hay en esa lista. y firmaste igual. me preguntaba quién lo haría.",
       "pt": "minúsculas, sem assinatura: você fechou uma carteira sem abrir o caso. então já sabia o que há nessa lista. e assinou mesmo assim. eu me perguntava quem faria isso."
+    },
+    "rushCost": {
+      "en": "THEY OPENED A SLUICE TO LET THE BOAT THROUGH. THE WATER WENT DOWNSTREAM.",
+      "ru": "РАДИ ЛОДКИ ОТКРЫЛИ ШЛЮЗ. ВОДА УШЛА ВНИЗ ПО ТЕЧЕНИЮ.",
+      "es": "ABRIERON UNA ESCLUSA PARA DEJAR PASAR EL BOTE. EL AGUA BAJÓ RÍO ABAJO.",
+      "pt": "ABRIRAM UMA ECLUSA PARA A BARCA PASSAR. A ÁGUA DESCEU O RIO."
+    },
+    "floodLeft": {
+      "en": "the water reaches it in about {blocks} block(s), and then this errand is lost",
+      "ru": "вода дойдёт примерно через блоков: {blocks}, и тогда это поручение пропадёт",
+      "es": "el agua llega en unos {blocks} bloques, y entonces este recado se pierde",
+      "pt": "a água chega em cerca de {blocks} blocos, e então este recado se perde"
+    },
+    "actaNeedsStatuteDead": {
+      "en": "THE REGISTRY WILL NOT TAKE THIS ACTA WITHOUT THE CAJA'S STATUTE. LEVENE CANNOT HAND IT OVER NOW: SEND STATUTE.",
+      "ru": "КАНЦЕЛЯРИЯ НЕ ПРИМЕТ ЭТОТ АКТ БЕЗ УСТАВА CAJA. ЛЕВЕНЕ ЕГО УЖЕ НЕ ОТДАСТ: SEND STATUTE.",
+      "es": "EL REGISTRO NO ADMITE ESTA ACTA SIN LOS ESTATUTOS DE LA CAJA. LEVENE YA NO PUEDE DARLOS: SEND STATUTE.",
+      "pt": "O REGISTRO NÃO ACEITA ESTA ATA SEM O ESTATUTO DA CAJA. LEVENE JÁ NÃO PODE ENTREGÁ-LO: SEND STATUTE."
     }
   },
   "acts": [
@@ -1777,28 +2517,36 @@ export const STORY = {
           "id": "renunciation",
           "label": {
             "en": "renunciation of a share",
-            "ru": "отказ от доли"
+            "ru": "отказ от доли",
+            "es": "renuncia a una parte",
+            "pt": "renúncia de cota"
           }
         },
         {
           "id": "attestation",
           "label": {
             "en": "attestation of access",
-            "ru": "заверение доступа"
+            "ru": "заверение доступа",
+            "es": "certificación de acceso",
+            "pt": "atestado de acesso"
           }
         },
         {
           "id": "death",
           "label": {
             "en": "death certificate",
-            "ru": "справка о смерти"
+            "ru": "справка о смерти",
+            "es": "certificado de defunción",
+            "pt": "certidão de óbito"
           }
         },
         {
           "id": "lot",
           "label": {
             "en": "auction lot",
-            "ru": "лот на торгах"
+            "ru": "лот на торгах",
+            "es": "lote de remate",
+            "pt": "lote de leilão"
           }
         }
       ],
@@ -1811,6 +2559,16 @@ export const STORY = {
             ],
             "ru": [
               "бумаги подписаны людьми, а не кошельками. book <страница>:<строка> открывает строку. ищи слово этой строки среди своих фраз. где нашёл, туда и пиши строку."
+            ],
+            "es": [
+              "los papeles están firmados con personas, no con billeteras.",
+              "book <página>:<línea> abre una línea.",
+              "buscá la palabra de esa línea entre tus frases. si tenés una, tenés la fila."
+            ],
+            "pt": [
+              "os papéis são assinados com pessoas, não com carteiras.",
+              "book <página>:<linha> abre uma linha. procure a palavra dessa linha nas suas frases.",
+              "quando achar a frase, você tem a linha da ata."
             ]
           }
         },
@@ -1822,6 +2580,14 @@ export const STORY = {
             ],
             "ru": [
               "у каждого заказчика свой почерк. board <заказчик> покажет его кредо. приложи к нему формулировки каждого листа."
+            ],
+            "es": [
+              "cada cliente tiene su letra. board <cliente> te muestra su credo.",
+              "poné la redacción de cada hoja al lado de eso."
+            ],
+            "pt": [
+              "cada cliente tem sua letra. board <cliente> mostra o credo.",
+              "compare o palavreado de cada folha com ele."
             ]
           }
         },
@@ -1833,6 +2599,16 @@ export const STORY = {
             ],
             "ru": [
               "дата карандашом не на бумаге, она в цепи. txlog <адрес> all покажет все движения с датами. первое внизу. нужен только год."
+            ],
+            "es": [
+              "la fecha a lápiz no está en el papel. está en la cadena.",
+              "txlog <dirección> all lista cada movimiento con su fecha. el primero está abajo.",
+              "solo necesitás el año."
+            ],
+            "pt": [
+              "a data a lápis não está no papel. está na cadeia.",
+              "txlog <endereço> all lista cada movimento com a data. o primeiro fica embaixo.",
+              "você só precisa do ano."
             ]
           }
         }
@@ -1947,7 +2723,7 @@ export const STORY = {
           "None of the three signed anything. You did: your opinion is on file under every one of these wallets.",
           "",
           "lower case, no signature:",
-          "good. now look at wallet 3 by number. 5, 9, 17, 33, 65, 129. that is not chance. someone who chooses like that likes numbers."
+          "good. now read wallet 3 by number: 5, 9, 17, 33, 65, 129. each one is the last one doubled, less one. someone who chooses like that likes numbers."
         ],
         "ru": [
           "Три листа, три строки книги.",
@@ -1957,7 +2733,33 @@ export const STORY = {
           "Никто из этих троих ничего не подписывал. Подписал ты: твоё заключение подшито под каждым из этих кошельков.",
           "",
           "строчные буквы, без подписи:",
-          "хорошо. теперь посмотри на кошелёк 3 по номерам. 5, 9, 17, 33, 65, 129. это не случайность. кто так выбирает, тот любит числа."
+          "хорошо. теперь прочитай кошелёк 3 по номерам: 5, 9, 17, 33, 65, 129. каждое следующее это предыдущее, удвоенное, без единицы. кто так выбирает, тот любит числа."
+        ],
+        "es": [
+          "Tres hojas, tres líneas del libro.",
+          "El socio 1 murió en 1998, y veintitrés años después renunció a su parte por undécima vez.",
+          "El socio 1791 murió en diciembre de 2001, y en 2018 su firma fue cotejada y confirmada.",
+          "El socio 515 está muerto en los papeles desde 2022. Alguien lo vio vivo en 2024.",
+          "Ninguno de los tres firmó nada. Vos sí: tu dictamen consta bajo cada una de estas",
+          "billeteras.",
+          "",
+          "minúsculas, sin firma:",
+          "bien. ahora leé la billetera 3 por número: 5, 9, 17, 33, 65, 129.",
+          "cada uno es el anterior duplicado, menos uno. a quien elige así le gustan los números."
+        ],
+        "pt": [
+          "Três folhas, três linhas do livro.",
+          "O sócio 1 morreu em 1998 e, vinte e três anos depois,",
+          "renunciou à cota pela décima primeira vez.",
+          "O sócio 1791 morreu em dezembro de 2001 e, em 2018,",
+          "a assinatura dele foi comparada e confirmada.",
+          "O sócio 515 está morto no papel desde 2022. Alguém o viu vivo em 2024.",
+          "Nenhum dos três assinou nada. Você assinou:",
+          "seu parecer está arquivado sob cada uma dessas carteiras.",
+          "",
+          "minúsculas, sem assinatura:",
+          "bom. agora leia a carteira 3 pelos números: 5, 9, 17, 33, 65, 129.",
+          "cada um é o anterior dobrado, tirando um. quem escolhe assim gosta de números."
         ]
       },
       "id": 1
@@ -1976,35 +2778,45 @@ export const STORY = {
           "id": "acceptance",
           "label": {
             "en": "acceptance of title",
-            "ru": "принятие права"
+            "ru": "принятие права",
+            "es": "aceptación de título",
+            "pt": "aceite de título"
           }
         },
         {
           "id": "energy-contract",
           "label": {
             "en": "energy contract",
-            "ru": "энергетический контракт"
+            "ru": "энергетический контракт",
+            "es": "contrato de energía",
+            "pt": "contrato de energia"
           }
         },
         {
           "id": "custody-release",
           "label": {
             "en": "custody release",
-            "ru": "выдача из хранения"
+            "ru": "выдача из хранения",
+            "es": "liberación de custodia",
+            "pt": "liberação de custódia"
           }
         },
         {
           "id": "lot",
           "label": {
             "en": "auction lot",
-            "ru": "лот на торгах"
+            "ru": "лот на торгах",
+            "es": "lote de remate",
+            "pt": "lote de leilão"
           }
         },
         {
           "id": "insurance-claim",
           "label": {
             "en": "insurance claim",
-            "ru": "страховое требование"
+            "ru": "страховое требование",
+            "es": "reclamo de seguro",
+            "pt": "aviso de sinistro"
           }
         }
       ],
@@ -2021,6 +2833,16 @@ export const STORY = {
               "открой первую строку книги и последнюю и посчитай, сколько раз подписался каждый.",
               "положи две фразы рядом. лист подписан строкой, строка это слово,",
               "а слово есть в одной из твоих фраз."
+            ],
+            "es": [
+              "abrí la primera línea del libro y la última, y contá cuántas veces firma cada una.",
+              "poné las dos frases lado a lado. una hoja la firma una línea, la línea es una palabra,",
+              "y la palabra está en una frase que ya tenés."
+            ],
+            "pt": [
+              "abra a primeira linha do livro e a última, e conte quantas vezes cada uma assina.",
+              "ponha as duas frases lado a lado. uma folha é assinada por uma linha, a linha é uma palavra,",
+              "e a palavra está em uma frase que você já tem."
             ]
           }
         },
@@ -2029,15 +2851,27 @@ export const STORY = {
           "text": {
             "en": [
               "one word sits in two phrases. only one. book thank.",
-              "he was dead long before that contract was alive. the book will not argue with you.",
-              "for the hand, board <client> as before. one speaks in lots. one reads from the far end.",
-              "one is late on purpose."
+              "he died long before that contract. the book will not argue.",
+              "find the hand as before, board <client>. one talks in lots and appraisals. one reads from the end.",
+              "one counts the delay on a signal."
             ],
             "ru": [
               "одно слово стоит в двух фразах. только одно. book thank.",
               "он умер задолго до того контракта. книга спорить не будет.",
-              "почерк ищи как раньше, board <заказчик>. один говорит лотами. другой читает с конца.",
-              "третий опаздывает нарочно."
+              "почерк ищи как раньше, board <заказчик>. один говорит лотами и оценками. другой читает с конца.",
+              "третий считает задержку сигнала."
+            ],
+            "es": [
+              "una palabra está en dos frases. una sola. book thank.",
+              "él murió mucho antes de ese contrato. el libro no va a discutir.",
+              "buscá la letra como antes, board <cliente>. uno habla de lotes y tasaciones.",
+              "uno lee desde el extremo opuesto. uno cuenta la demora de una señal."
+            ],
+            "pt": [
+              "uma palavra está em duas frases. só uma. book thank.",
+              "ele morreu muito antes daquele contrato. o livro não discute.",
+              "ache a letra como antes, board <cliente>. uma fala em lotes e avaliações. uma lê do fim.",
+              "uma conta o atraso de um sinal."
             ]
           }
         },
@@ -2045,14 +2879,26 @@ export const STORY = {
           "id": "h6",
           "text": {
             "en": [
-              "two sheets are dated off the same wallet, through two different doors.",
-              "the third is dated off another. txlog <address> all, and the first is at the bottom.",
-              "count the days between the first two. you only need the year."
+              "two sheets are dated by the all ones wallet: one by its native address, one by its legacy address.",
+              "the third is dated by churn. txlog <address> all, and the first movement is at the bottom.",
+              "you only need the year."
             ],
             "ru": [
-              "два листа датированы по одному кошельку, через две разные двери.",
-              "третий по другому. txlog <адрес> all, и первое движение внизу.",
-              "посчитай дни между первыми двумя. нужен только год."
+              "два листа датированы по кошельку всех единиц: один по адресу native, другой по адресу legacy.",
+              "третий датирован по оттоку. txlog <адрес> all, и первое движение внизу.",
+              "нужен только год."
+            ],
+            "es": [
+              "dos hojas se fechan por la billetera todo unos:",
+              "una por su dirección native, otra por su legacy.",
+              "la tercera se fecha por maquinaria.",
+              "txlog <dirección> all, y el primer movimiento está abajo.",
+              "solo necesitás el año."
+            ],
+            "pt": [
+              "duas folhas são datadas pela carteira todos uns: uma pelo endereço native, outra pelo legacy.",
+              "a terceira é datada pela moagem. txlog <endereço> all, e o primeiro movimento fica embaixo.",
+              "você só precisa do ano."
             ]
           }
         }
@@ -2222,6 +3068,56 @@ export const STORY = {
           "для этих кошельков никому не нужны были твои руки. нужна была твоя клятва.",
           "спроси, кто нанимает честного свидетеля на той неделе, когда тонет бумага.",
           "седьмое уже оплачено. его оплатили ещё до того, как наняли тебя."
+        ],
+        "es": [
+          "Tres hojas más, tres líneas más del libro.",
+          "La socia 2048 aceptó una transferencia de título en 2019, por undécima vez.",
+          "El socio 1 viene soltando, once veces. Un libro, dos puntas.",
+          "El socio 1791 murió en diciembre de 2001,",
+          "y en 2019 contrató cuarenta años de electricidad.",
+          "La socia 327 cuidó llaves ajenas durante cuarenta años.",
+          "En 2023 liberaron la suya, a pedido.",
+          "Firmaste abajo de todo eso.",
+          "Un hombre que vendía papel está muerto, con tu número en su legajo.",
+          "",
+          "Lalo entra sin bolsa de pan. Trae una sola impresión y la agarra por los bordes.",
+          "'Terminal de la facultad. Estaba buscando otra cosa.'",
+          "Una página pública del estándar: los test vectors contra los que prueban los que hacen",
+          "billeteras.",
+          "Esa lista es pública desde 2013. Cualquiera puede leerla.",
+          "Tus ocho frases están ahí.",
+          "'Juraste que las sacaste de los papeles de un muerto', dice Lalo. No termina.",
+          "",
+          "minúsculas, sin firma:",
+          "fijate por tu cuenta. buscá el nombre del estándar y las palabras test vectors.",
+          "solo leé. nunca escribas una frase en una página que te la pida.",
+          "nadie necesitaba tus manos para esas billeteras. necesitaban tu juramento.",
+          "preguntate quién contrata un testigo honesto la semana en que se ahoga el papel.",
+          "la séptima ya está paga. la pagaron antes de que te contrataran."
+        ],
+        "pt": [
+          "Mais três folhas, mais três linhas do livro.",
+          "A sócia 2048 aceitou uma transferência de título em 2019, pela décima primeira vez.",
+          "O sócio 1 vem largando a cota onze vezes seguidas. Um livro, duas pontas.",
+          "O sócio 1791 morreu em dezembro de 2001 e, em 2019, contratou quarenta anos de eletricidade.",
+          "A sócia 327 guardou chaves alheias por quarenta anos.",
+          "Em 2023 a dela foi liberada, a pedido.",
+          "Você assinou embaixo de tudo isso.",
+          "Um homem que vendia papel está morto, com o seu número na ficha.",
+          "",
+          "Lalo entra sem saco de pão. Traz uma impressão só, e segura pelas beiradas.",
+          "'Terminal da faculdade. Eu tava procurando outra coisa.'",
+          "Uma página pública do padrão: os vetores de teste que os fabricantes de carteira conferem.",
+          "Essa lista é pública desde 2013. Qualquer um pode ler.",
+          "As suas oito frases estão nela.",
+          "'Você jurou que tirou isso dos papéis de um morto', diz Lalo. Não termina.",
+          "",
+          "minúsculas, sem assinatura:",
+          "procure você. pesquise o nome do padrão e as palavras test vectors.",
+          "só leia. nunca digite uma frase numa página que peça uma.",
+          "ninguém precisava das suas mãos para aquelas carteiras. precisavam do seu juramento.",
+          "pergunte quem contrata uma testemunha honesta na semana em que o papel se afoga.",
+          "a sétima já está paga. foi paga antes de contratarem você."
         ]
       },
       "requires_paper": "statute"
@@ -2229,7 +3125,9 @@ export const STORY = {
   ],
   "acta_rules": {
     "attempts_per_block": 2,
-    "offline_window_ms": 600000
+    "offline_window_ms": 600000,
+    "debt_call_at": 3,
+    "rush_blocks": 2
   },
   "cold_open": {
     "en": [
@@ -2261,13 +3159,51 @@ export const STORY = {
       "— А один человек с Кинтаны говорит, что тебе велели вписать его имя.",
       "— Он не злится. Просил узнать, как ты его пишешь.",
       "Дверь за ним грохает. Закрывает он так же, как стучит."
+    ],
+    "es": [
+      "Todavía tenés ACCEPTED en la pantalla cuando alguien le da dos patadas a la puerta.",
+      "Es un golpe: tiene las manos ocupadas.",
+      "Una bolsa de pan cae sobre el escritorio.",
+      "Adentro, otra bolsa de pan. Adentro de esa, papel.",
+      "'No te levantes. Te vas a mojar, y entonces somos dos.'",
+      "'Lalo Funes. Veintidós. Cadete. Alguien pagó un mes por adelantado y no dejó nombre,",
+      "porque de ahora en más alguien tiene que cargar el papel mojado.",
+      "Solo no camina. Ya lo vi.'",
+      "'Hiciste tres líneas. El libro tiene dos mil cuarenta y ocho. Yo tengo una bicicleta.'",
+      "'Mi abuelo te manda saludos. También está en el libro.",
+      "También está muerto, legalmente, desde un martes.'",
+      "'Está bien. Está en la cocina.",
+      "Todos los meses hago la cola del banco para probar lo contrario.'",
+      "Deja un sobre arriba de las bolsas, con dos dedos, como si pudiera morder.",
+      "'Y un señor de Quintana dice que te dijeron que escribas su nombre.'",
+      "'No está enojado. Me pidió que averigüe cómo lo escribís.'",
+      "La puerta golpea detrás de él. Cierra las puertas como las golpea."
+    ],
+    "pt": [
+      "ACCEPTED ainda está na sua tela quando alguém chuta a porta duas vezes.",
+      "É uma batida: ele está com as mãos ocupadas.",
+      "Um saco de pão cai na mesa. Dentro dele, outro saco de pão. Dentro desse, papel.",
+      "'Não levanta não. Só vai se molhar, e aí ficam dois.'",
+      "'Lalo Funes. Vinte e dois. Mensageiro. Alguém pagou um mês adiantado e não deixou nome,",
+      "porque de agora em diante alguém tem que carregar o papel molhado.",
+      "Sozinho ele não anda. Já vi.'",
+      "'Você fez três linhas. O livro tem duas mil e quarenta e oito. Eu tenho uma bicicleta.'",
+      "'Meu avô mandou um oi. Ele também está no livro.",
+      "Também tá morto, legalmente, desde uma terça-feira.'",
+      "'Ele tá bem. Tá na cozinha. Todo mês eu pego fila no banco pra provar o contrário.'",
+      "Ele põe um envelope sobre os sacos com dois dedos, como se pudesse morder.",
+      "'E um homem na Quintana diz que mandaram você escrever o nome dele.'",
+      "'Ele não tá bravo. Só pediu pra eu descobrir que grafia você vai usar.'",
+      "A porta bate atrás dele. Ele fecha porta do jeito que bate."
     ]
   },
   "witnesses": {
     "levene": {
       "name": {
         "en": "Agustín Levene",
-        "ru": "Агустин Левене"
+        "ru": "Агустин Левене",
+        "es": "Agustín Levene",
+        "pt": "Agustín Levene"
       },
       "intro": {
         "en": [
@@ -2278,6 +3214,16 @@ export const STORY = {
           "Реколета. Он берёт трубку с первого гудка, будто всё это время держал её в руке.",
           "— Левене. Спрашивайте словами, которые видели, оператор.",
           "Вопросы без происхождения возвращаю."
+        ],
+        "es": [
+          "Recoleta. Atiende al primer timbrazo, como si hubiera estado con el tubo en la mano.",
+          "'Levene. Pregunte con palabras que haya visto, operador.",
+          "Las preguntas sin procedencia las devuelvo.'"
+        ],
+        "pt": [
+          "Recoleta. Atende no primeiro toque, como se já estivesse com o fone na mão.",
+          "'Levene. Pergunte com palavras que o senhor já viu, operador.",
+          "Pergunta sem procedência eu devolvo.'"
         ]
       },
       "fallback": [
@@ -2287,6 +3233,13 @@ export const STORY = {
           ],
           "ru": [
             "У этого слова нет происхождения. Принесите что-нибудь с листа: лот, строку, форму."
+          ],
+          "es": [
+            "Esa palabra no tiene procedencia. Tráigame algo de una hoja:",
+            "un lote, una línea, un formulario."
+          ],
+          "pt": [
+            "Sem procedência, essa palavra. Traga algo de uma folha: um lote, uma linha, um formulário."
           ]
         },
         {
@@ -2296,6 +3249,13 @@ export const STORY = {
           "ru": [
             "Приписывается вам, и я сомневаюсь. Попробуйте каталог, записку или мои туфли.",
             "Многие пробуют."
+          ],
+          "es": [
+            "Atribuido a usted, y lo dudo. Pruebe con el catálogo, el memo o mis zapatos.",
+            "La gente prueba."
+          ],
+          "pt": [
+            "Atribuída ao senhor, e duvido. Tente o catálogo, o memorando ou meus sapatos. Todos tentam."
           ]
         },
         {
@@ -2304,6 +3264,12 @@ export const STORY = {
           ],
           "ru": [
             "Я не оцениваю того, чего не видел. С какого это листа? Прочтите мне слово оттуда."
+          ],
+          "es": [
+            "No taso lo que no vi. ¿De qué hoja sale eso? Léame la palabra que tiene."
+          ],
+          "pt": [
+            "Não avalio o que não vi. De que folha é isso? Leia para mim a palavra."
           ]
         }
       ],
@@ -2314,6 +3280,12 @@ export const STORY = {
           ],
           "ru": [
             "Телефон звонит в затопленной комнате. Трубку никто не берёт."
+          ],
+          "es": [
+            "La línea suena en una pieza inundada. Nadie atiende."
+          ],
+          "pt": [
+            "A linha toca numa sala alagada. Ninguém atende."
           ]
         },
         {
@@ -2322,6 +3294,12 @@ export const STORY = {
           ],
           "ru": [
             "Запись дома: «Агустин Левене сожалеет. Оставьте оценку после сигнала»."
+          ],
+          "es": [
+            "La grabación de la casa: 'Agustín Levene lamenta. Deje una estimación después del tono.'"
+          ],
+          "pt": [
+            "A gravação da casa: 'Agustín Levene lamenta. Deixe sua estimativa após o sinal.'"
           ]
         },
         {
@@ -2331,6 +3309,14 @@ export const STORY = {
           ],
           "ru": [
             "Звонит долго. Кто-то оплатил линию вперёд. Будет звонить, пока оплата не кончится."
+          ],
+          "es": [
+            "Suena un largo rato. Alguien pagó la cuenta por adelantado.",
+            "Va a sonar hasta que paren."
+          ],
+          "pt": [
+            "Toca por muito tempo. Alguém pagou a conta adiantado.",
+            "Vai tocar até pararem."
           ]
         }
       ],
@@ -2341,7 +3327,24 @@ export const STORY = {
             "quintana",
             "кинтана",
             "реколета",
-            "recoleta"
+            "recoleta",
+            "martilleros",
+            "remate",
+            "remates",
+            "subasta",
+            "subastas",
+            "rematador",
+            "sala",
+            "salón",
+            "salon",
+            "patio",
+            "cuadros",
+            "pátio",
+            "leilão",
+            "leilao",
+            "leilões",
+            "leiloes",
+            "leiloeiro"
           ],
           "text": {
             "en": [
@@ -2353,6 +3356,16 @@ export const STORY = {
               "Зал, двор, двенадцать каталогов. Я продаю картины, которых никто не видел,",
               "людям, которых никто не знает. Последнее честное ремесло в городе:",
               "каждый точно знает, чего именно он не получит."
+            ],
+            "es": [
+              "Una sala, un patio, doce catálogos. Vendo cuadros que nadie vio",
+              "a gente que nadie conoce. Es el último oficio honesto de la ciudad:",
+              "todos saben exactamente lo que no se están llevando."
+            ],
+            "pt": [
+              "Uma sala, um pátio, doze catálogos. Vendo pinturas que ninguém viu",
+              "para gente que ninguém conhece. É o último ofício honesto da cidade:",
+              "todo mundo sabe exatamente o que não está levando."
             ]
           }
         },
@@ -2366,7 +3379,17 @@ export const STORY = {
             "рокамора",
             "inés",
             "ines",
-            "инес"
+            "инес",
+            "memorándum",
+            "memorandum",
+            "nota",
+            "escribana",
+            "escribanía",
+            "escribania",
+            "verbos",
+            "memorando",
+            "tabeliã",
+            "tabelia"
           ],
           "text": {
             "en": [
@@ -2376,6 +3399,14 @@ export const STORY = {
             "ru": [
               "Инес Рокамора. Школа правды. Пишет только то, что есть, а остальное оставляет за рамой.",
               "Она сказала, что я покупал и продавал. Так и было. Посмотрите, каких глаголов там нет."
+            ],
+            "es": [
+              "Inés Rocamora. Escuela de la verdad. Pinta solo lo que hay y deja afuera el resto.",
+              "Le dijo que compré y vendí. Es cierto. Mire los verbos que no usó."
+            ],
+            "pt": [
+              "Inés Rocamora. Escola da verdade. Só pinta o que está lá e deixa o resto de fora.",
+              "Disse ao senhor que comprei e vendi. Comprei e vendi. Repare nos verbos que ela não usou."
             ]
           }
         },
@@ -2388,7 +3419,17 @@ export const STORY = {
             "устав",
             "устава",
             "catalogue",
-            "каталог"
+            "каталог",
+            "lote",
+            "lotes",
+            "40",
+            "estatuto",
+            "estatutos",
+            "catálogo",
+            "catalogo",
+            "catálogos",
+            "catalogos",
+            "tomo"
           ],
           "text": {
             "en": [
@@ -2398,6 +3439,14 @@ export const STORY = {
             "ru": [
               "Лот 40. Я продавал его трижды, и он всё время возвращается. Они, видите ли, читают.",
               "Берите. На одобрение. Нет, не благодарите, вашу благодарность я уже оценил."
+            ],
+            "es": [
+              "Lote 40. Lo vendí tres veces y siempre vuelve a casa. Es que lo leen, ¿sabe?",
+              "Lléveselo. A prueba. No, no me agradezca, ya tasé su agradecimiento."
+            ],
+            "pt": [
+              "Lote 40. Vendi três vezes e ele sempre volta para casa. Eles leem, o senhor entende.",
+              "Leve. Sob aprovação. Não, não me agradeça, já avaliei o seu agradecimento."
             ]
           },
           "gives": "statute"
@@ -2407,7 +3456,16 @@ export const STORY = {
             "tontine",
             "тонтина",
             "тонтину",
-            "тонтины"
+            "тонтины",
+            "tontina",
+            "tontinas",
+            "instrumento",
+            "artículo",
+            "articulo",
+            "artículos",
+            "articulos",
+            "artigo",
+            "art"
           ],
           "text": {
             "en": [
@@ -2419,6 +3477,16 @@ export const STORY = {
               "Старый инструмент. Платишь и переживаешь других.",
               "Как форма прекрасно: один участник, без резерва.",
               "Потом я прочитал статью 8. И посидел немного во дворе. В туфлях."
+            ],
+            "es": [
+              "Un instrumento antiguo. Uno aporta, uno sobrevive.",
+              "Como forma la admiro: un solo postor, sin base.",
+              "Después leí el artículo 8. Me fui a sentar un rato al patio. Con mis zapatos."
+            ],
+            "pt": [
+              "Um instrumento antigo. Paga-se, sobrevive-se.",
+              "Como forma, admiro: um só licitante, sem preço mínimo.",
+              "Depois li o Artigo 8. Fui me sentar no pátio um pouco. De sapatos."
             ]
           }
         },
@@ -2428,7 +3496,16 @@ export const STORY = {
             "wrong",
             "mirror",
             "зеркало",
-            "pair"
+            "pair",
+            "espejo",
+            "espejos",
+            "par",
+            "pares",
+            "pareja",
+            "espelho",
+            "espelhos",
+            "espelhada",
+            "espelhado"
           ],
           "text": {
             "en": [
@@ -2439,6 +3516,16 @@ export const STORY = {
             "ru": [
               "Вы клали их рядом? Первая строка отпускает одиннадцать раз.",
               "Последняя берёт одиннадцать раз. У нас это называется парная вещь, и стоит она вдвое."
+            ],
+            "es": [
+              "¿Las puso lado a lado? La primera línea suelta once veces.",
+              "La última línea toma once veces.",
+              "En mi oficio eso es un par en espejo, y se cobra el doble."
+            ],
+            "pt": [
+              "O senhor já pôs lado a lado? A primeira linha larga onze vezes.",
+              "A última pega onze vezes.",
+              "No meu ofício isso é um par casado, e cobramos o dobro."
             ]
           }
         },
@@ -2449,7 +3536,16 @@ export const STORY = {
             "отказ",
             "отказа",
             "cané",
-            "кане"
+            "кане",
+            "renuncia",
+            "renuncias",
+            "renunciar",
+            "cane",
+            "aurelio",
+            "copia",
+            "copias",
+            "renúncia",
+            "renúncias"
           ],
           "text": {
             "en": [
@@ -2459,6 +3555,14 @@ export const STORY = {
             "ru": [
               "Экземпляр одиннадцатый из одиннадцати, от человека, умершего в прошлом веке.",
               "Я каталогизировал вещи и менее убедительные. Но ни от кого столь упорного."
+            ],
+            "es": [
+              "Copia once de once, de un hombre que murió el siglo pasado. Catalogué",
+              "cosas menos convincentes. Ninguna de alguien tan empecinado."
+            ],
+            "pt": [
+              "Cópia onze de onze, de um homem que morreu no século passado. Já cataloguei",
+              "coisas menos convincentes. Nunca de alguém tão determinado."
             ]
           }
         },
@@ -2471,7 +3575,32 @@ export const STORY = {
             "квитанция",
             "transfer",
             "appraisal",
-            "оценка"
+            "оценка",
+            "aceptación",
+            "aceptacion",
+            "aceptaciones",
+            "título",
+            "titulo",
+            "títulos",
+            "titulos",
+            "recibo",
+            "recibos",
+            "transferencia",
+            "transferencias",
+            "tasación",
+            "tasacion",
+            "tasaciones",
+            "formulario",
+            "formularios",
+            "aceite",
+            "aceites",
+            "aceitação",
+            "aceitacao",
+            "transferência",
+            "avaliação",
+            "avaliacao",
+            "avaliações",
+            "avaliacoes"
           ],
           "text": {
             "en": [
@@ -2481,6 +3610,14 @@ export const STORY = {
             "ru": [
               "Формулировка моя. Бланк дома. Печатаю двенадцать и ни одного не теряю.",
               "Да, по нему я передавал право. Был ли предмет, вопрос атрибуции."
+            ],
+            "es": [
+              "Esa redacción es mía. El formulario es de la casa. Imprimo doce y no pierdo ninguno.",
+              "Sí, transferí títulos con él. Si hubo o no lote es cuestión de atribución."
+            ],
+            "pt": [
+              "O palavreado é meu. O formulário é da casa. Imprimo doze e não perco nenhum.",
+              "Sim, já transferi título nele. Se havia lote é questão de atribuição."
             ]
           }
         },
@@ -2490,7 +3627,23 @@ export const STORY = {
             "деньги",
             "денег",
             "consideration",
-            "вознаграждение"
+            "вознаграждение",
+            "plata",
+            "dinero",
+            "guita",
+            "contraprestación",
+            "contraprestacion",
+            "suma",
+            "cifra",
+            "cifras",
+            "precio",
+            "apuesta",
+            "dinheiro",
+            "grana",
+            "contrapartida",
+            "soma",
+            "preço",
+            "preco"
           ],
           "text": {
             "en": [
@@ -2500,6 +3653,14 @@ export const STORY = {
             "ru": [
               "Вознаграждение. Сумма. Цифра. Указанная оценка. У меня одиннадцать слов для этого,",
               "и я чередую их. Юноша думает, что выиграет пари. У него молодой слух."
+            ],
+            "es": [
+              "La contraprestación. La suma. La cifra. La tasación asentada. Tengo once palabras para eso",
+              "y las voy rotando. El muchacho cree que va a ganar esa apuesta. Tiene oído de muchacho."
+            ],
+            "pt": [
+              "A contrapartida. A soma. A cifra. A avaliação lançada. Tenho onze palavras para isso",
+              "e as uso em rodízio. O rapaz acha que vai ganhar aquela aposta. Tem ouvido de moço."
             ]
           }
         },
@@ -2507,7 +3668,13 @@ export const STORY = {
           "keys": [
             "shoes",
             "туфли",
-            "туфлях"
+            "туфлях",
+            "zapatos",
+            "zapato",
+            "calzado",
+            "31",
+            "sapato",
+            "sapatos"
           ],
           "text": {
             "en": [
@@ -2517,6 +3684,16 @@ export const STORY = {
             "ru": [
               "Цвета бычьей крови, ручная колодка, старше посыльного. Без оговорок: сама вещь.",
               "В городе потоп. Пусть забирает всю Реколету. Этих он не получит."
+            ],
+            "es": [
+              "Sangre de buey, hechos a mano, más viejos que el cadete.",
+              "Sin calificativo: son la cosa misma.",
+              "Hay una inundación en esta ciudad. Puede quedarse con el resto de Recoleta. Con estos, no."
+            ],
+            "pt": [
+              "Sangue de boi, forma feita à mão, mais velhos que o mensageiro.",
+              "Sem ressalva: são a coisa em si.",
+              "Há uma enchente nesta cidade. Pode levar o resto da Recoleta. Estes, não."
             ]
           }
         },
@@ -2528,7 +3705,22 @@ export const STORY = {
             "downstairs",
             "provenance",
             "происхождения",
-            "происхождение"
+            "происхождение",
+            "sótano",
+            "sotano",
+            "sótanos",
+            "sotanos",
+            "abajo",
+            "procedencia",
+            "escalera",
+            "escaleras",
+            "porão",
+            "porao",
+            "porões",
+            "poroes",
+            "embaixo",
+            "escada",
+            "procedência"
           ],
           "text": {
             "en": [
@@ -2539,6 +3731,16 @@ export const STORY = {
             "ru": [
               "Подвал для происхождения. Вещи спускаются туда, чтобы обзавестись прошлым.",
               "На той лестнице я не был годами. У меня для этого человек. Был человек. Теперь вода."
+            ],
+            "es": [
+              "El sótano es para la procedencia. Las cosas bajan ahí a adquirir un pasado.",
+              "Hace años que no piso esa escalera. Tengo un hombre para eso. Tenía un hombre.",
+              "Ahora tengo agua."
+            ],
+            "pt": [
+              "Lá embaixo é para a procedência. As coisas descem para adquirir um passado.",
+              "Não piso naquela escada há anos. Tenho um homem para isso. Tinha um homem.",
+              "Agora tenho água."
             ]
           }
         },
@@ -2549,7 +3751,18 @@ export const STORY = {
             "посыльный",
             "посыльного",
             "funes",
-            "фунес"
+            "фунес",
+            "cadete",
+            "cadetes",
+            "muchacho",
+            "pibe",
+            "mensajero",
+            "estimación",
+            "estimacion",
+            "martillo",
+            "mensageiro",
+            "rapaz",
+            "martelo"
           ],
           "text": {
             "en": [
@@ -2559,6 +3772,15 @@ export const STORY = {
             "ru": [
               "Оценка: растёт. Читает таблицы приливов для удовольствия и сказал, что я неправильно держу",
               "молоток, как рычаг. Я тридцать лет терял силу в запястье. Он прав. Не говорите ему."
+            ],
+            "es": [
+              "Estimación: en alza. Lee tablas de mareas por placer y me dijo que agarro mal el martillo,",
+              "como palanca. Llevo treinta años perdiendo fuerza en la muñeca.",
+              "Tiene razón. No se lo diga."
+            ],
+            "pt": [
+              "Estimativa: em alta. Lê tábuas de maré por prazer e me disse que seguro o martelo errado,",
+              "como alavanca. Perdi trinta anos de força no pulso. Ele tem razão. Não conte a ele."
             ]
           }
         },
@@ -2570,7 +3792,20 @@ export const STORY = {
             "contract",
             "контракт",
             "reassigned",
-            "передан"
+            "передан",
+            "operador",
+            "operadores",
+            "operadora",
+            "contrato",
+            "contratos",
+            "reasignado",
+            "reasignada",
+            "tablero",
+            "rival",
+            "reatribuído",
+            "reatribuido",
+            "quadro",
+            "board"
           ],
           "text": {
             "en": [
@@ -2580,6 +3815,14 @@ export const STORY = {
             "ru": [
               "Вы второй оператор на этой неделе с таким вопросом. Другой платит вперёд",
               "и не смеётся. Без имени. Но оценку я составил: высокая."
+            ],
+            "es": [
+              "Ya van dos operadores que me preguntan eso esta semana. La otra parte paga por adelantado",
+              "y no se ríe. Sin nombre. Eso sí, saqué una estimación: alta."
+            ],
+            "pt": [
+              "O senhor é o segundo operador a me perguntar isso nesta semana. Essa outra mão paga adiantado",
+              "e não ri. Sem nome. Mas consegui uma estimativa: alta."
             ]
           }
         },
@@ -2592,7 +3835,25 @@ export const STORY = {
             "дата",
             "movement",
             "движение",
-            "движения"
+            "движения",
+            "lápiz",
+            "lapiz",
+            "fecha",
+            "fechas",
+            "movimiento",
+            "movimientos",
+            "dirección",
+            "direccion",
+            "direcciones",
+            "txlog",
+            "monedas",
+            "lápis",
+            "lapis",
+            "data",
+            "datas",
+            "datado",
+            "movimento",
+            "movimentos"
           ],
           "text": {
             "en": [
@@ -2605,6 +3866,18 @@ export const STORY = {
               "Дата карандашом, по движению на адресе. Изящно. Чужие монеты задним числом не сдвинешь.",
               "Так что теперь каждый лжец в городе говорит правду хотя бы о времени. TXLOG.",
               "Самое старое внизу."
+            ],
+            "es": [
+              "Fechado a lápiz, por un movimiento en una dirección. Elegante.",
+              "Nadie puede antedatar las monedas de un desconocido.",
+              "Así que todo mentiroso de esta ciudad hoy dice la verdad sobre la hora. TXLOG.",
+              "Lo más viejo está abajo."
+            ],
+            "pt": [
+              "Datado a lápis, por um movimento num endereço. Elegante.",
+              "Ninguém consegue antedatar as moedas de um estranho.",
+              "Assim, todo mentiroso desta cidade agora diz a verdade sobre a hora. TXLOG.",
+              "O mais antigo fica embaixo."
             ]
           }
         },
@@ -2614,7 +3887,20 @@ export const STORY = {
             "заказывал",
             "заказал",
             "заказчик",
-            "client"
+            "client",
+            "encargó",
+            "encargo",
+            "encargos",
+            "encargar",
+            "encargado",
+            "cliente",
+            "clientes",
+            "mandante",
+            "encomendou",
+            "encomendar",
+            "encomenda",
+            "encomendado",
+            "encomendada"
           ],
           "text": {
             "en": [
@@ -2624,15 +3910,44 @@ export const STORY = {
             "ru": [
               "Заказывал? Я сказал вам, что продавал. Мне ни разу не сказали, зачем это.",
               "Так и содержат молоток. Гвоздь ему никто не объясняет."
+            ],
+            "es": [
+              "¿Encargó? Ya le dije lo que vendí. Jamás, ni una vez, me dijeron para qué era.",
+              "Así se conserva un martillo. Nadie le explica el clavo."
+            ],
+            "pt": [
+              "Encomendou? Eu disse o que vendi. Nunca me disseram para que servia.",
+              "É assim que se conserva um martelo. Ninguém explica o prego."
             ]
           }
         }
-      ]
+      ],
+      "cite_nudge": {
+        "en": [
+          "Fine paper. Not my lot, and I do not appraise what is not mine.",
+          "Show me something off my own block: an acceptance, a renunciation, or whatever that notary wrote about me."
+        ],
+        "ru": [
+          "Хорошая бумага. Но это не мой лот, а чужого я не оцениваю.",
+          "Покажите что-нибудь с моих торгов: принятие, отказ или то, что написала обо мне нотариус."
+        ],
+        "es": [
+          "Fino papel. No es lote mío, y no taso lo que no es mío.",
+          "Muéstreme algo de mi propio remate: una aceptación, una renuncia, o lo que esa escribana",
+          "haya escrito sobre mí."
+        ],
+        "pt": [
+          "Belo papel. Não é lote meu, e não avalio o que não é meu.",
+          "Mostre algo da minha quadra: um aceite, uma renúncia, ou o que aquela tabeliã escreveu de mim."
+        ]
+      }
     },
     "ines": {
       "name": {
         "en": "Inés Rocamora",
-        "ru": "Инес Рокамора"
+        "ru": "Инес Рокамора",
+        "es": "Inés Rocamora",
+        "pt": "Inés Rocamora"
       },
       "intro": {
         "en": [
@@ -2644,6 +3959,16 @@ export const STORY = {
           "Реконкиста, восьмой этаж. Она отвечает ровно на втором гудке.",
           "— Я скажу вам то, что могу заверить. Вы увидите, что это много. И что это предел.",
           "«Начните с того, что есть на бумаге: моя записка, откачка, ваш гонорар»."
+        ],
+        "es": [
+          "Reconquista, octavo piso. Atiende al segundo timbrazo, exacto.",
+          "'Le diré aquello de lo que puedo dar fe. Verá que es mucho, y que es un límite.'",
+          "'Empiece por lo que está en papel: mi memo, el bombeo, sus honorarios.'"
+        ],
+        "pt": [
+          "Reconquista, oitavo andar. Atende no segundo toque, exatamente.",
+          "'Direi ao senhor o que posso atestar. Verá que é muito, e é um limite.'",
+          "'Comece pelo que está no papel: meu memorando, o bombeamento, seus honorários.'"
         ]
       },
       "fallback": [
@@ -2654,6 +3979,14 @@ export const STORY = {
           ],
           "ru": [
             "Я могу заверить то, что видела. Этого я не видела. Спросите про записку, подвал, гонорар."
+          ],
+          "es": [
+            "Puedo dar fe de lo que vi. Eso no lo vi.",
+            "Pregunte por el memo, el sótano, los honorarios."
+          ],
+          "pt": [
+            "Posso atestar o que vi. Isso eu não vi.",
+            "Pergunte sobre o memorando, o porão, os honorários."
           ]
         },
         {
@@ -2662,6 +3995,12 @@ export const STORY = {
           ],
           "ru": [
             "На это слово я не могу ответить под присягой. Дайте мне слово с листа."
+          ],
+          "es": [
+            "Esa no es una palabra a la que pueda responder bajo juramento. Deme una de una hoja."
+          ],
+          "pt": [
+            "Essa não é uma palavra a que eu possa responder sob juramento. Dê-me uma de uma folha."
           ]
         },
         {
@@ -2670,6 +4009,12 @@ export const STORY = {
           ],
           "ru": [
             "Вы просите меня гадать. Я не гадаю. Изложите на бумаге, и я прочитаю."
+          ],
+          "es": [
+            "Me pide que adivine. No adivino. Póngalo por escrito y lo leo."
+          ],
+          "pt": [
+            "O senhor está me pedindo que adivinhe. Não adivinho. Ponha no papel e eu leio."
           ]
         }
       ],
@@ -2680,7 +4025,11 @@ export const STORY = {
             "записка",
             "записку",
             "записке",
-            "martillero"
+            "martillero",
+            "memorándum",
+            "memorandum",
+            "nota",
+            "memorando"
           ],
           "text": {
             "en": [
@@ -2690,6 +4039,14 @@ export const STORY = {
             "ru": [
               "Каждая фраза в ней была правдой, когда я её писала.",
               "Он покупал и продавал. Гонорар пришёл бы. Перечитайте, если хотите."
+            ],
+            "es": [
+              "Cada oración era cierta cuando la escribí.",
+              "Compró y vendió. Sus honorarios se habrían acreditado. Reléalo, si lo desea."
+            ],
+            "pt": [
+              "Cada frase ali era verdadeira quando a escrevi.",
+              "Ele comprava e vendia. Seus honorários teriam saído. Releia, se o senhor quiser."
             ]
           }
         },
@@ -2698,7 +4055,11 @@ export const STORY = {
             "levene",
             "левене",
             "agustín",
-            "агустин"
+            "агустин",
+            "agustin",
+            "muerto",
+            "muerte",
+            "leiloeiro"
           ],
           "text": {
             "en": [
@@ -2706,6 +4067,12 @@ export const STORY = {
             ],
             "ru": [
               "Он покупает и продаёт. Это заверено."
+            ],
+            "es": [
+              "Compra y vende. Eso consta."
+            ],
+            "pt": [
+              "Ele compra e vende. Isso está atestado."
             ]
           },
           "after_found": {
@@ -2716,6 +4083,14 @@ export const STORY = {
             "ru": [
               "Он мёртв. Я читала справку, и она точна.",
               "Я не знаю, кто его убил."
+            ],
+            "es": [
+              "Está muerto. Leí el certificado, y es exacto.",
+              "No sé quién lo mató."
+            ],
+            "pt": [
+              "Ele está morto. Li a certidão, e ela está exata.",
+              "Não sei quem o matou."
             ]
           }
         },
@@ -2732,7 +4107,20 @@ export const STORY = {
             "реконкиста",
             "реконкисты",
             "sudestada",
-            "судестада"
+            "судестада",
+            "inundación",
+            "inundacion",
+            "sótano",
+            "sotano",
+            "sótanos",
+            "sotanos",
+            "agua",
+            "protocolo",
+            "papel",
+            "porão",
+            "porao",
+            "água",
+            "enchente"
           ],
           "text": {
             "en": [
@@ -2742,6 +4130,14 @@ export const STORY = {
             "ru": [
               "В ночь судестады в подвал поступила вода. Бумажный протокол был там.",
               "Его больше нет. Вот что я могу заверить."
+            ],
+            "es": [
+              "Al sótano le entró agua la noche de la sudestada. El protocolo en papel estaba ahí.",
+              "Ya no está. Esos son los hechos de los que puedo dar fe."
+            ],
+            "pt": [
+              "O porão recebeu água na noite da sudestada. O protocolo em papel estava nele.",
+              "Já não existe. Esses são os fatos que posso atestar."
             ]
           }
         },
@@ -2753,7 +4149,15 @@ export const STORY = {
             "откачки",
             "откачку",
             "log",
-            "журнал"
+            "журнал",
+            "bombeo",
+            "bomba",
+            "bombas",
+            "parte",
+            "partes",
+            "bombeamento",
+            "bombeado",
+            "registro"
           ],
           "text": {
             "en": [
@@ -2761,6 +4165,12 @@ export const STORY = {
             ],
             "ru": [
               "Журнал можете посмотреть. Он точен. Я просила вести его точно."
+            ],
+            "es": [
+              "Puede ver el parte. Es exacto. Pedí que se llevara con exactitud."
+            ],
+            "pt": [
+              "O senhor pode ver o registro. Está exato. Pedi que fosse mantido com exatidão."
             ]
           },
           "gives": "pump-log"
@@ -2771,7 +4181,29 @@ export const STORY = {
             "отклонено",
             "отклонённая",
             "отклонённые",
-            "retention"
+            "retention",
+            "rechazada",
+            "rechazadas",
+            "rechazado",
+            "rechazados",
+            "rechazo",
+            "registro",
+            "registros",
+            "entrada",
+            "entradas",
+            "presentación",
+            "presentacion",
+            "presentaciones",
+            "conservación",
+            "conservacion",
+            "rejeitada",
+            "rejeitadas",
+            "rejeitado",
+            "rejeitados",
+            "apresentação",
+            "apresentacao",
+            "apresentações",
+            "apresentacoes"
           ],
           "text": {
             "en": [
@@ -2781,6 +4213,14 @@ export const STORY = {
             "ru": [
               "Отклонённые подачи хранятся. Все. Это напечатано, и этого никто не читает.",
               "Журнал входящих можете посмотреть."
+            ],
+            "es": [
+              "Las presentaciones rechazadas se conservan. Todas. Eso está impreso, y nadie lo lee.",
+              "Puede ver el registro."
+            ],
+            "pt": [
+              "Apresentações rejeitadas são guardadas. Todas. Isso está impresso, e ninguém lê.",
+              "O senhor pode ver o livro de entradas."
             ]
           },
           "gives": "incoming-register"
@@ -2790,7 +4230,16 @@ export const STORY = {
             "lalo",
             "courier",
             "посыльный",
-            "посыльного"
+            "посыльного",
+            "cadete",
+            "funes",
+            "sombrero",
+            "sombreros",
+            "mentira",
+            "mentiras",
+            "mensageiro",
+            "chapéu",
+            "chapeu"
           ],
           "text": {
             "en": [
@@ -2800,6 +4249,14 @@ export const STORY = {
             "ru": [
               "Он задал мне одиннадцать вопросов, чтобы поймать на лжи.",
               "Спросил, нравится ли мне его шляпа. Я ответила, что это шляпа."
+            ],
+            "es": [
+              "Me ha hecho once preguntas pensadas para sorprenderme en una mentira.",
+              "Me preguntó si me gustaba su sombrero. Le dije que era un sombrero."
+            ],
+            "pt": [
+              "Ele já me fez onze perguntas feitas para me pegar numa mentira.",
+              "Perguntou se eu gostava do chapéu dele. Eu disse que era um chapéu."
             ]
           }
         },
@@ -2809,7 +4266,17 @@ export const STORY = {
             "энергетический",
             "salar",
             "consumer",
-            "потребитель"
+            "потребитель",
+            "energía",
+            "energia",
+            "consumidor",
+            "consumidores",
+            "torre",
+            "extremo",
+            "opuesto",
+            "contrato",
+            "extremidade",
+            "oposta"
           ],
           "text": {
             "en": [
@@ -2819,6 +4286,14 @@ export const STORY = {
             "ru": [
               "Эта формулировка не наша. Мы не пишем с конца.",
               "Я видела одну башню, которая так пишет."
+            ],
+            "es": [
+              "Esa redacción no es nuestra. No escribimos desde el extremo opuesto.",
+              "Vi una sola torre que lo hace."
+            ],
+            "pt": [
+              "Esse palavreado não é nosso. Não escrevemos a partir da extremidade oposta.",
+              "Vi uma torre que escreve assim."
             ]
           }
         },
@@ -2830,7 +4305,21 @@ export const STORY = {
             "хранения",
             "cruz",
             "key",
-            "ключ"
+            "ключ",
+            "custodia",
+            "liberación",
+            "liberacion",
+            "llave",
+            "llaves",
+            "clave",
+            "claves",
+            "perito",
+            "titular",
+            "custódia",
+            "liberação",
+            "liberacao",
+            "chave",
+            "chaves"
           ],
           "text": {
             "en": [
@@ -2841,6 +4330,16 @@ export const STORY = {
             "ru": [
               "Для выдачи нужно одно: заключение эксперта, что владелец контролирует фразу из дела.",
               "Здесь появляетесь вы. Здесь вы и появились."
+            ],
+            "es": [
+              "Una liberación necesita una sola cosa: el dictamen de un perito de que el titular",
+              "controla la frase registrada.",
+              "Ahí entra usted. Ahí entró usted."
+            ],
+            "pt": [
+              "Uma liberação exige uma só coisa: o parecer de um perito",
+              "de que o titular controla a frase em arquivo.",
+              "É aí que o senhor entra. É aí que o senhor entrou."
             ]
           }
         },
@@ -2850,7 +4349,19 @@ export const STORY = {
             "гонорар",
             "гонорара",
             "official",
-            "курсу"
+            "курсу",
+            "honorarios",
+            "honorario",
+            "oficial",
+            "cambio",
+            "tarifa",
+            "pago",
+            "pagos",
+            "recibo",
+            "honorário",
+            "honorários",
+            "taxa",
+            "pagamento"
           ],
           "text": {
             "en": [
@@ -2859,6 +4370,14 @@ export const STORY = {
             ],
             "ru": [
               "Пришёл. И будет приходить. По официальному курсу, в срок. Это я заверю не читая."
+            ],
+            "es": [
+              "Se acreditó. Se va a acreditar. Al cambio oficial, en fecha.",
+              "De eso puedo dar fe sin leer."
+            ],
+            "pt": [
+              "Foram pagos. Serão pagos. Na taxa oficial, em dia.",
+              "Isso posso atestar sem ler."
             ]
           }
         },
@@ -2868,7 +4387,22 @@ export const STORY = {
             "заключение",
             "заключения",
             "signature",
-            "подпись"
+            "подпись",
+            "dictamen",
+            "dictámenes",
+            "dictamenes",
+            "firma",
+            "firmas",
+            "declaración",
+            "declaracion",
+            "juramento",
+            "jurada",
+            "opinión",
+            "parecer",
+            "pareceres",
+            "assinatura",
+            "assinaturas",
+            "perito"
           ],
           "text": {
             "en": [
@@ -2879,6 +4413,16 @@ export const STORY = {
             "ru": [
               "Заключение есть клятва, что фраза восстановлена из бумаг покойного",
               "честным трудом. Вы трудились честно. Я за этим наблюдала."
+            ],
+            "es": [
+              "Un dictamen es una declaración jurada de que una frase se recuperó de los papeles del",
+              "difunto,",
+              "con trabajo honesto. Usted hizo trabajo honesto. Yo misma vi cómo lo hacía."
+            ],
+            "pt": [
+              "Um parecer é uma declaração juramentada de que uma frase foi recuperada",
+              "dos papéis do falecido,",
+              "por trabalho honesto. O senhor fez trabalho honesto. Eu o vi fazê-lo."
             ]
           }
         },
@@ -2889,7 +4433,21 @@ export const STORY = {
             "оператора",
             "nullsec",
             "hired",
-            "наняли"
+            "наняли",
+            "operador",
+            "operadores",
+            "operadora",
+            "contrató",
+            "contrato",
+            "contratar",
+            "contrataron",
+            "contrataste",
+            "historia",
+            "expediente",
+            "contratou",
+            "contratado",
+            "histórico",
+            "historico"
           ],
           "text": {
             "en": [
@@ -2901,6 +4459,16 @@ export const STORY = {
               "Я пригласила вас, потому что заключения надо подписать заново,",
               "а вы с этим делом не связаны.",
               "Вы спросили почему. Это ответ."
+            ],
+            "es": [
+              "Contraté sus servicios porque los dictámenes deben volver a firmarse y usted no tiene",
+              "historia con este expediente.",
+              "Preguntó por qué. Esa es una respuesta."
+            ],
+            "pt": [
+              "Contratei o senhor porque os pareceres precisam ser assinados de novo",
+              "e o senhor não tem histórico com este arquivo.",
+              "O senhor perguntou por quê. Isso é uma resposta."
             ]
           }
         },
@@ -2911,7 +4479,17 @@ export const STORY = {
             "тонтину",
             "statute",
             "устав",
-            "устава"
+            "устава",
+            "tontina",
+            "tontinas",
+            "estatuto",
+            "estatutos",
+            "artículo",
+            "articulo",
+            "artículos",
+            "articulos",
+            "lot",
+            "lote"
           ],
           "text": {
             "en": [
@@ -2919,6 +4497,12 @@ export const STORY = {
             ],
             "ru": [
               "Да. Я его читала. Я заверяла документы по нему. Это и есть работа нотариуса."
+            ],
+            "es": [
+              "Sí. Lo leí. Di fe de documentos bajo ese estatuto. Es lo que hace una escribana."
+            ],
+            "pt": [
+              "Sim. Li. Já atestei documentos sob ele. É o que faz uma tabeliã."
             ]
           }
         },
@@ -2926,7 +4510,18 @@ export const STORY = {
           "keys": [
             "correct",
             "верно",
-            "правильно"
+            "правильно",
+            "correcto",
+            "correcta",
+            "correctos",
+            "correctas",
+            "respuesta",
+            "verdad",
+            "correto",
+            "correta",
+            "certo",
+            "verdadeira",
+            "verdadeiro"
           ],
           "text": {
             "en": [
@@ -2934,6 +4529,14 @@ export const STORY = {
             ],
             "ru": [
               "Было ли его имя верным ответом в тех трёх строках? Вы спросили прямо. Нет."
+            ],
+            "es": [
+              "¿Si su nombre era la respuesta correcta para esas tres filas?",
+              "Me lo preguntó directamente. No."
+            ],
+            "pt": [
+              "O nome dele era a resposta correta para aquelas três linhas?",
+              "O senhor me perguntou diretamente. Não."
             ]
           }
         },
@@ -2942,7 +4545,21 @@ export const STORY = {
             "retained",
             "хранятся",
             "folders",
-            "папка"
+            "папка",
+            "conservadas",
+            "conservada",
+            "conservados",
+            "conservan",
+            "conservar",
+            "carpeta",
+            "carpetas",
+            "guardadas",
+            "guardada",
+            "guardados",
+            "guardado",
+            "guarda",
+            "pasta",
+            "pastas"
           ],
           "text": {
             "en": [
@@ -2953,6 +4570,16 @@ export const STORY = {
             "ru": [
               "Они лежат в тех же папках, что и остальные. Кто имеет доступ к папкам, может их читать",
               "и носить куда захочет. Исходите из того, что кто-то носит."
+            ],
+            "es": [
+              "Van a las mismas carpetas que las demás.",
+              "Cualquiera con acceso a las carpetas puede leerlas",
+              "y llevarlas adonde quiera. Le conviene suponer que alguien lo hace."
+            ],
+            "pt": [
+              "Vão para as mesmas pastas que as demais.",
+              "Quem tem acesso às pastas pode lê-las",
+              "e levá-las aonde quiser. O senhor deve presumir que alguém o faz."
             ]
           }
         },
@@ -2963,7 +4590,25 @@ export const STORY = {
             "соседи",
             "соседей",
             "соседние",
-            "соседний"
+            "соседний",
+            "vecinos",
+            "vecino",
+            "vecina",
+            "vecinas",
+            "válvula",
+            "valvula",
+            "válvulas",
+            "valvulas",
+            "física",
+            "fisica",
+            "nivel",
+            "centímetros",
+            "centimetros",
+            "vizinhos",
+            "vizinho",
+            "vizinhas",
+            "vizinha",
+            "nível"
           ],
           "text": {
             "en": [
@@ -2975,15 +4620,51 @@ export const STORY = {
               "У соседей намерили тридцать сантиметров. У нас два метра сорок.",
               "Вода сама находит свой уровень, оператор. Это физика, и физику я могу заверить.",
               "Чья рука лежала на каком шлюзе — такой фразы я по этому телефону не произнесу."
+            ],
+            "es": [
+              "Los vecinos midieron treinta centímetros. Nosotros medimos dos metros cuarenta.",
+              "El agua busca su nivel, operador. Eso es física, y de la física puedo dar fe.",
+              "Qué mano estaba en qué válvula no es una oración que vaya a decir por este teléfono."
+            ],
+            "pt": [
+              "Os vizinhos mediram trinta centímetros. Nós medimos dois metros e quarenta.",
+              "A água busca o próprio nível, operador. Isso é física, e física eu posso atestar.",
+              "De quem era a mão em qual válvula não é frase que direi por este telefone."
             ]
           }
         }
-      ]
+      ],
+      "cite_nudge": {
+        "en": [
+          "On that sheet I will attest to nothing today.",
+          "Show me what I wrote myself, or the figures from my basement, or the registry's rule on rejected filings.",
+          "For the last two you will have to send the courier: SEND pump-log, SEND register."
+        ],
+        "ru": [
+          "Об этом листе я сегодня ничего заверять не стану.",
+          "Покажите то, что написала я сама, или замеры из моего подвала, или правило канцелярии об отклонённых подачах.",
+          "За двумя последними придётся послать посыльного: SEND pump-log, SEND register."
+        ],
+        "es": [
+          "Sobre esa hoja hoy no doy fe de nada.",
+          "Muéstreme lo que escribí yo misma, o las cifras de mi sótano, o la regla del registro",
+          "sobre las presentaciones rechazadas.",
+          "Para las dos últimas tendrá que mandar al cadete. SEND pump-log, SEND register."
+        ],
+        "pt": [
+          "Sobre essa folha não atesto nada hoje.",
+          "Mostre-me o que eu mesma escrevi, ou os números do meu porão,",
+          "ou a regra do registro sobre apresentações rejeitadas.",
+          "Para os dois últimos, o senhor terá de mandar o mensageiro. SEND pump-log, SEND register."
+        ]
+      }
     },
     "abel": {
       "name": {
         "en": "Abel Funes",
-        "ru": "Абель Фунес"
+        "ru": "Абель Фунес",
+        "es": "Abel Funes",
+        "pt": "Abel Funes"
       },
       "intro": {
         "en": [
@@ -2993,6 +4674,16 @@ export const STORY = {
         "ru": [
           "Барракас, кухня, чайник. Внук держит телефон. Долгая пауза.",
           "— А? Громче. Да не ты, малец. Тебя я слышал. Строка 2038. Покойный. Чего надо?"
+        ],
+        "es": [
+          "Barracas, una cocina, una pava. El pibe sostiene el teléfono. Hay una pausa larga.",
+          "'¿Eh? Hablá más fuerte. No, vos no, el pibe. A vos te oí.",
+          "Línea 2038. Fallecido. ¿Qué querés?'"
+        ],
+        "pt": [
+          "Barracas, uma cozinha, uma chaleira. O menino segura o telefone. Há uma longa pausa.",
+          "'Hein? Fala alto. Não, você não, o menino. Você eu ouvi.",
+          "Linha 2038. Falecido. O que você quer?'"
         ]
       },
       "fallback": [
@@ -3002,6 +4693,12 @@ export const STORY = {
           ],
           "ru": [
             "А? С этой стороны не слышу. Скажи имя из книги. Их я слышу."
+          ],
+          "es": [
+            "¿Eh? De ese lado estoy sordo. Decí un nombre del libro. Esos los oigo."
+          ],
+          "pt": [
+            "Hein? Desse lado sou surdo. Diz um nome do livro. Desses eu ouço."
           ]
         },
         {
@@ -3012,6 +4709,15 @@ export const STORY = {
           "ru": [
             "Сорок лет ночей, и никто такого не спрашивал. Спроси про чернила. Про мёртвых спроси.",
             "Я их знаю."
+          ],
+          "es": [
+            "Cuarenta años de noches y nadie me preguntó eso.",
+            "Preguntá por la tinta. Preguntá por los muertos.",
+            "A esos los conozco."
+          ],
+          "pt": [
+            "Quarenta anos de noites e ninguém me perguntou isso. Pergunta da tinta. Pergunta dos mortos.",
+            "Esses eu conheço."
           ]
         },
         {
@@ -3021,6 +4727,14 @@ export const STORY = {
           ],
           "ru": [
             "Чайник кипит. За чайником не слышно. Он не кипит. Попробуй слово с какого-нибудь листа."
+          ],
+          "es": [
+            "Tengo la pava puesta. No te oigo por la pava. No está puesta.",
+            "Probá con una palabra de alguna de tus hojas."
+          ],
+          "pt": [
+            "A chaleira está no fogo. Com a chaleira não te ouço. Não está no fogo.",
+            "Tenta uma palavra de uma das suas folhas."
           ]
         },
         {
@@ -3029,6 +4743,12 @@ export const STORY = {
           ],
           "ru": [
             "Это выше сторожа. Ниже сторожа только пол. Спроси про пол."
+          ],
+          "es": [
+            "Eso le queda grande a un sereno. Debajo de un sereno está el piso. Preguntame por el piso."
+          ],
+          "pt": [
+            "Isso é acima de um vigia. Abaixo de um vigia só tem o chão. Pergunta do chão."
           ]
         }
       ],
@@ -3042,7 +4762,15 @@ export const STORY = {
             "2038",
             "watchman",
             "сторож",
-            "сторожа"
+            "сторожа",
+            "sereno",
+            "serenos",
+            "vigilante",
+            "línea",
+            "linea",
+            "errado",
+            "vigia",
+            "noturno"
           ],
           "text": {
             "en": [
@@ -3052,6 +4780,15 @@ export const STORY = {
             "ru": [
               "Строка 2038. Слово wrong, «неверно». Смейся. Малец смеётся с шести лет.",
               "Поставили в конец чужой фразы, чтобы сошлась чужая сумма. Вся жизнь ночного сторожа."
+            ],
+            "es": [
+              "Línea 2038. La palabra es wrong: equivocado. Dale, reíte.",
+              "El pibe se ríe desde los seis años.",
+              "Puesto último en una frase para que le cierre la cuenta a otro. Historia de un sereno."
+            ],
+            "pt": [
+              "Linha 2038. A palavra é wrong. Errado. Pode rir. O menino riu aos seis anos e não parou mais.",
+              "Posto por último numa frase pra fechar a conta dos outros. História de vigia noturno."
             ]
           }
         },
@@ -3068,7 +4805,30 @@ export const STORY = {
             "живым",
             "bank",
             "банк",
-            "банке"
+            "банке",
+            "muerto",
+            "muertos",
+            "muerta",
+            "fallecido",
+            "difunto",
+            "certificado",
+            "certificados",
+            "vivo",
+            "vivos",
+            "banco",
+            "bancos",
+            "gas",
+            "boleta",
+            "martes",
+            "morto",
+            "mortos",
+            "morta",
+            "morte",
+            "falecido",
+            "certidão",
+            "certidao",
+            "viva",
+            "gás"
           ],
           "text": {
             "en": [
@@ -3083,6 +4843,20 @@ export const STORY = {
               "Оплатил. Чтобы никто не сказал, что я умер должником.",
               "Малец стоит в банке с моей fe de vida.",
               "Подпись всё не сходится. Ужасная вещь возраст."
+            ],
+            "es": [
+              "Estoy muerto desde un martes.",
+              "Me enteré por la compañía del gas: condolencias y una última boleta.",
+              "La pagué. Nadie va a decir que me morí debiendo.",
+              "El pibe hace la cola del banco con mi fe de vida.",
+              "La firma no me coincide nunca. Terrible, la edad."
+            ],
+            "pt": [
+              "Estou morto desde uma terça.",
+              "Soube pela companhia de gás: condolências e uma conta final.",
+              "Paguei. Ninguém vai dizer que morri devendo.",
+              "O menino pega fila no banco com a minha fe de vida.",
+              "Minha assinatura nunca bate. Coisa terrível, a idade."
             ]
           }
         },
@@ -3097,7 +4871,26 @@ export const STORY = {
             "carbon",
             "копирка",
             "копирку",
-            "midnight"
+            "midnight",
+            "tinta",
+            "tintas",
+            "noche",
+            "noches",
+            "carbónico",
+            "carbonico",
+            "carbónicos",
+            "carbonicos",
+            "carbónica",
+            "carbonica",
+            "medianoche",
+            "posavasos",
+            "128",
+            "noite",
+            "carbono",
+            "cópia",
+            "copia",
+            "meia-noite",
+            "meianoite"
           ],
           "text": {
             "en": [
@@ -3107,6 +4900,15 @@ export const STORY = {
             "ru": [
               "В ночь, когда вписали последнюю строку? Я спал. Так в рапорте. Рапорт я написал заранее.",
               "Где-то есть копирка той страницы. Хорошая подставка под чашку. Пусть малец принесёт."
+            ],
+            "es": [
+              "¿La noche que entró la última línea? Yo dormía. Está en mi parte. Lo escribí antes.",
+              "Hay un carbónico de esa página por ahí. Sirve de posavasos. Mandá al pibe."
+            ],
+            "pt": [
+              "A noite em que entrou a última linha? Eu estava dormindo.",
+              "Está no meu relatório. Escrevi adiantado.",
+              "Tem um carbono dessa página em algum lugar. Dá um bom porta-copo. Manda o menino buscar."
             ]
           },
           "gives": "page-128"
@@ -3122,7 +4924,15 @@ export const STORY = {
             "128:16",
             "last",
             "последний",
-            "последняя"
+            "последняя",
+            "última",
+            "ultima",
+            "último",
+            "ultimo",
+            "dama",
+            "final",
+            "sócia",
+            "socia"
           ],
           "text": {
             "en": [
@@ -3134,6 +4944,17 @@ export const STORY = {
               "Имена целого порта, а кончается всё одной строкой, как песня, которую оборвали.",
               "Она в книге. За три недели до конца, там написано, а с книгой я не спорю.",
               "Я был на двери. Больше сторож о даме не знает. Спроси про чернила."
+            ],
+            "es": [
+              "Todo un puerto de nombres y termina en una línea, como un tango que alguien cortó.",
+              "Ella está en el libro. Tres semanas antes del final, dice, y yo con un libro no discuto.",
+              "Yo estaba en la puerta. Es todo lo que sabe un sereno de una dama.",
+              "Preguntame por la tinta."
+            ],
+            "pt": [
+              "Um porto inteiro de nomes e termina em uma linha, como música que alguém cortou.",
+              "Ela está no livro. Três semanas antes do fim, diz lá, e eu não discuto com livro.",
+              "Eu estava na porta. É tudo que um vigia sabe de uma dama. Pergunta da tinta."
             ]
           }
         },
@@ -3147,7 +4968,14 @@ export const STORY = {
             "thank",
             "1791",
             "treasurer",
-            "казначей"
+            "казначей",
+            "gracias",
+            "tesorero",
+            "electricidad",
+            "luz",
+            "obrigado",
+            "tesoureiro",
+            "eletricidade"
           ],
           "text": {
             "en": [
@@ -3160,6 +4988,18 @@ export const STORY = {
               "Его слово thank.",
               "Спасибо никто не сказал. Потом про него много чего говорили, в основном на бумаге.",
               "Он подписался на электричество? Чем? Он читал при свете с лестницы. При моём свете."
+            ],
+            "es": [
+              "Héctor llevaba los libros de la Caja, y es el único que vi hacerlos cerrar.",
+              "Su palabra es thank.",
+              "Gracias. Nadie se las dio. Después dijeron bastante de él, casi todo en papel.",
+              "¿Firmó por electricidad? ¿Con qué? Leía con la luz de la escalera. Mi luz."
+            ],
+            "pt": [
+              "Héctor cuidava dos livros da Caja, e só vi um homem fechar aquelas contas.",
+              "A palavra dele é thank.",
+              "Obrigado, ninguém disse. Depois falaram bastante dele, quase sempre no papel.",
+              "Ele assinou por eletricidade? Com o quê? Lia com a luz da escada. A minha luz."
             ]
           }
         },
@@ -3174,7 +5014,15 @@ export const STORY = {
             "515",
             "medic",
             "фельдшер",
-            "doctor"
+            "doctor",
+            "médico",
+            "medico",
+            "postal",
+            "cartas",
+            "doutor",
+            "baralho",
+            "cartão",
+            "cartao"
           ],
           "text": {
             "en": [
@@ -3189,6 +5037,21 @@ export const STORY = {
               "Рамиро должен мне партию. Прошлой зимой пришла открытка без обратного адреса,",
               "на ней проигрышный расклад. Мёртвые в карты не проигрывают, они просто перестают.",
               "Не ищи. Малец искал."
+            ],
+            "es": [
+              "Medio libro me debe al truco, y es mejor registro que el de ellos.",
+              "Uno que todavía te debe y todavía discute está vivo, diga lo que diga el sello.",
+              "Ramiro me debe una partida.",
+              "El invierno pasado llegó una postal sin remitente, con una mano",
+              "perdedora dibujada. Los muertos no pierden a las cartas, nomás dejan de jugar.",
+              "No lo busques. El pibe fue."
+            ],
+            "pt": [
+              "Meio livro me deve no truco, e é um registro melhor que o deles.",
+              "Homem que ainda deve e ainda discute está vivo, diga o carimbo o que disser.",
+              "Ramiro me deve uma partida. No inverno passado chegou um cartão sem remetente,",
+              "com uma mão perdedora desenhada. Morto não perde no baralho, só para.",
+              "Não vá procurar. O menino foi."
             ]
           }
         },
@@ -3204,7 +5067,19 @@ export const STORY = {
             "камера",
             "камеры",
             "retiro",
-            "ретиро"
+            "ретиро",
+            "maquinaria",
+            "guardaequipajes",
+            "equipaje",
+            "llave",
+            "llaves",
+            "estación",
+            "estacion",
+            "moagem",
+            "guarda-volumes",
+            "volumes",
+            "chave",
+            "chaves"
           ],
           "text": {
             "en": [
@@ -3214,6 +5089,14 @@ export const STORY = {
             "ru": [
               "Делия сорок лет хранила на вокзале чужие ключи.",
               "Выдать чужой? Скорее съела бы. Кто подписал этот лист, её не видел."
+            ],
+            "es": [
+              "Delia cuidó llaves ajenas en la estación durante cuarenta años.",
+              "Antes que liberar una se la comía. El que firmó esa hoja no la conoció nunca."
+            ],
+            "pt": [
+              "Delia guardou chaves dos outros na estação por quarenta anos.",
+              "Preferia comer uma a liberar. Quem assinou aquela folha nunca conheceu a Delia."
             ]
           }
         },
@@ -3225,7 +5108,15 @@ export const STORY = {
             "tontine",
             "тонтина",
             "тонтину",
-            "caja"
+            "caja",
+            "estatuto",
+            "estatutos",
+            "tontina",
+            "tontinas",
+            "chiste",
+            "rosa",
+            "lamas",
+            "piada"
           ],
           "text": {
             "en": [
@@ -3237,6 +5128,16 @@ export const STORY = {
               "Я читал его, когда подписывал. Весь. Ночной сторож, времени хватало.",
               "Нам было смешно. Переживёшь Розу Ламас и получишь её долю ничего.",
               "Шутка, в которую ты платил каждый месяц. Хорошая была шутка."
+            ],
+            "es": [
+              "Lo leí cuando lo firmé. Entero. Sereno: teníamos tiempo.",
+              "Nos parecía gracioso. Sobrevivís a Rosa Lamas, te llevás su parte de nada.",
+              "Era un chiste que pagabas todos los meses. Era un buen chiste."
+            ],
+            "pt": [
+              "Li quando assinei. Tudo. Vigia noturno, a gente tinha tempo.",
+              "A gente achava graça. Você sobrevive a Rosa Lamas, fica com a parte dela de coisa nenhuma.",
+              "Era uma piada que você pagava todo mês. Era uma boa piada."
             ]
           }
         },
@@ -3247,7 +5148,17 @@ export const STORY = {
             "малец",
             "внук",
             "courier",
-            "посыльный"
+            "посыльный",
+            "pibe",
+            "nieto",
+            "cadete",
+            "hidráulica",
+            "hidraulica",
+            "pava",
+            "menino",
+            "neto",
+            "mensageiro",
+            "chaleira"
           ],
           "text": {
             "en": [
@@ -3257,6 +5168,14 @@ export const STORY = {
             "ru": [
               "Дважды завалил гидравлику и поправляет мой чайник. Про чайник он прав.",
               "Скажешь ему, я откажусь. Я мёртв. Меня не вызовут."
+            ],
+            "es": [
+              "Bochó hidráulica dos veces y me corrige la pava. Sobre la pava tiene razón.",
+              "Decile y lo niego. Estoy muerto. No me pueden citar."
+            ],
+            "pt": [
+              "Reprovou duas vezes em hidráulica e corrige a minha chaleira. Ele tem razão sobre a chaleira.",
+              "Conta pra ele e eu nego. Estou morto. Não me intimam."
             ]
           }
         },
@@ -3266,7 +5185,16 @@ export const STORY = {
             "левене",
             "auctioneer",
             "аукционист",
-            "аукциониста"
+            "аукциониста",
+            "agustín",
+            "agustin",
+            "martillero",
+            "rematador",
+            "botella",
+            "silla",
+            "leiloeiro",
+            "cadeira",
+            "garrafa"
           ],
           "text": {
             "en": [
@@ -3276,6 +5204,15 @@ export const STORY = {
             "ru": [
               "Аукционист пришёл, когда я умер. Единственный. Принёс бутылку и оценил мой стул.",
               "Стул хороший. Он так и сказал. Приписывается стулу, сказал."
+            ],
+            "es": [
+              "El martillero vino cuando me morí. El único.",
+              "Trajo una botella y le puso precio a mi silla.",
+              "La silla es buena silla. Lo dijo él. Atribuida a una silla, dijo."
+            ],
+            "pt": [
+              "O leiloeiro veio quando eu morri. O único que veio. Trouxe uma garrafa e avaliou minha cadeira.",
+              "É uma boa cadeira. Ele disse. Atribuída a uma cadeira, disse."
             ]
           },
           "after_found": {
@@ -3286,6 +5223,14 @@ export const STORY = {
             "ru": [
               "Он пришёл, когда я умер. Похорон не было. Всё равно пришёл, с бутылкой.",
               "У него похороны будут. Я прослежу. У мёртвых есть время."
+            ],
+            "es": [
+              "Vino cuando me morí. No hubo velorio. Vino igual, con una botella.",
+              "Para él va a haber uno. Yo me ocupo. Los muertos tenemos tiempo."
+            ],
+            "pt": [
+              "Ele veio quando eu morri. Não teve enterro. Veio assim mesmo, com uma garrafa.",
+              "Pra ele vai ter. Eu cuido disso. Morto tem tempo."
             ]
           }
         },
@@ -3299,7 +5244,27 @@ export const STORY = {
             "соседи",
             "соседей",
             "water",
-            "вода"
+            "вода",
+            "bomba",
+            "bombas",
+            "bombeo",
+            "vecinos",
+            "vecino",
+            "agua",
+            "sótano",
+            "sotano",
+            "sótanos",
+            "sotanos",
+            "misa",
+            "inundación",
+            "inundacion",
+            "bombeamento",
+            "vizinhos",
+            "vizinho",
+            "água",
+            "enchente",
+            "porão",
+            "porao"
           ],
           "text": {
             "en": [
@@ -3309,6 +5274,15 @@ export const STORY = {
             "ru": [
               "Сорок лет я смотрел на воду в этом порту. По улице она поднимается вся разом,",
               "каждый подвал в один час, как люди к мессе. Спроси мальца. Он экзамен заваливал."
+            ],
+            "es": [
+              "Cuarenta años miré el agua en este puerto. Sube por una calle toda junta,",
+              "todos los sótanos a la misma hora, como la gente a misa.",
+              "Preguntale al pibe. Bochó el examen."
+            ],
+            "pt": [
+              "Quarenta anos vigiei água neste porto. Ela sobe uma rua toda de uma vez,",
+              "todo porão na mesma hora, como gente indo à missa. Pergunta pro menino. Ele reprovou no exame."
             ]
           }
         },
@@ -3320,7 +5294,14 @@ export const STORY = {
             "кане",
             "аурелио",
             "renunciation",
-            "отказ"
+            "отказ",
+            "cane",
+            "renuncia",
+            "renuncias",
+            "renunciar",
+            "tranvía",
+            "tranvia",
+            "renúncia"
           ],
           "text": {
             "en": [
@@ -3331,6 +5312,16 @@ export const STORY = {
             "ru": [
               "Аурелио Кане, умер в девяносто восьмом и всё отказывается. При жизни место в трамвае",
               "не уступал. Одиннадцать раз, говоришь? Он заставил бы просить двенадцать."
+            ],
+            "es": [
+              "Aurelio Cané, muerto en el noventa y ocho, y sigue renunciando.",
+              "No cedió un asiento en el tranvía",
+              "en toda su vida. ¿Once veces, es? Les habría hecho pedírselo doce."
+            ],
+            "pt": [
+              "Aurelio Cané, morto em noventa e oito, e ainda renunciando.",
+              "Nunca cedeu lugar no bonde",
+              "enquanto vivo. Onze vezes, é? Ia fazer pedirem doze."
             ]
           }
         },
@@ -3338,7 +5329,20 @@ export const STORY = {
           "keys": [
             "lamp",
             "лампа",
-            "лампу"
+            "лампу",
+            "lámpara",
+            "lampara",
+            "lámparas",
+            "lamparas",
+            "secante",
+            "estufa",
+            "quién",
+            "quien",
+            "lâmpada",
+            "lampada",
+            "luminária",
+            "luminaria",
+            "abajur"
           ],
           "text": {
             "en": [
@@ -3348,6 +5352,14 @@ export const STORY = {
             "ru": [
               "Одна лампа. Один придвинутый стул. Промокашка, которая утром ушла в печку.",
               "Я называю часы. Людей не называю. Спросишь кто, и окажется, что я оглох."
+            ],
+            "es": [
+              "Una lámpara. Una silla arrimada. Un secante que a la mañana siguiente fue a la estufa.",
+              "Yo digo horas. No digo personas. Preguntame quién y vas a ver cómo me quedo sordo."
+            ],
+            "pt": [
+              "Uma lâmpada. Uma cadeira puxada. Um mata-borrão que foi pro fogão na manhã seguinte.",
+              "Eu dou horas. Não dou gente. Pergunta quem e vai ver que fiquei surdo."
             ]
           }
         },
@@ -3357,7 +5369,15 @@ export const STORY = {
             "подпись",
             "hand",
             "почерк",
-            "fe"
+            "fe",
+            "firma",
+            "firmas",
+            "letra",
+            "firmar",
+            "assinatura",
+            "assinaturas",
+            "fe de vida",
+            "vida"
           ],
           "text": {
             "en": [
@@ -3367,15 +5387,44 @@ export const STORY = {
             "ru": [
               "Хорошая подпись. Шестьдесят лет у меня. Банк видел её раз сто.",
               "Статью 8 ты читал. Сам сообразишь. И при мальце ни слова."
+            ],
+            "es": [
+              "Es una buena firma. La tengo hace sesenta años. El banco la vio cien veces.",
+              "Leíste el artículo 8. Sacá la cuenta. Y delante del pibe, ni una palabra."
+            ],
+            "pt": [
+              "É uma boa assinatura. Tenho faz sessenta anos. O banco já viu cem vezes.",
+              "Você leu o Artigo 8. Faz a conta. E não fala nada na frente do menino."
             ]
           }
         }
-      ]
+      ],
+      "cite_nudge": {
+        "en": [
+          "I am a night watchman, not a notary. That one means nothing to me.",
+          "Show me something about that night, about the articles, or about a man the papers say is dead."
+        ],
+        "ru": [
+          "Я ночной сторож, а не нотариус. Мне это ни о чём не говорит.",
+          "Покажи что-нибудь про ту ночь, про статьи устава или про человека, которого бумаги считают покойником."
+        ],
+        "es": [
+          "Soy sereno, no escribano. Eso a mí no me dice nada.",
+          "Mostrame algo de esa noche, de los artículos,",
+          "o de un hombre que según los papeles está muerto."
+        ],
+        "pt": [
+          "Sou vigia noturno, não tabelião. Isso não me diz nada.",
+          "Mostra alguma coisa daquela noite, dos artigos, ou de um homem que os papéis dizem que morreu."
+        ]
+      }
     },
     "lalo": {
       "name": {
         "en": "Lalo Funes",
-        "ru": "Лало Фунес"
+        "ru": "Лало Фунес",
+        "es": "Lalo Funes",
+        "pt": "Lalo Funes"
       },
       "intro": {
         "en": [
@@ -3385,6 +5434,14 @@ export const STORY = {
         "ru": [
           "Он на лестнице, или в дверях, или звонит из-под какого-то навеса.",
           "— Спрашивай. Я бумагу ношу, а не читаю. Вру, читаю всё, дорога длинная."
+        ],
+        "es": [
+          "Está en la escalera, o en la puerta, o en el teléfono, abajo de un toldo.",
+          "'Preguntá. Yo llevo papeles, no los leo. Mentira, los leo todos, es un viaje largo.'"
+        ],
+        "pt": [
+          "Ele está na escada, ou na porta, ou no telefone, debaixo de um toldo.",
+          "'Pergunta. Eu carrego papel, não leio. Mentira, leio tudo, o caminho é longo.'"
         ]
       },
       "fallback": [
@@ -3395,6 +5452,14 @@ export const STORY = {
           ],
           "ru": [
             "Ни на одном листе такого не вёз. Дай слово с листа, или SEND куда-нибудь, и я найду."
+          ],
+          "es": [
+            "En ninguna hoja de las que traje. Dame una palabra de una hoja,",
+            "o SEND a algún lado y te encuentro una."
+          ],
+          "pt": [
+            "Isso não tá em nenhuma folha que eu trouxe. Me dá uma palavra de uma folha,",
+            "ou manda um SEND que eu acho uma."
           ]
         },
         {
@@ -3403,6 +5468,12 @@ export const STORY = {
           ],
           "ru": [
             "С этим к деду, а он сделает вид, что не слышит. ASK abel. Громко."
+          ],
+          "es": [
+            "Para eso querés a mi abuelo, y se va a hacer el sordo. ASK abel. Gritá."
+          ],
+          "pt": [
+            "Isso é com o meu avô, e ele vai fingir que não ouviu. ASK abel. Grita."
           ]
         },
         {
@@ -3411,6 +5482,12 @@ export const STORY = {
           ],
           "ru": [
             "Без понятия. Я дважды завалил гидравлику, учти. Спроси про то, у чего есть имя."
+          ],
+          "es": [
+            "Ni idea. Boché hidráulica dos veces, así que imaginate. Preguntame algo que tenga nombre."
+          ],
+          "pt": [
+            "Nem ideia. Reprovei duas vezes em hidráulica, leva isso em conta. Pergunta algo com nome."
           ]
         }
       ],
@@ -3424,7 +5501,14 @@ export const STORY = {
             "посыльный",
             "hydraulics",
             "гидравлика",
-            "гидравлику"
+            "гидравлику",
+            "cadete",
+            "mensajero",
+            "hidráulica",
+            "hidraulica",
+            "bici",
+            "bicicleta",
+            "mensageiro"
           ],
           "text": {
             "en": [
@@ -3434,6 +5518,15 @@ export const STORY = {
             "ru": [
               "Двадцать два. Третий курс, гидравлика, вторая попытка. Во время потопа, который профессора",
               "называют наглядным материалом, а мой велосипед называет иначе."
+            ],
+            "es": [
+              "Veintidós. Tercer año de hidráulica, segundo intento. En plena inundación, que mis profes",
+              "llaman una oportunidad de aprendizaje y mi bici llama de otra manera."
+            ],
+            "pt": [
+              "Vinte e dois. Terceiro ano de hidráulica, segunda tentativa.",
+              "Numa enchente, que meus professores",
+              "chamam de oportunidade pedagógica e minha bicicleta chama de outra coisa."
             ]
           }
         },
@@ -3448,7 +5541,19 @@ export const STORY = {
             "кухне",
             "fe",
             "bank",
-            "банке"
+            "банке",
+            "abuelo",
+            "cocina",
+            "vida",
+            "banco",
+            "cola",
+            "avô",
+            "avo",
+            "vovô",
+            "vovo",
+            "cozinha",
+            "fe de vida",
+            "assinatura"
           ],
           "text": {
             "en": [
@@ -3462,6 +5567,19 @@ export const STORY = {
               "я стою в очереди, банк говорит, что подпись не сходится.",
               "Подписывается, будто за ним гонятся.",
               "Говорю ему: потренируйся. Он говорит, что поздно учить собственное имя."
+            ],
+            "es": [
+              "Lo certificaron hace años. Desde entonces, todos los meses, una fe de vida:",
+              "él firma que está vivo,",
+              "yo hago la cola, el banco dice que la firma no coincide. Firma como alguien al que corren.",
+              "Le dije que practique. Dice que está muy viejo para aprender su propio nombre."
+            ],
+            "pt": [
+              "Certificaram ele faz anos. Desde então, todo mês, uma fe de vida:",
+              "ele assina que tá vivo,",
+              "eu pego fila, o banco diz que a assinatura não confere.",
+              "Ele assina feito quem tá sendo perseguido.",
+              "Falei pra ele treinar. Ele diz que tá velho demais pra aprender o próprio nome."
             ]
           }
         },
@@ -3476,7 +5594,27 @@ export const STORY = {
             "auctioneer",
             "аукционист",
             "bet",
-            "пари"
+            "пари",
+            "zapatos",
+            "zapato",
+            "martillero",
+            "rematador",
+            "apuesta",
+            "estimación",
+            "estimacion",
+            "sánguche",
+            "sanguche",
+            "sándwich",
+            "sandwich",
+            "agustín",
+            "agustin",
+            "sapato",
+            "sapatos",
+            "leiloeiro",
+            "aposta",
+            "apostas",
+            "sanduíche",
+            "sanduiche"
           ],
           "text": {
             "en": [
@@ -3489,6 +5627,18 @@ export const STORY = {
               "Оценил меня в девять. Потом в двенадцать. Слово не говорит. Я всё перепробовал.",
               "Спросил, сколько стоит сэндвич. Он: «По какой оценке переходит сэндвич». Он хороший.",
               "Не говори ему. Потребует атрибуцию."
+            ],
+            "es": [
+              "Me tasó en nueve. Después en doce. La palabra no la dice. Probé de todo.",
+              "Le pregunté cuánto sale un sánguche. Me dijo: 'A cuánto se transfiere un sánguche.'",
+              "Es un buen tipo.",
+              "No le digas. Lo querría atribuido."
+            ],
+            "pt": [
+              "Me avaliou em nove. Depois doze. Não fala a palavra. Já tentei de tudo.",
+              "Perguntei quanto custa um sanduíche. Ele disse: 'Por quanto um sanduíche é transferido.'",
+              "É gente boa.",
+              "Não conta pra ele. Ia querer atribuição."
             ]
           },
           "after_found": {
@@ -3499,6 +5649,14 @@ export const STORY = {
             "ru": [
               "Двенадцать. Это последняя, что я видел. Думал, к Пасхе будет пятнадцать.",
               "Спроси что-нибудь другое."
+            ],
+            "es": [
+              "Doce. Esa fue la última que vi. Pensé que para Pascuas llegaba a quince.",
+              "Preguntame otra cosa."
+            ],
+            "pt": [
+              "Doze. Foi a última que vi. Achei que chegava a quinze até a Páscoa.",
+              "Pergunta outra coisa."
             ]
           }
         },
@@ -3511,7 +5669,13 @@ export const STORY = {
             "рокамора",
             "lie",
             "hat",
-            "шляпа"
+            "шляпа",
+            "escribana",
+            "mentira",
+            "mentiras",
+            "sombrero",
+            "chapéu",
+            "chapeu"
           ],
           "text": {
             "en": [
@@ -3521,6 +5685,14 @@ export const STORY = {
             "ru": [
               "Я веду счёт, на скольких враках её поймал. Пока одиннадцать вопросов.",
               "Счёт всё ещё ноль. Спросил, идёт ли дождь. Она: «Шёл, когда я смотрела»."
+            ],
+            "es": [
+              "Llevo la cuenta de las mentiras que le agarré. Once preguntas hasta ahora.",
+              "Sigue en cero. Le pregunté si llovía. Me dijo: 'Llovía la última vez que miré.'"
+            ],
+            "pt": [
+              "Mantenho a conta das mentiras que peguei ela contando. Onze perguntas até agora.",
+              "Segue zero. Perguntei se tava chovendo. Ela disse: 'Estava, quando olhei pela última vez.'"
             ]
           }
         },
@@ -3535,7 +5707,22 @@ export const STORY = {
             "year",
             "год",
             "native",
-            "legacy"
+            "legacy",
+            "lápiz",
+            "lapiz",
+            "fecha",
+            "fechas",
+            "año",
+            "ano",
+            "años",
+            "anos",
+            "nested",
+            "dirección",
+            "direccion",
+            "lápis",
+            "lapis",
+            "data",
+            "datas"
           ],
           "text": {
             "en": [
@@ -3546,6 +5733,16 @@ export const STORY = {
             "ru": [
               "Даты на бумаге нет. В этом весь приём. TXLOG <адрес> ALL, самое старое внизу.",
               "Кто это пишет, узнаёт время по чужим людям. Я так же, по автобусам."
+            ],
+            "es": [
+              "La fecha no está en el papel. Ahí está toda la gracia.",
+              "TXLOG <dirección> ALL, lo más viejo abajo.",
+              "El que escribe esto saca la hora de los desconocidos. Yo hago lo mismo con los bondis."
+            ],
+            "pt": [
+              "A data não tá no papel. Esse é o truque todo.",
+              "TXLOG <endereço> ALL, o mais antigo embaixo.",
+              "Quem escreve isso vê as horas pelos estranhos. Eu faço igual, com ônibus."
             ]
           }
         },
@@ -3561,7 +5758,26 @@ export const STORY = {
             "neighbours",
             "соседи",
             "basement",
-            "подвал"
+            "подвал",
+            "bomba",
+            "bombas",
+            "bombeo",
+            "parte",
+            "vecinos",
+            "vecino",
+            "sótano",
+            "sotano",
+            "sótanos",
+            "sotanos",
+            "medias",
+            "bombeamento",
+            "registro",
+            "vizinhos",
+            "vizinho",
+            "porão",
+            "porao",
+            "meia",
+            "meias"
           ],
           "text": {
             "en": [
@@ -3575,6 +5791,18 @@ export const STORY = {
               "Два дома, одна улица, одна ночь.",
               "Я этот экзамен дважды завалил, так что я ничего не говорю.",
               "Я только говорю, что носки сухие."
+            ],
+            "es": [
+              "Me paré en el sótano de al lado. En medias. Medias secas.",
+              "Dos edificios, una calle, una noche.",
+              "Este examen lo boché dos veces, así que no digo nada.",
+              "Digo nomás que las medias estaban secas."
+            ],
+            "pt": [
+              "Fiquei no porão do lado. De meia. Meia seca.",
+              "Dois prédios, uma rua, uma noite.",
+              "Já reprovei duas vezes nessa matéria, então não tô dizendo nada.",
+              "Só tô dizendo que as meias tavam secas."
             ]
           }
         },
@@ -3590,7 +5818,18 @@ export const STORY = {
             "передан",
             "board",
             "доска",
-            "доски"
+            "доски",
+            "operador",
+            "operadores",
+            "operadora",
+            "contrato",
+            "contratos",
+            "reasignado",
+            "tablero",
+            "propina",
+            "reatribuído",
+            "reatribuido",
+            "quadro"
           ],
           "text": {
             "en": [
@@ -3601,6 +5840,16 @@ export const STORY = {
             "ru": [
               "Кто-то работает по твоей доске. Берёт раньше, чем ты откроешь, без долгов, без разговоров.",
               "Один раз я им возил. Чаевые ровно по тарифу. Спросили, какой ты. Я сказал: мокрый."
+            ],
+            "es": [
+              "Alguien te está laburando el tablero. Agarra antes de que abras, sin favores, sin charla.",
+              "Una vez le llevé algo. Dejó la propina exacta. Me preguntó cómo eras.",
+              "Le dije que goteabas."
+            ],
+            "pt": [
+              "Tem alguém mexendo no seu quadro. Pega antes de você abrir, sem favor, sem conversa.",
+              "Já fiz uma entrega pra essa pessoa. Gorjeta na medida exata. Perguntou como você era.",
+              "Falei: pingando."
             ]
           }
         },
@@ -3613,7 +5862,15 @@ export const STORY = {
             "bip-39",
             "bip39",
             "word",
-            "слово"
+            "слово",
+            "lista",
+            "listas",
+            "palabra",
+            "palabras",
+            "letras",
+            "diccionario",
+            "palavra",
+            "palavras"
           ],
           "text": {
             "en": [
@@ -3623,6 +5880,14 @@ export const STORY = {
             "ru": [
               "Две тысячи сорок восемь слов, и каждое определяется первыми четырьмя буквами.",
               "Больше в этой стране ничто ничем не определяется. Читаю в автобусе. Успокаивает."
+            ],
+            "es": [
+              "Dos mil cuarenta y ocho palabras y a cada una la definen sus primeras cuatro letras.",
+              "En este país nada más se define por nada. Lo leí en el bondi. Me relaja."
+            ],
+            "pt": [
+              "Duas mil e quarenta e oito palavras, e cada uma se resolve nas quatro primeiras letras.",
+              "Neste país mais nada se resolve com coisa nenhuma. Li no ônibus. Relaxa."
             ]
           }
         },
@@ -3637,7 +5902,28 @@ export const STORY = {
             "задержка",
             "orbit",
             "ground",
-            "станция"
+            "станция",
+            "custodia",
+            "liberación",
+            "liberacion",
+            "demora",
+            "latencia",
+            "órbita",
+            "orbita",
+            "antena",
+            "antenas",
+            "estación",
+            "estacion",
+            "satélite",
+            "satelite",
+            "custódia",
+            "liberação",
+            "liberacao",
+            "atraso",
+            "estação",
+            "estacao",
+            "alô",
+            "alo"
           ],
           "text": {
             "en": [
@@ -3647,6 +5933,14 @@ export const STORY = {
             "ru": [
               "Позвонил тем, что с антеннами. Сказал: алло. Через две с половиной секунды: алло.",
               "К тому времени я сказал алло ещё раз. Это продолжалось долго. Это весь их продукт."
+            ],
+            "es": [
+              "Llamé a los de las antenas. Dije hola. Dos segundos y medio después, hola.",
+              "Para entonces yo ya había dicho hola otra vez. Esto siguió un rato. Es todo su producto."
+            ],
+            "pt": [
+              "Liguei pro pessoal das antenas. Falei alô. Dois segundos e meio depois, alô.",
+              "Aí eu já tinha falado alô de novo. Isso durou um tempo. É o produto inteiro deles."
             ]
           }
         },
@@ -3658,7 +5952,13 @@ export const STORY = {
             "ольмоса",
             "515",
             "medic",
-            "фельдшер"
+            "фельдшер",
+            "médico",
+            "medico",
+            "dársena",
+            "darsena",
+            "puerta",
+            "doutor"
           ],
           "text": {
             "en": [
@@ -3668,6 +5968,15 @@ export const STORY = {
             "ru": [
               "Ездил один раз. Никто не открывает. И никто не умер, что бы там ни было на твоём листе:",
               "почту кто-то забирает. Съездил бы снова, но Дарсена-Сур уходит под воду, улица за улицей."
+            ],
+            "es": [
+              "Fui una vez. No abre nadie. Muerto tampoco está, diga lo que diga tu hoja:",
+              "alguien entra la correspondencia.",
+              "Iría de nuevo, pero Dársena Sur se hunde, calle por calle."
+            ],
+            "pt": [
+              "Fui uma vez. Ninguém abre. Ninguém morreu também, diga sua folha o que disser:",
+              "alguém recolhe o correio. Eu voltava, mas Dársena Sur tá afundando, rua por rua."
             ]
           }
         },
@@ -3678,7 +5987,17 @@ export const STORY = {
             "блок",
             "блока",
             "блоки",
-            "квартал"
+            "квартал",
+            "bloque",
+            "bloques",
+            "cuadra",
+            "cuadras",
+            "bloco",
+            "blocos",
+            "quadra",
+            "quadras",
+            "quarteirão",
+            "quarteirao"
           ],
           "text": {
             "en": [
@@ -3688,6 +6007,15 @@ export const STORY = {
             "ru": [
               "Ты считаешь блоками, я кварталами. Твой блок десять минут. Мой квартал сто метров.",
               "Одно другому не мешает. Я только мокрее."
+            ],
+            "es": [
+              "Vos contás en bloques y yo en cuadras. Los tuyos duran diez minutos.",
+              "Las mías, cien metros.",
+              "Los dos tenemos razón. Yo estoy más empapado."
+            ],
+            "pt": [
+              "Você conta em blocos. Eu também, só que os meus têm nome de quadra.",
+              "Os seus duram dez minutos, os meus têm cem metros. Os dois tamos certos. Eu, mais molhado."
             ]
           }
         },
@@ -3699,7 +6027,17 @@ export const STORY = {
             "energy",
             "энергетический",
             "far",
-            "конца"
+            "конца",
+            "torre",
+            "catalinas",
+            "energía",
+            "energia",
+            "ascensor",
+            "extremo",
+            "opuesto",
+            "extremidade",
+            "oposta",
+            "elevador"
           ],
           "text": {
             "en": [
@@ -3710,6 +6048,16 @@ export const STORY = {
             "ru": [
               "Возил в Каталинас однажды. Лифт для всех остальных идёт до двадцать восьмого.",
               "Человек сказал, что за пакетом спустятся. Таким тоном, что, может, и не при его жизни."
+            ],
+            "es": [
+              "Una vez le llevé algo a Catalinas. El ascensor para en el veintiocho para todos los demás.",
+              "Un señor dijo que alguien iba a bajar a buscarlo,",
+              "en un tono que quería decir en esta vida o no."
+            ],
+            "pt": [
+              "Uma vez fiz entrega em Catalinas. O elevador para no vinte e oito pra todo mundo.",
+              "Um homem disse que alguém ia descer pra buscar,",
+              "num tom de ainda nesta vida, ou não."
             ]
           }
         },
@@ -3723,7 +6071,21 @@ export const STORY = {
             "устава",
             "article",
             "статья",
-            "статью"
+            "статью",
+            "tontina",
+            "tontinas",
+            "estatuto",
+            "estatutos",
+            "artículo",
+            "articulo",
+            "artículos",
+            "articulos",
+            "cuenta",
+            "suma",
+            "artigo",
+            "artigos",
+            "conta",
+            "contas"
           ],
           "text": {
             "en": [
@@ -3733,10 +6095,32 @@ export const STORY = {
             "ru": [
               "Я посчитал. Лучше бы не считал. Деда не спрашивай, я уже пробовал.",
               "Сделал вид, что кипит чайник. У него нет такого громкого чайника."
+            ],
+            "es": [
+              "Hice la cuenta. Ojalá no. No le preguntes a mi abuelo, ya probé.",
+              "Se hizo el que tenía la pava puesta. No tiene una pava tan ruidosa."
+            ],
+            "pt": [
+              "Fiz a conta. Queria não ter feito. Não pergunta pro meu avô, já tentei.",
+              "Ele fingiu que a chaleira tava no fogo. Ele não tem chaleira tão barulhenta."
             ]
           }
         }
-      ]
+      ],
+      "cite_nudge": {
+        "en": [
+          "Why show me? I carried it here. Show it to someone who is lying."
+        ],
+        "ru": [
+          "Мне-то зачем? Я это и принёс. Покажи тому, кто врёт."
+        ],
+        "es": [
+          "¿Para qué me lo mostrás? Lo traje yo. Mostráselo a alguien que esté mintiendo."
+        ],
+        "pt": [
+          "Por que mostrar pra mim? Fui eu que trouxe. Mostra pra alguém que esteja mentindo."
+        ]
+      }
     }
   },
   "cites": [
@@ -3752,6 +6136,16 @@ export const STORY = {
         "ru": [
           "Покупал. Продавал. Теперь найдите мне «заказывал». Давайте, я подожду.",
           "Она велит вписать меня заказчиком и ни разу не говорит, что я им был. Это мастерство."
+        ],
+        "es": [
+          "Compró. Vendió. Ahora encuéntreme 'encargó'. Adelante, yo espero.",
+          "Le dice que me anote como cliente, y ni una vez dice que lo fui.",
+          "Eso es oficio."
+        ],
+        "pt": [
+          "Comprou. Vendeu. Agora me ache 'encomendou'. Vá, eu espero.",
+          "Ela manda escrever meu nome como cliente e nem uma vez diz que fui.",
+          "Isso é ofício."
         ]
       },
       "gives": "ordered"
@@ -3769,6 +6163,16 @@ export const STORY = {
           "А. Да. Это мой бланк. Я сказал «был ли предмет» и был при этом очень забавен.",
           "Больше не буду. Предмета не было. Была строка в книге.",
           "Если хотите знать зачем, читайте лот 40."
+        ],
+        "es": [
+          "Ah. Sí. Ese es uno de los míos. Dije 'si hubo o no lote' y estaba siendo gracioso.",
+          "Ya paro. No hubo lote. Hubo una línea en un libro.",
+          "Si quiere saber por qué, lea el Lote 40."
+        ],
+        "pt": [
+          "Ah. Sim. Essa é das minhas. Eu disse 'se havia lote', e estava sendo espirituoso.",
+          "Agora paro. Não havia lote. Havia uma linha num livro.",
+          "Se quiser saber o porquê, leia o Lote 40."
         ]
       },
       "gives": "statute"
@@ -3784,6 +6188,14 @@ export const STORY = {
         "ru": [
           "Экземпляр одиннадцатый из одиннадцати. Мой тоже. Я не знал, что у него есть пара.",
           "Кто-то годами продавал мне половину парной вещи. Обидно, чисто профессионально."
+        ],
+        "es": [
+          "Copia once de once. La mía también. Nunca supe que tuviera un hermano.",
+          "Alguien lleva años vendiéndome medio par. Descubro que me ofende profesionalmente."
+        ],
+        "pt": [
+          "Cópia onze de onze. A minha também. Nunca soube que tinha uma irmã.",
+          "Há anos alguém me vende meio par. Descubro que isso me ofende, profissionalmente."
         ]
       },
       "gives": "mirror"
@@ -3799,6 +6211,16 @@ export const STORY = {
         "ru": [
           "Я написала, что он покупал и продавал. Что гонорар придёт, если вы впишете его имя.",
           "Я не писала, что это верно. Теперь можете спросить об этом."
+        ],
+        "es": [
+          "Escribí que compró y vendió.",
+          "Escribí que sus honorarios se acreditarían si escribía su nombre.",
+          "No escribí que fuera correcto. Ahora puede preguntarme eso."
+        ],
+        "pt": [
+          "Escrevi que ele comprava e vendia.",
+          "Escrevi que seus honorários sairiam se o senhor escrevesse o nome dele.",
+          "Não escrevi que era correto. O senhor pode me perguntar isso agora."
         ]
       },
       "gives": "correct"
@@ -3816,6 +6238,18 @@ export const STORY = {
         "ru": [
           "Да. Наш подвал и ещё три, та же бригада, тот же час. Цифры как намерили.",
           "Графу соседей вы видели. Я сказала, что журнал точен. Сегодня я к этому ничего не добавлю."
+        ],
+        "es": [
+          "Sí. Nuestro sótano y otros tres, la misma cuadrilla, la misma hora.",
+          "Las cifras son las medidas.",
+          "Usted vio la columna de los vecinos. Le dije que el parte era exacto.",
+          "Hoy no voy a agregar nada a eso."
+        ],
+        "pt": [
+          "Sim. Nosso porão e mais três, a mesma equipe, a mesma hora.",
+          "Os números são os medidos.",
+          "O senhor viu a coluna dos vizinhos. Eu disse que o registro estava exato.",
+          "Não acrescentarei nada a isso hoje."
         ]
       },
       "gives": "neighbours"
@@ -3831,6 +6265,14 @@ export const STORY = {
         "ru": [
           "Вы произносите «отклонено» так, будто на этом всё кончается. Я вам этого не говорила.",
           "Это графа на странице. Сама подача остаётся там, где лежит."
+        ],
+        "es": [
+          "Usted dijo 'rechazada' como si eso fuera el final de algo. Nunca le dije que lo fuera.",
+          "Es una columna en una página. La presentación misma queda donde está."
+        ],
+        "pt": [
+          "O senhor disse 'rejeitada' como se isso fosse o fim de alguma coisa. Nunca lhe disse que era.",
+          "É uma coluna numa página. A apresentação fica onde está."
         ]
       },
       "gives": "retained"
@@ -3849,6 +6291,18 @@ export const STORY = {
           "Ладно. Копирка не спит. В десять минут третьего я был на лестнице.",
           "В конторе горела лампа. Кто-то принёс свои чернила, запах был слышен, дорогие,",
           "не наши сине-чёрные. Копию для ревизоров уже унесли. Никто и не узнал бы, кроме лестницы."
+        ],
+        "es": [
+          "Está bien. El carbónico no duerme. A las dos y diez yo estaba en la escalera.",
+          "Lámpara prendida en la oficina. Alguien había traído su propia tinta, se olía, de la cara,",
+          "no nuestro azul negro. La copia de los auditores ya no estaba.",
+          "Así nadie se iba a enterar nunca, salvo la escalera."
+        ],
+        "pt": [
+          "Tudo bem. Carbono não dorme. Eu estava na escada às duas e dez.",
+          "Lâmpada acesa no escritório. Alguém trouxe tinta própria, dava pra sentir o cheiro, coisa cara,",
+          "não o nosso azul-preto. A cópia dos auditores já não estava lá.",
+          "Assim ninguém ia saber nunca, só a escada."
         ]
       },
       "gives": "lamp"
@@ -3868,6 +6322,18 @@ export const STORY = {
           "В списке я номер между кем-то и всей суммой. Вне списка я старик с чайником.",
           "Малец думает, что это бумажки. Пусть так и думает. Мы поняли друг друга?",
           "Я тебя прекрасно слышу."
+        ],
+        "es": [
+          "Así que leíste el artículo 8. Entonces sabés lo que me haría una firma buena.",
+          "En la lista soy un número entre alguien y todo el lote.",
+          "Afuera soy un viejo con una pava.",
+          "El pibe cree que es papeleo. Que siga siendo papeleo. ¿Estamos? Te oigo perfecto."
+        ],
+        "pt": [
+          "Então você leu o Artigo 8. Então sabe o que uma assinatura boa faria comigo.",
+          "Na lista eu sou um número entre alguém e o lote inteiro.",
+          "Fora dela sou um velho com uma chaleira.",
+          "O menino acha que é papelada. Continua papelada. Estamos entendidos? Estou ouvindo muito bem."
         ]
       },
       "gives": "signature"
@@ -3883,6 +6349,15 @@ export const STORY = {
         "ru": [
           "Рамиро? На этой бумаге мёртв, вижу. Хорошая бумага. Кто её писал, с ним не играл.",
           "Он не мёртв, он проигрывает. И дверь не откроет, так что второй раз не повторю."
+        ],
+        "es": [
+          "¿Ramiro? Muerto en ese papel, ya veo. Lindo papel. El que lo escribió nunca jugó con él.",
+          "No está muerto, está perdiendo.",
+          "Y no abre la puerta, así que no me hagas decirlo dos veces."
+        ],
+        "pt": [
+          "Ramiro? Morto nesse papel, estou vendo. Bonito papel. Quem escreveu nunca jogou com ele.",
+          "Ele não está morto, está perdendo. E não atende a porta, então não me faz repetir."
         ]
       },
       "gives": "truco"
@@ -3893,11 +6368,15 @@ export const STORY = {
       "id": "statute",
       "district": {
         "en": "Recoleta",
-        "ru": "Реколета"
+        "ru": "Реколета",
+        "es": "Recoleta",
+        "pt": "Recoleta"
       },
       "label": {
         "en": "Fetch Lot 40 from the room on Quintana",
-        "ru": "Забрать лот 40 из зала на Кинтане"
+        "ru": "Забрать лот 40 из зала на Кинтане",
+        "es": "Traer el Lote 40 del salón de Quintana",
+        "pt": "Buscar o Lote 40 na sala da Quintana"
       },
       "blocks": 2,
       "gives": "statute",
@@ -3908,6 +6387,12 @@ export const STORY = {
         ],
         "ru": [
           "Кинтана. Если спросят, я участник торгов. Табличка есть. Это сковородка, но она есть."
+        ],
+        "es": [
+          "Quintana. Si alguien pregunta, soy postor. Tengo paleta. Es una sartén, pero la tengo."
+        ],
+        "pt": [
+          "Quintana. Se alguém perguntar, sou licitante. Tenho plaquinha. É uma frigideira, mas tenho."
         ]
       },
       "lalo_back": {
@@ -3918,6 +6403,14 @@ export const STORY = {
         "ru": [
           "Лот 40. Пока шли до двери, он пытался взять с меня комиссию покупателя.",
           "Сказал ему, что дверь это я. Том тяжелее, чем кажется, и смотрит на тебя."
+        ],
+        "es": [
+          "Lote 40. Quiso cobrarme comisión de comprador en el camino a la puerta.",
+          "Le dije que la puerta era yo. Pesa más de lo que parece, y te mira."
+        ],
+        "pt": [
+          "Lote 40. Ele tentou me cobrar comissão de comprador no caminho até a porta.",
+          "Falei que a porta era eu. É mais pesado do que parece, e ainda te encara."
         ]
       },
       "lalo_back_after_found": {
@@ -3928,6 +6421,15 @@ export const STORY = {
         "ru": [
           "Лот 40. Двор в ленте. За столом никого. Стоял на полке с биркой.",
           "Я оставил в его ящике квитанцию. Он бы потребовал квитанцию."
+        ],
+        "es": [
+          "Lote 40. El patio está con cinta. Nadie en el escritorio.",
+          "Estaba en el estante, con etiqueta.",
+          "Le dejé un recibo en el cajón. Él habría querido un recibo."
+        ],
+        "pt": [
+          "Lote 40. O pátio tá isolado. Ninguém na mesa. Tava na prateleira, com a etiqueta.",
+          "Deixei recibo na gaveta dele. Ele ia querer recibo."
         ]
       }
     },
@@ -3935,11 +6437,15 @@ export const STORY = {
       "id": "page-128",
       "district": {
         "en": "Barracas",
-        "ru": "Барракас"
+        "ru": "Барракас",
+        "es": "Barracas",
+        "pt": "Barracas"
       },
       "label": {
         "en": "Bring the carbon from your grandfather's kitchen",
-        "ru": "Привезти копирку с кухни деда"
+        "ru": "Привезти копирку с кухни деда",
+        "es": "Traer el carbónico de la cocina de tu abuelo",
+        "pt": "Trazer o carbono da cozinha do seu avô"
       },
       "blocks": 1,
       "gives": "page-128",
@@ -3950,6 +6456,13 @@ export const STORY = {
         ],
         "ru": [
           "Она у него под чайником. Скажет, что это подставка. Это подставка. Вернусь через блок."
+        ],
+        "es": [
+          "Lo tiene abajo de la tetera. Te va a decir que es un posavasos.",
+          "Es un posavasos. Vuelvo en un bloque."
+        ],
+        "pt": [
+          "Ele guarda debaixo do bule. Vai dizer que é porta-copo. É porta-copo. Volto em um bloco."
         ]
       },
       "lalo_back": {
@@ -3960,6 +6473,14 @@ export const STORY = {
         "ru": [
           "Он сделал вид, что не слышит. Потом сделал вид, что слышит что-то другое.",
           "На ней след от чашки. Мне говорили, от этого дороже."
+        ],
+        "es": [
+          "Se hizo el que no me oía. Después se hizo el que oía otra cosa.",
+          "Tiene un círculo de té, que según me dicen le suma valor."
+        ],
+        "pt": [
+          "Ele fingiu que não me ouviu. Depois fingiu ouvir outra coisa.",
+          "Tem uma marca de chá, que dizem que valoriza."
         ]
       }
     },
@@ -3967,11 +6488,15 @@ export const STORY = {
       "id": "pump-log",
       "district": {
         "en": "Microcentro, La City",
-        "ru": "Микросентро, La City"
+        "ru": "Микросентро, La City",
+        "es": "Microcentro, La City",
+        "pt": "Microcentro, La City"
       },
       "label": {
         "en": "Get the pumping log off Reconquista",
-        "ru": "Взять журнал откачки на Реконкисте"
+        "ru": "Взять журнал откачки на Реконкисте",
+        "es": "Conseguir el parte de bombeo de Reconquista",
+        "pt": "Pegar o registro de bombeamento na Reconquista"
       },
       "blocks": 1,
       "gives": "pump-log",
@@ -3982,6 +6507,12 @@ export const STORY = {
         ],
         "ru": [
           "Журнал откачки. Наконец-то мой предмет. Не радуйся, я его дважды завалил."
+        ],
+        "es": [
+          "Un parte de bombeo. Por fin, mi materia. No te entusiasmes, la boché dos veces."
+        ],
+        "pt": [
+          "Registro de bombeamento. Até que enfim, minha matéria. Calma, já reprovei duas vezes."
         ]
       },
       "lalo_back": {
@@ -3992,6 +6523,14 @@ export const STORY = {
         "ru": [
           "Держи. Сосед пустил меня постоять в своём подвале. В носках. В сухих носках.",
           "Я ничего не говорю. Прошу отметить, что я ничего не говорю."
+        ],
+        "es": [
+          "Tomá. El de al lado me dejó pararme en su sótano. En medias. Medias secas.",
+          "No digo nada. Quiero que conste que no digo nada."
+        ],
+        "pt": [
+          "Toma. O vizinho me deixou ficar no porão dele. De meia. Meia seca.",
+          "Não tô dizendo nada. Quero que fique registrado que não tô dizendo nada."
         ]
       }
     },
@@ -3999,11 +6538,15 @@ export const STORY = {
       "id": "register",
       "district": {
         "en": "Balvanera",
-        "ru": "Бальванера"
+        "ru": "Бальванера",
+        "es": "Balvanera",
+        "pt": "Balvanera"
       },
       "label": {
         "en": "Ask what happens to a rejected filing",
-        "ru": "Узнать, что бывает с отклонённой подачей"
+        "ru": "Узнать, что бывает с отклонённой подачей",
+        "es": "Preguntar qué pasa con una presentación rechazada",
+        "pt": "Perguntar o que acontece com uma apresentação rejeitada"
       },
       "blocks": 1,
       "gives": "incoming-register",
@@ -4014,6 +6557,14 @@ export const STORY = {
         ],
         "ru": [
           "Ринкон. Над галантереей. Вывески нет, номер кабинета остался. Моя контора."
+        ],
+        "es": [
+          "Rincón. Arriba de la mercería. El cartel ya no está, el número de oficina quedó.",
+          "Mi tipo de oficina."
+        ],
+        "pt": [
+          "Rincón. Em cima do armarinho. A placa foi embora, o número da sala ficou.",
+          "Meu tipo de escritório."
         ]
       },
       "lalo_back": {
@@ -4026,6 +6577,16 @@ export const STORY = {
           "Единственная очередь в городе, которая движется.",
           "Спросил, получил страницу, сухую, с печатью, за двадцать секунд.",
           "В банке мне дольше объясняют, что дед мёртв."
+        ],
+        "es": [
+          "La única cola de la ciudad que avanza.",
+          "Hice mi pregunta, me dieron una página, seca, sellada, veinte segundos.",
+          "Esperé más para que un banco me diga que mi abuelo está muerto."
+        ],
+        "pt": [
+          "A única fila da cidade que anda.",
+          "Fiz a pergunta, ganhei uma página, seca, carimbada, vinte segundos.",
+          "Já esperei mais pro banco me dizer que meu avô morreu."
         ]
       }
     },
@@ -4033,11 +6594,15 @@ export const STORY = {
       "id": "olmos",
       "district": {
         "en": "Dársena Sur",
-        "ru": "Дарсена-Сур"
+        "ru": "Дарсена-Сур",
+        "es": "Dársena Sur",
+        "pt": "Dársena Sur"
       },
       "label": {
         "en": "Knock on R. Olmos's door, while there's still a street",
-        "ru": "Постучать к Р. Ольмосу, пока там ещё есть улица"
+        "ru": "Постучать к Р. Ольмосу, пока там ещё есть улица",
+        "es": "Golpear la puerta de R. Olmos, mientras quede calle",
+        "pt": "Bater na porta de R. Olmos, enquanto ainda há rua"
       },
       "blocks": 2,
       "gives": "olmos-door",
@@ -4049,6 +6614,14 @@ export const STORY = {
         "ru": [
           "Дарсена-Сур. Последний автобус ещё ходит. Последний автобус это лодка.",
           "Через два блока, если лодка вернётся."
+        ],
+        "es": [
+          "Dársena Sur. El último bondi sigue andando. El último bondi es un bote.",
+          "Vuelvo en dos, si vuelve el bote."
+        ],
+        "pt": [
+          "Dársena Sur. O último ônibus ainda roda. O último ônibus é um barco.",
+          "Volto em dois, se o barco voltar."
         ]
       },
       "lalo_back": {
@@ -4059,6 +6632,14 @@ export const STORY = {
         "ru": [
           "Никто не открыл. Стучал десять минут и нарисовал тебе дверь.",
           "Он не мёртв. Он просто очень хорошо умеет не быть дома."
+        ],
+        "es": [
+          "No atendió nadie. Golpeé diez minutos y te dibujé la puerta.",
+          "No está muerto. Nomás es muy bueno para no estar en casa."
+        ],
+        "pt": [
+          "Ninguém atendeu. Bati dez minutos e desenhei a porta pra você.",
+          "Ele não morreu. Só é muito bom em não estar em casa."
         ]
       }
     }
@@ -4072,6 +6653,14 @@ export const STORY = {
       "ru": [
         "Квитанция приходит минута в минуту, по официальному курсу. Ниже напечатано: «Мы находим.",
         "Остальное в этой строке ваше»."
+      ],
+      "es": [
+        "Llega un recibo, al minuto, al cambio oficial. Abajo, a máquina: 'Encontramos.",
+        "El resto de esa fila es suyo.'"
+      ],
+      "pt": [
+        "Chega um recibo, no minuto exato, na taxa oficial. Datilografado embaixo: 'Nós encontramos.",
+        "O resto dessa linha é seu.'"
       ]
     },
     "martillero": {
@@ -4082,6 +6671,14 @@ export const STORY = {
       "ru": [
         "Конверт без обратного адреса. Внутри твоя отклонённая строка с оценкой:",
         "«Приписывается любителю»."
+      ],
+      "es": [
+        "Un sobre sin remitente.",
+        "Adentro, tu fila rechazada, tasada: 'Atribuida a un aficionado.'"
+      ],
+      "pt": [
+        "Um envelope sem remetente.",
+        "Dentro, sua linha rejeitada, avaliada: 'Atribuída a um amador.'"
       ]
     },
     "bajofondo": {
@@ -4092,6 +6689,14 @@ export const STORY = {
       "ru": [
         "Следующая выплата BAJOFONDO опаздывает на два прилива. К ней приложена карта сектора.",
         "Твоя улица отмечена карандашом как глубина."
+      ],
+      "es": [
+        "El próximo pago de BAJOFONDO llega dos mareas tarde. Con él, una carta de sector.",
+        "Tu calle está marcada, a lápiz, como una profundidad."
+      ],
+      "pt": [
+        "O próximo pagamento do BAJOFONDO chega duas marés atrasado. Junto, uma carta por setores.",
+        "Sua rua está marcada, a lápis, como profundidade."
       ]
     },
     "cruz-del-sur": {
@@ -4102,6 +6707,14 @@ export const STORY = {
       "ru": [
         "CRUZ DEL SUR подтверждает получение твоего обвинения через две с половиной секунды после",
         "того, как ты о нём забыл. И снова, каждый час."
+      ],
+      "es": [
+        "CRUZ DEL SUR acusa recibo de tu acusación dos segundos y medio después de que dejaste",
+        "de pensarla. Después otra vez, cada hora."
+      ],
+      "pt": [
+        "A CRUZ DEL SUR confirma sua acusação dois segundos e meio depois de você parar de pensar nela.",
+        "Depois de novo, de hora em hora."
       ]
     },
     "sanatorio": {
@@ -4112,6 +6725,14 @@ export const STORY = {
       "ru": [
         "SANATORIO NORTE благодарит за интерес и напоминает, что обследование для вас бесплатно.",
         "В первый раз."
+      ],
+      "es": [
+        "SANATORIO NORTE agradece su interés y le recuerda que su control es sin cargo.",
+        "La primera vez."
+      ],
+      "pt": [
+        "O SANATORIO NORTE agradece seu interesse e lembra que seu check-up é gratuito.",
+        "Da primeira vez."
       ]
     },
     "mesa-entradas": {
@@ -4122,6 +6743,14 @@ export const STORY = {
       "ru": [
         "Ваша подача с упоминанием этого ведомства получена и пронумерована.",
         "Ответ последует через шесть месяцев. В этом письме не хватает одного ██████."
+      ],
+      "es": [
+        "Su presentación que nombra a esta oficina fue recibida y numerada.",
+        "La respuesta sale en seis meses. A esta carta le falta una ██████."
+      ],
+      "pt": [
+        "Sua apresentação citando esta repartição foi recebida e numerada.",
+        "Resposta em seis meses. Falta a esta carta uma ██████."
       ]
     },
     "salar": {
@@ -4132,6 +6761,14 @@ export const STORY = {
       "ru": [
         "SALAR не отвечает. В следующем месяце счёт за электричество в твоём квартале чуть выше.",
         "Через несколько десятилетий это будет неважно."
+      ],
+      "es": [
+        "SALAR no contesta. El mes que viene la luz de tu cuadra sale un poco más cara.",
+        "En unas décadas esto no va a haber importado."
+      ],
+      "pt": [
+        "O SALAR não responde. No mês seguinte a conta de luz da sua quadra vem um pouco mais alta.",
+        "Em algumas décadas isso não terá tido importância."
       ]
     },
     "aleph": {
@@ -4142,6 +6779,14 @@ export const STORY = {
       "ru": [
         "Твой счёт в баре там же, где ты его оставил. На нём карандашом: «чужая ошибка.",
         "такие мы тоже храним»."
+      ],
+      "es": [
+        "Tu cuenta del bar está exactamente donde la dejaste. Encima, a lápiz: 'error de otro.",
+        "esos también los guardamos.'"
+      ],
+      "pt": [
+        "Sua conta do bar está exatamente onde você deixou. Nela, a lápis: 'o erro de outra pessoa.",
+        "também guardamos esses.'"
       ]
     }
   },
@@ -4160,6 +6805,21 @@ export const STORY = {
       "",
       "Ниже шариковой ручкой: «Это они. По одному слову за раз. Хватит гадать.",
       "Чистые копии я привезу»."
+    ],
+    "es": [
+      "AVISO. La cantidad de sus presentaciones rechazadas ha llegado a conocimiento de la",
+      "carpeta especial.",
+      "Los papeles en su poder pueden completarse con ██████ sin previo aviso.",
+      "",
+      "Debajo, en birome: 'Son ellos. Una palabra por vez. Dejá de adivinar.",
+      "Puedo traerte copias limpias.'"
+    ],
+    "pt": [
+      "AVISO. O número das suas apresentações rejeitadas chegou ao conhecimento da pasta especial.",
+      "Papéis em seu poder podem ser completados com ██████ sem aviso prévio.",
+      "",
+      "Embaixo, a caneta: 'São eles. Uma palavra de cada vez. Para de chutar.",
+      "Posso trazer cópias limpas.'"
     ]
   },
   "levene_found": {
@@ -4193,6 +6853,41 @@ export const STORY = {
         "Ты думал, «отклонено» значит в корзину. Но это не значило «не подшито». Это значило папку,",
         "и папка дошла до него. — Ты вписал его имя, — говорит Лало. Это не вопрос.",
         "Он забирает пустые пакеты. Первый раз за всё время дверь закрывается тихо."
+      ],
+      "es": [
+        "Lalo no golpea. Siempre golpea. Es un número que hace, con el pie.",
+        "'Quintana. Se inundó el sótano. Lo bombearon esta mañana. Él estaba ahí abajo.'",
+        "'Los zapatos estaban en el tercer escalón. Uno al lado del otro. Secos.'",
+        "'El martes me pagó para mantenerlos secos. Él no baja ahí. No baja nunca.'",
+        "'Sin familia en el legajo. El médico preguntó si alguien podía decir quién era.",
+        "Así que lo dije.'",
+        "'Agustín Levene. Sin atribuido a. Sin círculo de. El nombre solo. Después firmé por él.'",
+        "Nadie sabe quién fue. Su legajo estaba abierto en el escritorio.",
+        "Arriba, una hoja que conocés:",
+        "ACTA. Cliente: MARTILLERO. RECHAZADA.",
+        "DICTAMEN N.º {n} · BLOQUE {height} · OPERADOR {operator}",
+        "Al margen, su letra: 'Atribuido al operador. Escuela de Rocamora.'",
+        "Creíste que rechazada quería decir la basura. Nunca quiso decir no archivada. Quería decir",
+        "una carpeta, y la carpeta le llegó a él.",
+        "'Escribiste su nombre', dice Lalo. No es una pregunta.",
+        "Junta las bolsas vacías. Por primera vez, cierra la puerta despacio."
+      ],
+      "pt": [
+        "Lalo não bate. Ele sempre bate. É uma gracinha dele, com o pé.",
+        "'Quintana. O porão alagou. Bombearam hoje de manhã. Ele estava lá embaixo.'",
+        "'Os sapatos estavam no terceiro degrau. Lado a lado. Secos.'",
+        "'Ele me pagou na terça pra manter eles secos. Ele não desce lá. Ele nunca desce.'",
+        "'Sem família na ficha. O médico perguntou se alguém podia dizer quem ele era. Aí eu disse.'",
+        "'Agustín Levene. Sem atribuído a. Sem círculo de. Só o nome. Depois assinei por ele.'",
+        "Ninguém sabe quem fez isso. O arquivo dele estava aberto na mesa.",
+        "Por cima, uma folha que você conhece:",
+        "ATA. Cliente: MARTILLERO. REJEITADA.",
+        "PARECER N.º {n} · BLOCO {height} · OPERADOR {operator}",
+        "Na margem, a letra dele: 'Atribuído ao operador. Escola de Rocamora.'",
+        "Você achou que rejeitada queria dizer lixo. Nunca quis dizer não arquivada.",
+        "Queria dizer uma pasta,",
+        "e a pasta chegou até ele. 'Você escreveu o nome dele', diz Lalo. Não é uma pergunta.",
+        "Ele pega os sacos vazios. Pela primeira vez, fecha a porta sem barulho."
       ]
     },
     "b": {
@@ -4227,6 +6922,41 @@ export const STORY = {
         "и это до него дошло. — Ты не вписывал, — говорит Лало. — Я смотрел. Не вписывал.",
         "Он забирает пустые пакеты. — Кто-то хотел, чтобы он думал, что впишешь.",
         "Первый раз за всё время дверь закрывается тихо."
+      ],
+      "es": [
+        "Lalo no golpea. Siempre golpea. Es un número que hace, con el pie.",
+        "'Quintana. Se inundó el sótano. Lo bombearon esta mañana. Él estaba ahí abajo.'",
+        "'Los zapatos estaban en el tercer escalón. Uno al lado del otro. Secos.'",
+        "'El martes me pagó para mantenerlos secos. Él no baja ahí. No baja nunca.'",
+        "'Sin familia en el legajo. El médico preguntó si alguien podía decir quién era.",
+        "Así que lo dije.'",
+        "'Agustín Levene. Sin atribuido a. Sin círculo de. El nombre solo. Después firmé por él.'",
+        "Nadie sabe quién fue. Su legajo estaba abierto en el escritorio.",
+        "Arriba, una hoja que conocés:",
+        "ESCRIBANÍA CERO. 'Escriba MARTILLERO en el Acta como cliente.' Abrochada, una boleta:",
+        "DICTAMEN N.º {n} · BLOQUE {height} · OPERADOR {operator}",
+        "Al margen, su letra: 'Cierto. Atribuido a una escribana. ¿Quién es el operador?'",
+        "Nunca escribiste su nombre. Alguien guardó tu número al lado igual,",
+        "y le llegó. 'No lo escribiste', dice Lalo. 'Me fijé. No lo escribiste.'",
+        "Junta las bolsas vacías. 'Alguien quería que él pensara que lo ibas a escribir.'",
+        "Por primera vez, cierra la puerta despacio."
+      ],
+      "pt": [
+        "Lalo não bate. Ele sempre bate. É uma gracinha dele, com o pé.",
+        "'Quintana. O porão alagou. Bombearam hoje de manhã. Ele estava lá embaixo.'",
+        "'Os sapatos estavam no terceiro degrau. Lado a lado. Secos.'",
+        "'Ele me pagou na terça pra manter eles secos. Ele não desce lá. Ele nunca desce.'",
+        "'Sem família na ficha. O médico perguntou se alguém podia dizer quem ele era. Aí eu disse.'",
+        "'Agustín Levene. Sem atribuído a. Sem círculo de. Só o nome. Depois assinei por ele.'",
+        "Ninguém sabe quem fez isso. O arquivo dele estava aberto na mesa.",
+        "Por cima, uma folha que você conhece:",
+        "ESCRIBANÍA CERO. 'Escreva MARTILLERO na Ata como cliente.' Presa a ela, uma tira de papel:",
+        "PARECER N.º {n} · BLOCO {height} · OPERADOR {operator}",
+        "Na margem, a letra dele: 'Verdadeiro. Atribuído a uma tabeliã. Quem é o operador?'",
+        "Você nunca escreveu o nome dele. Alguém guardou o seu número ao lado dele mesmo assim,",
+        "e isso chegou até ele. 'Você não escreveu', diz Lalo. 'Eu olhei. Você não escreveu.'",
+        "Ele pega os sacos vazios. 'Alguém queria que ele achasse que você ia escrever.'",
+        "Pela primeira vez, fecha a porta sem barulho."
       ]
     }
   },
@@ -4260,6 +6990,114 @@ export const STORY = {
       "из тех, кто ещё сидит на кухне.",
       "— Две тысячи сорок восемь строк. — Он всё равно считает. — Им нужны все, кроме одной.",
       "Он поднимает глаза. — Кроме какой?"
+    ],
+    "es": [
+      "Lalo lee el estatuto parado, goteando sobre el artículo 7. Después se sienta,",
+      "cosa que no hace.",
+      "'Es una tontina. Todos ponen. Te morís, tu parte va a los que quedan.'",
+      "'La última línea del libro se lleva todo. Bueno. Morboso, legal, muy siglo diecinueve.'",
+      "Vuelve al artículo 8 y lo sigue con el dedo.",
+      "'Un socio está vivo hasta que se certifique lo contrario. No hasta que se muera.",
+      "Hasta que se certifique.'",
+      "Tenés un certificado de la línea 515. Alguien lo vio vivo en 2024.",
+      "'El de mi abuelo lo enmarcamos. Está arriba de la pava.'",
+      "Acá nadie le roba a los muertos. No hace falta. Fabrican nuevos,",
+      "con gente que todavía está en la cocina.",
+      "'Dos mil cuarenta y ocho líneas.' Hace la cuenta igual. 'Necesitan a todos menos uno.'",
+      "Levanta la vista. '¿Cuál?'"
+    ],
+    "pt": [
+      "Lalo lê o estatuto de pé, pingando em cima do Artigo 7. Depois se senta,",
+      "coisa que ele não faz.",
+      "'É uma tontina. Todo mundo paga. Você morre, sua cota vai pra quem sobrou.'",
+      "'A última linha do livro leva tudo. Beleza. Mórbido, legal, bem século dezenove.'",
+      "Ele volta ao Artigo 8 e segue com o dedo.",
+      "'O sócio está vivo até que se certifique o contrário. Não até morrer.",
+      "Até certificarem.'",
+      "Você tem uma certidão da linha 515. Alguém o viu vivo em 2024.",
+      "'A gente emoldurou a do meu avô. Tá em cima da chaleira.'",
+      "Ninguém aqui rouba os mortos. Nem precisa. Fabricam mortos novos,",
+      "com gente que ainda está na cozinha.",
+      "'Duas mil e quarenta e oito linhas.' Ele faz a conta assim mesmo.",
+      "'Precisam de todas menos uma.'",
+      "Ele levanta os olhos. 'Qual?'"
+    ]
+  },
+  "word_labels": {
+    "ordered": {
+      "en": "ordered",
+      "ru": "заказывал",
+      "es": "encargó",
+      "pt": "encomendou"
+    },
+    "mirror": {
+      "en": "mirror",
+      "ru": "зеркало",
+      "es": "espejo",
+      "pt": "espelho"
+    },
+    "correct": {
+      "en": "correct",
+      "ru": "верно",
+      "es": "correcto",
+      "pt": "correto"
+    },
+    "neighbours": {
+      "en": "neighbours",
+      "ru": "соседи",
+      "es": "vecinos",
+      "pt": "vizinhos"
+    },
+    "retained": {
+      "en": "retained",
+      "ru": "хранятся",
+      "es": "conservadas",
+      "pt": "guardadas"
+    },
+    "lamp": {
+      "en": "lamp",
+      "ru": "лампа",
+      "es": "lámpara",
+      "pt": "lâmpada"
+    },
+    "signature": {
+      "en": "signature",
+      "ru": "подпись",
+      "es": "firma",
+      "pt": "assinatura"
+    },
+    "truco": {
+      "en": "truco",
+      "ru": "труко",
+      "es": "truco",
+      "pt": "truco"
+    }
+  },
+  "debt_call": {
+    "en": [
+      "lower case, no signature:",
+      "three. you were told it was being counted.",
+      "i do not take money. your copies spent a night with me and came back with a word missing from each.",
+      "the courier can bring clean ones. the next favour will cost more than a word."
+    ],
+    "ru": [
+      "строчные буквы, без подписи:",
+      "три. было сказано, что счёт идёт.",
+      "денег я не беру. твои копии провели у меня ночь и вернулись, в каждой не хватает слова.",
+      "чистые привезёт посыльный. следующая услуга будет стоить дороже слова."
+    ],
+    "es": [
+      "minúsculas, sin firma:",
+      "tres. te avisaron que se llevaba la cuenta.",
+      "no cobro en plata.",
+      "tus copias pasaron una noche conmigo y volvieron sin una palabra cada una.",
+      "el cadete puede traerte limpias. el próximo favor va a costar más que una palabra."
+    ],
+    "pt": [
+      "minúsculas, sem assinatura:",
+      "três. avisaram que estava sendo contado.",
+      "não aceito dinheiro. suas cópias passaram uma noite comigo e voltaram sem uma palavra cada.",
+      "o mensageiro pode trazer cópias limpas. o próximo favor vai custar mais que uma palavra."
     ]
   }
 };

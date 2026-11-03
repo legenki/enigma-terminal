@@ -147,8 +147,11 @@ export const markRead = (progress, paper) => {
 };
 
 const redactionActive = (progress) => {
-  const { rejected, cleanAt } = progress.story;
-  return rejected.length >= NOISE_LIMIT && cleanAt < rejected.length;
+  const { rejected, cleanAt, debtBorrowed } = progress.story;
+  return (
+    debtBorrowed ||
+    (rejected.length >= NOISE_LIMIT && cleanAt < rejected.length)
+  );
 };
 
 /**
@@ -323,6 +326,20 @@ export const shownActaHints = (progress) => {
   return act ? act.hints.slice(0, hintsShownIn(progress, act)) : [];
 };
 
+/**
+ * The first favour that comes due. Once, at the third: the informant takes a word
+ * from each of the player's copies, and the courier or the next filed act brings
+ * them back. Whichever front-end spent the favour asks here afterwards.
+ */
+export function debtCall(progress, { lang = 'en' } = {}) {
+  const { story } = progress;
+  if (story.debtCalled || debt(progress) < RULES.debt_call_at) return null;
+  story.debtCalled = true;
+  story.debtBorrowed = true;
+  progress.save();
+  return pick(STORY.debt_call, lang);
+}
+
 export const moreActaHints = (progress) => {
   const act = currentAct(progress);
   return Boolean(act) && hintsShownIn(progress, act) < act.hints.length;
@@ -468,7 +485,7 @@ export function fileActa(
     act.requires_paper &&
     !papers(progress).some((paper) => paper.id === act.requires_paper)
   ) {
-    return { status: 'needs-statute' };
+    return { status: 'needs-statute', dead: Boolean(story.leveneFound) };
   }
   const window = openWindow(progress, height, now);
   if (window.count >= RULES.attempts_per_block) {
@@ -477,6 +494,7 @@ export function fileActa(
   }
   if (digestOf(act, story.draft) === act.answer) {
     story.filedActs.push(act.id);
+    story.debtBorrowed = false;
     if (act.id === 1) story.actTwoStart = { height, at: now };
     progress.save();
     return {
@@ -591,12 +609,17 @@ export function cite(progress, who, reference, { lang = 'en' } = {}) {
   const paper = /^\d+$/.test(wanted)
     ? folder[Number(wanted) - 1]
     : folder.find((entry) => entry.id === wanted);
+  if (!wanted)
+    return { status: 'nudge', lines: pick(witness.cite_nudge, lang) };
   if (!paper) return { status: 'no-paper' };
   const key = String(who).toLowerCase();
+  const nudge = pick(witness.cite_nudge, lang);
   const hit = STORY.cites.find(
     (entry) => entry.witness === key && entry.paper === paper.id,
   );
-  if (!hit) return { status: 'nothing', name: pick(witness.name, lang) };
+  if (!hit) {
+    return { status: 'nothing', name: pick(witness.name, lang), lines: nudge };
+  }
   return {
     status: 'answer',
     lines: pick(hit.text, lang),
@@ -611,14 +634,29 @@ export function cite(progress, who, reference, { lang = 'en' } = {}) {
 export const errandById = (id) =>
   STORY.errands.find((entry) => entry.id === id) || null;
 
+/**
+ * Blocks until the water reaches a district, or null where it never will. The
+ * clock runs from the start of the act, and every rushed errand moves it on: a
+ * favour opens a sluice to let the boat through, and the water goes downstream.
+ */
+export const floodLeft = (
+  progress,
+  errand,
+  { height = null, now = Date.now() } = {},
+) => {
+  if (errand.closes_after === null) return null;
+  const { actTwoStart: start, floodAdvance } = progress.story;
+  if (!start) return errand.closes_after - floodAdvance;
+  const elapsed =
+    height !== null && start.height !== null
+      ? height - start.height
+      : Math.floor((now - start.at) / BLOCK_MS);
+  return errand.closes_after - elapsed - floodAdvance;
+};
+
 const flooded = (progress, errand, height, now) => {
-  if (errand.closes_after === null) return false;
-  const start = progress.story.actTwoStart;
-  if (!start) return false;
-  if (height !== null && start.height !== null) {
-    return height - start.height > errand.closes_after;
-  }
-  return now - start.at > errand.closes_after * BLOCK_MS;
+  const left = floodLeft(progress, errand, { height, now });
+  return left !== null && left <= 0;
 };
 
 /** Where one errand stands, for a list of them. */
@@ -676,6 +714,7 @@ const bringBack = (progress, lang) => {
   story.errandsDone.push(errand.id);
   // He brings clean copies with him; that is what the warning promised.
   story.cleanAt = story.rejected.length;
+  story.debtBorrowed = false;
   const later = story.leveneFound && errand.lalo_back_after_found;
   const handed = grant(progress, errand.gives, lang);
   return {
@@ -704,7 +743,8 @@ export function collectErrand(
 export function collectNow(progress, { lang = 'en' } = {}) {
   if (!progress.story.errand) return { status: 'idle' };
   progress.story.favours += 1;
-  return { status: 'back', ...bringBack(progress, lang) };
+  progress.story.floodAdvance += RULES.rush_blocks;
+  return { status: 'back', rushed: true, ...bringBack(progress, lang) };
 }
 
 // --------------------------------------------------------------------------

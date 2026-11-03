@@ -401,7 +401,7 @@ export const CLIENTS = [
         "Cada lote se cierra a un precio con un número cosido en él. Las cifras importan más que el lienzo."
       ],
       "pt": [
-        "A SÉTIMA ASSINATURA vende pinturas que ninguém viu para pessoas que ninguém conhece.",
+        "A MARTILLERO vende pinturas que ninguém viu para pessoas que ninguém conhece.",
         "Uma sala na Quintana, entrada pelo pátio, catálogo impresso em doze cópias.",
         "A papelada deles nunca diz 'dinheiro' — apenas 'lote', 'avaliação' e 'transferência de título',",
         "e o acerto é feito através de uma cueva perto da Florida, onde a taxa é sussurrada.",
@@ -1802,7 +1802,7 @@ export const CLIENTS = [
         "Their papers are always missing something. Exactly one word. That is not sloppiness, it is method."
       ],
       "es": [
-        "El departamento desapareció hace diecinueve años. El departamento sigue trabajando.",
+        "El departamento cerró hace diecinueve años. El departamento sigue trabajando.",
         "Primer piso sobre una mercería en Rincón, el letrero retirado, el número de habitación aún en la puerta.",
         "MESA DE ENTRADAS sigue sellando, numerando lo que llega y tachando lo que no debe saberse.",
         "Alguien paga sus salarios; alguien a quien llaman 'el sucesor' y nunca por su nombre.",

@@ -31,8 +31,7 @@ FIRST_PAPERS = [paper for paper in STORY["papers"] if paper["act"] == 1]
 ALL_FORMS = {form["id"] for act in ACTS for form in act["forms"]}
 CLIENTS = json.loads((ROOT / "data" / "clients.json").read_text(encoding="utf-8"))["clients"]
 ALL_LANGS = ("en", "ru", "es", "pt")
-#: Story prose is written in these first; the others fall back to English.
-STORY_LANGS = ("en", "ru")
+STORY_LANGS = ALL_LANGS
 
 
 def member_word(member: int) -> str:
@@ -557,6 +556,8 @@ def test_a_member_can_be_named_by_number_place_or_word(played):
 def test_the_second_acta_needs_the_statute(played):
     """One tester filed the whole act without ever meeting the word tontine."""
     assert played["needsStatute"] == "needs-statute"
+    assert "SEND STATUTE" in STORY["ui"]["actaNeedsStatuteDead"]["en"]
+    assert "ASK" not in STORY["ui"]["actaNeedsStatuteDead"]["en"]
     assert played["acceptedWithStatute"] == "accepted"
 
 
@@ -677,3 +678,120 @@ def test_the_terminal_plays_the_second_act(played):
     assert "END OF THE FIRST ACT" not in english["accepted"]
     for paper in STORY["papers"]:
         assert "Filed. — T." not in " ".join(paper["body"]["en"])
+
+
+# --- the weak spots the simulations found -------------------------------------
+
+@pytest.mark.parametrize("case_id", [5, 6])
+@pytest.mark.parametrize("lang", ALL_LANGS)
+def test_each_definition_shows_the_words_first_letter_and_length(case_id, lang):
+    """Testers could not reach `grab` or `report` from a definition alone."""
+    case = next(entry for entry in CAMPAIGN["cases"] if entry["id"] == case_id)
+    lines = [line for line in case["clues"][lang] if re.match(r"\s*\d+\.", line)]
+    words = SOLUTIONS[case_id].split()
+    assert len(lines) == len(words)
+    for line, word in zip(lines, words):
+        mask = line.split()[1]
+        assert mask == word[0] + "_" * (len(word) - 1), line
+        assert word not in line, f"the clue gives the word away: {line}"
+
+
+def test_a_wrong_paper_tells_you_what_the_witness_would_answer_to(played):
+    nudge = played["nudge"]
+    assert nudge["status"] == "nothing" and nudge["lines"]
+    assert nudge["asked"] == "nudge" and nudge["askedLines"] == nudge["lines"]
+    assert nudge["lalo"], "Lalo has to say something too"
+
+
+def test_every_witness_has_a_nudge_in_every_story_language():
+    for name, witness in STORY["witnesses"].items():
+        for lang in STORY_LANGS:
+            assert witness["cite_nudge"][lang], name
+
+
+def test_every_cite_a_nudge_points_at_exists():
+    """The nudge has to be reachable: each witness with a nudge has real targets."""
+    papers = {paper["id"] for paper in STORY["papers"]}
+    for cited in STORY["cites"]:
+        assert cited["paper"] in papers
+
+
+def test_rushing_the_courier_raises_the_water_on_the_optional_district(played):
+    flood = played["flood"]
+    assert flood["before"] == 5
+    assert flood["afterTwoRushes"] == 1
+    assert flood["stillOpen"] == "open"
+    assert flood["rush"] is True
+    assert flood["afterThree"] == "flooded"
+    assert flood["send"] == "flooded"
+
+
+def test_the_third_favour_comes_due_once_and_takes_a_word(played):
+    call = played["call"]
+    assert call["early"] is None
+    assert "██████" not in call["cleanBefore"]
+    assert call["first"]
+    assert call["second"] is None
+    assert "██████" in call["borrowed"]
+    assert "██████" not in call["returned"]
+    assert call["noRepeat"] is None
+
+
+def test_the_acceptance_of_an_act_returns_what_was_borrowed(played):
+    assert "██████" in played["callClearsOnFiling"]["during"]
+    assert "██████" not in played["callClearsOnFiling"]["after"]
+
+
+def test_the_collectors_note_is_in_the_informants_hand():
+    for lang in STORY_LANGS:
+        text = " ".join(STORY["debt_call"][lang])
+        assert text == text.lower()
+        assert "-" not in text and "−" not in text
+
+
+def test_no_note_gives_away_the_informants_gender_in_russian():
+    notes = [" ".join(paper["body"]["ru"]) for paper in STORY["papers"]
+             if paper["id"].startswith("note-")]
+    notes.append(" ".join(STORY["debt_call"]["ru"]))
+    for text in notes:
+        assert not re.search(r"\bя \w+(ла|л)\b", text), text
+
+
+def test_handed_out_words_are_shown_in_the_players_language(played):
+    for word, labels in STORY["word_labels"].items():
+        for lang in STORY_LANGS:
+            assert labels[lang]
+    labels = STORY["word_labels"]
+    givers = {cited["gives"] for cited in STORY["cites"]}
+    papers = {paper["id"] for paper in STORY["papers"]}
+    assert givers - papers == set(labels)
+    for cited in STORY["cites"]:
+        if cited["gives"] not in labels:
+            continue
+        keys = {
+            key.lower()
+            for topic in STORY["witnesses"][cited["witness"]]["topics"]
+            for key in topic["keys"]
+        }
+        for lang in STORY_LANGS:
+            assert labels[cited["gives"]][lang].lower() in keys, (cited["gives"], lang)
+
+
+def test_a_cite_with_no_paper_answers_in_the_terminal(played):
+    assert "Show me what I wrote myself" in played["terminal2"]["en"]["citeAsk"]
+
+
+def test_the_story_never_calls_anyone_disappeared():
+    text = json.dumps(STORY, ensure_ascii=False).lower()
+    assert "desaparec" not in text
+
+
+def test_levene_says_the_word_only_once():
+    """The running gag only pays off if he has not said it already."""
+    for lang, words in (("en", ["money"]), ("ru", ["деньг"]), ("es", ["dinero", "plata"]),
+                        ("pt", ["dinheiro"])):
+        lines = []
+        for topic in STORY["witnesses"]["levene"]["topics"]:
+            lines += topic["text"][lang]
+        for word in words:
+            assert not any(word in line.lower() for line in lines), (lang, word)

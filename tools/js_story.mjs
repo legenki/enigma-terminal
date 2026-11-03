@@ -165,6 +165,74 @@ report.book = {
   };
 }
 
+// Weak spots: what a witness says to a wrong paper, and what a favour costs.
+{
+  const progress = fresh();
+  finishActOne(progress);
+  const nudge = story.cite(progress, 'ines', 'catalogue');
+  const asked = story.cite(progress, 'ines', '');
+  report.nudge = {
+    status: nudge.status,
+    lines: nudge.lines,
+    asked: asked.status,
+    askedLines: asked.lines,
+    lalo: story.cite(progress, 'lalo', 'catalogue').lines,
+  };
+}
+{
+  const progress = fresh();
+  finishActOne(progress);
+  const flood = {};
+  const olmos = story.errandById('olmos');
+  flood.before = story.floodLeft(progress, olmos, { height: 101 });
+  for (const id of ['pump-log', 'register']) {
+    story.sendErrand(progress, id, { height: 101 });
+    story.collectNow(progress);
+  }
+  flood.afterTwoRushes = story.floodLeft(progress, olmos, { height: 101 });
+  flood.stillOpen = story.errandStatus(progress, olmos, { height: 101 });
+  story.sendErrand(progress, 'page-128', { height: 101 });
+  flood.rush = story.collectNow(progress).rushed;
+  flood.afterThree = story.errandStatus(progress, olmos, { height: 101 });
+  flood.send = story.sendErrand(progress, 'olmos', { height: 101 }).status;
+  report.flood = flood;
+}
+{
+  const progress = fresh();
+  finishActOne(progress);
+  const call = {};
+  const paper = story.paperById('attestation');
+  progress.useHint(1);
+  progress.useHint(2);
+  call.early = story.debtCall(progress, { lang: 'en' });
+  call.cleanBefore = story.paperLines(progress, paper, 'en').join(' ');
+  progress.useHint(3);
+  call.first = story.debtCall(progress, { lang: 'en' });
+  call.second = story.debtCall(progress, { lang: 'en' });
+  call.borrowed = story.paperLines(progress, paper, 'en').join(' ');
+  story.sendErrand(progress, 'pump-log', { height: 101 });
+  story.collectErrand(progress, { height: 102 });
+  call.returned = story.paperLines(progress, paper, 'en').join(' ');
+  call.noRepeat = story.debtCall(progress, { lang: 'en' });
+  report.call = call;
+}
+{
+  const progress = fresh();
+  for (const id of [1, 2, 3]) {
+    close(progress, id);
+    progress.useHint(id);
+  }
+  story.debtCall(progress, { lang: 'en' });
+  const paper = story.paperById('attestation');
+  const during = story.paperLines(progress, paper, 'en').join(' ');
+  rowsFor(progress, [1, 2, 3]);
+  story.fileActa(progress, { height: 1 });
+  report.callClearsOnFiling = {
+    during,
+    after: story.paperLines(progress, paper, 'en').join(' '),
+  };
+}
+
 // With no chain to read, the clock falls back to ten minutes of the real one.
 {
   const progress = fresh();
@@ -527,6 +595,7 @@ for (const lang of ['en', 'ru', 'es', 'pt']) {
   seen.ask = await run('ASK levene recoleta');
   seen.intro = await run('ASK lalo');
   seen.cite = await run('CITE levene 2');
+  seen.citeAsk = await run('CITE ines');
   seen.send = await run('SEND pump-log');
   seen.busy = await run('SEND register');
   seen.now = await run('SEND NOW');

@@ -44,12 +44,14 @@ import {
   collectNow,
   currentAct,
   debt,
+  debtCall,
   draft,
   errandOut,
   errandStatus,
   fileActa,
   filedLine,
   filingLine,
+  floodLeft,
   isUnread,
   markRead,
   notes,
@@ -620,6 +622,8 @@ export class Engine {
     } catch (error) {
       this.term.print(`[FATAL] ${error.message || error}`, 'red');
     }
+    const called = debtCall(this.progress, { lang: this.lang });
+    if (called) this.printEvent({ lines: called });
   }
 
   commands() {
@@ -685,7 +689,7 @@ export class Engine {
     this.term.blank();
     for (const [command, description] of pick(HELP, this.lang)) {
       this.term.print([
-        { text: `  ${command.padEnd(26)}`, style: 'green' },
+        { text: `  ${command.padEnd(26)} `, style: 'green' },
         { text: description, style: 'grey' },
       ]);
     }
@@ -1065,7 +1069,9 @@ export class Engine {
     this.printEvent(result.event);
     if (result.word) {
       this.term.print(
-        `  ${say('newWord', this.lang, { word: result.word })}`,
+        `  ${say('newWord', this.lang, {
+          word: pick(STORY.word_labels[result.word], this.lang),
+        })}`,
         'cyan',
       );
     }
@@ -1076,6 +1082,7 @@ export class Engine {
     const { term } = this;
     term.blank();
     term.print(`  ${say('sendBack', this.lang)}`, 'cyan');
+    if (result.rushed) term.print(`  ${say('rushCost', this.lang)}`, 'amber');
     term.printLines(result.lines, 'white');
     this.printHandover(result);
     term.blank();
@@ -1134,7 +1141,10 @@ export class Engine {
         term.print(`[WARN] ${say('actaIncomplete', lang)}`, 'amber'),
       wait: () => term.print(`[WARN] ${say('actaWait', lang)}`, 'amber'),
       'needs-statute': () =>
-        term.print(`[WARN] ${say('actaNeedsStatute', lang)}`, 'amber'),
+        term.print(
+          `[WARN] ${say(result.dead ? 'actaNeedsStatuteDead' : 'actaNeedsStatute', lang)}`,
+          'amber',
+        ),
       rejected: () => {
         term.print(
           `[FATAL] ${say('actaRejected', lang, { left: result.left })}`,
@@ -1278,18 +1288,23 @@ export class Engine {
   cmdCite(argument) {
     const { term, lang } = this;
     const [who = '', paper = ''] = argument.trim().split(/\s+/);
-    if (!who || !paper) {
+    if (!who) {
       term.print(`[WARN] ${say('citeUsage', lang)}`, 'amber');
       return;
     }
     const result = cite(this.progress, who, paper, { lang });
     if (this.witnessFailure(result, who)) return;
+    if (result.status === 'nudge') {
+      term.printLines(result.lines, 'white');
+      return;
+    }
     if (result.status === 'no-paper') {
       term.print(`[WARN] ${say('paperMissing', lang, { n: paper })}`, 'amber');
       return;
     }
     if (result.status === 'nothing') {
       term.print(say('citeNothing', lang, { who: result.name }), 'grey');
+      term.printLines(result.lines, 'white');
       return;
     }
     term.blank();
@@ -1318,6 +1333,13 @@ export class Engine {
         `  ${errand.id.padEnd(10)} ${pick(errand.district, lang)} · ${pick(errand.label, lang)} · ${say(label, lang)}`,
         status === 'open' ? 'white' : 'grey',
       );
+      const left = floodLeft(this.progress, errand, { height: chainTip() });
+      if (status === 'open' && left !== null) {
+        term.print(
+          `             ${say('floodLeft', lang, { blocks: left })}`,
+          'amber',
+        );
+      }
     }
     term.rule();
     if (out) {
@@ -1326,7 +1348,10 @@ export class Engine {
         'grey',
       );
     }
-    term.print(`  ${say('sendUsage', lang)}`, 'grey');
+    term.print(
+      `  ${say('sendUsage', lang, { blocks: STORY.acta_rules.rush_blocks })}`,
+      'grey',
+    );
     term.blank();
   }
 

@@ -121,6 +121,9 @@ const readStory = (value) => {
     leveneSpoke: count(source.leveneSpoke),
     blindCloses: count(source.blindCloses),
     read: strings(source.read),
+    floodAdvance: count(source.floodAdvance),
+    debtCalled: source.debtCalled === true,
+    debtBorrowed: source.debtBorrowed === true,
   };
 };
 

@@ -69,12 +69,14 @@ import {
   collectNow,
   currentAct,
   debt,
+  debtCall,
   draft,
   errandOut,
   errandStatus,
   fileActa,
   filedLine,
   filingLine,
+  floodLeft,
   moreActaHints,
   notes,
   paperById,
@@ -1466,7 +1468,14 @@ export class GuiApp {
       if (outcome.reveal) out.push(notice('warn', '', ...outcome.reveal));
       if (outcome.event) out.push(notice('warn', '', ...outcome.event.lines));
       if (outcome.word) {
-        out.push(notice('info', say('newWord', lang, { word: outcome.word })));
+        out.push(
+          notice(
+            'info',
+            say('newWord', lang, {
+              word: pick(STORY.word_labels[outcome.word], lang),
+            }),
+          ),
+        );
       }
       paintFolder();
       return out;
@@ -1512,8 +1521,11 @@ export class GuiApp {
     });
 
     const paintHints = () => {
+      const called = debtCall(this.progress, { lang });
+      if (called) paintFolder();
       replace(
         hintBox,
+        called ? notice('warn', '', ...called) : null,
         ...shownActaHints(this.progress).flatMap((hint) =>
           pick(hint.text, lang).map((line) =>
             el('p', { class: 'hint-text', text: line }),
@@ -1663,7 +1675,15 @@ export class GuiApp {
             : []),
         ],
         incomplete: () => [notice('warn', say('actaIncomplete', lang))],
-        'needs-statute': () => [notice('warn', say('actaNeedsStatute', lang))],
+        'needs-statute': () => [
+          notice(
+            'warn',
+            say(
+              outcome.dead ? 'actaNeedsStatuteDead' : 'actaNeedsStatute',
+              lang,
+            ),
+          ),
+        ],
         wait: () => [
           notice('warn', say('actaWait', lang)),
           el('button', {
@@ -1716,7 +1736,11 @@ export class GuiApp {
         if (outcome.status === 'nothing') {
           replace(
             answer,
-            notice('info', say('citeNothing', lang, { who: outcome.name })),
+            notice(
+              'info',
+              say('citeNothing', lang, { who: outcome.name }),
+              ...outcome.lines,
+            ),
           );
           return;
         }
@@ -1773,7 +1797,12 @@ export class GuiApp {
       });
       replace(
         errandNotice,
-        notice('ok', say('sendBack', lang), ...outcome.lines),
+        notice(
+          'ok',
+          say('sendBack', lang),
+          ...(outcome.rushed ? [say('rushCost', lang)] : []),
+          ...outcome.lines,
+        ),
         ...handover(outcome),
       );
     };
@@ -1793,6 +1822,7 @@ export class GuiApp {
         errandBox,
         ...STORY.errands.map((errand) => {
           const status = errandStatus(this.progress, errand, { height });
+          const left = floodLeft(this.progress, errand, { height });
           const label = {
             open: 'statusOpen',
             done: 'statusDone',
@@ -1824,7 +1854,7 @@ export class GuiApp {
               : null,
             el('span', {
               class: 'hint-text',
-              text: `${pick(errand.district, lang)} · ${pick(errand.label, lang)} · ${say(label, lang)}`,
+              text: `${pick(errand.district, lang)} · ${pick(errand.label, lang)} · ${say(label, lang)}${left !== null && status === 'open' ? ` · ${say('floodLeft', lang, { blocks: left })}` : ''}`,
             }),
           );
         }),
