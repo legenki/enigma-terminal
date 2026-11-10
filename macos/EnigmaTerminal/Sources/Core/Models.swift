@@ -8,6 +8,13 @@ public enum PanelCategory: String, CaseIterable, Identifiable {
     public var id: String { rawValue }
 }
 
+public enum DesignVariant: String, CaseIterable, Identifiable {
+    case studio = "Studio IDE"
+    case classicHIG = "Classic HIG"
+
+    public var id: String { rawValue }
+}
+
 public enum AppPanel: String, CaseIterable, Identifiable {
     case terminal = "terminal"
     case cases = "cases"

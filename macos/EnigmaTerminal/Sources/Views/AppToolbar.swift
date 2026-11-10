@@ -46,6 +46,15 @@ public struct AppToolbar: ToolbarContent {
 
         ToolbarItem(placement: .primaryAction) {
             HStack(spacing: 10) {
+                // Design Variant Switcher (Studio IDE vs Classic HIG)
+                Picker("Variant", selection: $appState.designVariant) {
+                    Text("Studio IDE").tag(DesignVariant.studio)
+                    Text("Classic HIG").tag(DesignVariant.classicHIG)
+                }
+                .pickerStyle(.segmented)
+                .controlSize(.small)
+                .frame(width: 155)
+
                 // Daylight Selector (LIVE / DAY / NIGHT)
                 HStack(spacing: 2) {
                     ForEach(DaylightMode.allCases) { mode in

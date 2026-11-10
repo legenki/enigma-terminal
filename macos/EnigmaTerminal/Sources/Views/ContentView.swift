@@ -8,6 +8,18 @@ public struct ContentView: View {
     private var theme: AppTheme { appState.theme }
 
     public var body: some View {
+        Group {
+            if appState.designVariant == .studio {
+                studioLayout
+            } else {
+                ClassicHIGLayoutView()
+            }
+        }
+    }
+
+    // MARK: - Variant 1: Studio IDE Layout (Floating Card Architecture)
+
+    private var studioLayout: some View {
         NavigationSplitView {
             SidebarView()
                 .navigationSplitViewColumnWidth(min: 220, ideal: 250, max: 320)

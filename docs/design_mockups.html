@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enigma Terminal — macOS Design Variants Mockup</title>
+<style>
+  :root {
+    --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+    --font-mono: "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+  }
+
+  body {
+    margin: 0;
+    padding: 24px;
+    font-family: var(--font-ui);
+    background: #0d0b10;
+    color: #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+
+  /* Control Banner */
+  .control-panel {
+    background: #18141f;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 12px 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    max-width: 900px;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .seg-control {
+    display: inline-flex;
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 3px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .seg-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .seg-btn.active {
+    background: #7c3aed;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
+  }
+
+  /* macOS Window Mockup Frame */
+  .macos-window {
+    width: 100%;
+    max-width: 1240px;
+    height: 740px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.12);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+  }
+
+  /* Dark Obsidian Theme (Variant 1 & 2 Dark) */
+  .theme-dark {
+    --win-bg: #0a080d;
+    --win-header: #120e17;
+    --sidebar-bg: #0d0a12;
+    --card-bg: #140f1a;
+    --card-inner: #0d0a12;
+    --card-border: rgba(255,255,255,0.08);
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent-purple: #8b5cf6;
+    --accent-purple-soft: rgba(139, 92, 246, 0.15);
+    --accent-green: #10b981;
+    --accent-cyan: #06b6d4;
+    --accent-amber: #f59e0b;
+    --code-bg: #09070c;
+  }
+
+  /* Light Ivory Daylight Theme */
+  .theme-light {
+    --win-bg: #ede8df;
+    --win-header: #e4ddd1;
+    --sidebar-bg: #e5dfd3;
+    --card-bg: #fcfbf8;
+    --card-inner: #f2ede3;
+    --card-border: rgba(0,0,0,0.10);
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --accent-purple: #6d28d9;
+    --accent-purple-soft: rgba(109, 40, 217, 0.12);
+    --accent-green: #059669;
+    --accent-cyan: #0284c7;
+    --accent-amber: #d97706;
+    --code-bg: #f8f6f0;
+  }
+
+  /* Unified Header */
+  .win-toolbar {
+    height: 44px;
+    background: var(--win-header);
+    border-bottom: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    justify-content: space-between;
+    user-select: none;
+  }
+
+  .traffic-lights {
+    display: flex;
+    gap: 8px;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+
+  .center-pills {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .pill {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--card-inner);
+    border: 1px solid var(--card-border);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .indicator-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  /* Window Layout */
+  .win-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    background: var(--win-bg);
+  }
+
+  /* Left Sidebar */
+  .sidebar {
+    width: 250px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--card-border);
+    display: flex;
+    flex-direction: column;
+    padding: 12px 10px;
+    box-sizing: border-box;
+  }
+
+  .sidebar-section {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-top: 14px;
+    margin-bottom: 6px;
+    padding: 0 8px;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 2px;
+  }
+  .sidebar-item.active {
+    background: var(--accent-purple-soft);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+  }
+
+  .avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  .item-meta { flex: 1; min-width: 0; }
+  .item-title { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+  .item-sub { font-size: 10px; font-family: var(--font-mono); color: var(--text-muted); }
+  .badge { font-size: 9px; font-family: var(--font-mono); font-weight: 700; padding: 2px 6px; border-radius: 10px; background: rgba(255,255,255,0.06); color: var(--text-muted); }
+  .sidebar-item.active .badge { background: var(--accent-purple); color: white; }
+
+  /* Center Main Stage */
+  .main-stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+
+  /* Variant 1: Floating Card */
+  .floating-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .card-tabs {
+    display: flex;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--card-border);
+    padding: 6px 12px;
+    gap: 8px;
+  }
+  .tab-pill {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: var(--text-muted);
+  }
+  .tab-pill.active {
+    background: var(--accent-purple-soft);
+    color: var(--text-primary);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+  }
+
+  .card-content {
+    flex: 1;
+    padding: 18px;
+    background: var(--card-inner);
+    overflow-y: auto;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-primary);
+  }
+
+  .shell-box {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 14px;
+  }
+  .shell-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .bottom-input-bar {
+    background: var(--card-bg);
+    border-top: 1px solid var(--card-border);
+    padding: 12px 16px;
+  }
+  .input-pill-box {
+    background: var(--card-inner);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* Right Inspector */
+  .inspector {
+    width: 280px;
+    background: var(--sidebar-bg);
+    border-left: 1px solid var(--card-border);
+    display: flex;
+    flex-direction: column;
+  }
+  .inspector-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--card-border);
+    padding: 8px;
+    gap: 6px;
+  }
+  .insp-tab {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  .insp-tab.active {
+    background: var(--accent-purple-soft);
+    color: var(--text-primary);
+  }
+
+  .word-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-family: var(--font-mono);
+    padding: 6px 12px;
+    border-radius: 6px;
+    margin: 2px 8px;
+    background: rgba(255,255,255,0.02);
+  }
+</style>
+</head>
+<body class="theme-dark">
+
+  <!-- Interactive Mockup Switcher -->
+  <div class="control-panel">
+    <div>
+      <strong style="font-size: 15px;">Enigma Terminal Design Mockup Preview</strong>
+      <div style="font-size: 12px; color: #94a3b8;">Choose a design variant and theme to compare layouts</div>
+    </div>
+    <div style="display: flex; gap: 12px;">
+      <div class="seg-control">
+        <button class="seg-btn active" onclick="setVariant('studio')">Variant 1: Studio IDE</button>
+        <button class="seg-btn" onclick="setVariant('classic')">Variant 2: Classic HIG</button>
+      </div>
+      <div class="seg-control">
+        <button class="seg-btn active" id="btn-dark" onclick="setTheme('dark')">Night</button>
+        <button class="seg-btn" id="btn-light" onclick="setTheme('light')">Daylight (Ivory)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- macOS Window Frame -->
+  <div class="macos-window">
+    <!-- Titlebar Toolbar -->
+    <div class="win-toolbar">
+      <div class="traffic-lights">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="center-pills">
+        <div class="pill">
+          <div class="indicator-dot" style="background: var(--accent-purple);"></div>
+          <span>1 engine active</span>
+        </div>
+        <div class="pill" style="border-color: var(--accent-green);">
+          <div class="indicator-dot" style="background: var(--accent-green);"></div>
+          <span style="font-weight: 700;">#975,357 · just now</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <span class="badge" style="background: var(--accent-purple); color: white;">RU</span>
+        <span class="badge">🔔</span>
+        <span class="badge">⊞</span>
+      </div>
+    </div>
+
+    <!-- Window Body -->
+    <div class="win-body">
+      <!-- Left Sidebar -->
+      <div class="sidebar">
+        <div style="font-size: 13px; font-weight: 700; padding: 0 8px; color: var(--text-primary); display: flex; justify-content: space-between;">
+          <span>★ Enigma Terminal</span>
+          <span style="color: var(--text-muted);">▾</span>
+        </div>
+
+        <div class="sidebar-section">PROJECTS / WORKSPACE</div>
+        <div class="sidebar-item active">
+          <div class="avatar" style="background: rgba(139,92,246,0.2); color: var(--accent-purple);">&gt;_</div>
+          <div class="item-meta">
+            <div class="item-title">enigma-terminal</div>
+            <div class="item-sub">main ★ · live feed</div>
+          </div>
+          <div class="badge">v3.1</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="avatar" style="background: rgba(59,130,246,0.2); color: #3b82f6;">CF</div>
+          <div class="item-meta">
+            <div class="item-title">Case Files</div>
+            <div class="item-sub">Act 1 & 2 · 8 cases</div>
+          </div>
+          <div class="badge">0/8</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="avatar" style="background: rgba(245,158,11,0.2); color: var(--accent-amber);">CB</div>
+          <div class="item-meta">
+            <div class="item-title">Contracts Board</div>
+            <div class="item-sub">8 employers · 256 jobs</div>
+          </div>
+          <div class="badge">0/256</div>
+        </div>
+
+        <div class="sidebar-section">CRYPTOGRAPHY</div>
+        <div class="sidebar-item">
+          <div class="avatar" style="background: rgba(6,182,212,0.2); color: var(--accent-cyan);">DC</div>
+          <div class="item-meta">
+            <div class="item-title">Decrypt & Derive</div>
+            <div class="item-sub">BIP-39 / BIP-32 / secp</div>
+          </div>
+          <div class="badge">3 addrs</div>
+        </div>
+
+        <div class="sidebar-item">
+          <div class="avatar" style="background: rgba(16,185,129,0.2); color: var(--accent-green);">EX</div>
+          <div class="item-meta">
+            <div class="item-title">Live Explorer</div>
+            <div class="item-sub">#975357 · mempool</div>
+          </div>
+          <div class="badge">live</div>
+        </div>
+      </div>
+
+      <!-- Main Stage -->
+      <div class="main-stage" id="stage-area">
+        <!-- Floating Card (Studio IDE) -->
+        <div class="floating-card" id="card-view">
+          <div class="card-tabs">
+            <div class="tab-pill active">Enigma Terminal Quest</div>
+            <div class="tab-pill">Live Bitcoin Chain</div>
+            <div style="flex: 1;"></div>
+            <div style="font-size: 13px; color: var(--text-muted); cursor: pointer;">✕</div>
+          </div>
+
+          <div class="card-content">
+            <div class="shell-box">
+              <div class="shell-header">
+                <span>Shell</span>
+                <span>Copy 📋</span>
+              </div>
+              <div style="color: var(--accent-cyan);">./tools/build_macos_app.sh</div>
+              <div style="color: var(--text-secondary); margin-top: 6px; font-size: 11px;">
+                ==&gt; Building native SwiftUI Enigma Terminal for macOS 26.0+ (arm64)<br>
+                ==&gt; Bundling JavaScriptCore crypto engine... Success (52 KB)<br>
+                ==&gt; Build successful: dist/Enigma Terminal.app (5.1M)
+              </div>
+            </div>
+
+            <div style="color: var(--accent-green); margin-bottom: 8px;">[ OK ] BITCOIN NETWORK ACTIVE · HEIGHT #975,357</div>
+            <div style="color: var(--text-primary); margin-bottom: 4px;">nullsec@enigma:~$ DECRYPT abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about</div>
+            <div style="color: var(--accent-purple);">[ OK ] BIP-39 CHECKSUM VALID (12 words)</div>
+            <div style="color: var(--text-secondary); font-size: 11px;">
+              [+] Legacy (P2PKH): 1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA<br>
+              [+] Native SegWit (Bech32): bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu
+            </div>
+          </div>
+
+          <div class="bottom-input-bar">
+            <div class="input-pill-box">
+              <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-primary);">
+                nullsec@enigma:~$ STATUS
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 10px; color: var(--accent-purple); font-weight: 700;">Enigma v3.1 · Secp256k1</span>
+                <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--accent-purple); color: white; display: flex; align-items: center; justify-content: center; font-size: 12px;">↑</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Inspector -->
+      <div class="inspector">
+        <div class="inspector-tabs">
+          <div class="insp-tab active">Wordlist</div>
+          <div class="insp-tab">Recovery</div>
+          <div class="insp-tab">Chain</div>
+          <div class="insp-tab">Journal</div>
+        </div>
+        <div style="padding: 10px;">
+          <input type="text" placeholder="Filter words..." style="width: 100%; box-sizing: border-box; background: var(--card-inner); border: 1px solid var(--card-border); color: var(--text-primary); border-radius: 6px; padding: 6px 10px; font-family: var(--font-mono); font-size: 11px;">
+        </div>
+        <div style="flex: 1; overflow-y: auto;">
+          <div class="word-row"><span style="color: var(--accent-cyan);">#1</span><span>abandon</span><span>📋</span></div>
+          <div class="word-row"><span style="color: var(--accent-cyan);">#2</span><span>ability</span><span>📋</span></div>
+          <div class="word-row"><span style="color: var(--accent-cyan);">#3</span><span>able</span><span>📋</span></div>
+          <div class="word-row"><span style="color: var(--accent-cyan);">#4</span><span>about</span><span>📋</span></div>
+          <div class="word-row"><span style="color: var(--accent-cyan);">#5</span><span>above</span><span>📋</span></div>
+          <div class="word-row"><span style="color: var(--accent-cyan);">#6</span><span>absent</span><span>📋</span></div>
+        </div>
+        <div style="background: var(--card-inner); border-top: 1px solid var(--card-border); padding: 10px; font-family: var(--font-mono); font-size: 10px;">
+          <div style="color: var(--accent-amber);">v3.1.0 via CoreBridge</div>
+          <div style="color: var(--accent-green);">482 tests passed · parity 100%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function setVariant(variant) {
+      const card = document.getElementById('card-view');
+      const stage = document.getElementById('stage-area');
+      const btns = document.querySelectorAll('.seg-control:first-child .seg-btn');
+      btns.forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (variant === 'classic') {
+        card.style.borderRadius = '0';
+        card.style.boxShadow = 'none';
+        card.style.border = 'none';
+        stage.style.padding = '0';
+      } else {
+        card.style.borderRadius = '14px';
+        card.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+        card.style.border = '1px solid var(--card-border)';
+        stage.style.padding = '16px';
+      }
+    }
+
+    function setTheme(theme) {
+      document.body.className = theme === 'light' ? 'theme-light' : 'theme-dark';
+      document.getElementById('btn-dark').classList.toggle('active', theme === 'dark');
+      document.getElementById('btn-light').classList.toggle('active', theme === 'light');
+    }
+  </script>
+</body>
+</html>

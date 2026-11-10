@@ -47,6 +47,7 @@ public enum TerminalLineStyle {
 public final class AppState: ObservableObject {
     @Published public var selectedPanel: AppPanel = .terminal
     @Published public var showInspector: Bool = false
+    @Published public var designVariant: DesignVariant = .studio
     @Published public var daylightMode: DaylightMode = .live {
         didSet {
             updateTheme()
