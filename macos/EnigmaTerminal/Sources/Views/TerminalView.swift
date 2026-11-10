@@ -34,7 +34,7 @@ public struct TerminalView: View {
             // Console output area
             ScrollViewReader { proxy in
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 4) {
                         ForEach(appState.terminalLines) { line in
                             Text(line.text)
                                 .font(.system(size: 13, weight: .regular, design: .monospaced))

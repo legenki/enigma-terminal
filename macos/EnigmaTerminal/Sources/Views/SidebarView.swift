@@ -10,17 +10,16 @@ public struct SidebarView: View {
             ForEach(PanelCategory.allCases) { category in
                 Section(category.rawValue) {
                     ForEach(AppPanel.allCases.filter { $0.category == category }) { panel in
-                        NavigationLink(value: panel) {
-                            HStack {
-                                Label(panel.title, systemImage: panel.systemImage)
-                                Spacer()
-                                if let shortcut = panel.shortcutNumber {
-                                    Text("⌘\(shortcut)")
-                                        .font(.caption2.monospaced())
-                                        .foregroundStyle(.tertiary)
-                                }
+                        HStack {
+                            Label(panel.title, systemImage: panel.systemImage)
+                            Spacer()
+                            if let shortcut = panel.shortcutNumber {
+                                Text("⌘\(shortcut)")
+                                    .font(.caption2.monospaced())
+                                    .foregroundStyle(.tertiary)
                             }
                         }
+                        .tag(panel)
                     }
                 }
             }

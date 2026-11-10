@@ -1,12 +1,12 @@
 import SwiftUI
 
-public struct AppToolbar: CustomizableToolbarContent {
+public struct AppToolbar: ToolbarContent {
     @EnvironmentObject private var appState: AppState
 
     public init() {}
 
-    public var body: some CustomizableToolbarContent {
-        ToolbarItem(id: "blockStatus", placement: .automatic) {
+    public var body: some ToolbarContent {
+        ToolbarItem(placement: .automatic) {
             HStack(spacing: 6) {
                 Circle()
                     .fill(Color.green)
@@ -25,7 +25,7 @@ public struct AppToolbar: CustomizableToolbarContent {
             .help("Bitcoin Block Clock & Height")
         }
 
-        ToolbarItem(id: "daylightPicker", placement: .automatic) {
+        ToolbarItem(placement: .automatic) {
             Picker("Daylight", selection: $appState.daylightMode) {
                 ForEach(DaylightMode.allCases) { mode in
                     Text(mode.rawValue).tag(mode)
@@ -35,7 +35,7 @@ public struct AppToolbar: CustomizableToolbarContent {
             .help("Interface Daylight Palette (Live/Day/Night)")
         }
 
-        ToolbarItem(id: "languagePicker", placement: .automatic) {
+        ToolbarItem(placement: .automatic) {
             Menu {
                 Button("English (EN)") { appState.selectedLanguage = "EN" }
                 Button("Русский (RU)") { appState.selectedLanguage = "RU" }
@@ -47,7 +47,7 @@ public struct AppToolbar: CustomizableToolbarContent {
             .help("Narrative Language")
         }
 
-        ToolbarItem(id: "soundToggle", placement: .automatic) {
+        ToolbarItem(placement: .automatic) {
             Button {
                 appState.soundEnabled.toggle()
             } label: {
@@ -56,7 +56,7 @@ public struct AppToolbar: CustomizableToolbarContent {
             .help(appState.soundEnabled ? "Mute block chime" : "Unmute block chime")
         }
 
-        ToolbarItem(id: "inspectorToggle", placement: .primaryAction) {
+        ToolbarItem(placement: .primaryAction) {
             Button {
                 appState.showInspector.toggle()
             } label: {

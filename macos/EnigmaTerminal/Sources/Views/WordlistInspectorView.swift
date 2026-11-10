@@ -31,7 +31,6 @@ public struct WordlistInspectorView: View {
                 recoverySection
             }
         }
-        .frame(minWidth: 260, idealWidth: 300)
         .onAppear {
             performSearch()
         }

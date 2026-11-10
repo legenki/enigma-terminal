@@ -32,13 +32,14 @@ public struct ContentView: View {
                 }
             }
             .navigationTitle(appState.selectedPanel.title)
+            .frame(minWidth: 700, minHeight: 500)
         }
         .inspector(isPresented: $appState.showInspector) {
             WordlistInspectorView()
+                .inspectorColumnWidth(min: 260, ideal: 300, max: 400)
         }
         .toolbar {
             AppToolbar()
         }
-        .frame(minWidth: 960, minHeight: 640)
     }
 }

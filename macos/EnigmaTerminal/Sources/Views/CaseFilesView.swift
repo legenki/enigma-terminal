@@ -34,13 +34,20 @@ public struct CaseFilesView: View {
         )
     ]
 
-    @State private var selectedCase: CaseRecord?
+    @State private var selectedCaseID: String?
 
     public init() {}
 
+    private var activeCase: CaseRecord? {
+        if let id = selectedCaseID, let found = cases.first(where: { $0.id == id }) {
+            return found
+        }
+        return cases.first
+    }
+
     public var body: some View {
-        NavigationSplitView {
-            List(cases, selection: $selectedCase) { c in
+        HSplitView {
+            List(cases, selection: $selectedCaseID) { c in
                 VStack(alignment: .leading, spacing: 4) {
                     Text(c.title)
                         .font(.headline)
@@ -52,11 +59,11 @@ public struct CaseFilesView: View {
                         .foregroundStyle(.cyan)
                 }
                 .padding(.vertical, 4)
-                .tag(c)
+                .tag(c.id)
             }
-            .navigationTitle("Campaign Cases")
-        } detail: {
-            if let active = selectedCase ?? cases.first {
+            .frame(minWidth: 220, idealWidth: 260, maxWidth: 320)
+
+            if let active = activeCase {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
@@ -99,9 +106,11 @@ public struct CaseFilesView: View {
                     }
                     .padding(20)
                 }
+                .frame(minWidth: 440)
             } else {
                 Text("Select a case file")
                     .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
     }
