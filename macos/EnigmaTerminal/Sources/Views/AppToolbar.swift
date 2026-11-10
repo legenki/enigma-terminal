@@ -6,63 +6,111 @@ public struct AppToolbar: ToolbarContent {
     public init() {}
 
     public var body: some ToolbarContent {
-        ToolbarItem(placement: .automatic) {
-            HStack(spacing: 6) {
-                Circle()
-                    .fill(Color.green)
-                    .frame(width: 7, height: 7)
-                Text("#\(appState.blockHeight)")
-                    .font(.caption.monospaced().bold())
-                Text("·")
-                    .foregroundStyle(.secondary)
-                Text(appState.blockTimeAgo)
-                    .font(.caption.monospaced())
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(Color.secondary.opacity(0.12), in: Capsule())
-            .help("Bitcoin Block Clock & Height")
-        }
-
-        ToolbarItem(placement: .automatic) {
-            Picker("Daylight", selection: $appState.daylightMode) {
-                ForEach(DaylightMode.allCases) { mode in
-                    Text(mode.rawValue).tag(mode)
+        ToolbarItem(placement: .navigation) {
+            HStack(spacing: 8) {
+                Button {
+                    // Navigate back if needed
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.caption2)
+                        .foregroundStyle(Theme.textMuted)
                 }
+                .buttonStyle(.plain)
+
+                Button {
+                    // Navigate forward if needed
+                } label: {
+                    Image(systemName: "chevron.right")
+                        .font(.caption2)
+                        .foregroundStyle(Theme.textMuted)
+                }
+                .buttonStyle(.plain)
             }
-            .pickerStyle(.segmented)
-            .help("Interface Daylight Palette (Live/Day/Night)")
         }
 
-        ToolbarItem(placement: .automatic) {
-            Menu {
-                Button("English (EN)") { appState.selectedLanguage = "EN" }
-                Button("Русский (RU)") { appState.selectedLanguage = "RU" }
-                Button("Español (ES)") { appState.selectedLanguage = "ES" }
-                Button("Português (PT)") { appState.selectedLanguage = "PT" }
-            } label: {
-                Label(appState.selectedLanguage, systemImage: "globe")
-            }
-            .help("Narrative Language")
-        }
+        ToolbarItem(placement: .principal) {
+            HStack(spacing: 12) {
+                // Agent / Engine pill (matching screenshot: "1 agent running")
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(Theme.purple)
+                        .frame(width: 6, height: 6)
+                    Text("1 engine running")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(Theme.textSecondary)
+                }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 3)
+                .background(Color.white.opacity(0.04), in: Capsule())
 
-        ToolbarItem(placement: .automatic) {
-            Button {
-                appState.soundEnabled.toggle()
-            } label: {
-                Image(systemName: appState.soundEnabled ? "speaker.wave.2.fill" : "speaker.slash.fill")
+                // Price / Block height pill (matching screenshot: "$87.84" style)
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(Theme.green)
+                        .frame(width: 6, height: 6)
+                    Text("#\(appState.blockHeight)")
+                        .font(.system(size: 11, weight: .bold, design: .monospaced))
+                        .foregroundStyle(Theme.textPrimary)
+                    Text("·")
+                        .foregroundStyle(Theme.textMuted)
+                    Text(appState.blockTimeAgo)
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(Theme.textSecondary)
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(Theme.cardInner, in: Capsule())
+                .overlay(Capsule().stroke(Theme.border, lineWidth: 1))
             }
-            .help(appState.soundEnabled ? "Mute block chime" : "Unmute block chime")
         }
 
         ToolbarItem(placement: .primaryAction) {
-            Button {
-                appState.showInspector.toggle()
-            } label: {
-                Image(systemName: "sidebar.trailing")
+            HStack(spacing: 10) {
+                // Daylight Segmented Control
+                Picker("Daylight", selection: $appState.daylightMode) {
+                    ForEach(DaylightMode.allCases) { mode in
+                        Text(mode.rawValue).tag(mode)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .controlSize(.small)
+                .frame(width: 130)
+
+                // Language
+                Menu {
+                    Button("English (EN)") { appState.selectedLanguage = "EN" }
+                    Button("Русский (RU)") { appState.selectedLanguage = "RU" }
+                    Button("Español (ES)") { appState.selectedLanguage = "ES" }
+                    Button("Português (PT)") { appState.selectedLanguage = "PT" }
+                } label: {
+                    Text(appState.selectedLanguage)
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundStyle(Theme.textSecondary)
+                }
+                .buttonStyle(.plain)
+
+                // Sound Chime Button
+                Button {
+                    appState.soundEnabled.toggle()
+                } label: {
+                    Image(systemName: appState.soundEnabled ? "bell.fill" : "bell.slash")
+                        .font(.caption)
+                        .foregroundStyle(appState.soundEnabled ? Theme.purple : Theme.textMuted)
+                }
+                .buttonStyle(.plain)
+                .help("Toggle Block Landing Chime")
+
+                // Inspector Toggle
+                Button {
+                    appState.showInspector.toggle()
+                } label: {
+                    Image(systemName: "sidebar.trailing")
+                        .font(.caption)
+                        .foregroundStyle(appState.showInspector ? Theme.purple : Theme.textSecondary)
+                }
+                .buttonStyle(.plain)
+                .help("Toggle Inspector")
             }
-            .help("Toggle BIP-39 Wordlist & Recovery Inspector")
         }
     }
 }
