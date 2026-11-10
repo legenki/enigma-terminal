@@ -88,6 +88,13 @@ python3 -m http.server 8000 --directory docs
 # http://localhost:8000
 ```
 
+Or build and run the native macOS desktop application (macOS 26+):
+
+```bash
+./tools/build_macos_app.sh
+open "dist/Enigma Terminal.app"
+```
+
 ## The interface
 
 The web build is one interface with twelve panels, reachable by clicking or by pressing
@@ -421,7 +428,9 @@ tools/measure_leading.mjs  re-measures the distribution behind nameforge.json
 tools/js_vectors.mjs       runs the JS crypto under Node for the parity tests
 tools/js_commands.mjs      reports the web build's command and panel surface
 tools/smoke_web.mjs        opens the page in a browser and presses the buttons
-tests/                     477 tests, including the Python ↔ JavaScript diff
+tools/build_macos_app.sh   compiles and packages the native macOS desktop application
+macos/                     native Swift/AppKit wrapper for macOS 26+
+tests/                     482 tests, including the Python ↔ JavaScript diff
 ```
 
 ## Development
@@ -431,8 +440,7 @@ generator and the reference implementation; it is not a runtime.
 
 ```bash
 pip install -e ".[dev]"            # pytest, ruff, mypy and the reference libraries
-python -m pytest tests -v          # 477 tests
-python tools/build_web_data.py     # required after editing data/
+python -m pytest tests -v          # 482 tests
 ```
 
 The suite is static: it reads the web build rather than running it, which is
