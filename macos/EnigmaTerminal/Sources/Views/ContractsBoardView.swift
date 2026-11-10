@@ -12,6 +12,8 @@ public struct ContractsBoardView: View {
 
     public init() {}
 
+    private var theme: AppTheme { appState.theme }
+
     private var currentContracts: [ContractCase] {
         let list = appState.contracts.filter {
             $0.client.lowercased() == selectedClientSlug.lowercased() && $0.act == selectedAct
@@ -41,16 +43,16 @@ public struct ContractsBoardView: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 10)
             }
-            .background(Theme.sidebarBg.opacity(0.8))
+            .background(theme.sidebarBg)
 
             Divider()
-                .overlay(Theme.border)
+                .overlay(theme.border)
 
-            // 2. Phase Navigation Bar (Custom Dark Pills, no clashing blue!)
+            // 2. Phase Navigation Bar
             HStack(spacing: 8) {
-                Text("PHASE:")
+                Text(appState.t("phase"))
                     .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(Theme.textMuted)
+                    .foregroundStyle(theme.textMuted)
 
                 ForEach(1...4, id: \.self) { act in
                     let isSelected = selectedAct == act
@@ -59,16 +61,16 @@ public struct ContractsBoardView: View {
                     } label: {
                         Text(actTitle(act))
                             .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
-                            .foregroundStyle(isSelected ? Theme.purple : Theme.textSecondary)
+                            .foregroundStyle(isSelected ? theme.purple : theme.textSecondary)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 5)
                             .background(
-                                isSelected ? Theme.purpleSoft : Color.white.opacity(0.04),
+                                isSelected ? theme.purpleSoft : Color.white.opacity(0.04),
                                 in: RoundedRectangle(cornerRadius: 6)
                             )
                             .overlay(
                                 RoundedRectangle(cornerRadius: 6)
-                                    .stroke(isSelected ? Theme.borderGlow : Color.clear, lineWidth: 1)
+                                    .stroke(isSelected ? theme.borderGlow : Color.clear, lineWidth: 1)
                             )
                     }
                     .buttonStyle(.plain)
@@ -80,18 +82,18 @@ public struct ContractsBoardView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "mappin.circle.fill")
                         .font(.caption2)
-                        .foregroundStyle(Theme.cyan)
+                        .foregroundStyle(theme.cyan)
                     Text(activeClient.district)
                         .font(.system(size: 11, design: .monospaced))
-                        .foregroundStyle(Theme.textSecondary)
+                        .foregroundStyle(theme.textSecondary)
                 }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
-            .background(Theme.cardBg)
+            .background(theme.cardBg)
 
             Divider()
-                .overlay(Theme.borderSubtle)
+                .overlay(theme.borderSubtle)
 
             // 3. Contracts Grid Area
             ScrollView {
@@ -102,7 +104,7 @@ public struct ContractsBoardView: View {
                 }
                 .padding(16)
             }
-            .background(Theme.cardInner)
+            .background(theme.cardInner)
         }
         .onAppear {
             if appState.clients.isEmpty {
@@ -115,11 +117,13 @@ public struct ContractsBoardView: View {
     }
 
     private func actTitle(_ act: Int) -> String {
+        let lang = appState.selectedLanguage.lowercased()
+        let prefix = lang == "ru" ? "Фаза" : (lang == "es" || lang == "pt" ? "Fase" : "Phase")
         switch act {
-        case 1: return "Phase I (1-8)"
-        case 2: return "Phase II (9-16)"
-        case 3: return "Phase III (17-24)"
-        default: return "Phase IV (25-32)"
+        case 1: return "\(prefix) I (1-8)"
+        case 2: return "\(prefix) II (9-16)"
+        case 3: return "\(prefix) III (17-24)"
+        default: return "\(prefix) IV (25-32)"
         }
     }
 
@@ -133,33 +137,33 @@ public struct ContractsBoardView: View {
             HStack(spacing: 8) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 6)
-                        .fill(isSelected ? Theme.purple : Color.white.opacity(0.06))
+                        .fill(isSelected ? theme.purple : Color.white.opacity(0.06))
                         .frame(width: 24, height: 24)
                     Text(String(client.name.prefix(2)))
                         .font(.system(size: 9, weight: .bold, design: .monospaced))
-                        .foregroundStyle(isSelected ? Color.white : Theme.textSecondary)
+                        .foregroundStyle(isSelected ? Color.white : theme.textSecondary)
                 }
 
                 VStack(alignment: .leading, spacing: 1) {
                     Text(client.name)
                         .font(.system(size: 11, weight: isSelected ? .bold : .medium))
-                        .foregroundStyle(isSelected ? Theme.textPrimary : Theme.textSecondary)
+                        .foregroundStyle(isSelected ? theme.textPrimary : theme.textSecondary)
                         .lineLimit(1)
                     Text(client.district)
                         .font(.system(size: 9))
-                        .foregroundStyle(Theme.textMuted)
+                        .foregroundStyle(theme.textMuted)
                         .lineLimit(1)
                 }
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
             .background(
-                isSelected ? Theme.purpleSoft : Color.white.opacity(0.03),
+                isSelected ? theme.purpleSoft : Color.white.opacity(0.03),
                 in: RoundedRectangle(cornerRadius: 8)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(isSelected ? Theme.borderGlow : Theme.border, lineWidth: 1)
+                    .stroke(isSelected ? theme.borderGlow : theme.border, lineWidth: 1)
             )
         }
         .buttonStyle(.plain)
@@ -171,55 +175,50 @@ public struct ContractsBoardView: View {
         let isSolved = appState.solvedContractIDs.contains(contract.id)
 
         return VStack(alignment: .leading, spacing: 10) {
-            // Header
             HStack {
                 Text("#\(contract.id)")
                     .font(.caption.monospaced().bold())
-                    .foregroundStyle(Theme.cyan)
+                    .foregroundStyle(theme.cyan)
 
-                Text("· Phase \(contract.act)")
+                Text("· \(contract.act)")
                     .font(.caption2.monospaced())
-                    .foregroundStyle(Theme.textMuted)
+                    .foregroundStyle(theme.textMuted)
 
                 Spacer()
 
-                Text(isSolved ? "SOLVED" : "AVAILABLE")
+                Text(isSolved ? appState.t("solved") : appState.t("available"))
                     .font(.system(size: 9, weight: .bold, design: .monospaced))
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
                     .background(
-                        isSolved ? Theme.green.opacity(0.2) : Color.white.opacity(0.06),
+                        isSolved ? theme.green.opacity(0.2) : Color.white.opacity(0.06),
                         in: Capsule()
                     )
-                    .foregroundStyle(isSolved ? Theme.green : Theme.textMuted)
+                    .foregroundStyle(isSolved ? theme.green : theme.textMuted)
             }
 
-            // Codename
             Text(contract.codename)
                 .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(Theme.textPrimary)
+                .foregroundStyle(theme.textPrimary)
                 .lineLimit(1)
 
-            // Archetype / Scheme tag
             HStack {
                 Image(systemName: "puzzlepiece.fill")
                     .font(.system(size: 9))
                 Text(contract.archetype.replacingOccurrences(of: "_", with: " ").capitalized)
                     .font(.system(size: 10, design: .monospaced))
             }
-            .foregroundStyle(Theme.purple)
+            .foregroundStyle(theme.purple)
 
-            // Brief summary
             if let firstLine = contract.brief.first {
                 Text(firstLine)
                     .font(.system(size: 11))
-                    .foregroundStyle(Theme.textSecondary)
+                    .foregroundStyle(theme.textSecondary)
                     .lineLimit(2)
             }
 
             Spacer()
 
-            // Action Button
             Button {
                 solutionInput = ""
                 solutionError = nil
@@ -228,27 +227,27 @@ public struct ContractsBoardView: View {
             } label: {
                 HStack(spacing: 6) {
                     Image(systemName: "doc.text.magnifyingglass")
-                    Text("Open Dossier")
+                    Text(appState.t("openDossier"))
                 }
                 .font(.system(size: 11, weight: .medium))
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 6)
-                .background(Theme.purpleSoft, in: RoundedRectangle(cornerRadius: 6))
-                .overlay(RoundedRectangle(cornerRadius: 6).stroke(Theme.borderGlow, lineWidth: 1))
-                .foregroundStyle(Theme.purple)
+                .background(theme.purpleSoft, in: RoundedRectangle(cornerRadius: 6))
+                .overlay(RoundedRectangle(cornerRadius: 6).stroke(theme.borderGlow, lineWidth: 1))
+                .foregroundStyle(theme.purple)
             }
             .buttonStyle(.plain)
         }
         .padding(14)
-        .background(Theme.cardBg)
+        .background(theme.cardBg)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(isSolved ? Theme.green.opacity(0.4) : Theme.border, lineWidth: 1)
+                .stroke(isSolved ? theme.green.opacity(0.4) : theme.border, lineWidth: 1)
         )
     }
 
-    // MARK: - Interactive Dossier Sheet (Real content & solving!)
+    // MARK: - Interactive Dossier Sheet
 
     private func contractDossierSheet(_ contract: ContractCase) -> some View {
         VStack(spacing: 0) {
@@ -258,14 +257,14 @@ public struct ContractsBoardView: View {
                     HStack(spacing: 8) {
                         Text("CONTRACT #\(contract.id)")
                             .font(.caption.monospaced().bold())
-                            .foregroundStyle(Theme.cyan)
+                            .foregroundStyle(theme.cyan)
                         Text("· \(contract.client.uppercased())")
                             .font(.caption2.bold())
-                            .foregroundStyle(Theme.purple)
+                            .foregroundStyle(theme.purple)
                     }
                     Text(contract.codename)
                         .font(.title3.bold())
-                        .foregroundStyle(Theme.textPrimary)
+                        .foregroundStyle(theme.textPrimary)
                 }
 
                 Spacer()
@@ -275,120 +274,121 @@ public struct ContractsBoardView: View {
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                         .font(.title2)
-                        .foregroundStyle(Theme.textMuted)
+                        .foregroundStyle(theme.textMuted)
                 }
                 .buttonStyle(.plain)
             }
             .padding(20)
-            .background(Theme.cardBg)
+            .background(theme.cardBg)
 
             Divider()
-                .overlay(Theme.border)
+                .overlay(theme.border)
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     // Briefing Section
                     VStack(alignment: .leading, spacing: 8) {
-                        Label("BRIEFING & BACKGROUND", systemImage: "info.circle.fill")
+                        Label(appState.t("briefing"), systemImage: "info.circle.fill")
                             .font(.system(size: 11, weight: .bold, design: .monospaced))
-                            .foregroundStyle(Theme.cyan)
+                            .foregroundStyle(theme.cyan)
 
                         VStack(alignment: .leading, spacing: 4) {
                             ForEach(contract.brief, id: \.self) { line in
                                 Text(line)
                                     .font(.system(size: 13))
-                                    .foregroundStyle(Theme.textPrimary)
+                                    .foregroundStyle(theme.textPrimary)
                             }
                         }
                         .padding(12)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
-                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Theme.border, lineWidth: 1))
+                        .background(theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(theme.border, lineWidth: 1))
                     }
 
                     // Clues & Evidence Section
                     VStack(alignment: .leading, spacing: 8) {
-                        Label("FORENSIC EVIDENCE & CLUES", systemImage: "magnifyingglass")
+                        Label(appState.t("evidence"), systemImage: "magnifyingglass")
                             .font(.system(size: 11, weight: .bold, design: .monospaced))
-                            .foregroundStyle(Theme.amber)
+                            .foregroundStyle(theme.amber)
 
                         VStack(alignment: .leading, spacing: 6) {
                             ForEach(contract.evidence, id: \.self) { clue in
                                 HStack(alignment: .top, spacing: 8) {
                                     Text("›")
-                                        .foregroundStyle(Theme.amber)
+                                        .foregroundStyle(theme.amber)
                                     Text(clue)
                                         .font(.system(size: 12, design: .monospaced))
-                                        .foregroundStyle(Theme.textPrimary)
+                                        .foregroundStyle(theme.textPrimary)
                                         .textSelection(.enabled)
                                 }
                             }
                         }
                         .padding(14)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
-                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Theme.border, lineWidth: 1))
+                        .background(theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(theme.border, lineWidth: 1))
                     }
 
                     // Decrypt & Verification Box
                     VStack(alignment: .leading, spacing: 10) {
-                        Label("DECRYPT & FILE CONTRACT", systemImage: "lock.shield.fill")
+                        Label(appState.t("decryptFile"), systemImage: "lock.shield.fill")
                             .font(.system(size: 11, weight: .bold, design: .monospaced))
-                            .foregroundStyle(Theme.green)
+                            .foregroundStyle(theme.green)
 
                         if isSolvedSuccess {
                             HStack {
                                 Image(systemName: "checkmark.seal.fill")
                                     .font(.title2)
-                                    .foregroundStyle(Theme.green)
+                                    .foregroundStyle(theme.green)
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("CONTRACT SOLVED & CLOSED")
+                                    Text(appState.t("contractClosed"))
                                         .font(.headline)
-                                        .foregroundStyle(Theme.green)
-                                    Text("Fingerprint verified against the Bitcoin network.")
-                                        .font(.caption)
-                                        .foregroundStyle(Theme.textSecondary)
+                                        .foregroundStyle(theme.green)
+                                    Text("Fingerprint: \(contract.fingerprint)")
+                                        .font(.system(size: 10, design: .monospaced))
+                                        .foregroundStyle(theme.textMuted)
+                                        .lineLimit(1)
                                 }
                             }
                             .padding(12)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Theme.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
+                            .background(theme.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
                         } else {
                             VStack(spacing: 10) {
-                                TextField("Enter 12-word recovery seed phrase or hex solution...", text: $solutionInput)
+                                TextField(appState.t("enterSolution"), text: $solutionInput)
                                     .textFieldStyle(.plain)
                                     .font(.system(size: 13, design: .monospaced))
                                     .padding(10)
-                                    .background(Theme.inputBg, in: RoundedRectangle(cornerRadius: 6))
-                                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(Theme.border, lineWidth: 1))
+                                    .background(theme.inputBg, in: RoundedRectangle(cornerRadius: 6))
+                                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(theme.border, lineWidth: 1))
 
                                 HStack {
                                     if let err = solutionError {
                                         Text(err)
                                             .font(.caption.bold())
-                                            .foregroundStyle(Theme.red)
+                                            .foregroundStyle(theme.red)
                                     }
                                     Spacer()
-                                    Button("Verify & Solve") {
+                                    Button(appState.t("verifySolve")) {
                                         let solved = appState.solveContract(id: contract.id, phrase: solutionInput)
                                         if solved {
                                             isSolvedSuccess = true
                                             solutionError = nil
                                         } else {
-                                            solutionError = "Fingerprint mismatch. Check clue handwriting."
+                                            solutionError = appState.selectedLanguage == "RU" ? "Неверная фраза или контрольная сумма" : "Fingerprint mismatch. Check clue handwriting."
                                         }
                                     }
                                     .buttonStyle(.borderedProminent)
                                 }
                             }
                             .padding(12)
-                            .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
+                            .background(theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
                         }
                     }
                 }
                 .padding(20)
             }
-            .background(Theme.bgDeep)
+            .background(theme.bgDeep)
         }
         .frame(minWidth: 540, minHeight: 480)
     }

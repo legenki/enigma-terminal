@@ -5,142 +5,144 @@ public struct SidebarView: View {
 
     public init() {}
 
+    private var theme: AppTheme { appState.theme }
+
     public var body: some View {
         VStack(spacing: 0) {
             // Top Workspace Header
             HStack(spacing: 8) {
                 Image(systemName: "star")
                     .font(.caption)
-                    .foregroundStyle(Theme.textSecondary)
+                    .foregroundStyle(theme.textSecondary)
                 Text("Enigma Terminal")
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Theme.textPrimary)
+                    .foregroundStyle(theme.textPrimary)
                 Spacer()
                 Image(systemName: "chevron.up.chevron.down")
                     .font(.caption2)
-                    .foregroundStyle(Theme.textMuted)
+                    .foregroundStyle(theme.textMuted)
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 12)
 
             Divider()
-                .overlay(Theme.border)
+                .overlay(theme.border)
 
             // Scrollable Navigation Items
             ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
-                    sectionView(title: "PROJECTS / WORKSPACE") {
+                VStack(alignment: .leading, spacing: 16) {
+                    sectionView(title: appState.t("projects")) {
                         sidebarRow(
                             panel: .terminal,
                             avatarText: ">_",
-                            avatarColor: Theme.purple,
-                            title: "enigma-terminal",
-                            subtitle: "main ★ · live feed",
+                            avatarColor: theme.purple,
+                            title: appState.t("terminal"),
+                            subtitle: appState.t("terminalSub"),
                             badge: "v3.1"
                         )
                         sidebarRow(
                             panel: .cases,
                             avatarText: "CF",
                             avatarColor: Color.blue,
-                            title: "Case Files",
-                            subtitle: "Act 1 & 2 · 4 active",
-                            badge: "4"
+                            title: appState.t("cases"),
+                            subtitle: appState.t("casesSub"),
+                            badge: "\(appState.solvedCaseIDs.count)/8"
                         )
                         sidebarRow(
                             panel: .contracts,
                             avatarText: "CB",
                             avatarColor: Color.orange,
-                            title: "Contracts Board",
-                            subtitle: "8 employers · 256 jobs",
-                            badge: "256"
+                            title: appState.t("contracts"),
+                            subtitle: appState.t("contractsSub"),
+                            badge: "\(appState.solvedContractIDs.count)/256"
                         )
                         sidebarRow(
                             panel: .acta,
                             avatarText: "AC",
                             avatarColor: Color.pink,
-                            title: "Acta Records",
-                            subtitle: "Caja book · wet papers",
+                            title: appState.t("acta"),
+                            subtitle: appState.t("actaSub"),
                             badge: nil
                         )
                     }
 
-                    sectionView(title: "CRYPTOGRAPHY") {
+                    sectionView(title: appState.t("crypto")) {
                         sidebarRow(
                             panel: .decrypt,
                             avatarText: "DC",
-                            avatarColor: Theme.cyan,
-                            title: "Decrypt & Derive",
-                            subtitle: "BIP-39 / BIP-32 / secp",
+                            avatarColor: theme.cyan,
+                            title: appState.t("decrypt"),
+                            subtitle: appState.t("decryptSub"),
                             badge: "3 addrs"
                         )
                         sidebarRow(
                             panel: .ledger,
                             avatarText: "LD",
-                            avatarColor: Theme.green,
-                            title: "Ledger Sync",
-                            subtitle: "UTXO & balance probes",
+                            avatarColor: theme.green,
+                            title: appState.t("ledger"),
+                            subtitle: appState.t("ledgerSub"),
                             badge: nil
                         )
                         sidebarRow(
                             panel: .explorer,
                             avatarText: "EX",
                             avatarColor: Color.indigo,
-                            title: "Live Explorer",
-                            subtitle: "#\(appState.blockHeight) · mempool",
-                            badge: "live"
+                            title: appState.t("explorer"),
+                            subtitle: appState.t("explorerSub"),
+                            badge: "#\(appState.blockHeight)"
                         )
                         sidebarRow(
                             panel: .randomizer,
                             avatarText: "RN",
                             avatarColor: Color.teal,
-                            title: "Randomizer",
-                            subtitle: "CSPRNG entropy rolls",
+                            title: appState.t("randomizer"),
+                            subtitle: appState.t("randomizerSub"),
                             badge: nil
                         )
                         sidebarRow(
                             panel: .nameforge,
                             avatarText: "NF",
                             avatarColor: Color.yellow,
-                            title: "Nameforge",
-                            subtitle: "1<Name> vanity stamps",
+                            title: appState.t("nameforge"),
+                            subtitle: appState.t("nameforgeSub"),
                             badge: nil
                         )
                     }
 
-                    sectionView(title: "INVESTIGATION") {
+                    sectionView(title: appState.t("investigation")) {
                         sidebarRow(
                             panel: .journal,
                             avatarText: "JN",
                             avatarColor: Color.mint,
-                            title: "Audit Journal",
-                            subtitle: "\(appState.journal.count) entries recorded",
+                            title: appState.t("journal"),
+                            subtitle: "\(appState.journal.count) \(appState.t("journalSub"))",
                             badge: "\(appState.journal.count)"
                         )
                         sidebarRow(
                             panel: .about,
                             avatarText: "ET",
-                            avatarColor: Theme.purple,
-                            title: "System & About",
-                            subtitle: "macOS 26 Native HIG",
+                            avatarColor: theme.purple,
+                            title: appState.t("about"),
+                            subtitle: appState.t("aboutSub"),
                             badge: nil
                         )
                     }
                 }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 10)
             }
 
             Divider()
-                .overlay(Theme.border)
+                .overlay(theme.border)
 
-            // Bottom Status / Git Branch Footer (matching screenshot)
+            // Bottom Status / Git Branch Footer
             HStack(spacing: 8) {
                 Image(systemName: "point.filled.topleft.down.curvedto.point.bottomright.up")
                     .font(.caption2)
-                    .foregroundStyle(Theme.purple)
+                    .foregroundStyle(theme.purple)
                 Text("main")
                     .font(.caption.monospaced())
-                    .foregroundStyle(Theme.textSecondary)
+                    .foregroundStyle(theme.textSecondary)
 
                 Spacer()
 
@@ -151,27 +153,27 @@ public struct SidebarView: View {
                         .font(.caption)
                 }
                 .buttonStyle(.plain)
-                .foregroundStyle(Theme.textSecondary)
-                .help("Toggle Right Inspector")
+                .foregroundStyle(theme.textSecondary)
+                .help(appState.t("toggleInspector"))
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 10)
-            .background(Theme.sidebarBg.opacity(0.6))
+            .background(theme.sidebarBg)
         }
-        .background(Theme.sidebarBg)
-        .frame(minWidth: 220, idealWidth: 240, maxWidth: 280)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(theme.sidebarBg)
     }
 
     private func sectionView<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Text(title)
                     .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(Theme.textMuted)
+                    .foregroundStyle(theme.textMuted)
                 Spacer()
                 Image(systemName: "plus")
                     .font(.system(size: 10))
-                    .foregroundStyle(Theme.textMuted)
+                    .foregroundStyle(theme.textMuted)
             }
             .padding(.horizontal, 8)
             .padding(.bottom, 2)
@@ -193,30 +195,30 @@ public struct SidebarView: View {
         return Button {
             appState.selectedPanel = panel
         } label: {
-            HStack(spacing: 10) {
+            HStack(spacing: 9) {
                 // Avatar badge
                 ZStack {
                     RoundedRectangle(cornerRadius: 6)
                         .fill(avatarColor.opacity(isSelected ? 0.3 : 0.15))
-                        .frame(width: 28, height: 28)
+                        .frame(width: 26, height: 26)
                         .overlay(
                             RoundedRectangle(cornerRadius: 6)
                                 .stroke(avatarColor.opacity(isSelected ? 0.8 : 0.3), lineWidth: 1)
                         )
                     Text(avatarText)
-                        .font(.system(size: 11, weight: .bold, design: .monospaced))
+                        .font(.system(size: 10, weight: .bold, design: .monospaced))
                         .foregroundStyle(avatarColor)
                 }
 
                 // Titles & Subtitles
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 1) {
                     Text(title)
                         .font(.system(size: 12, weight: isSelected ? .semibold : .medium))
-                        .foregroundStyle(isSelected ? Theme.textPrimary : Theme.textSecondary)
+                        .foregroundStyle(isSelected ? theme.textPrimary : theme.textSecondary)
                         .lineLimit(1)
                     Text(subtitle)
                         .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Theme.textMuted)
+                        .foregroundStyle(theme.textMuted)
                         .lineLimit(1)
                 }
 
@@ -229,21 +231,21 @@ public struct SidebarView: View {
                         .padding(.horizontal, 6)
                         .padding(.vertical, 2)
                         .background(
-                            isSelected ? Theme.purple.opacity(0.25) : Color.white.opacity(0.06),
+                            isSelected ? theme.purple.opacity(0.25) : Color.white.opacity(0.06),
                             in: Capsule()
                         )
-                        .foregroundStyle(isSelected ? Theme.purple : Theme.textMuted)
+                        .foregroundStyle(isSelected ? theme.purple : theme.textMuted)
                 }
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 6)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(isSelected ? Theme.purpleSoft : Color.clear)
+                    .fill(isSelected ? theme.purpleSoft : Color.clear)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(isSelected ? Theme.borderGlow : Color.clear, lineWidth: 1)
+                    .stroke(isSelected ? theme.borderGlow : Color.clear, lineWidth: 1)
             )
         }
         .buttonStyle(.plain)

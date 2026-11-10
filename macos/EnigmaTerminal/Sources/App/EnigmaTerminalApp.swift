@@ -8,7 +8,7 @@ struct EnigmaTerminalApp: App {
         WindowGroup("ENIGMA TERMINAL") {
             ContentView()
                 .environmentObject(appState)
-                .preferredColorScheme(appState.daylightMode == .day ? .light : (appState.daylightMode == .night ? .dark : nil))
+                .preferredColorScheme(appState.isLightMode ? .light : .dark)
         }
         .windowStyle(.titleBar)
         .defaultSize(width: 1200, height: 800)

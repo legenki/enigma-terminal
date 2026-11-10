@@ -5,12 +5,15 @@ public struct ContentView: View {
 
     public init() {}
 
+    private var theme: AppTheme { appState.theme }
+
     public var body: some View {
         NavigationSplitView {
             SidebarView()
+                .navigationSplitViewColumnWidth(min: 220, ideal: 250, max: 320)
         } detail: {
             ZStack {
-                Theme.backgroundGradient
+                theme.backgroundGradient
                     .ignoresSafeArea()
 
                 Group {
@@ -18,35 +21,35 @@ public struct ContentView: View {
                     case .terminal:
                         TerminalView()
                     case .cases, .acta:
-                        cardWrapper(title: "Case Files & Briefings") {
+                        cardWrapper(title: appState.t("cardCases")) {
                             CaseFilesView()
                         }
                     case .contracts:
-                        cardWrapper(title: "Contracts Matrix (256 Tasks)") {
+                        cardWrapper(title: appState.t("cardContracts")) {
                             ContractsBoardView()
                         }
                     case .decrypt, .ledger:
-                        cardWrapper(title: "Cryptographic Key Derivation") {
+                        cardWrapper(title: appState.t("cardDecrypt")) {
                             DecryptView()
                         }
                     case .explorer:
-                        cardWrapper(title: "Bitcoin Blockchain Explorer") {
+                        cardWrapper(title: appState.t("cardExplorer")) {
                             ExplorerView()
                         }
                     case .randomizer:
-                        cardWrapper(title: "CSPRNG Entropy Generator") {
+                        cardWrapper(title: appState.t("cardRandomizer")) {
                             RandomizerView()
                         }
                     case .nameforge:
-                        cardWrapper(title: "Nameforge Vanity Generator") {
+                        cardWrapper(title: appState.t("cardNameforge")) {
                             NameforgeView()
                         }
                     case .archive, .journal:
-                        cardWrapper(title: "Investigation Audit Journal") {
+                        cardWrapper(title: appState.t("cardJournal")) {
                             JournalView()
                         }
                     case .about:
-                        cardWrapper(title: "About Enigma Terminal") {
+                        cardWrapper(title: appState.t("cardAbout")) {
                             AboutView()
                         }
                     }
@@ -62,7 +65,7 @@ public struct ContentView: View {
         .toolbar {
             AppToolbar()
         }
-        .background(Theme.bgDeep)
+        .background(theme.bgDeep)
     }
 
     private func cardWrapper<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
@@ -70,30 +73,30 @@ public struct ContentView: View {
             HStack {
                 HStack(spacing: 6) {
                     Circle()
-                        .fill(Theme.purple)
+                        .fill(theme.purple)
                         .frame(width: 8, height: 8)
                     Text(title)
                         .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(Theme.textPrimary)
+                        .foregroundStyle(theme.textPrimary)
                 }
                 Spacer()
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-            .background(Theme.cardBg)
+            .background(theme.cardBg)
 
             Divider()
-                .overlay(Theme.border)
+                .overlay(theme.border)
 
             content()
         }
-        .background(Theme.cardBg)
+        .background(theme.cardBg)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(
             RoundedRectangle(cornerRadius: 14)
-                .stroke(Theme.border, lineWidth: 1)
+                .stroke(theme.border, lineWidth: 1)
         )
-        .shadow(color: Color.black.opacity(0.35), radius: 12, x: 0, y: 6)
+        .shadow(color: Color.black.opacity(theme.isLight ? 0.08 : 0.35), radius: 12, x: 0, y: 6)
         .padding(16)
     }
 }

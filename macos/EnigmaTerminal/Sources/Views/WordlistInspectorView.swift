@@ -24,32 +24,34 @@ public struct WordlistInspectorView: View {
 
     public init() {}
 
+    private var theme: AppTheme { appState.theme }
+
     public var body: some View {
         VStack(spacing: 0) {
-            // 1. Top Tab Strip (Wordlist, Recovery, Chain, Journal)
+            // 1. Top Tab Strip
             HStack(spacing: 4) {
-                tabButton(title: "Wordlist", index: 0)
-                tabButton(title: "Recovery", index: 1)
-                tabButton(title: "Chain", index: 2)
-                tabButton(title: "Journal", index: 3)
+                tabButton(title: appState.t("tabWordlist"), index: 0)
+                tabButton(title: appState.t("tabRecovery"), index: 1)
+                tabButton(title: appState.t("tabChain"), index: 2)
+                tabButton(title: appState.t("tabJournal"), index: 3)
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
-            .background(Theme.sidebarBg)
+            .background(theme.sidebarBg)
 
             Divider()
-                .overlay(Theme.border)
+                .overlay(theme.border)
 
             // 2. Filter Bar
             HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")
                     .font(.caption2)
-                    .foregroundStyle(Theme.textMuted)
+                    .foregroundStyle(theme.textMuted)
 
-                TextField("Filter BIP-39 words or indices...", text: $filterQuery)
+                TextField(appState.t("filterPlaceholder"), text: $filterQuery)
                     .textFieldStyle(.plain)
                     .font(.system(size: 11, design: .monospaced))
-                    .foregroundStyle(Theme.textPrimary)
+                    .foregroundStyle(theme.textPrimary)
                     .onChange(of: filterQuery) { _, _ in
                         performSearch()
                     }
@@ -63,21 +65,21 @@ public struct WordlistInspectorView: View {
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.caption2)
-                            .foregroundStyle(Theme.textMuted)
+                            .foregroundStyle(theme.textMuted)
                     }
                     .buttonStyle(.plain)
                 }
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(Theme.inputBg)
+            .background(theme.inputBg)
             .clipShape(RoundedRectangle(cornerRadius: 6))
-            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Theme.border, lineWidth: 1))
+            .overlay(RoundedRectangle(cornerRadius: 6).stroke(theme.border, lineWidth: 1))
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
 
             Divider()
-                .overlay(Theme.borderSubtle)
+                .overlay(theme.borderSubtle)
 
             // 3. Tab Content View
             Group {
@@ -94,12 +96,12 @@ public struct WordlistInspectorView: View {
             }
 
             Divider()
-                .overlay(Theme.border)
+                .overlay(theme.border)
 
             // 4. Interactive Bottom Drawer
             interactiveBottomDrawer
         }
-        .background(Theme.sidebarBg)
+        .background(theme.sidebarBg)
         .onAppear {
             performSearch()
             fetchLiveChain()
@@ -113,22 +115,22 @@ public struct WordlistInspectorView: View {
         } label: {
             Text(title)
                 .font(.system(size: 11, weight: isSelected ? .bold : .medium))
-                .foregroundStyle(isSelected ? Theme.purple : Theme.textMuted)
-                .padding(.horizontal, 10)
+                .foregroundStyle(isSelected ? theme.purple : theme.textMuted)
+                .padding(.horizontal, 8)
                 .padding(.vertical, 5)
                 .background(
-                    isSelected ? Theme.purpleSoft : Color.clear,
+                    isSelected ? theme.purpleSoft : Color.clear,
                     in: RoundedRectangle(cornerRadius: 6)
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 6)
-                        .stroke(isSelected ? Theme.borderGlow : Color.clear, lineWidth: 1)
+                        .stroke(isSelected ? theme.borderGlow : Color.clear, lineWidth: 1)
                 )
         }
         .buttonStyle(.plain)
     }
 
-    // MARK: - Wordlist Clean ScrollView (No ugly table lines!)
+    // MARK: - Wordlist Clean ScrollView
 
     private var wordlistScrollView: some View {
         ScrollView {
@@ -138,12 +140,12 @@ public struct WordlistInspectorView: View {
                     HStack(spacing: 10) {
                         Text("#\(entry.index)")
                             .font(.system(size: 10, weight: .bold, design: .monospaced))
-                            .foregroundStyle(Theme.cyan)
+                            .foregroundStyle(theme.cyan)
                             .frame(width: 38, alignment: .leading)
 
                         Text(entry.word)
                             .font(.system(size: 12, design: .monospaced))
-                            .foregroundStyle(Theme.textPrimary)
+                            .foregroundStyle(theme.textPrimary)
 
                         Spacer()
 
@@ -157,14 +159,14 @@ public struct WordlistInspectorView: View {
                         } label: {
                             Image(systemName: isJustCopied ? "checkmark" : "doc.on.doc")
                                 .font(.system(size: 10))
-                                .foregroundStyle(isJustCopied ? Theme.green : Theme.textMuted)
+                                .foregroundStyle(isJustCopied ? theme.green : theme.textMuted)
                         }
                         .buttonStyle(.plain)
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 5)
                     .background(
-                        isJustCopied ? Theme.green.opacity(0.12) : Color.white.opacity(0.02),
+                        isJustCopied ? theme.green.opacity(0.12) : (theme.isLight ? Color.black.opacity(0.02) : Color.white.opacity(0.02)),
                         in: RoundedRectangle(cornerRadius: 6)
                     )
                 }
@@ -178,18 +180,18 @@ public struct WordlistInspectorView: View {
 
     private var recoveryView: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Single-Word BIP-39 Recovery")
+            Text(appState.selectedLanguage == "RU" ? "Восстановление пропущенного слова" : "Single-Word BIP-39 Recovery")
                 .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(Theme.textPrimary)
+                .foregroundStyle(theme.textPrimary)
 
-            TextField("Phrase with ?...", text: $recoveryInput)
+            TextField("abandon ... ?", text: $recoveryInput)
                 .textFieldStyle(.plain)
                 .font(.system(size: 11, design: .monospaced))
                 .padding(8)
-                .background(Theme.inputBg, in: RoundedRectangle(cornerRadius: 6))
-                .overlay(RoundedRectangle(cornerRadius: 6).stroke(Theme.border, lineWidth: 1))
+                .background(theme.inputBg, in: RoundedRectangle(cornerRadius: 6))
+                .overlay(RoundedRectangle(cornerRadius: 6).stroke(theme.border, lineWidth: 1))
 
-            Button("Solve Candidates") {
+            Button(appState.t("solveCandidates")) {
                 let (pos, candidates) = appState.core.complete(pattern: recoveryInput)
                 self.recoveryPosition = pos
                 self.recoveryCandidates = candidates
@@ -198,9 +200,9 @@ public struct WordlistInspectorView: View {
             .controlSize(.small)
 
             if recoveryPosition >= 0 {
-                Text("Pos #\(recoveryPosition + 1) · \(recoveryCandidates.count) matches:")
+                Text(appState.selectedLanguage == "RU" ? "Позиция #\(recoveryPosition + 1) · \(recoveryCandidates.count) совпадений:" : "Pos #\(recoveryPosition + 1) · \(recoveryCandidates.count) matches:")
                     .font(.system(size: 10, weight: .bold, design: .monospaced))
-                    .foregroundStyle(Theme.cyan)
+                    .foregroundStyle(theme.cyan)
 
                 ScrollView {
                     LazyVStack(spacing: 4) {
@@ -208,7 +210,7 @@ public struct WordlistInspectorView: View {
                             HStack {
                                 Text(word)
                                     .font(.system(size: 11, design: .monospaced))
-                                    .foregroundStyle(Theme.textPrimary)
+                                    .foregroundStyle(theme.textPrimary)
                                 Spacer()
                                 Button("Copy") {
                                     NSPasteboard.general.clearContents()
@@ -219,7 +221,7 @@ public struct WordlistInspectorView: View {
                             }
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
-                            .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 4))
+                            .background(theme.cardInner, in: RoundedRectangle(cornerRadius: 4))
                         }
                     }
                 }
@@ -230,46 +232,46 @@ public struct WordlistInspectorView: View {
         .padding(12)
     }
 
-    // MARK: - Live Chain View (Interactive network query!)
+    // MARK: - Live Chain View
 
     private var chainView: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
-                Text("Bitcoin Network Pulse")
+                Text(appState.selectedLanguage == "RU" ? "Пульс сети Bitcoin" : "Bitcoin Network Pulse")
                     .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(Theme.textPrimary)
+                    .foregroundStyle(theme.textPrimary)
                 Spacer()
                 Button {
                     fetchLiveChain()
                 } label: {
                     Image(systemName: "arrow.clockwise")
                         .font(.system(size: 11))
-                        .foregroundStyle(isFetchingChain ? Theme.purple : Theme.textSecondary)
+                        .foregroundStyle(isFetchingChain ? theme.purple : theme.textSecondary)
                 }
                 .buttonStyle(.plain)
             }
 
             VStack(spacing: 8) {
-                metricRow(label: "Tip Block Height", value: "#\(appState.blockHeight)", tint: Theme.purple)
-                metricRow(label: "Block Pulse", value: appState.blockTimeAgo, tint: Theme.green)
+                metricRow(label: appState.t("tipHeight"), value: "#\(appState.blockHeight)", tint: theme.purple)
+                metricRow(label: appState.selectedLanguage == "RU" ? "Время блока" : "Block Pulse", value: appState.blockTimeAgo, tint: theme.green)
                 if let fee = liveFastestFee {
-                    metricRow(label: "Recommended Fee", value: "\(fee) sat/vB", tint: Theme.amber)
+                    metricRow(label: appState.t("recFee"), value: "\(fee) sat/vB", tint: theme.amber)
                 }
                 if let lat = liveLatencyMs {
-                    metricRow(label: "Mempool API Latency", value: "\(lat) ms", tint: Theme.cyan)
+                    metricRow(label: appState.t("apiLatency"), value: "\(lat) ms", tint: theme.cyan)
                 }
             }
             .padding(12)
-            .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
+            .background(theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
 
             Link(destination: URL(string: "https://mempool.space")!) {
                 HStack {
-                    Text("Open mempool.space")
+                    Text("mempool.space ↗")
                     Spacer()
                     Image(systemName: "arrow.up.right.square")
                 }
                 .font(.system(size: 11))
-                .foregroundStyle(Theme.purple)
+                .foregroundStyle(theme.purple)
                 .padding(8)
             }
 
@@ -282,7 +284,7 @@ public struct WordlistInspectorView: View {
         HStack {
             Text(label)
                 .font(.system(size: 11))
-                .foregroundStyle(Theme.textSecondary)
+                .foregroundStyle(theme.textSecondary)
             Spacer()
             Text(value)
                 .font(.system(size: 11, weight: .bold, design: .monospaced))
@@ -300,25 +302,25 @@ public struct WordlistInspectorView: View {
                         HStack {
                             Text(item.tool.uppercased())
                                 .font(.system(size: 9, weight: .bold, design: .monospaced))
-                                .foregroundStyle(Theme.purple)
+                                .foregroundStyle(theme.purple)
                             Spacer()
                             Text(item.timestamp, style: .time)
                                 .font(.system(size: 9, design: .monospaced))
-                                .foregroundStyle(Theme.textMuted)
+                                .foregroundStyle(theme.textMuted)
                         }
                         Text(item.summary)
                             .font(.system(size: 11))
-                            .foregroundStyle(Theme.textPrimary)
+                            .foregroundStyle(theme.textPrimary)
                     }
                     .padding(8)
-                    .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 6))
+                    .background(theme.cardInner, in: RoundedRectangle(cornerRadius: 6))
                 }
             }
             .padding(8)
         }
     }
 
-    // MARK: - Interactive Bottom Drawer (Setup, Run, Terminal)
+    // MARK: - Interactive Bottom Drawer
 
     private var interactiveBottomDrawer: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -330,45 +332,44 @@ public struct WordlistInspectorView: View {
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(Color.black.opacity(0.3))
+            .background(theme.isLight ? Color.black.opacity(0.06) : Color.black.opacity(0.3))
 
-            // Dynamic output based on drawer tab
             VStack(alignment: .leading, spacing: 4) {
                 if drawerTab == "Terminal" {
                     Text("v3.1.0 via CoreBridge")
                         .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Theme.amber)
+                        .foregroundStyle(theme.amber)
                     Text("enigma-terminal on ⎇ main [✓]")
                         .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Theme.green)
+                        .foregroundStyle(theme.green)
                     Text("482 tests passed · parity 100%")
                         .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Theme.cyan)
+                        .foregroundStyle(theme.cyan)
                 } else if drawerTab == "Run" {
-                    Text("[STATUS] Block #\(appState.blockHeight) · Network: mainnet")
+                    Text("[STATUS] Block #\(appState.blockHeight) · mainnet")
                         .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Theme.green)
+                        .foregroundStyle(theme.green)
                     Text("[STATS] Solved Cases: \(appState.solvedCaseIDs.count)/8")
                         .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Theme.purple)
+                        .foregroundStyle(theme.purple)
                     Text("[STATS] Solved Contracts: \(appState.solvedContractIDs.count)/256")
                         .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Theme.cyan)
+                        .foregroundStyle(theme.cyan)
                 } else {
                     Text("Runtime: Apple Swift 6.4 + AppKit")
                         .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Theme.textSecondary)
+                        .foregroundStyle(theme.textSecondary)
                     Text("Crypto: JavaScriptCore In-Process VM")
                         .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Theme.textSecondary)
+                        .foregroundStyle(theme.textSecondary)
                     Text("Target: macOS 26.0+ (ARM64)")
                         .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Theme.textSecondary)
+                        .foregroundStyle(theme.textSecondary)
                 }
             }
             .padding(10)
         }
-        .background(Theme.cardInner)
+        .background(theme.cardInner)
     }
 
     private func drawerTabButton(_ name: String) -> some View {
@@ -384,7 +385,7 @@ public struct WordlistInspectorView: View {
                 Text(name)
                     .font(.system(size: 10, weight: isSelected ? .bold : .regular))
             }
-            .foregroundStyle(isSelected ? Theme.purple : Theme.textMuted)
+            .foregroundStyle(isSelected ? theme.purple : theme.textMuted)
         }
         .buttonStyle(.plain)
     }
@@ -424,7 +425,7 @@ public struct WordlistInspectorView: View {
             if let data = data, let str = String(data: data, encoding: .utf8), let h = Int(str.trimmingCharacters(in: .whitespacesAndNewlines)) {
                 DispatchQueue.main.async {
                     self.appState.blockHeight = h
-                    self.appState.blockTimeAgo = "just now"
+                    self.appState.blockTimeAgo = self.appState.selectedLanguage == "RU" ? "только что" : "just now"
                     self.liveLatencyMs = duration
                     self.isFetchingChain = false
                 }

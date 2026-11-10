@@ -47,9 +47,36 @@ public enum TerminalLineStyle {
 public final class AppState: ObservableObject {
     @Published public var selectedPanel: AppPanel = .terminal
     @Published public var showInspector: Bool = false
-    @Published public var daylightMode: DaylightMode = .live
+    @Published public var daylightMode: DaylightMode = .live {
+        didSet {
+            updateTheme()
+        }
+    }
     @Published public var soundEnabled: Bool = true
-    @Published public var selectedLanguage: String = "EN"
+    @Published public var selectedLanguage: String = "EN" {
+        didSet {
+            reloadGameData()
+        }
+    }
+    @Published public var theme: AppTheme = AppTheme.make(isLight: false)
+
+    public var isLightMode: Bool {
+        switch daylightMode {
+        case .day: return true
+        case .night: return false
+        case .live:
+            let hour = Calendar.current.component(.hour, from: Date())
+            return hour >= 7 && hour < 19
+        }
+    }
+
+    public func updateTheme() {
+        self.theme = AppTheme.make(isLight: isLightMode)
+    }
+
+    public func t(_ key: String) -> String {
+        I18N.t(key, lang: selectedLanguage)
+    }
     @Published public var blockHeight: Int = 881240
     @Published public var blockTimeAgo: String = "4m ago"
     @Published public var journal: [JournalItem] = []

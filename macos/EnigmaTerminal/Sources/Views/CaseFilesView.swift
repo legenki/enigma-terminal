@@ -10,6 +10,8 @@ public struct CaseFilesView: View {
 
     public init() {}
 
+    private var theme: AppTheme { appState.theme }
+
     private var currentCases: [CampaignCase] {
         if appState.campaignCases.isEmpty {
             return appState.core.loadCampaignCases(lang: appState.selectedLanguage.lowercased())
@@ -26,20 +28,20 @@ public struct CaseFilesView: View {
             // Left Pane: Case Files Master List
             VStack(spacing: 0) {
                 HStack {
-                    Text("CAMPAIGN ACTS")
+                    Text(appState.t("campaignActs"))
                         .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(Theme.textMuted)
+                        .foregroundStyle(theme.textMuted)
                     Spacer()
-                    Text("\(appState.solvedCaseIDs.count)/\(currentCases.count) Closed")
+                    Text("\(appState.solvedCaseIDs.count)/\(currentCases.count) \(appState.t("closed"))")
                         .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Theme.green)
+                        .foregroundStyle(theme.green)
                 }
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)
-                .background(Theme.sidebarBg.opacity(0.8))
+                .background(theme.sidebarBg)
 
                 Divider()
-                    .overlay(Theme.border)
+                    .overlay(theme.border)
 
                 List(currentCases) { c in
                     let isSelected = selectedCaseID == c.id
@@ -55,22 +57,22 @@ public struct CaseFilesView: View {
                             HStack {
                                 Text("WALLET #\(c.id)")
                                     .font(.system(size: 10, weight: .bold, design: .monospaced))
-                                    .foregroundStyle(isSelected ? Theme.cyan : Theme.textMuted)
+                                    .foregroundStyle(isSelected ? theme.cyan : theme.textMuted)
 
                                 Spacer()
 
                                 if isSolved {
-                                    Text("CLOSED")
+                                    Text(appState.t("closed").uppercased())
                                         .font(.system(size: 8, weight: .bold, design: .monospaced))
                                         .padding(.horizontal, 5)
                                         .padding(.vertical, 1)
-                                        .background(Theme.green.opacity(0.2), in: Capsule())
-                                        .foregroundStyle(Theme.green)
+                                        .background(theme.green.opacity(0.2), in: Capsule())
+                                        .foregroundStyle(theme.green)
                                 } else {
                                     HStack(spacing: 2) {
                                         ForEach(0..<c.difficulty, id: \.self) { _ in
                                             Circle()
-                                                .fill(Theme.amber)
+                                                .fill(theme.amber)
                                                 .frame(width: 4, height: 4)
                                         }
                                     }
@@ -79,18 +81,18 @@ public struct CaseFilesView: View {
 
                             Text(c.codename)
                                 .font(.system(size: 12, weight: isSelected ? .bold : .medium))
-                                .foregroundStyle(isSelected ? Theme.textPrimary : Theme.textSecondary)
+                                .foregroundStyle(isSelected ? theme.textPrimary : theme.textSecondary)
                                 .lineLimit(1)
                         }
                         .padding(.horizontal, 8)
                         .padding(.vertical, 6)
                         .background(
-                            isSelected ? Theme.purpleSoft : Color.clear,
+                            isSelected ? theme.purpleSoft : Color.clear,
                             in: RoundedRectangle(cornerRadius: 6)
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 6)
-                                .stroke(isSelected ? Theme.borderGlow : Color.clear, lineWidth: 1)
+                                .stroke(isSelected ? theme.borderGlow : Color.clear, lineWidth: 1)
                         )
                     }
                     .buttonStyle(.plain)
@@ -99,7 +101,7 @@ public struct CaseFilesView: View {
                 .listStyle(.plain)
             }
             .frame(minWidth: 220, idealWidth: 240, maxWidth: 280)
-            .background(Theme.sidebarBg)
+            .background(theme.sidebarBg)
 
             // Right Pane: Active Case Dossier
             if let active = activeCase {
@@ -111,85 +113,85 @@ public struct CaseFilesView: View {
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
                                 HStack(spacing: 8) {
-                                    Text("INVESTIGATION DOSSIER #\(active.id)")
+                                    Text("DOSSIER #\(active.id)")
                                         .font(.caption.monospaced().bold())
-                                        .foregroundStyle(Theme.cyan)
-                                    Text("· Difficulty \(active.difficulty)/5")
+                                        .foregroundStyle(theme.cyan)
+                                    Text("· \(appState.t("difficulty")) \(active.difficulty)/5")
                                         .font(.caption2)
-                                        .foregroundStyle(Theme.amber)
+                                        .foregroundStyle(theme.amber)
                                 }
                                 Text(active.codename)
                                     .font(.title2.bold())
-                                    .foregroundStyle(Theme.textPrimary)
+                                    .foregroundStyle(theme.textPrimary)
                             }
 
                             Spacer()
 
-                            Label(isSolved ? "CLOSED" : "ACTIVE", systemImage: isSolved ? "lock.fill" : "lock.open")
+                            Label(isSolved ? appState.t("closed").uppercased() : appState.t("active"), systemImage: isSolved ? "lock.fill" : "lock.open")
                                 .font(.system(size: 11, weight: .bold, design: .monospaced))
                                 .padding(.horizontal, 10)
                                 .padding(.vertical, 5)
-                                .background(isSolved ? Theme.green.opacity(0.2) : Theme.amber.opacity(0.2), in: Capsule())
-                                .foregroundStyle(isSolved ? Theme.green : Theme.amber)
+                                .background(isSolved ? theme.green.opacity(0.2) : theme.amber.opacity(0.2), in: Capsule())
+                                .foregroundStyle(isSolved ? theme.green : theme.amber)
                         }
 
                         Divider()
-                            .overlay(Theme.border)
+                            .overlay(theme.border)
 
                         // Briefing Card
                         VStack(alignment: .leading, spacing: 8) {
-                            Label("BRIEFING", systemImage: "text.alignleft")
+                            Label(appState.t("briefing"), systemImage: "text.alignleft")
                                 .font(.system(size: 11, weight: .bold, design: .monospaced))
-                                .foregroundStyle(Theme.purple)
+                                .foregroundStyle(theme.purple)
 
                             VStack(alignment: .leading, spacing: 4) {
                                 ForEach(active.brief, id: \.self) { line in
                                     Text(line)
                                         .font(.system(size: 13))
-                                        .foregroundStyle(Theme.textPrimary)
+                                        .foregroundStyle(theme.textPrimary)
                                 }
                             }
                             .padding(14)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
-                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Theme.border, lineWidth: 1))
+                            .background(theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
+                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(theme.border, lineWidth: 1))
                         }
 
                         // Forensic Evidence Card
                         VStack(alignment: .leading, spacing: 8) {
-                            Label("FORENSIC EVIDENCE", systemImage: "magnifyingglass")
+                            Label(appState.t("evidence"), systemImage: "magnifyingglass")
                                 .font(.system(size: 11, weight: .bold, design: .monospaced))
-                                .foregroundStyle(Theme.amber)
+                                .foregroundStyle(theme.amber)
 
                             VStack(alignment: .leading, spacing: 6) {
                                 ForEach(active.evidence, id: \.self) { fragment in
                                     Text(fragment)
                                         .font(.system(size: 12, design: .monospaced))
-                                        .foregroundStyle(Theme.textPrimary)
+                                        .foregroundStyle(theme.textPrimary)
                                         .textSelection(.enabled)
                                         .padding(.vertical, 2)
                                 }
                             }
                             .padding(14)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
-                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Theme.border, lineWidth: 1))
+                            .background(theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
+                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(theme.border, lineWidth: 1))
                         }
 
                         // Solution / Decrypt Box
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
-                                Label("DECRYPT SEED PHRASE", systemImage: "key.fill")
+                                Label("BIP-39 / BIP-32", systemImage: "key.fill")
                                     .font(.system(size: 11, weight: .bold, design: .monospaced))
-                                    .foregroundStyle(Theme.green)
+                                    .foregroundStyle(theme.green)
                                 Spacer()
                                 if active.id == 1 && !isSolved {
-                                    Button("Fill Test Vector") {
+                                    Button(appState.t("fillTestVector")) {
                                         phraseInput = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
                                     }
                                     .buttonStyle(.plain)
                                     .font(.caption2.monospaced())
-                                    .foregroundStyle(Theme.cyan)
+                                    .foregroundStyle(theme.cyan)
                                 }
                             }
 
@@ -198,30 +200,30 @@ public struct CaseFilesView: View {
                                     HStack {
                                         Image(systemName: "checkmark.seal.fill")
                                             .font(.title3)
-                                            .foregroundStyle(Theme.green)
+                                            .foregroundStyle(theme.green)
                                         VStack(alignment: .leading, spacing: 2) {
-                                            Text("WALLET DRAINED & CLOSED")
+                                            Text(appState.t("walletDrained"))
                                                 .font(.headline)
-                                                .foregroundStyle(Theme.green)
+                                                .foregroundStyle(theme.green)
                                             Text("Fingerprint: \(active.fingerprint)")
                                                 .font(.system(size: 10, design: .monospaced))
-                                                .foregroundStyle(Theme.textMuted)
+                                                .foregroundStyle(theme.textMuted)
                                                 .lineLimit(1)
                                         }
                                     }
 
                                     if !solvedAddresses.isEmpty {
                                         Divider()
-                                            .overlay(Theme.borderSubtle)
+                                            .overlay(theme.borderSubtle)
                                         ForEach(solvedAddresses) { addr in
                                             HStack {
                                                 Text(addr.label)
                                                     .font(.caption.bold())
-                                                    .foregroundStyle(Theme.textSecondary)
+                                                    .foregroundStyle(theme.textSecondary)
                                                 Spacer()
                                                 Text(addr.address)
                                                     .font(.system(size: 11, design: .monospaced))
-                                                    .foregroundStyle(Theme.textPrimary)
+                                                    .foregroundStyle(theme.textPrimary)
                                                     .textSelection(.enabled)
                                             }
                                         }
@@ -229,45 +231,45 @@ public struct CaseFilesView: View {
                                 }
                                 .padding(14)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Theme.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
-                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Theme.green.opacity(0.3), lineWidth: 1))
+                                .background(theme.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
+                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(theme.green.opacity(0.3), lineWidth: 1))
                             } else {
                                 VStack(spacing: 10) {
-                                    TextField("Enter 12-word seed phrase recovered from clues...", text: $phraseInput)
+                                    TextField(appState.selectedLanguage == "RU" ? "Введите 12 слов найденной мнемоники..." : "Enter 12-word seed phrase recovered from clues...", text: $phraseInput)
                                         .textFieldStyle(.plain)
                                         .font(.system(size: 13, design: .monospaced))
                                         .padding(10)
-                                        .background(Theme.inputBg, in: RoundedRectangle(cornerRadius: 6))
-                                        .overlay(RoundedRectangle(cornerRadius: 6).stroke(Theme.border, lineWidth: 1))
+                                        .background(theme.inputBg, in: RoundedRectangle(cornerRadius: 6))
+                                        .overlay(RoundedRectangle(cornerRadius: 6).stroke(theme.border, lineWidth: 1))
 
                                     HStack {
                                         if let err = verifyError {
                                             Text(err)
                                                 .font(.caption.bold())
-                                                .foregroundStyle(Theme.red)
+                                                .foregroundStyle(theme.red)
                                         }
                                         Spacer()
-                                        Button("Verify & Close Wallet") {
+                                        Button(appState.t("verifyClose")) {
                                             let ok = appState.solveCase(id: active.id, phrase: phraseInput)
                                             if ok {
                                                 verifyError = nil
                                                 solvedAddresses = appState.core.derive(mnemonic: phraseInput)
                                             } else {
-                                                verifyError = "Fingerprint check failed. Check wordlist & checksum."
+                                                verifyError = appState.selectedLanguage == "RU" ? "Неверная контрольная сумма или фингерпринт" : "Fingerprint check failed. Check wordlist & checksum."
                                             }
                                         }
                                         .buttonStyle(.borderedProminent)
                                     }
                                 }
                                 .padding(14)
-                                .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
-                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Theme.border, lineWidth: 1))
+                                .background(theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
+                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(theme.border, lineWidth: 1))
                             }
                         }
                     }
                     .padding(20)
                 }
-                .background(Theme.bgDeep)
+                .background(theme.bgDeep)
             }
         }
         .onAppear {

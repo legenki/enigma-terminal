@@ -10,15 +10,17 @@ public struct TerminalView: View {
 
     public init() {}
 
+    private var theme: AppTheme { appState.theme }
+
     public var body: some View {
         VStack(spacing: 0) {
-            // Main Floating Card Container (matching screenshot)
+            // Main Floating Card Container
             VStack(spacing: 0) {
                 // 1. Tab Bar on top of card
                 tabBarHeader
 
                 Divider()
-                    .overlay(Theme.border)
+                    .overlay(theme.border)
 
                 // 2. Feed / Console Area
                 ScrollViewReader { proxy in
@@ -26,16 +28,16 @@ public struct TerminalView: View {
                         VStack(alignment: .leading, spacing: 16) {
                             // Initial System Welcome Block
                             shellCodeBlock(
-                                title: "Initialization & Diagnostics",
+                                title: appState.selectedLanguage == "RU" ? "Инициализация и диагностика" : "Initialization & Diagnostics",
                                 command: "./tools/build_macos_app.sh",
-                                output: "==> Building native SwiftUI Enigma Terminal for macOS 26.0+ (arm64)\n==> Bundling JavaScriptCore crypto engine... Success (52 KB)\n==> Signing bundle with ad-hoc identity... Verified\n==> Build successful: dist/Enigma Terminal.app (1.6M)"
+                                output: "==> Building native SwiftUI Enigma Terminal for macOS 26.0+ (arm64)\n==> Bundling JavaScriptCore crypto engine... Success (52 KB)\n==> Signing bundle with ad-hoc identity... Verified\n==> Build successful: dist/Enigma Terminal.app (5.0M)"
                             )
 
                             // Verification Step Block
                             shellCodeBlock(
-                                title: "Process Life-Cycle & State Restoration",
+                                title: appState.selectedLanguage == "RU" ? "Жизненный цикл процесса и восстановление состояния" : "Process Life-Cycle & State Restoration",
                                 command: "open \"dist/Enigma Terminal.app\"",
-                                output: "Process actively running. talagentd state restoration snapshot completed with 0 errors. AutoLayout constraint loops eliminated."
+                                output: appState.selectedLanguage == "RU" ? "Процесс стабильно удерживает окно, стадия talagentd проходит без сбоев, новые .ips-отчеты отсутствуют." : "Process actively running. talagentd state restoration snapshot completed with 0 errors. AutoLayout constraint loops eliminated."
                             )
 
                             // Live Log Entries
@@ -44,31 +46,31 @@ public struct TerminalView: View {
                                     .id(line.id)
                             }
 
-                            // Dynamic Attachment Chip (matching screenshot)
+                            // Dynamic Attachment Chip
                             HStack {
                                 Spacer()
                                 HStack(spacing: 10) {
                                     Image(systemName: "doc.text.fill")
-                                        .foregroundStyle(Theme.purple)
+                                        .foregroundStyle(theme.purple)
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text("BIP-39 Test Vectors Parity Report")
+                                        Text(appState.selectedLanguage == "RU" ? "Отчёт о паритете тестовых векторов BIP-39" : "BIP-39 Test Vectors Parity Report")
                                             .font(.system(size: 11, weight: .medium))
-                                            .foregroundStyle(Theme.textPrimary)
-                                        Text("482 tests passed · Bit-for-bit identical")
+                                            .foregroundStyle(theme.textPrimary)
+                                        Text(appState.selectedLanguage == "RU" ? "482 теста пройдено · 100% паритет" : "482 tests passed · Bit-for-bit identical")
                                             .font(.system(size: 10, design: .monospaced))
-                                            .foregroundStyle(Theme.textMuted)
+                                            .foregroundStyle(theme.textMuted)
                                     }
                                 }
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 8)
-                                .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
-                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Theme.border, lineWidth: 1))
+                                .background(theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
+                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(theme.border, lineWidth: 1))
                             }
                             .padding(.vertical, 4)
                         }
                         .padding(18)
                     }
-                    .background(Theme.cardInner)
+                    .background(theme.cardInner)
                     .onChange(of: appState.terminalLines.count) { _, _ in
                         if let last = appState.terminalLines.last {
                             withAnimation(.easeOut(duration: 0.15)) {
@@ -79,21 +81,21 @@ public struct TerminalView: View {
                 }
 
                 Divider()
-                    .overlay(Theme.border)
+                    .overlay(theme.border)
 
-                // 3. Floating Interactive Input Bar (matching screenshot)
+                // 3. Floating Interactive Input Bar
                 floatingInputBar
             }
-            .background(Theme.cardBg)
+            .background(theme.cardBg)
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay(
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(Theme.border, lineWidth: 1)
+                    .stroke(theme.border, lineWidth: 1)
             )
-            .shadow(color: Color.black.opacity(0.35), radius: 12, x: 0, y: 6)
+            .shadow(color: Color.black.opacity(theme.isLight ? 0.08 : 0.35), radius: 12, x: 0, y: 6)
             .padding(16)
         }
-        .background(Theme.bgDeep)
+        .background(theme.bgDeep)
         .onAppear {
             isInputFocused = true
         }
@@ -103,37 +105,23 @@ public struct TerminalView: View {
 
     private var tabBarHeader: some View {
         HStack(spacing: 0) {
-            // Tab 1: Workspace / Story
-            tabItem(title: "Enigma Terminal Quest", icon: "terminal.fill", isActive: activeTab == 0) {
+            tabItem(title: appState.t("questTab"), icon: "terminal.fill", isActive: activeTab == 0) {
                 activeTab = 0
             }
 
-            // Tab 2: Console
-            tabItem(title: "Live Bitcoin Chain", icon: "network", isActive: activeTab == 1) {
+            tabItem(title: appState.t("chainTab"), icon: "network", isActive: activeTab == 1) {
                 activeTab = 1
             }
 
-            // Tab Plus
-            Button {
-                appState.appendTerminal("Created new scratchpad session", style: .cyan)
-            } label: {
-                Image(systemName: "plus")
-                    .font(.caption2)
-                    .foregroundStyle(Theme.textMuted)
-                    .padding(.horizontal, 10)
-            }
-            .buttonStyle(.plain)
-
             Spacer()
 
-            // Header Action Buttons
             HStack(spacing: 12) {
                 Button {
                     appState.clearTerminal()
                 } label: {
                     Image(systemName: "trash")
                         .font(.caption)
-                        .foregroundStyle(Theme.textMuted)
+                        .foregroundStyle(theme.textMuted)
                 }
                 .buttonStyle(.plain)
                 .help("Clear Terminal Output")
@@ -143,7 +131,7 @@ public struct TerminalView: View {
                 } label: {
                     Image(systemName: "arrow.clockwise")
                         .font(.caption)
-                        .foregroundStyle(Theme.textMuted)
+                        .foregroundStyle(theme.textMuted)
                 }
                 .buttonStyle(.plain)
                 .help("Refresh Status")
@@ -151,7 +139,7 @@ public struct TerminalView: View {
             .padding(.trailing, 14)
         }
         .padding(.vertical, 8)
-        .background(Theme.cardBg)
+        .background(theme.cardBg)
     }
 
     private func tabItem(title: String, icon: String, isActive: Bool, action: @escaping () -> Void) -> some View {
@@ -159,40 +147,39 @@ public struct TerminalView: View {
             HStack(spacing: 6) {
                 Image(systemName: icon)
                     .font(.caption2)
-                    .foregroundStyle(isActive ? Theme.purple : Theme.textMuted)
+                    .foregroundStyle(isActive ? theme.purple : theme.textMuted)
                 Text(title)
                     .font(.system(size: 11, weight: isActive ? .semibold : .regular))
-                    .foregroundStyle(isActive ? Theme.textPrimary : Theme.textMuted)
+                    .foregroundStyle(isActive ? theme.textPrimary : theme.textMuted)
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
             .background(
-                isActive ? Theme.purpleSoft : Color.clear,
+                isActive ? theme.purpleSoft : Color.clear,
                 in: RoundedRectangle(cornerRadius: 6)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 6)
-                    .stroke(isActive ? Theme.borderGlow : Color.clear, lineWidth: 1)
+                    .stroke(isActive ? theme.borderGlow : Color.clear, lineWidth: 1)
             )
         }
         .buttonStyle(.plain)
         .padding(.leading, 8)
     }
 
-    // MARK: - Code / Shell Block (Matching screenshot)
+    // MARK: - Code / Shell Block
 
     private func shellCodeBlock(title: String, command: String, output: String) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(Theme.textPrimary)
+                .foregroundStyle(theme.textPrimary)
 
             VStack(alignment: .leading, spacing: 0) {
-                // Top header of code box
                 HStack {
                     Text("Shell")
                         .font(.system(size: 10, weight: .bold, design: .monospaced))
-                        .foregroundStyle(Theme.textMuted)
+                        .foregroundStyle(theme.textMuted)
                     Spacer()
                     Button {
                         NSPasteboard.general.clearContents()
@@ -200,34 +187,34 @@ public struct TerminalView: View {
                     } label: {
                         Image(systemName: "doc.on.doc")
                             .font(.system(size: 10))
-                            .foregroundStyle(Theme.textMuted)
+                            .foregroundStyle(theme.textMuted)
                     }
                     .buttonStyle(.plain)
                     .help("Copy command")
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
-                .background(Color.white.opacity(0.02))
+                .background(theme.isLight ? Color.black.opacity(0.03) : Color.white.opacity(0.02))
 
                 Divider()
-                    .overlay(Theme.borderSubtle)
+                    .overlay(theme.borderSubtle)
 
                 Text(command)
                     .font(.system(size: 12, weight: .regular, design: .monospaced))
-                    .foregroundStyle(Theme.textPrimary)
+                    .foregroundStyle(theme.textPrimary)
                     .textSelection(.enabled)
                     .padding(12)
             }
-            .background(Theme.cardBg)
+            .background(theme.cardBg)
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Theme.border, lineWidth: 1)
+                    .stroke(theme.border, lineWidth: 1)
             )
 
             Text(output)
                 .font(.system(size: 11, design: .monospaced))
-                .foregroundStyle(Theme.textSecondary)
+                .foregroundStyle(theme.textSecondary)
                 .padding(.leading, 4)
         }
         .padding(.vertical, 4)
@@ -237,30 +224,27 @@ public struct TerminalView: View {
         HStack(alignment: .top, spacing: 6) {
             Text(line.text)
                 .font(.system(size: 12, weight: .regular, design: .monospaced))
-                .foregroundStyle(line.style.color)
+                .foregroundStyle(theme.isLight ? (line.style == .normal ? theme.textPrimary : line.style.color) : line.style.color)
                 .textSelection(.enabled)
             Spacer()
         }
         .padding(.horizontal, 4)
     }
 
-    // MARK: - Floating Input Bar (Matching screenshot)
+    // MARK: - Floating Input Bar
 
     private var floatingInputBar: some View {
         VStack(alignment: .leading, spacing: 8) {
-            // Text Input Field
-            TextField("Type command (e.g. HELP, DECRYPT <phrase>, WORD <n>, FIND <phrase ?>, STATUS)...", text: $inputCommand)
+            TextField(appState.t("cmdPlaceholder"), text: $inputCommand)
                 .textFieldStyle(.plain)
                 .font(.system(size: 13, design: .monospaced))
-                .foregroundStyle(Theme.textPrimary)
+                .foregroundStyle(theme.textPrimary)
                 .focused($isInputFocused)
                 .onSubmit {
                     execute()
                 }
 
-            // Bottom Badges & Send Button Row
             HStack(spacing: 8) {
-                // Model / Engine Pill
                 HStack(spacing: 5) {
                     Image(systemName: "cpu.fill")
                         .font(.system(size: 9))
@@ -269,24 +253,22 @@ public struct TerminalView: View {
                 }
                 .padding(.horizontal, 8)
                 .padding(.vertical, 3)
-                .background(Theme.purpleSoft, in: Capsule())
-                .foregroundStyle(Theme.purple)
+                .background(theme.purpleSoft, in: Capsule())
+                .foregroundStyle(theme.purple)
 
-                // High / Live status badge
-                Text("Mainnet Live")
+                Text(appState.t("mainnetLive"))
                     .font(.system(size: 9, weight: .bold, design: .monospaced))
                     .padding(.horizontal, 6)
                     .padding(.vertical, 3)
-                    .background(Theme.green.opacity(0.15), in: Capsule())
-                    .foregroundStyle(Theme.green)
+                    .background(theme.green.opacity(0.15), in: Capsule())
+                    .foregroundStyle(theme.green)
 
                 Spacer()
 
-                // Send Button (circular purple button with up arrow)
                 Button(action: execute) {
                     ZStack {
                         Circle()
-                            .fill(inputCommand.isEmpty ? Theme.purple.opacity(0.3) : Theme.purple)
+                            .fill(inputCommand.isEmpty ? theme.purple.opacity(0.3) : theme.purple)
                             .frame(width: 28, height: 28)
                         Image(systemName: "arrow.up")
                             .font(.system(size: 12, weight: .bold))
@@ -298,11 +280,11 @@ public struct TerminalView: View {
             }
         }
         .padding(12)
-        .background(Theme.inputBg)
+        .background(theme.inputBg)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(isInputFocused ? Theme.borderGlow : Theme.border, lineWidth: 1)
+                .stroke(isInputFocused ? theme.borderGlow : theme.border, lineWidth: 1)
         )
         .padding(12)
     }
