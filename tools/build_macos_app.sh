@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Build script for Enigma Terminal macOS Native App
+# Build script for Enigma Terminal Native SwiftUI macOS App
 # Target: macOS 26.0 and above
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -15,7 +15,7 @@ MACOS_DIR="${ROOT_DIR}/macos/EnigmaTerminal"
 MIN_MACOS_VERSION="26.0"
 TARGET_TRIPLE="arm64-apple-macos${MIN_MACOS_VERSION}"
 
-echo "==> Building ${APP_NAME} for macOS ${MIN_MACOS_VERSION}+ (${TARGET_TRIPLE})"
+echo "==> Building native SwiftUI ${APP_NAME} for macOS ${MIN_MACOS_VERSION}+ (${TARGET_TRIPLE})"
 
 # 1. Clean previous build artifact
 rm -rf "${APP_DIR}"
@@ -34,26 +34,20 @@ cp "${MACOS_DIR}/Resources/AppIcon.icns" "${APP_DIR}/Contents/Resources/AppIcon.
 # 3. Copy Info.plist
 cp "${MACOS_DIR}/Resources/Info.plist" "${APP_DIR}/Contents/Info.plist"
 
-# 4. Copy web assets to Resources/web
-echo "==> Syncing web assets..."
-mkdir -p "${APP_DIR}/Contents/Resources/web"
-rsync -a \
-    --exclude '.git*' \
-    --exclude '.DS_Store' \
-    "${ROOT_DIR}/docs/" "${APP_DIR}/Contents/Resources/web/"
+# 4. Ensure bundled enigma_engine.js exists
+echo "==> Bundling JavaScriptCore crypto engine..."
+node "${ROOT_DIR}/tools/build_engine_bundle.mjs"
+cp "${MACOS_DIR}/Resources/enigma_engine.js" "${APP_DIR}/Contents/Resources/enigma_engine.js"
 
-# 5. Compile Swift sources
-echo "==> Compiling Swift sources targeting ${TARGET_TRIPLE}..."
+# 5. Compile Native SwiftUI sources
+echo "==> Compiling Native SwiftUI sources targeting ${TARGET_TRIPLE}..."
 swiftc \
     -target "${TARGET_TRIPLE}" \
     -O \
     -parse-as-library \
-    -Xfrontend -enable-bare-slash-regex \
-    "${MACOS_DIR}/Sources/EnigmaSchemeHandler.swift" \
-    "${MACOS_DIR}/Sources/MenuBuilder.swift" \
-    "${MACOS_DIR}/Sources/MainWindowController.swift" \
-    "${MACOS_DIR}/Sources/AppDelegate.swift" \
-    "${MACOS_DIR}/Sources/main.swift" \
+    "${MACOS_DIR}/Sources/Core/"*.swift \
+    "${MACOS_DIR}/Sources/App/"*.swift \
+    "${MACOS_DIR}/Sources/Views/"*.swift \
     -o "${APP_DIR}/Contents/MacOS/EnigmaTerminal"
 
 chmod +x "${APP_DIR}/Contents/MacOS/EnigmaTerminal"

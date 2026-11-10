@@ -1,4 +1,4 @@
-"""Tests for the native macOS application bundle and build artifacts."""
+"""Tests for the native macOS SwiftUI application bundle and build artifacts."""
 
 from __future__ import annotations
 
@@ -57,20 +57,26 @@ def test_macos_app_binary_target_and_architecture(built_app):
     assert "minos 26.0" in done.stdout, f"Binary was not built with minos 26.0:\n{done.stdout}"
     assert "platform 1" in done.stdout, f"Binary platform is not macOS:\n{done.stdout}"
 
+    # Verify native SwiftUI and JavaScriptCore linkage with zero WebKit dependency
+    libs = subprocess.run(
+        ["otool", "-L", str(binary)],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
+    assert "SwiftUI.framework" in libs, "Binary does not link native SwiftUI"
+    assert "JavaScriptCore.framework" in libs, "Binary does not link JavaScriptCore"
+    assert "WebKit.framework" not in libs, "Binary unexpectedly links WebKit; must be pure native SwiftUI"
+
 
 def test_macos_app_bundled_resources(built_app):
-    web_dir = built_app / "Contents" / "Resources" / "web"
-    assert (web_dir / "index.html").exists(), "web/index.html missing from app bundle"
-    assert (web_dir / "js" / "main.js").exists(), "web/js/main.js missing from app bundle"
-    assert (web_dir / "css" / "gui.css").exists(), "web/css/gui.css missing from app bundle"
-
-    # Must be identical to docs/index.html
-    docs_index = (ROOT / "docs" / "index.html").read_bytes()
-    bundled_index = (web_dir / "index.html").read_bytes()
-    assert bundled_index == docs_index, "Bundled index.html drifted from docs/index.html"
+    resources_dir = built_app / "Contents" / "Resources"
+    engine_js = resources_dir / "enigma_engine.js"
+    assert engine_js.exists(), "enigma_engine.js missing from app bundle Resources"
+    assert engine_js.stat().st_size > 10000, "enigma_engine.js is unexpectedly truncated"
 
     # AppIcon.icns check
-    icon = built_app / "Contents" / "Resources" / "AppIcon.icns"
+    icon = resources_dir / "AppIcon.icns"
     assert icon.exists(), "Contents/Resources/AppIcon.icns is missing"
     assert icon.stat().st_size > 1024, "AppIcon.icns is too small"
 
