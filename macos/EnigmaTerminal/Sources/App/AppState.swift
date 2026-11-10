@@ -54,7 +54,11 @@ public final class AppState: ObservableObject {
     @Published public var blockTimeAgo: String = "4m ago"
     @Published public var journal: [JournalItem] = []
     @Published public var terminalLines: [TerminalLine] = []
-
+    @Published public var solvedCaseIDs: Set<Int> = []
+    @Published public var solvedContractIDs: Set<Int> = []
+    @Published public var campaignCases: [CampaignCase] = []
+    @Published public var contracts: [ContractCase] = []
+    @Published public var clients: [ClientInfo] = []
     public let core: EnigmaCore
 
     public init(core: EnigmaCore = .shared) {
@@ -70,6 +74,40 @@ public final class AppState: ObservableObject {
             TerminalLine("---", style: .normal)
         ]
         log(tool: "system", summary: "Session initialized")
+        reloadGameData()
+    }
+
+    public func reloadGameData() {
+        let lang = selectedLanguage.lowercased()
+        self.clients = core.loadClients(lang: lang)
+        self.campaignCases = core.loadCampaignCases(lang: lang)
+        self.contracts = core.loadContracts(lang: lang)
+    }
+
+    public func solveCase(id: Int, phrase: String) -> Bool {
+        guard let c = campaignCases.first(where: { $0.id == id }) else { return false }
+        if core.verifySolution(phrase: phrase, expectedFingerprint: c.fingerprint) {
+            solvedCaseIDs.insert(id)
+            appendTerminal("[ OK ] WALLET #\(id) DECRYPTED AND CLOSED!", style: .ok)
+            appendTerminal("       Codename: \(c.codename)", style: .cyan)
+            log(tool: "cases", summary: "Closed campaign case #\(id): \(c.codename)")
+            return true
+        }
+        appendTerminal("[FAIL] Fingerprint mismatch for Wallet #\(id)", style: .error)
+        return false
+    }
+
+    public func solveContract(id: Int, phrase: String) -> Bool {
+        guard let c = contracts.first(where: { $0.id == id }) else { return false }
+        if core.verifySolution(phrase: phrase, expectedFingerprint: c.fingerprint) {
+            solvedContractIDs.insert(id)
+            appendTerminal("[ OK ] CONTRACT #\(id) SOLVED!", style: .ok)
+            appendTerminal("       Codename: \(c.codename) · Client: \(c.client)", style: .cyan)
+            log(tool: "contracts", summary: "Solved contract #\(id): \(c.codename)")
+            return true
+        }
+        appendTerminal("[FAIL] Verification rejected for contract #\(id)", style: .error)
+        return false
     }
 
     public func log(tool: String, summary: String) {

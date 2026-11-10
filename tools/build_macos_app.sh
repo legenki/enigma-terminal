@@ -39,6 +39,12 @@ echo "==> Bundling JavaScriptCore crypto engine..."
 node "${ROOT_DIR}/tools/build_engine_bundle.mjs"
 cp "${MACOS_DIR}/Resources/enigma_engine.js" "${APP_DIR}/Contents/Resources/enigma_engine.js"
 
+# 4b. Copy real game data (cases, contracts, clients)
+echo "==> Bundling game datasets (cases, contracts, clients)..."
+mkdir -p "${APP_DIR}/Contents/Resources/data"
+cp "${ROOT_DIR}/data/cases.json" "${APP_DIR}/Contents/Resources/data/cases.json"
+cp "${ROOT_DIR}/data/contracts.json" "${APP_DIR}/Contents/Resources/data/contracts.json"
+cp "${ROOT_DIR}/data/clients.json" "${APP_DIR}/Contents/Resources/data/clients.json"
 # 5. Compile Native SwiftUI sources
 echo "==> Compiling Native SwiftUI sources targeting ${TARGET_TRIPLE}..."
 swiftc \

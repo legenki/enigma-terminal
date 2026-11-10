@@ -7,37 +7,46 @@ public struct WordlistInspectorView: View {
     @State private var selectedTab: Int = 0
     @State private var filterQuery: String = ""
     @State private var searchResults: [WordEntry] = []
+    @State private var copiedWord: String?
 
     // Recovery State
     @State private var recoveryInput: String = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon ?"
     @State private var recoveryPosition: Int = -1
     @State private var recoveryCandidates: [String] = []
 
+    // Live Chain State
+    @State private var liveLatencyMs: Int?
+    @State private var liveFastestFee: Int?
+    @State private var isFetchingChain: Bool = false
+
+    // Bottom Drawer Tab
+    @State private var drawerTab: String = "Terminal"
+
     public init() {}
 
     public var body: some View {
         VStack(spacing: 0) {
-            // 1. Top Tab Strip (matching screenshot: Files, Changes, Review, Checks)
-            HStack(spacing: 0) {
+            // 1. Top Tab Strip (Wordlist, Recovery, Chain, Journal)
+            HStack(spacing: 4) {
                 tabButton(title: "Wordlist", index: 0)
                 tabButton(title: "Recovery", index: 1)
                 tabButton(title: "Chain", index: 2)
                 tabButton(title: "Journal", index: 3)
             }
-            .padding(.horizontal, 8)
+            .padding(.horizontal, 10)
             .padding(.vertical, 8)
             .background(Theme.sidebarBg)
 
             Divider()
                 .overlay(Theme.border)
 
-            // 2. Filter Bar (matching screenshot: Filter input with eye and expand icons)
+            // 2. Filter Bar
             HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")
                     .font(.caption2)
                     .foregroundStyle(Theme.textMuted)
 
-                TextField("Filter...", text: $filterQuery)
+                TextField("Filter BIP-39 words or indices...", text: $filterQuery)
                     .textFieldStyle(.plain)
                     .font(.system(size: 11, design: .monospaced))
                     .foregroundStyle(Theme.textPrimary)
@@ -47,20 +56,24 @@ public struct WordlistInspectorView: View {
 
                 Spacer()
 
-                Image(systemName: "eye")
-                    .font(.caption2)
-                    .foregroundStyle(Theme.textMuted)
-
-                Image(systemName: "arrow.up.left.and.arrow.down.right")
-                    .font(.caption2)
-                    .foregroundStyle(Theme.textMuted)
+                if !filterQuery.isEmpty {
+                    Button {
+                        filterQuery = ""
+                        performSearch()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.caption2)
+                            .foregroundStyle(Theme.textMuted)
+                    }
+                    .buttonStyle(.plain)
+                }
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
             .background(Theme.inputBg)
             .clipShape(RoundedRectangle(cornerRadius: 6))
             .overlay(RoundedRectangle(cornerRadius: 6).stroke(Theme.border, lineWidth: 1))
-            .padding(.horizontal, 10)
+            .padding(.horizontal, 12)
             .padding(.vertical, 8)
 
             Divider()
@@ -70,25 +83,26 @@ public struct WordlistInspectorView: View {
             Group {
                 switch selectedTab {
                 case 0:
-                    wordlistTreeView
+                    wordlistScrollView
                 case 1:
-                    recoveryInspectorView
+                    recoveryView
                 case 2:
-                    chainStatusView
+                    chainView
                 default:
-                    journalMiniView
+                    journalView
                 }
             }
 
             Divider()
                 .overlay(Theme.border)
 
-            // 4. Bottom Terminal / Console Drawer (matching screenshot's bottom-right pane)
-            bottomTerminalDrawer
+            // 4. Interactive Bottom Drawer
+            interactiveBottomDrawer
         }
         .background(Theme.sidebarBg)
         .onAppear {
             performSearch()
+            fetchLiveChain()
         }
     }
 
@@ -98,63 +112,72 @@ public struct WordlistInspectorView: View {
             selectedTab = index
         } label: {
             Text(title)
-                .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
-                .foregroundStyle(isSelected ? Theme.textPrimary : Theme.textMuted)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
+                .font(.system(size: 11, weight: isSelected ? .bold : .medium))
+                .foregroundStyle(isSelected ? Theme.purple : Theme.textMuted)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
                 .background(
                     isSelected ? Theme.purpleSoft : Color.clear,
-                    in: RoundedRectangle(cornerRadius: 4)
+                    in: RoundedRectangle(cornerRadius: 6)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(isSelected ? Theme.borderGlow : Color.clear, lineWidth: 1)
                 )
         }
         .buttonStyle(.plain)
     }
 
-    // MARK: - Wordlist Tree View
+    // MARK: - Wordlist Clean ScrollView (No ugly table lines!)
 
-    private var wordlistTreeView: some View {
-        List {
-            ForEach(searchResults) { entry in
-                HStack(spacing: 8) {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 8))
-                        .foregroundStyle(Theme.textMuted)
+    private var wordlistScrollView: some View {
+        ScrollView {
+            LazyVStack(spacing: 2) {
+                ForEach(searchResults) { entry in
+                    let isJustCopied = copiedWord == entry.word
+                    HStack(spacing: 10) {
+                        Text("#\(entry.index)")
+                            .font(.system(size: 10, weight: .bold, design: .monospaced))
+                            .foregroundStyle(Theme.cyan)
+                            .frame(width: 38, alignment: .leading)
 
-                    Image(systemName: "doc.text")
-                        .font(.caption2)
-                        .foregroundStyle(Theme.purple)
+                        Text(entry.word)
+                            .font(.system(size: 12, design: .monospaced))
+                            .foregroundStyle(Theme.textPrimary)
 
-                    Text("#\(entry.index)")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Theme.textMuted)
-                        .frame(width: 36, alignment: .leading)
+                        Spacer()
 
-                    Text(entry.word)
-                        .font(.system(size: 12, design: .monospaced))
-                        .foregroundStyle(Theme.textPrimary)
-
-                    Spacer()
-
-                    Button {
-                        NSPasteboard.general.clearContents()
-                        NSPasteboard.general.setString(entry.word, forType: .string)
-                    } label: {
-                        Image(systemName: "doc.on.doc")
-                            .font(.system(size: 10))
-                            .foregroundStyle(Theme.textMuted)
+                        Button {
+                            NSPasteboard.general.clearContents()
+                            NSPasteboard.general.setString(entry.word, forType: .string)
+                            copiedWord = entry.word
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                if copiedWord == entry.word { copiedWord = nil }
+                            }
+                        } label: {
+                            Image(systemName: isJustCopied ? "checkmark" : "doc.on.doc")
+                                .font(.system(size: 10))
+                                .foregroundStyle(isJustCopied ? Theme.green : Theme.textMuted)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(
+                        isJustCopied ? Theme.green.opacity(0.12) : Color.white.opacity(0.02),
+                        in: RoundedRectangle(cornerRadius: 6)
+                    )
                 }
-                .padding(.vertical, 2)
             }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
         }
-        .listStyle(.plain)
     }
 
     // MARK: - Recovery View
 
-    private var recoveryInspectorView: some View {
-        VStack(alignment: .leading, spacing: 10) {
+    private var recoveryView: some View {
+        VStack(alignment: .leading, spacing: 12) {
             Text("Single-Word BIP-39 Recovery")
                 .font(.system(size: 11, weight: .semibold))
                 .foregroundStyle(Theme.textPrimary)
@@ -175,52 +198,84 @@ public struct WordlistInspectorView: View {
             .controlSize(.small)
 
             if recoveryPosition >= 0 {
-                Text("Pos #\(recoveryPosition + 1) · \(recoveryCandidates.count) candidates:")
+                Text("Pos #\(recoveryPosition + 1) · \(recoveryCandidates.count) matches:")
                     .font(.system(size: 10, weight: .bold, design: .monospaced))
                     .foregroundStyle(Theme.cyan)
 
-                List(recoveryCandidates, id: \.self) { word in
-                    HStack {
-                        Text(word)
-                            .font(.system(size: 11, design: .monospaced))
-                            .foregroundStyle(Theme.textPrimary)
-                        Spacer()
-                        Button("Use") {
-                            NSPasteboard.general.clearContents()
-                            NSPasteboard.general.setString(word, forType: .string)
+                ScrollView {
+                    LazyVStack(spacing: 4) {
+                        ForEach(recoveryCandidates, id: \.self) { word in
+                            HStack {
+                                Text(word)
+                                    .font(.system(size: 11, design: .monospaced))
+                                    .foregroundStyle(Theme.textPrimary)
+                                Spacer()
+                                Button("Copy") {
+                                    NSPasteboard.general.clearContents()
+                                    NSPasteboard.general.setString(word, forType: .string)
+                                }
+                                .buttonStyle(.bordered)
+                                .controlSize(.mini)
+                            }
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 4))
                         }
-                        .buttonStyle(.bordered)
-                        .controlSize(.mini)
                     }
                 }
-                .listStyle(.plain)
             } else {
                 Spacer()
             }
         }
-        .padding(10)
+        .padding(12)
     }
 
-    // MARK: - Chain Status View
+    // MARK: - Live Chain View (Interactive network query!)
 
-    private var chainStatusView: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Block Monitor & Fees")
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(Theme.textPrimary)
+    private var chainView: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                Text("Bitcoin Network Pulse")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(Theme.textPrimary)
+                Spacer()
+                Button {
+                    fetchLiveChain()
+                } label: {
+                    Image(systemName: "arrow.clockwise")
+                        .font(.system(size: 11))
+                        .foregroundStyle(isFetchingChain ? Theme.purple : Theme.textSecondary)
+                }
+                .buttonStyle(.plain)
+            }
 
             VStack(spacing: 8) {
-                metricRow(label: "Current Height", value: "#\(appState.blockHeight)", tint: Theme.purple)
+                metricRow(label: "Tip Block Height", value: "#\(appState.blockHeight)", tint: Theme.purple)
                 metricRow(label: "Block Pulse", value: appState.blockTimeAgo, tint: Theme.green)
-                metricRow(label: "Fastest Fee", value: "18 sat/vB", tint: Theme.amber)
-                metricRow(label: "Mempool", value: "42.5 MB", tint: Theme.cyan)
+                if let fee = liveFastestFee {
+                    metricRow(label: "Recommended Fee", value: "\(fee) sat/vB", tint: Theme.amber)
+                }
+                if let lat = liveLatencyMs {
+                    metricRow(label: "Mempool API Latency", value: "\(lat) ms", tint: Theme.cyan)
+                }
             }
-            .padding(10)
+            .padding(12)
             .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 8))
+
+            Link(destination: URL(string: "https://mempool.space")!) {
+                HStack {
+                    Text("Open mempool.space")
+                    Spacer()
+                    Image(systemName: "arrow.up.right.square")
+                }
+                .font(.system(size: 11))
+                .foregroundStyle(Theme.purple)
+                .padding(8)
+            }
 
             Spacer()
         }
-        .padding(10)
+        .padding(12)
     }
 
     private func metricRow(label: String, value: String, tint: Color) -> some View {
@@ -235,81 +290,109 @@ public struct WordlistInspectorView: View {
         }
     }
 
-    // MARK: - Journal Mini View
+    // MARK: - Journal View
 
-    private var journalMiniView: some View {
-        List(appState.journal) { item in
-            VStack(alignment: .leading, spacing: 2) {
-                HStack {
-                    Text(item.tool.uppercased())
-                        .font(.system(size: 9, weight: .bold, design: .monospaced))
-                        .foregroundStyle(Theme.purple)
-                    Spacer()
-                    Text(item.timestamp, style: .time)
-                        .font(.system(size: 9, design: .monospaced))
-                        .foregroundStyle(Theme.textMuted)
+    private var journalView: some View {
+        ScrollView {
+            LazyVStack(spacing: 6) {
+                ForEach(appState.journal) { item in
+                    VStack(alignment: .leading, spacing: 3) {
+                        HStack {
+                            Text(item.tool.uppercased())
+                                .font(.system(size: 9, weight: .bold, design: .monospaced))
+                                .foregroundStyle(Theme.purple)
+                            Spacer()
+                            Text(item.timestamp, style: .time)
+                                .font(.system(size: 9, design: .monospaced))
+                                .foregroundStyle(Theme.textMuted)
+                        }
+                        Text(item.summary)
+                            .font(.system(size: 11))
+                            .foregroundStyle(Theme.textPrimary)
+                    }
+                    .padding(8)
+                    .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 6))
                 }
-                Text(item.summary)
-                    .font(.system(size: 11))
-                    .foregroundStyle(Theme.textPrimary)
-                    .lineLimit(2)
             }
-            .padding(.vertical, 2)
+            .padding(8)
         }
-        .listStyle(.plain)
     }
 
-    // MARK: - Bottom Terminal Drawer (Matching bottom-right terminal in screenshot)
+    // MARK: - Interactive Bottom Drawer (Setup, Run, Terminal)
 
-    private var bottomTerminalDrawer: some View {
+    private var interactiveBottomDrawer: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Tabs on bottom drawer: Setup, Run, Terminal, +
             HStack(spacing: 12) {
-                Text("Setup")
-                    .font(.system(size: 10))
-                    .foregroundStyle(Theme.textMuted)
-                Text("Run")
-                    .font(.system(size: 10))
-                    .foregroundStyle(Theme.textMuted)
-                HStack(spacing: 4) {
-                    Image(systemName: "terminal.fill")
-                        .font(.system(size: 9))
-                    Text("Terminal")
-                        .font(.system(size: 10, weight: .semibold))
-                }
-                .foregroundStyle(Theme.purple)
-
+                drawerTabButton("Setup")
+                drawerTabButton("Run")
+                drawerTabButton("Terminal")
                 Spacer()
-
-                Image(systemName: "plus")
-                    .font(.system(size: 9))
-                    .foregroundStyle(Theme.textMuted)
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(Color.black.opacity(0.2))
+            .background(Color.black.opacity(0.3))
 
-            // Output feed
+            // Dynamic output based on drawer tab
             VStack(alignment: .leading, spacing: 4) {
-                Text("v3.1.0 via CoreBridge")
-                    .font(.system(size: 10, design: .monospaced))
-                    .foregroundStyle(Theme.amber)
-                Text("enigma-terminal on ⎇ main [✓]")
-                    .font(.system(size: 10, design: .monospaced))
-                    .foregroundStyle(Theme.green)
-                Text("482 tests passed · parity 100%")
-                    .font(.system(size: 10, design: .monospaced))
-                    .foregroundStyle(Theme.cyan)
+                if drawerTab == "Terminal" {
+                    Text("v3.1.0 via CoreBridge")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(Theme.amber)
+                    Text("enigma-terminal on ⎇ main [✓]")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(Theme.green)
+                    Text("482 tests passed · parity 100%")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(Theme.cyan)
+                } else if drawerTab == "Run" {
+                    Text("[STATUS] Block #\(appState.blockHeight) · Network: mainnet")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(Theme.green)
+                    Text("[STATS] Solved Cases: \(appState.solvedCaseIDs.count)/8")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(Theme.purple)
+                    Text("[STATS] Solved Contracts: \(appState.solvedContractIDs.count)/256")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(Theme.cyan)
+                } else {
+                    Text("Runtime: Apple Swift 6.4 + AppKit")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(Theme.textSecondary)
+                    Text("Crypto: JavaScriptCore In-Process VM")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(Theme.textSecondary)
+                    Text("Target: macOS 26.0+ (ARM64)")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(Theme.textSecondary)
+                }
             }
             .padding(10)
         }
         .background(Theme.cardInner)
     }
 
+    private func drawerTabButton(_ name: String) -> some View {
+        let isSelected = drawerTab == name
+        return Button {
+            drawerTab = name
+        } label: {
+            HStack(spacing: 3) {
+                if name == "Terminal" {
+                    Image(systemName: "terminal.fill")
+                        .font(.system(size: 8))
+                }
+                Text(name)
+                    .font(.system(size: 10, weight: isSelected ? .bold : .regular))
+            }
+            .foregroundStyle(isSelected ? Theme.purple : Theme.textMuted)
+        }
+        .buttonStyle(.plain)
+    }
+
     private func performSearch() {
         let q = filterQuery.trimmingCharacters(in: .whitespaces).lowercased()
         if q.isEmpty {
-            searchResults = (1...25).compactMap { idx in
+            searchResults = (1...30).compactMap { idx in
                 if let w = appState.core.wordAt(index: idx) {
                     return WordEntry(index: idx, word: w)
                 }
@@ -322,7 +405,46 @@ public struct WordlistInspectorView: View {
                 searchResults = []
             }
         } else {
-            searchResults = appState.core.searchWords(prefix: q, limit: 30)
+            searchResults = appState.core.searchWords(prefix: q, limit: 40)
+        }
+    }
+
+    private func fetchLiveChain() {
+        guard !isFetchingChain else { return }
+        isFetchingChain = true
+        let start = Date()
+
+        guard let heightURL = URL(string: "https://mempool.space/api/blocks/tip/height") else {
+            isFetchingChain = false
+            return
+        }
+
+        URLSession.shared.dataTask(with: heightURL) { data, _, _ in
+            let duration = Int(Date().timeIntervalSince(start) * 1000)
+            if let data = data, let str = String(data: data, encoding: .utf8), let h = Int(str.trimmingCharacters(in: .whitespacesAndNewlines)) {
+                DispatchQueue.main.async {
+                    self.appState.blockHeight = h
+                    self.appState.blockTimeAgo = "just now"
+                    self.liveLatencyMs = duration
+                    self.isFetchingChain = false
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.isFetchingChain = false
+                }
+            }
+        }.resume()
+
+        if let feeURL = URL(string: "https://mempool.space/api/v1/fees/recommended") {
+            URLSession.shared.dataTask(with: feeURL) { data, _, _ in
+                if let data = data,
+                   let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let fastest = json["fastestFee"] as? Int {
+                    DispatchQueue.main.async {
+                        self.liveFastestFee = fastest
+                    }
+                }
+            }.resume()
         }
     }
 }

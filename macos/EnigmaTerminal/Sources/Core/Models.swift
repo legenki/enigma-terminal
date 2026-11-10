@@ -143,20 +143,63 @@ public struct JournalItem: Identifiable, Hashable {
     }
 }
 
-public struct CaseRecord: Identifiable, Hashable {
-    public let id: String
-    public let title: String
-    public let district: String
-    public let employer: String
-    public let brief: String
-    public let solved: Bool
+public struct CampaignCase: Identifiable, Hashable {
+    public let id: Int
+    public let codename: String
+    public let difficulty: Int
+    public let fingerprint: String
+    public let brief: [String]
+    public let evidence: [String]
+    public var isSolved: Bool
 
-    public init(id: String, title: String, district: String, employer: String, brief: String, solved: Bool = false) {
+    public init(id: Int, codename: String, difficulty: Int, fingerprint: String, brief: [String], evidence: [String], isSolved: Bool = false) {
         self.id = id
-        self.title = title
-        self.district = district
-        self.employer = employer
+        self.codename = codename
+        self.difficulty = difficulty
+        self.fingerprint = fingerprint
         self.brief = brief
-        self.solved = solved
+        self.evidence = evidence
+        self.isSolved = isSolved
+    }
+}
+
+public struct ContractCase: Identifiable, Hashable {
+    public let id: Int
+    public let client: String
+    public let act: Int // 1..4 (Phase I..IV)
+    public let archetype: String
+    public let difficulty: Int
+    public let fingerprint: String
+    public let codename: String
+    public let brief: [String]
+    public let evidence: [String]
+    public var isSolved: Bool
+
+    public init(id: Int, client: String, act: Int, archetype: String, difficulty: Int, fingerprint: String, codename: String, brief: [String], evidence: [String], isSolved: Bool = false) {
+        self.id = id
+        self.client = client
+        self.act = act
+        self.archetype = archetype
+        self.difficulty = difficulty
+        self.fingerprint = fingerprint
+        self.codename = codename
+        self.brief = brief
+        self.evidence = evidence
+        self.isSolved = isSolved
+    }
+}
+
+public struct ClientInfo: Identifiable, Hashable {
+    public var id: String { slug }
+    public let slug: String
+    public let name: String
+    public let district: String
+    public let kind: String
+
+    public init(slug: String, name: String, district: String, kind: String) {
+        self.slug = slug
+        self.name = name
+        self.district = district
+        self.kind = kind
     }
 }

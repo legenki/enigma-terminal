@@ -6,36 +6,14 @@ public struct AppToolbar: ToolbarContent {
     public init() {}
 
     public var body: some ToolbarContent {
-        ToolbarItem(placement: .navigation) {
-            HStack(spacing: 8) {
-                Button {
-                    // Navigate back if needed
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.caption2)
-                        .foregroundStyle(Theme.textMuted)
-                }
-                .buttonStyle(.plain)
-
-                Button {
-                    // Navigate forward if needed
-                } label: {
-                    Image(systemName: "chevron.right")
-                        .font(.caption2)
-                        .foregroundStyle(Theme.textMuted)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-
         ToolbarItem(placement: .principal) {
-            HStack(spacing: 12) {
-                // Agent / Engine pill (matching screenshot: "1 agent running")
-                HStack(spacing: 6) {
+            HStack(spacing: 10) {
+                // Engine pill
+                HStack(spacing: 5) {
                     Circle()
                         .fill(Theme.purple)
                         .frame(width: 6, height: 6)
-                    Text("1 engine running")
+                    Text("1 engine active")
                         .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(Theme.textSecondary)
                 }
@@ -43,7 +21,7 @@ public struct AppToolbar: ToolbarContent {
                 .padding(.vertical, 3)
                 .background(Color.white.opacity(0.04), in: Capsule())
 
-                // Price / Block height pill (matching screenshot: "$87.84" style)
+                // Bitcoin block height & pulse pill
                 HStack(spacing: 6) {
                     Circle()
                         .fill(Theme.green)
@@ -66,26 +44,59 @@ public struct AppToolbar: ToolbarContent {
 
         ToolbarItem(placement: .primaryAction) {
             HStack(spacing: 10) {
-                // Daylight Segmented Control
-                Picker("Daylight", selection: $appState.daylightMode) {
+                // Custom Dark Daylight Selector (No clashing bright blue!)
+                HStack(spacing: 2) {
                     ForEach(DaylightMode.allCases) { mode in
-                        Text(mode.rawValue).tag(mode)
+                        let isSelected = appState.daylightMode == mode
+                        Button {
+                            appState.daylightMode = mode
+                        } label: {
+                            Text(mode.rawValue)
+                                .font(.system(size: 9, weight: isSelected ? .bold : .regular))
+                                .foregroundStyle(isSelected ? Theme.purple : Theme.textMuted)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 3)
+                                .background(
+                                    isSelected ? Theme.purpleSoft : Color.clear,
+                                    in: RoundedRectangle(cornerRadius: 4)
+                                )
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
-                .pickerStyle(.segmented)
-                .controlSize(.small)
-                .frame(width: 130)
+                .padding(2)
+                .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 6))
+                .overlay(RoundedRectangle(cornerRadius: 6).stroke(Theme.border, lineWidth: 1))
 
-                // Language
+                // Language Menu
                 Menu {
-                    Button("English (EN)") { appState.selectedLanguage = "EN" }
-                    Button("Русский (RU)") { appState.selectedLanguage = "RU" }
-                    Button("Español (ES)") { appState.selectedLanguage = "ES" }
-                    Button("Português (PT)") { appState.selectedLanguage = "PT" }
+                    Button("English (EN)") {
+                        appState.selectedLanguage = "EN"
+                        appState.reloadGameData()
+                    }
+                    Button("Русский (RU)") {
+                        appState.selectedLanguage = "RU"
+                        appState.reloadGameData()
+                    }
+                    Button("Español (ES)") {
+                        appState.selectedLanguage = "ES"
+                        appState.reloadGameData()
+                    }
+                    Button("Português (PT)") {
+                        appState.selectedLanguage = "PT"
+                        appState.reloadGameData()
+                    }
                 } label: {
-                    Text(appState.selectedLanguage)
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(Theme.textSecondary)
+                    HStack(spacing: 4) {
+                        Image(systemName: "globe")
+                            .font(.system(size: 10))
+                        Text(appState.selectedLanguage)
+                            .font(.system(size: 10, weight: .bold))
+                    }
+                    .foregroundStyle(Theme.textSecondary)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 4))
                 }
                 .buttonStyle(.plain)
 
@@ -94,19 +105,27 @@ public struct AppToolbar: ToolbarContent {
                     appState.soundEnabled.toggle()
                 } label: {
                     Image(systemName: appState.soundEnabled ? "bell.fill" : "bell.slash")
-                        .font(.caption)
+                        .font(.system(size: 11))
                         .foregroundStyle(appState.soundEnabled ? Theme.purple : Theme.textMuted)
+                        .padding(5)
+                        .background(Theme.cardInner, in: RoundedRectangle(cornerRadius: 4))
                 }
                 .buttonStyle(.plain)
-                .help("Toggle Block Landing Chime")
+                .help("Toggle Block Chime")
 
-                // Inspector Toggle
+                // Inspector Toggle Button
                 Button {
                     appState.showInspector.toggle()
                 } label: {
                     Image(systemName: "sidebar.trailing")
-                        .font(.caption)
+                        .font(.system(size: 11))
                         .foregroundStyle(appState.showInspector ? Theme.purple : Theme.textSecondary)
+                        .padding(5)
+                        .background(appState.showInspector ? Theme.purpleSoft : Theme.cardInner, in: RoundedRectangle(cornerRadius: 4))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 4)
+                                .stroke(appState.showInspector ? Theme.borderGlow : Theme.border, lineWidth: 1)
+                        )
                 }
                 .buttonStyle(.plain)
                 .help("Toggle Inspector")
