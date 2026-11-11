@@ -19,9 +19,6 @@ public struct WordlistInspectorView: View {
     @State private var liveFastestFee: Int?
     @State private var isFetchingChain: Bool = false
 
-    // Bottom Drawer Tab
-    @State private var drawerTab: String = "Terminal"
-
     public init() {}
 
     private var theme: AppTheme { appState.theme }
@@ -37,49 +34,51 @@ public struct WordlistInspectorView: View {
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
-            .background(theme.sidebarBg)
+            .background(theme.cardBg)
 
             Divider()
                 .overlay(theme.border)
 
-            // 2. Filter Bar
-            HStack(spacing: 8) {
-                Image(systemName: "magnifyingglass")
-                    .font(.caption2)
-                    .foregroundStyle(theme.textMuted)
+            // 2. Filter Bar (for Wordlist and Journal)
+            if selectedTab == 0 || selectedTab == 3 {
+                HStack(spacing: 8) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.caption2)
+                        .foregroundStyle(theme.textMuted)
 
-                TextField(appState.t("filterPlaceholder"), text: $filterQuery)
-                    .textFieldStyle(.plain)
-                    .font(.system(size: 11, design: .monospaced))
-                    .foregroundStyle(theme.textPrimary)
-                    .onChange(of: filterQuery) { _, _ in
-                        performSearch()
+                    TextField(appState.t("filterPlaceholder"), text: $filterQuery)
+                        .textFieldStyle(.plain)
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundStyle(theme.textPrimary)
+                        .onChange(of: filterQuery) { _, _ in
+                            performSearch()
+                        }
+
+                    Spacer()
+
+                    if !filterQuery.isEmpty {
+                        Button {
+                            filterQuery = ""
+                            performSearch()
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.caption2)
+                                .foregroundStyle(theme.textMuted)
+                        }
+                        .buttonStyle(.plain)
                     }
-
-                Spacer()
-
-                if !filterQuery.isEmpty {
-                    Button {
-                        filterQuery = ""
-                        performSearch()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.caption2)
-                            .foregroundStyle(theme.textMuted)
-                    }
-                    .buttonStyle(.plain)
                 }
-            }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(theme.inputBg)
-            .clipShape(RoundedRectangle(cornerRadius: 6))
-            .overlay(RoundedRectangle(cornerRadius: 6).stroke(theme.border, lineWidth: 1))
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(theme.inputBg)
+                .clipShape(RoundedRectangle(cornerRadius: 6))
+                .overlay(RoundedRectangle(cornerRadius: 6).stroke(theme.border, lineWidth: 1))
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
 
-            Divider()
-                .overlay(theme.borderSubtle)
+                Divider()
+                    .overlay(theme.borderSubtle)
+            }
 
             // 3. Tab Content View
             Group {
@@ -94,12 +93,7 @@ public struct WordlistInspectorView: View {
                     journalView
                 }
             }
-
-            Divider()
-                .overlay(theme.border)
-
-            // 4. Interactive Bottom Drawer
-            interactiveBottomDrawer
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(theme.sidebarBg)
         .onAppear {
@@ -130,7 +124,7 @@ public struct WordlistInspectorView: View {
         .buttonStyle(.plain)
     }
 
-    // MARK: - Wordlist Clean ScrollView
+    // MARK: - Wordlist ScrollView
 
     private var wordlistScrollView: some View {
         ScrollView {
@@ -318,76 +312,6 @@ public struct WordlistInspectorView: View {
             }
             .padding(8)
         }
-    }
-
-    // MARK: - Interactive Bottom Drawer
-
-    private var interactiveBottomDrawer: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack(spacing: 12) {
-                drawerTabButton("Setup")
-                drawerTabButton("Run")
-                drawerTabButton("Terminal")
-                Spacer()
-            }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(theme.isLight ? Color.black.opacity(0.06) : Color.black.opacity(0.3))
-
-            VStack(alignment: .leading, spacing: 4) {
-                if drawerTab == "Terminal" {
-                    Text("v3.1.0 via CoreBridge")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(theme.amber)
-                    Text("enigma-terminal on ⎇ main [✓]")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(theme.green)
-                    Text("482 tests passed · parity 100%")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(theme.cyan)
-                } else if drawerTab == "Run" {
-                    Text("[STATUS] Block #\(appState.blockHeight) · mainnet")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(theme.green)
-                    Text("[STATS] Solved Cases: \(appState.solvedCaseIDs.count)/8")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(theme.purple)
-                    Text("[STATS] Solved Contracts: \(appState.solvedContractIDs.count)/256")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(theme.cyan)
-                } else {
-                    Text("Runtime: Apple Swift 6.4 + AppKit")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(theme.textSecondary)
-                    Text("Crypto: JavaScriptCore In-Process VM")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(theme.textSecondary)
-                    Text("Target: macOS 26.0+ (ARM64)")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(theme.textSecondary)
-                }
-            }
-            .padding(10)
-        }
-        .background(theme.cardInner)
-    }
-
-    private func drawerTabButton(_ name: String) -> some View {
-        let isSelected = drawerTab == name
-        return Button {
-            drawerTab = name
-        } label: {
-            HStack(spacing: 3) {
-                if name == "Terminal" {
-                    Image(systemName: "terminal.fill")
-                        .font(.system(size: 8))
-                }
-                Text(name)
-                    .font(.system(size: 10, weight: isSelected ? .bold : .regular))
-            }
-            .foregroundStyle(isSelected ? theme.purple : theme.textMuted)
-        }
-        .buttonStyle(.plain)
     }
 
     private func performSearch() {

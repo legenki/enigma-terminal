@@ -9,52 +9,29 @@ public struct AppToolbar: ToolbarContent {
 
     public var body: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            HStack(spacing: 10) {
-                // Engine pill
-                HStack(spacing: 5) {
-                    Circle()
-                        .fill(theme.purple)
-                        .frame(width: 6, height: 6)
-                    Text(appState.t("engineActive"))
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundStyle(theme.textSecondary)
-                }
-                .padding(.horizontal, 8)
-                .padding(.vertical, 3)
-                .background(theme.cardInner, in: Capsule())
-
-                // Bitcoin block height & pulse pill
-                HStack(spacing: 6) {
-                    Circle()
-                        .fill(theme.green)
-                        .frame(width: 6, height: 6)
-                    Text("#\(appState.blockHeight)")
-                        .font(.system(size: 11, weight: .bold, design: .monospaced))
-                        .foregroundStyle(theme.textPrimary)
-                    Text("·")
-                        .foregroundStyle(theme.textMuted)
-                    Text(appState.blockTimeAgo)
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(theme.textSecondary)
-                }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 4)
-                .background(theme.cardInner, in: Capsule())
-                .overlay(Capsule().stroke(theme.border, lineWidth: 1))
+            // Live Bitcoin block height & pulse pill
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(theme.green)
+                    .frame(width: 7, height: 7)
+                Text("#\(appState.blockHeight)")
+                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                    .foregroundStyle(theme.textPrimary)
+                Text("·")
+                    .foregroundStyle(theme.textMuted)
+                Text(appState.blockTimeAgo)
+                    .font(.system(size: 10, design: .monospaced))
+                    .foregroundStyle(theme.textSecondary)
             }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 4)
+            .background(theme.cardInner, in: Capsule())
+            .overlay(Capsule().stroke(theme.border, lineWidth: 1))
+            .help("Bitcoin Block Clock & Tip Height")
         }
 
         ToolbarItem(placement: .primaryAction) {
             HStack(spacing: 10) {
-                // Design Variant Switcher (Studio IDE vs Classic HIG)
-                Picker("Variant", selection: $appState.designVariant) {
-                    Text("Studio IDE").tag(DesignVariant.studio)
-                    Text("Classic HIG").tag(DesignVariant.classicHIG)
-                }
-                .pickerStyle(.segmented)
-                .controlSize(.small)
-                .frame(width: 155)
-
                 // Daylight Selector (LIVE / DAY / NIGHT)
                 HStack(spacing: 2) {
                     ForEach(DaylightMode.allCases) { mode in

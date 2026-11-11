@@ -8,67 +8,55 @@ public struct ContentView: View {
     private var theme: AppTheme { appState.theme }
 
     public var body: some View {
-        Group {
-            if appState.designVariant == .studio {
-                studioLayout
-            } else {
-                ClassicHIGLayoutView()
-            }
-        }
-    }
-
-    // MARK: - Variant 1: Studio IDE Layout (Floating Card Architecture)
-
-    private var studioLayout: some View {
         NavigationSplitView {
             SidebarView()
-                .navigationSplitViewColumnWidth(min: 220, ideal: 250, max: 320)
+                .navigationSplitViewColumnWidth(min: 210, ideal: 240, max: 280)
         } detail: {
-            ZStack {
-                theme.backgroundGradient
-                    .ignoresSafeArea()
+            VStack(spacing: 0) {
+                // Header Bar (Document View Title)
+                HStack(spacing: 8) {
+                    Image(systemName: appState.selectedPanel.systemImage)
+                        .font(.headline)
+                        .foregroundStyle(theme.purple)
+                    Text(appState.t(appState.selectedPanel.rawValue))
+                        .font(.title3.bold())
+                        .foregroundStyle(theme.textPrimary)
+                    Spacer()
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
+                .background(theme.cardBg)
 
+                Divider()
+                    .overlay(theme.border)
+
+                // Main Detail Content Area (Clean Edge-to-Edge)
                 Group {
                     switch appState.selectedPanel {
                     case .terminal:
                         TerminalView()
                     case .cases, .acta:
-                        cardWrapper(title: appState.t("cardCases")) {
-                            CaseFilesView()
-                        }
+                        CaseFilesView()
                     case .contracts:
-                        cardWrapper(title: appState.t("cardContracts")) {
-                            ContractsBoardView()
-                        }
+                        ContractsBoardView()
                     case .decrypt, .ledger:
-                        cardWrapper(title: appState.t("cardDecrypt")) {
-                            DecryptView()
-                        }
+                        DecryptView()
                     case .explorer:
-                        cardWrapper(title: appState.t("cardExplorer")) {
-                            ExplorerView()
-                        }
+                        ExplorerView()
                     case .randomizer:
-                        cardWrapper(title: appState.t("cardRandomizer")) {
-                            RandomizerView()
-                        }
+                        RandomizerView()
                     case .nameforge:
-                        cardWrapper(title: appState.t("cardNameforge")) {
-                            NameforgeView()
-                        }
+                        NameforgeView()
                     case .archive, .journal:
-                        cardWrapper(title: appState.t("cardJournal")) {
-                            JournalView()
-                        }
+                        JournalView()
                     case .about:
-                        cardWrapper(title: appState.t("cardAbout")) {
-                            AboutView()
-                        }
+                        AboutView()
                     }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .navigationTitle("")
             .frame(minWidth: 700, minHeight: 500)
+            .background(theme.bgDeep)
         }
         .inspector(isPresented: $appState.showInspector) {
             WordlistInspectorView()
@@ -77,38 +65,5 @@ public struct ContentView: View {
         .toolbar {
             AppToolbar()
         }
-        .background(theme.bgDeep)
-    }
-
-    private func cardWrapper<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(spacing: 0) {
-            HStack {
-                HStack(spacing: 6) {
-                    Circle()
-                        .fill(theme.purple)
-                        .frame(width: 8, height: 8)
-                    Text(title)
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(theme.textPrimary)
-                }
-                Spacer()
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .background(theme.cardBg)
-
-            Divider()
-                .overlay(theme.border)
-
-            content()
-        }
-        .background(theme.cardBg)
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-        .overlay(
-            RoundedRectangle(cornerRadius: 14)
-                .stroke(theme.border, lineWidth: 1)
-        )
-        .shadow(color: Color.black.opacity(theme.isLight ? 0.08 : 0.35), radius: 12, x: 0, y: 6)
-        .padding(16)
     }
 }
